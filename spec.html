@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Spec · 1490 Lively Ridge</title>
+<meta name="description" content="Canonical design spec for 1490 Lively Ridge — California Modern Japandi · 9 principles · canon designers · 7 owner decisions">
+<style>
+  :root {
+    --bg: #faf8f4;
+    --ink: #2a2622;
+    --muted: #6b6660;
+    --accent: #8a7a5a;
+    --card-bg: #fff;
+    --warm-tint: #f7eedc;
+    --note-tint: #f0e8d8;
+    --border: #e8e2d6;
+    --target-tint: #e8efe2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 248, 244, 0.94);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topnav-inner {
+    max-width: 880px; margin: 0 auto; padding: 12px 28px;
+    display: flex; gap: 18px; align-items: center; font-size: 14px;
+  }
+  .topnav-inner a {
+    color: var(--ink); text-decoration: none; font-weight: 500;
+  }
+  .topnav-inner a:hover { color: var(--accent); }
+  .topnav-inner .home {
+    color: var(--muted); margin-right: auto;
+  }
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+  h1 {
+    font-size: 38px; font-weight: 600; letter-spacing: -0.6px;
+    margin: 0 0 24px; line-height: 1.15;
+  }
+  h2 {
+    font-size: 24px; font-weight: 600; margin: 48px 0 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+  }
+  h3 {
+    font-size: 18px; font-weight: 600; margin: 28px 0 12px;
+  }
+  h4 {
+    font-size: 15px; font-weight: 600; margin: 20px 0 10px;
+    text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent);
+  }
+  p { margin: 0 0 16px; font-size: 15.5px; }
+  ul, ol { margin: 0 0 16px; padding-left: 24px; font-size: 15.5px; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--ink); }
+  blockquote {
+    border-left: 3px solid var(--accent);
+    margin: 16px 0;
+    padding: 4px 0 4px 18px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  code {
+    background: #f0ece4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: #5c4f2f;
+  }
+  pre {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  pre code {
+    background: none;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--warm-tint);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code { font-size: 12px; }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(138, 122, 90, 0.3);
+  }
+  a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 720px) {
+    .container { padding: 24px 18px 60px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 21px; }
+    table { font-size: 12.5px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a>
+    <a href="/mood-board">Mood Board</a>
+    <a href="/spec">Spec</a>
+  </div>
+</nav>
+
+<div class="container">
+<h1 id="1490-lively-ridge-design-spec">1490 Lively Ridge — Design Spec</h1>
+<p><strong>Master canonical doc. SUPERSEDES <code>PHILOSOPHY.md</code> and <code>_DESIGN_LANGUAGE.md</code>.</strong></p>
+<p>Last updated: 2026-05-12 (post tri-audit reconciliation)
+Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decision flags marked <strong>[OWNER CONFIRM]</strong></p>
+<p>This is the single governing rule set. If any older doc contradicts this, this wins. Older docs marked SUPERSEDED.</p>
+<hr />
+<h2 id="1-the-aesthetic-in-one-sentence">1. The aesthetic in one sentence</h2>
+<p>A 1953 Atlanta brick ranch executed as <strong>California Modern Japandi</strong>, translated honestly for Southern compressed-ceiling architecture: light + warm + restrained + lived-in, with Japandi discipline (restraint, palette, wabi-sabi) running underneath and modern California domestic warmth on top.</p>
+<h2 id="2-the-aesthetic-name-final">2. The aesthetic name (final)</h2>
+<p><strong>"California Modern Japandi — Atlanta Translation"</strong></p>
+<p>The "Atlanta Translation" qualifier is intentional. The canon designers work in vaulted-California-loft conditions; we work in 8-ft-ceiling Southern ranch conditions. Our execution will look like <em>kin</em> of the canon, not <em>clones</em>.</p>
+<h2 id="3-canon-designers-locked-final">3. Canon designers (LOCKED, final)</h2>
+<p><strong>Primary (anchor):</strong>
+- <strong>Cathie Hong Interiors</strong> — Bay Area boutique. Campbell House (Rue Magazine) is the spine project.
+- <strong>OWIU Studio</strong> — LA Japandi. <strong>WARM projects only:</strong> Palmero, Ryokan, Echo Park Hill House, Duane House, Brentwood, Wellington Office. <strong>REJECTED:</strong> Biscuit Loft (too pale lacking coziness), Glass Ridge.</p>
+<p><strong>Supporting:</strong>
+- <strong>Sarah Sherman Samuel</strong> — Mandy Moore's mid-century home
+- <strong>Jenni Kayne Interiors</strong> — Lake House + Santa Ynez Ranch
+- <strong>Studio LIFE/STYLE</strong> (Shannon Wollack + Brittany Zwickl) — Brentwood home
+- <strong>Allprace Homes</strong> (Shanty Wijaya) — LA Japandi project</p>
+<p><strong>EXPLICITLY REJECTED through iteration</strong> (do not re-add as canon):
+- Daytrip Studio (too London-modern, dark-stained floors)
+- Athena Calderone (too classic-Brooklyn-dark)
+- Heidi Caillier (cottage-traditional throughout, except Inverness Cottage which was the original anchor signal we've since refined past)
+- Mahno residential (too maximalist-textile)
+- Norm Architects austere work (too cold)
+- Reath Design (too saturated jewel-tone)
+- Justina Blakeney / Jungalow (Coachella maximalist boho)
+- Modern Farmhouse / shiplap / beadboard wainscot
+- Studio Lifestyle, Mandy Cheng (calibrated as "less of a fit" per owner)</p>
+<h2 id="3a-the-9-element-california-modern-japandi-composite-signature-from-image-audit">3a. The 9-element CALIFORNIA MODERN JAPANDI composite signature (from image audit)</h2>
+<p>Across the 18 sourceable anchors, these 9 visual elements appear in &gt;50% of clear-canon frames. <strong>This is the operational definition for the renovation:</strong></p>
+<ol>
+<li><strong>Light oak wide-plank floor</strong> (17 of 18 anchors)</li>
+<li><strong>Plaster, cream, or soft-white walls</strong> — never saturated, never wallpapered, never beadboard/shiplap in public rooms</li>
+<li><strong>One warm-wood gesture per surface</strong> — oak island OR oak built-in OR oak coffee table; not all three at once</li>
+<li><strong>Marble (Carrara, Calacatta, or quartz-look) for kitchen counters/backsplash</strong> — bookmatched or slab; not subway tile</li>
+<li><strong>Brass hardware + at least one brass light fixture per public room</strong> — globe pendant, branching chandelier, or disc sconce. Never gold-gold; always brushed/aged brass</li>
+<li><strong>One cream linen upholstered anchor per LR</strong> (sectional or sofa). Never patterned, never tufted</li>
+<li><strong>One real plant tree at floor height per public room</strong> — fiddle leaf fig is the canon default. <strong>Cat-safe substitution mandate:</strong> spec parlor palm OR kentia palm OR bird of paradise (all cat-safe, same vertical-leaf-tree presence)</li>
+<li><strong>One "real color" accent per room</strong> — sage olive, mustard, rust, or olive-glass green. Never more than one accent color per room; never primary colors; never jewel tones</li>
+<li><strong>Hand-thrown ceramics in restrained groupings</strong> (3-5 per shelf), matte-clay or muted-glaze, never matched commercial dinnerware</li>
+</ol>
+<h3 id="secondary-signals-in-30-50-of-anchors">Secondary signals (in 30-50% of anchors)</h3>
+<ul>
+<li>Nelson Bubble Saucer or generic paper-globe pendant</li>
+<li>Wishbone CH24 or paper-cord oak chair silhouette in dining</li>
+<li>Beni Ourain or neutral wool rug (deferred to year 4)</li>
+<li>Sheer cream linen Roman shades or drapes</li>
+<li>Hans Wegner / Aalto / mid-century light-wood furniture forms</li>
+</ul>
+<h3 id="anti-signals-must-not-appear-final-reconciled-kill-list">Anti-signals — MUST NOT APPEAR (final reconciled kill list)</h3>
+<ul>
+<li>Dark-stained or dark walnut floors</li>
+<li>Beadboard, shiplap, board-and-batten walls in public rooms (cali_25 has subtle plank walls in a bedroom only — borderline edge case)</li>
+<li>Walnut as PRIMARY cabinetry (accent permitted)</li>
+<li>Open shelves carrying matched-set commercial dishware</li>
+<li>Saturated wall paint (terracotta, navy, emerald) — single-accent textile is the only color delivery</li>
+<li>Gilt mirrors, antlers, taxidermy, William Morris wallpaper, dreamcatchers, macramé walls</li>
+<li>Chrome, polished nickel, exposed Edison cages, crystal, dark bronze</li>
+<li>Glass coffee tables on chrome legs, lucite, mirrored furniture</li>
+<li>Espresso / mahogany / cherry / pickled-whitewash wood finishes</li>
+<li>High-saturation kilim revival rugs, pattern-on-pattern textile stacking</li>
+<li>Shiplap with barn doors with black metal grid ("modern farmhouse")</li>
+</ul>
+<h2 id="4-the-7-locked-principles-final-reconciliation">4. The 7 LOCKED principles (final reconciliation)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Principle</th>
+<th>Locked value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Density per major surface</td>
+<td><strong>5-7 visible objects</strong> (not 3-5 minimal-cold, not 7-9 busy. Calibrated for 8-ft ceilings.)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Light + warm modern California</td>
+<td>Pale honey oak floors. Cream / oat walls. Modern furniture lines. Lived-in warmth. NOT dark, NOT classic, NOT London-modern, NOT cottage-traditional.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Patina gracefully (10-year check)</td>
+<td>Solid brass, real wood, full-grain leather, hand-glazed tile. NO plated, NO veneer-poly, NO bonded leather. Maintenance contract required (Section 13).</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Japandi principles, modern execution</td>
+<td>Keep wabi-sabi + kanso (clutter-free) + ma (negative space). LOW Asian iconography.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>One bold accent per room</td>
+<td>Permitted: olive, rust, mustard, sumi black, oxblood, sage. Never walls saturated. 1-3 objects max per room.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Plants integrated</td>
+<td>3-5 per social room, 1-2 private. Cat-toxic plants (fiddle leaf, monstera, olive, pothos) only on high mounts / hanging / large floor pots cat-inaccessible. <strong>Default to cat-safe species:</strong> areca palm, parlor palm, calathea, prayer plant, spider plant, peperomia.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Mostly new + selective vintage</td>
+<td><strong>8-12% vintage</strong> (split between Claude's "low" and Gemini's "high" recommendation). One real vintage piece per major room. <strong>Beni Ourain DEFERRED to year 4</strong> (post-potty-train, post-pet-maturity).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-reconciled-rule-corrections-audit-flagged-contradictions">5. RECONCILED rule corrections (audit-flagged contradictions)</h2>
+<h3 id="5a-walnut-rule-corrected">5a. Walnut rule (CORRECTED)</h3>
+<p><strong>Previously stated wrong:</strong> "No walnut as primary surface, no walnut accent."</p>
+<p><strong>Correct rule:</strong>
+- <strong>Light / natural walnut PERMITTED as accent</strong> — 1-2 pieces per major room.
+- <strong>Dark-stained / espresso walnut REJECTED</strong> — looks dated, fights aesthetic.
+- <strong>Walnut canon examples:</strong> Campbell entry pivot door (cali_09), Aloha+Ohayo fluted island (variety_04), Allprace Reform cabinets (variety_14), Campbell bedroom spindle bed (loved_15), Duane round dining (loved_11).</p>
+<h3 id="5b-paper-lantern-rule-corrected">5b. Paper-lantern rule (CORRECTED)</h3>
+<p><strong>Previously stated wrong:</strong> "No Akari paper pendants in public rooms — only in kid bedroom."</p>
+<p><strong>Correct rule:</strong>
+- <strong>Nelson Bubble / Saucer / paper-globe modern forms PERMITTED throughout</strong> (canon shows them in Campbell LR, Echo Park BR, etc.)
+- <strong>Akari-Noguchi-iconic forms (UF1-XN, 21A standing lantern, ribbed pendants)</strong> RESTRICTED — permitted as ONE accent moment per house only. Recommended location: a sitting nook, master reading area, or kid's bedroom.
+- <strong>Shoji screens / sliding rice-paper partitions</strong> RESTRICTED — exclude unless specific architectural moment justifies.
+- <strong>Formakami JH5 paper-stack pendants</strong> PERMITTED — read more modern than traditional Akari.</p>
+<h3 id="5c-density-rule-locked-at-5-7">5c. Density rule (LOCKED at 5-7)</h3>
+<p><strong>5-7 objects per surface</strong> chosen over 7-9 (too busy under 8-ft ceilings) and 3-5 (too cold/austere). Designer calibration: low-end (5) in master BR + master bath; mid (6) in office, dining, kitchen; high (7) in LR + family room + entry.</p>
+<h3 id="5d-vintage-locked-at-8-12">5d. Vintage % (LOCKED at 8-12%)</h3>
+<p>Final brand split (revised):</p>
+<table>
+<thead>
+<tr>
+<th>Bracket</th>
+<th>%</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>West Elm</td>
+<td>35-40%</td>
+<td>Bedding, sofa anchor (Andes/Harmony), accessories, vanities</td>
+</tr>
+<tr>
+<td>Article / Crate &amp; Barrel / Room &amp; Board</td>
+<td>20-25%</td>
+<td>Sofa alternative, dining, secondary case goods</td>
+</tr>
+<tr>
+<td>Schoolhouse + Rejuvenation</td>
+<td>15%</td>
+<td>Lighting + hardware</td>
+</tr>
+<tr>
+<td>Pottery Barn / Anthropologie / S&amp;L</td>
+<td>8%</td>
+<td>Selective accents only</td>
+</tr>
+<tr>
+<td>ferm LIVING / HAY / Muuto</td>
+<td>3%</td>
+<td>Specialist accent pieces</td>
+</tr>
+<tr>
+<td><strong>Vintage (Beni Ourain deferred to year 4; vintage side tables, ceramics, art, one lamp per major room)</strong></td>
+<td><strong>8-12%</strong></td>
+<td>Real vintage gestures — soul layer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-construction-spec-callouts-from-renovation-budget-locked">6. Construction spec callouts (from renovation budget — LOCKED)</h2>
+<p>These were locked in the construction phase and constrain design execution.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Spec</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hardwood floors</td>
+<td>Bleached red oak + Rubio Monocoat Pure (warm-honey white oak look)</td>
+<td>LOCKED — non-negotiable contract callout</td>
+</tr>
+<tr>
+<td>Plumbing fixture finish</td>
+<td>Delta Trinsic in <strong>Champagne Bronze</strong></td>
+<td>LOCKED — non-negotiable contract callout</td>
+</tr>
+<tr>
+<td>Wall paint primary</td>
+<td>BM White Dove (OC-17), matte</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Wall paint bedroom alt</td>
+<td>SW Accessible Beige (SW 7036), matte</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Bath accent wall</td>
+<td>BM Saybrook Sage (HC-114), matte</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Trim + doors</td>
+<td>BM Simply White (OC-117), satin</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Master bath wall tile</td>
+<td>Cle Weathered White 2×6 Bejmat</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Master bath floor tile</td>
+<td>Daltile Choice Ivory 24×24 honed</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Hall bath wall tile</td>
+<td>Cle Sea Salt 4×4 Petite</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Hall bath floor tile</td>
+<td>Daltile Portfolio White 12×24 honed</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Basement bath</td>
+<td>Match hall bath spec</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Kitchen backsplash</td>
+<td><strong>[OWNER CONFIRM]</strong> — see Section 7</td>
+<td></td>
+</tr>
+<tr>
+<td>Kitchen floor</td>
+<td>Daltile Choice Ivory porcelain</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Hood</td>
+<td>Vent-A-Hood K2240SS Magic Lung matte black</td>
+<td>LOCKED (Phase 1 $3,400 in current scope)</td>
+</tr>
+<tr>
+<td>Master + hall vanity</td>
+<td>WE Hutchinson Blonde (60" Double + 36" Single)</td>
+<td>LOCKED</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-owner-decisions-surfaced-from-tri-audit">7. Owner decisions surfaced from tri-audit</h2>
+<p>The audit flagged decisions that need explicit owner sign-off (vs designer-default lock).</p>
+<p><strong>[OWNER CONFIRM #1] Kitchen backsplash — Cle Bejmat or canon-consistent?</strong>
+- <strong>Current locked spec:</strong> Cle Weathered White Bejmat counter-to-ceiling on range wall
+- <strong>Audit pushback:</strong> every canon kitchen reference uses <strong>Carrara/Calacatta slab + zellige squares + white herringbone</strong> — not Bejmat. Bejmat reads "Marrakech-meets-Spanish" not "California Modern Japandi."
+- <strong>Designer recommendation:</strong> <strong>PIVOT</strong> kitchen backsplash to <strong>Carrara slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</strong> (matches canon). <strong>KEEP Bejmat in master bath only</strong> as the high-impact small-area moment.
+- <strong>Cost impact:</strong> Carrara slab adds ~$500-800 vs Bejmat $/sf — both premium tile categories. Lead time similar.</p>
+<p><strong>[OWNER CONFIRM #2] Beni Ourain in living room — source year 1 or defer to year 4?</strong>
+- <strong>Audit pushback:</strong> Beni Ourain wool absorbs organic stains permanently. Year 1-3 with 40-lb shedding Labradoodle + cat + newborn + toddler = high probability of catastrophic stain. The "vintage rug for life" is a year-5+ purchase.
+- <strong>Designer recommendation:</strong> <strong>DEFER Beni Ourain to year 4</strong> (post-potty-train, post-pet-maturity). Spec <strong>WE/Rejuvenation flat-weave wool placeholder</strong> for years 1-3 (~$800-1,500 vs $3-5K vintage).
+- <strong>Override option:</strong> if you want to buy the Beni Ourain now and accept the maintenance reality, do it eyes-open and budget for year-5 replacement.</p>
+<p><strong>[OWNER CONFIRM #3] Performance fabrics vs Belgian flax linen?</strong>
+- <strong>Audit pushback:</strong> Belgian flax linen is a fiber-magnet for Labradoodle hair + soils on baby spit-up. Cream linen sofa in your house = looking defeated in 12-18 months.
+- <strong>Designer recommendation:</strong> <strong>PIVOT primary sofa + LR seating + drapery to performance fabric</strong> — Crypton Linen, Perennials, or similar performance-linen weave. Drops the photographic look ~5%, drops the panic ~80%.
+- <strong>Pure Belgian Flax linen:</strong> keep only for non-pet-zones — master bed bedding (which gets laundered weekly anyway), maybe formal dining drapery if not pet-accessible.</p>
+<p><strong>[OWNER CONFIRM #4] Brass maintenance commitment?</strong>
+- <strong>Reality:</strong> Atlanta 80-90% summer RH + unlacquered brass = tarnishes blotchy not honey. Year 5 brass cabinet pulls in kitchen will be 10× wear differential (fridge pull vs trash pull).
+- <strong>Designer recommendation:</strong> <strong>Accept the maintenance contract:</strong>
+  - High-touch brass (pulls, door hardware): Renaissance Wax annually OR budget replacement at year 8-10
+  - Low-touch brass (sconces, faucets above counter, light fixtures): patina freely
+  - Rubio floors: refresh every 18-30 months ($1K each refresh)
+- <strong>Override option:</strong> if unwilling to commit to maintenance cycle, pivot brass-look to <strong>lacquered brass</strong> (stays shiny indefinitely, lower wabi-sabi credit but lower failure mode). Note: this contradicts Principle 3 (patina gracefully); patina becomes "permanent finish" instead.</p>
+<p><strong>[OWNER CONFIRM #5] Furniture envelope — $30K fixed or $80-120K phased?</strong>
+- <strong>Audit reality check:</strong> Canon kitchens use $40-60K+ custom millwork (fluted oak islands, full-height built-ins) that's not in retail brand split. Realistic to hit canon look across 6+ rooms = $80-120K furniture/decor.
+- <strong>Designer recommendation:</strong> <strong>PHASE — Year 1 essentials in $30-40K</strong> (sofa, master bed, dining table, key lighting, basics). <strong>Year 2-3 staggered $40-60K</strong> for second-tier pieces. <strong>Year 4+ vintage indulgence layer.</strong>
+- <strong>Total realistic envelope: $80-100K</strong> over 3-4 years vs $30K all-at-once.</p>
+<h2 id="8-atlanta-context-translation-rules-new-section-was-missing">8. Atlanta-context translation rules (NEW SECTION — was missing)</h2>
+<p>The audit's biggest finding: every canon reference is California vaulted-loft. Our house is 1953 Atlanta brick ranch with 8-ft ceilings + heavy tree canopy + 90% summer humidity. Honest translation rules:</p>
+<h3 id="8a-ceiling-height-specific-lighting">8a. Ceiling-height-specific lighting</h3>
+<ul>
+<li><strong>Pendants &lt;16" in major-traffic areas</strong> (don't drop a Nelson Saucer Bubble that's beautiful at 9' ceiling into 8' room — it becomes an obstacle).</li>
+<li><strong>Sconces should carry more lighting load than pendants</strong> in most rooms (sconce + recessed combo).</li>
+<li><strong>Recessed lighting plan</strong> required to supplement decorative — 2700K gimbaled (not 3000K which reads cool) for cloudy/tree-shaded Atlanta days.</li>
+</ul>
+<h3 id="8b-compressed-room-volume">8b. Compressed-room volume</h3>
+<ul>
+<li><strong>Drop "open plan" expectations</strong> — your house has structural-brick walls, not movable partitions. The aesthetic must work in well-resolved compressed rooms.</li>
+<li><strong>Density target stays 5-7</strong> — pushing to 7-9 with 8-ft ceilings reads as cluttered.</li>
+<li><strong>Vertical proportions</strong> matter more than canon photos suggest — tall thin floor lamps, vertical art, tall narrow plants help fight ceiling compression.</li>
+</ul>
+<h3 id="8c-light-strategy">8c. Light strategy</h3>
+<ul>
+<li><strong>Maximum-window-glass moves</strong> (clerestory, gable-window, sliding-glass-wall) are not in budget. <strong>Re-baseline expectations:</strong> "light + bright California" will not photograph the same in Atlanta. Plan for <em>warm</em> not <em>bright</em>.</li>
+<li><strong>Sheer linen drapery + light-color upholstery</strong> preserve what daylight does reach the rooms.</li>
+<li><strong>Reflective surfaces</strong> (Carrara marble, brass mirror surrounds, sheer linen) bounce limited light.</li>
+</ul>
+<h3 id="8d-humidity-protocol">8d. Humidity protocol</h3>
+<ul>
+<li><strong>HVAC humidity control to 35-55% RH</strong> — non-negotiable for the spec. Without it: Rubio floors gap/cup, brass tarnishes faster, plaster walls show movement, linen mildews.</li>
+<li><strong>Wood specifications:</strong> rift-sawn or quarter-sawn for cabinet doors and built-ins (more stable than plain-sawn against humidity swings).</li>
+<li><strong>Bath ventilation:</strong> humidistat-controlled exhaust fans (already in scope) — non-optional given Atlanta summer.</li>
+</ul>
+<h3 id="8e-regional-appropriateness">8e. Regional appropriateness</h3>
+<ul>
+<li><strong>Brick exterior stays — and the design should acknowledge it.</strong> A Bay Area Eichler aesthetic inside Southern brick-rancher bones is a tension that can be elegant (call it intentional translation) or jarring (looks like you ignored the house).</li>
+<li><strong>Landscape brief</strong> (Section 11) needs Atlanta-appropriate plant palette, not California native.</li>
+</ul>
+<h2 id="9-pet-family-integration-new-section-was-implicit-now-explicit">9. Pet + family integration (NEW SECTION — was implicit, now explicit)</h2>
+<h3 id="sonja-40-lb-labradoodle-sheds-not-a-chewer">Sonja (40-lb Labradoodle, sheds, not a chewer)</h3>
+<ul>
+<li><strong>Sofas + accent chairs:</strong> performance fabric (Crypton, Perennials) — not pure linen</li>
+<li><strong>Floor surfaces:</strong> Rubio floors will show dog-path wear by year 3 — accept + refresh cycle</li>
+<li><strong>Rugs:</strong> flat-weave wool for years 1-3 (cleanable), defer Beni Ourain to year 4</li>
+<li><strong>Sonja's gear:</strong> dog bed, leash hook, food/water — designed-in mudroom or kitchen spot, not afterthought</li>
+<li><strong>Sonja's color:</strong> dark hair shows on cream, light hair shows on dark — pick mid-tone fabrics (oat with dark fleck OR camel) for primary seating</li>
+</ul>
+<h3 id="cat-1-plant-chewer-constraint">Cat (1, plant-chewer constraint)</h3>
+<ul>
+<li><strong>Cat-safe plants as default</strong>, cat-toxic as accent only on high mounts</li>
+<li><strong>No linen drapery puddled at floor</strong> (cat scratching post material)</li>
+<li><strong>No floor-level small ceramics</strong> that cat can knock — keep delicate items at 36"+ heights</li>
+<li><strong>Litter zone:</strong> Robolitter ventilation locked in renovation scope, placement away from social rooms</li>
+</ul>
+<h3 id="newborn-1-year-horizon">Newborn ~1 year horizon</h3>
+<ul>
+<li><strong>Nursery framework now, real sourcing 6 months pre-arrival</strong> (Section 10)</li>
+<li><strong>Toddler-safe styling tier (18+ months):</strong> removable hand-thrown ceramics, no glass coffee tables, soft rug corners</li>
+<li><strong>Master + nursery proximity:</strong> sound insulation between master/nursery wall <strong>LOCKED in renovation scope</strong> (P1 line item)</li>
+<li><strong>Hardware safety:</strong> all door hardware should be lever-type (not knobs that toddlers can't grip); cabinet locks where appropriate</li>
+</ul>
+<h2 id="10-nursery-aesthetic-framework-new-section-was-missing">10. Nursery aesthetic framework (NEW SECTION — was missing)</h2>
+<p>Real sourcing deferred to ~6 months pre-arrival. Framework now:</p>
+<ul>
+<li><strong>Wall color:</strong> BM Saybrook Sage (HC-114) accent wall or BM White Dove primary — match house palette discipline</li>
+<li><strong>Crib:</strong> light oak slat (Babyletto Hudson, Nestig Cloud, or similar) — matches canon white-oak language</li>
+<li><strong>Glider:</strong> boucle in cream OR performance fabric (Sherwin Williams Article)</li>
+<li><strong>Soft goods:</strong> Belgian flax linen bedding (kid bedding is laundered every 1-2 days — flax holds up)</li>
+<li><strong>Lighting:</strong> ONE Akari/paper-globe accent pendant permitted here (this is the single house location for the iconographic Akari moment)</li>
+<li><strong>Storage:</strong> light oak dresser (WE / IKEA-hacked PAX), wall-mount shelf for books at adult-reach</li>
+<li><strong>Art:</strong> modern abstract over crib at safe height</li>
+<li><strong>Plant:</strong> ONE cat-safe + child-safe plant (areca palm or boston fern)</li>
+<li><strong>Floor:</strong> existing Rubio oak + machine-washable cotton dhurrie (NOT vintage wool)</li>
+</ul>
+<h2 id="11-exterior-landscape-brief-new-section-was-missing">11. Exterior + landscape brief (NEW SECTION — was missing)</h2>
+<p>Phase 1 has front yard scope $7,500 (cedar fence + bamboo cut + landscape refresh). Phase 2 has back yard + deck rebuild + driveway.</p>
+<ul>
+<li><strong>Brick exterior:</strong> RED BRICK STAYS (cost prohibitive to repaint, and red brick + cream interior aesthetic is intentional Southern-modern dialogue, not error)</li>
+<li><strong>Front door:</strong> keep existing OR replace with walnut pivot-style (canon: Cathie Hong Campbell entry — cali_09). <strong>[Owner decision: front door replacement in P1?]</strong></li>
+<li><strong>Front yard:</strong> 50 LF cedar 5-ft horizontal slat fence (privacy + canon-consistent material) + decomposed-granite path + plantings TBD</li>
+<li><strong>Plant palette (Atlanta-appropriate, not California native):</strong> Japanese maple (already on lot?), boxwood, holly fern, hellebore, native azaleas (restrained varieties — not high-saturation), liriope. Avoid: succulents (wrong climate), pampas grass (Coachella connotation), bamboo running varieties.</li>
+<li><strong>Outdoor lighting:</strong> brass + glass cylinder sconces at front + dark-sky-compliant down-lights on deck</li>
+<li><strong>Deck (Phase 1 rebuild):</strong> Trex composite in warm tone, matches canon outdoor-living spec, hot tub stays</li>
+</ul>
+<h2 id="12-tv-strategy-new-section-was-missing">12. TV strategy (NEW SECTION — was missing)</h2>
+<p>Canon images conspicuously have zero TVs. Real modern family LR has one. Strategy:</p>
+<ul>
+<li><strong>Primary LR TV:</strong> Samsung Frame TV mounted above mantel OR articulating arm. Frame TV's art-mode photo display lets it disappear when not in use.</li>
+<li><strong>Family room (basement):</strong> standard large flat-screen, articulating arm, less visual discipline (it's a media room).</li>
+<li><strong>No TV in master BR</strong> (owner-locked sleep sanctuary)</li>
+<li><strong>No TV in dining or kitchen</strong> — discipline</li>
+<li><strong>Wire management:</strong> AV closet near LR for receiver/Sonos/Eero/cable; all wires in-wall</li>
+</ul>
+<h2 id="13-window-treatments-per-room-new-section-was-missing">13. Window treatments per room (NEW SECTION — was missing)</h2>
+<p>Audit flagged this as gap. Per-room policy:</p>
+<table>
+<thead>
+<tr>
+<th>Room</th>
+<th>Treatment</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LR</td>
+<td>Hunter Douglas Vignette Roman in Linen Weave (Stone) OR Smith &amp; Noble Belgian Linen Roman</td>
+<td>Privacy + light filter, performance-fabric option if pet-accessible</td>
+</tr>
+<tr>
+<td>Master BR</td>
+<td>Sheer linen drapery puddled + blackout Roman behind</td>
+<td>Sleep priority + bright morning option</td>
+</tr>
+<tr>
+<td>Office</td>
+<td>Roman shade only — no drapery</td>
+<td>Pet area, simple cleaning</td>
+</tr>
+<tr>
+<td>Dining</td>
+<td>Sheer linen drapery (formal occasion only)</td>
+<td>Lower pet traffic</td>
+</tr>
+<tr>
+<td>Kitchen</td>
+<td>None on window over sink; light filter on side windows</td>
+<td>Daylight maximization</td>
+</tr>
+<tr>
+<td>Baths</td>
+<td>Cellular shade + sheer privacy lower-half</td>
+<td>Privacy + light + humidity-friendly</td>
+</tr>
+<tr>
+<td>Nursery</td>
+<td>Blackout roller + sheer linen overlay</td>
+<td>Nap discipline</td>
+</tr>
+<tr>
+<td>Basement</td>
+<td>Whatever the existing condition needs</td>
+<td>Lower priority</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Performance-fabric mandate:</strong> any window treatment that puddles at floor in pet zone = NOT pure linen. Crypton Linen or Perennials linen-weave.</p>
+<h2 id="14-storage-mudroom-drop-zones-new-section-was-missing">14. Storage / mudroom / drop zones (NEW SECTION — was missing)</h2>
+<p>Canon photos show 30% of storage; real life needs 70% off-camera. Per-zone:</p>
+<ul>
+<li><strong>Entry:</strong> bench + hooks + tray for keys (Cathie Hong Campbell entry style — cali_09 reference)</li>
+<li><strong>Mudroom (between kitchen/carport):</strong> dog leash/coat hooks, baby gear bin, mail station, charging tray</li>
+<li><strong>Kitchen pantry:</strong> floor-to-ceiling oak built-in (canon: Hiroo cali_2i style) — depth + height matters more than aesthetic</li>
+<li><strong>Master closet:</strong> California-Closets-style reach-in (already locked in renovation scope)</li>
+<li><strong>Hall closets:</strong> PAX or Container Store TCS hybrid</li>
+<li><strong>Basement utility/storage zone:</strong> Robolitter cabinet (deferred to P2), shelves</li>
+<li><strong>Kid drop zone (post-arrival):</strong> in mudroom or kitchen nook, low-shelf for shoes + small art</li>
+</ul>
+<h2 id="15-lighting-plan-supplement-new-section-was-implicit-now-explicit">15. Lighting plan supplement (NEW SECTION — was implicit, now explicit)</h2>
+<p>Beyond decorative fixtures already speced:</p>
+<ul>
+<li><strong>Recessed gimbaled cans:</strong> 2700K, CRI 90+, in living areas + hallways. Throughout, not just kitchen. Quantity: ~25-35 cans whole-house.</li>
+<li><strong>Dimming:</strong> Lutron Caseta on living areas + master BR; standard toggles in utility zones.</li>
+<li><strong>Switches:</strong> Lutron Pico OR standard rocker. Smart toggles in 3+ way switch locations.</li>
+<li><strong>CRI 90+ bulbs throughout</strong> — color accuracy matters when palette is restrained</li>
+<li><strong>Task lighting:</strong> under-cabinet kitchen LED (already in P1 scope), reading-light at master + office</li>
+<li><strong>Smart smoke/CO detectors:</strong> Nest Protect × 6 (already in P1 scope)</li>
+</ul>
+<h2 id="16-patina-maintenance-contract-new-section-was-implicit-now-explicit">16. Patina maintenance contract (NEW SECTION — was implicit, now explicit)</h2>
+<p>Reframing principle 3 as a contract:</p>
+<table>
+<thead>
+<tr>
+<th>Material</th>
+<th>Maintenance</th>
+<th>Frequency</th>
+<th>Owner commitment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unlacquered brass — high-touch (pulls, door hardware)</td>
+<td>Renaissance Wax application OR accept blotchy tarnish</td>
+<td>Annually</td>
+<td>OPT-IN required</td>
+</tr>
+<tr>
+<td>Unlacquered brass — low-touch (sconces, faucets, fixtures)</td>
+<td>Patina freely</td>
+<td>None</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Rubio Monocoat floors</td>
+<td>Spot-clean per Rubio protocol; refresh every 18-30 months</td>
+<td>$1K each refresh</td>
+<td>OPT-IN required</td>
+</tr>
+<tr>
+<td>Cle Bejmat tile</td>
+<td>Hand-glaze variation is permanent; grout sealing yearly</td>
+<td>$200 annual sealant</td>
+<td>OPT-IN required</td>
+</tr>
+<tr>
+<td>Full-grain leather</td>
+<td>Wipe + condition annually</td>
+<td>$50 leather conditioner</td>
+<td>OPT-IN required</td>
+</tr>
+<tr>
+<td>Performance fabric</td>
+<td>Clean per manufacturer (most professional-clean-able)</td>
+<td>As needed</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Pure linen (master bedding only)</td>
+<td>Weekly wash, replace ~3-5 years</td>
+<td>$200-400/cycle</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Solid white oak millwork</td>
+<td>Wipe + Rubio oil pad annually</td>
+<td>$50-100</td>
+<td>Pass</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total annual maintenance commitment: ~$1,500-2,500/year + 4-8 hours of owner-direct work.</strong> If unwilling: pivot to lacquered finishes throughout (principle 3 changes from "patina gracefully" to "stay pristine").</p>
+<h2 id="17-sourceability-classification-system-locked-image-audit-complete">17. Sourceability classification system (LOCKED — image audit complete)</h2>
+<p>Each canon image classified per <code>_IMAGE_AUDIT.md</code> (image audit 2026-05-12).</p>
+<p><strong>Tally across 60 images:</strong> 18 SOURCEABLE / 21 MATERIAL-DIRECTION / 19 MOOD-ONLY / 2 DROPPED (exact duplicates)</p>
+<table>
+<thead>
+<tr>
+<th>Classification</th>
+<th>Definition</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SOURCEABLE</strong></td>
+<td>Elements visible can be bought retail / spec'd through normal channels</td>
+<td>Build per-room sourcing briefs against these</td>
+</tr>
+<tr>
+<td><strong>MATERIAL-DIRECTION</strong></td>
+<td>Use as palette/finish/material reference; literal furniture/layout may not translate</td>
+<td>Reference for spec decisions</td>
+</tr>
+<tr>
+<td><strong>MOOD-ONLY</strong></td>
+<td>Relies on heroic architecture, custom millwork, or specific site conditions</td>
+<td>Absorb the vibe; do not procure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="18-sourceable-anchor-images-per-room-sourcing-briefs-build-from-these">18 SOURCEABLE anchor images (per-room sourcing briefs build from these)</h3>
+<ol>
+<li><strong>cali_02</strong> — Saratoga Whimsy Kitchen (CHI) — light oak island + oat upper cabinets + brass branching chandelier</li>
+<li><strong>loved_12</strong> — Campbell House Kitchen HERO (CHI Rue Magazine) — fluted oak curved-end island + Caesarstone + Carrara backsplash</li>
+<li><strong>loved_13</strong> — Campbell House Dining (CHI Rue Magazine) — round oak table + Wishbone CH24 + brass branch chandelier</li>
+<li><strong>cali_21</strong> — Mandy Moore Kitchen (SSS) — sage-olive cabinets + Carrara waterfall + brass globe pendants</li>
+<li><strong>cali_08</strong> — Campbell Modern LR (CHI) — tan leather wing + cream sectional + Nelson Bubble + fiddle leaf</li>
+<li><strong>cali_24</strong> — Jenni Kayne Lake Arrowhead LR — cream linen sectional + Beni Ourain + fiddle leaf + bleached oak</li>
+<li><strong>loved_15</strong> — Campbell House Bedroom (CHI Rue) — walnut spindle bed + mustard linen duvet + sage pillows</li>
+<li><strong>cali_25</strong> — JK Lake Arrowhead Bedroom — cream upholstered bed + oak stump side table + black sconce</li>
+<li><strong>loved_08</strong> — OWIU Echo Park WFH Office — light-oak L-built-in + Eames Soft Pad</li>
+<li><strong>variety_12</strong> — Studio LIFE/STYLE Brentwood Kitchen+Dining — honey-oak beams + cream Shaker + Carrara + brass hood</li>
+<li><strong>cali_01</strong> — Saratoga Whimsy LR/Dining hero</li>
+<li><strong>cali_03</strong> — Saratoga Whimsy Kitchen detail</li>
+<li><strong>cali_04</strong> — Saratoga Whimsy reading chair vignette</li>
+<li><strong>cali_19</strong> — Duane Bedroom — platform bed + Aalto stool + paper lantern</li>
+<li><strong>variety_01</strong> — Pheasant Kitchen — sage uppers + bookmatched marble</li>
+<li><strong>variety_05</strong> — Castro Valley Dining — wishbone + brass branch chandelier</li>
+<li><strong>variety_13</strong> — Studio LIFE/STYLE breakfast nook — sage banquette</li>
+</ol>
+<h3 id="mood-only-callouts-do-not-try-to-reproduce-absorb-vibe-only">MOOD-ONLY callouts (DO NOT TRY TO REPRODUCE — absorb vibe only)</h3>
+<p>Heavy architectural commitments not in budget — references for atmosphere only:</p>
+<ul>
+<li><strong>cali_22</strong> (Mandy Moore mustard daybed) — <strong>PREVIOUSLY anchor for "one bold accent" rule. RECLASSIFIED:</strong> entire vignette is custom built-in plaster bench under custom skylight in custom bookshelf wall. CANNOT be procured. Reference for accent-color <em>placement</em> logic, not for the literal daybed.</li>
+<li><strong>variety_07</strong> (OWIU Brentwood Kitchen) — full custom slab oak millwork; $40-60K+ piece</li>
+<li><strong>variety_10</strong> (Santa Ynez Great Room) — vaulted beadboard + steel gable; $3-5M architecture</li>
+<li><strong>variety_09</strong> (OWIU Wellington Office) — full custom oak wall</li>
+<li><strong>variety_15</strong> (Allprace primary BR) — vaulted ceiling + exposed rafters + herringbone oak floor</li>
+<li><strong>loved_03 / loved_04</strong> (Palmero exterior + entry) — site-specific architecture</li>
+<li><strong>loved_05</strong> (Palmero HERO dining) — travertine + plaster + glass block + beams; gestalt depends on architecture</li>
+<li><strong>loved_07</strong> (Ryokan bonsai garden) — mature niwaki = $3-15K trees + multi-year acclimation</li>
+<li><strong>loved_11</strong> (Duane hinoki sauna) — custom-built wellness vignette</li>
+<li><strong>cali_05 / cali_07</strong> (Eichler architecture) — coffered ceilings + Eichler structural</li>
+<li><strong>cali_11</strong> (Writers Retreat) — clerestory + walnut counter signature</li>
+<li><strong>cali_13, cali_14, cali_15</strong> (Biscuit Loft series) — owner already rejected as "too pale lacking coziness"</li>
+<li><strong>cali_17</strong> (Echo Park shoji bedroom) — shoji built-ins</li>
+<li><strong>cali_20</strong> (Glass Ridge bedroom) — anti-Glass-Ridge discipline per canon notes</li>
+<li><strong>cali_23</strong> (Mandy Moore Beni Ourain LR) — reeded wood-block divider is custom</li>
+</ul>
+<h3 id="dropped-exact-duplicates-remove-from-canon">DROPPED (exact duplicates — remove from canon)</h3>
+<ul>
+<li><strong>loved_09</strong> = exact duplicate of cali_16 (Echo Park Hill House LR — tan leather sectional). NOT a bedroom despite manifest label.</li>
+<li><strong>loved_14</strong> = exact duplicate of cali_08 (Campbell Modern LR — Nelson Bubble + tan leather wing chair). NOT a separate fireplace-focused frame.</li>
+</ul>
+<h3 id="label-mismatches-to-repair-in-_california_canonmd">Label mismatches to repair in <code>_CALIFORNIA_CANON.md</code></h3>
+<p>5 entries in the loved_ block describe content other than what their JPG shows:</p>
+<ul>
+<li><strong>loved_01:</strong> described as LR with travertine; actual is Palmero exterior-looking-in dusk shot</li>
+<li><strong>loved_03:</strong> described as Akari+Aalto HERO; actual is Palmero exterior golden hour</li>
+<li><strong>loved_04:</strong> described as exterior golden hour; actual is Palmero dim interior entry/bar</li>
+<li><strong>loved_05:</strong> correctly describes Akari+Aalto HERO but mis-attributes to Ryokan (actually Palmero)</li>
+<li><strong>loved_10 / loved_11:</strong> swapped — walnut dining and hinoki sauna files don't match their manifest entries</li>
+</ul>
+<p>These are documentation-only fixes (JPGs are fine; labels need rewriting). Lower priority than the duplicates/reclassifications.</p>
+<h2 id="18-custom-millwork-sub-budget-new-section-was-missing">18. Custom millwork sub-budget (NEW SECTION — was missing)</h2>
+<p>Audit flagged $30-50K minimum in custom millwork to achieve canon look. Breakdown estimate:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Estimated cost</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kitchen oak island base + open shelves (fluted detail if budget allows)</td>
+<td>$10-15K</td>
+<td>HIGH — canon spine</td>
+</tr>
+<tr>
+<td>Master bath wood vanity + linen tower built-in</td>
+<td>(already in P1 scope)</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>LR built-in TV/storage cabinetry (1 wall)</td>
+<td>$5-8K</td>
+<td>MED — canon reference</td>
+</tr>
+<tr>
+<td>Office built-in wall (Wellington-Office-style)</td>
+<td>$5-10K</td>
+<td>MED</td>
+</tr>
+<tr>
+<td>Mudroom built-in bench + hooks + storage</td>
+<td>$2-4K</td>
+<td>HIGH (functional)</td>
+</tr>
+<tr>
+<td>Kitchen pantry built-in (full-height oak slab)</td>
+<td>$4-6K</td>
+<td>MED-HIGH</td>
+</tr>
+<tr>
+<td>Plaster fireplace slab (LR)</td>
+<td>$3-6K + brick prep</td>
+<td>MED (or accept existing brick + paint)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Custom millwork target: $30-50K within construction budget.</strong> If this is not affordable: aesthetic shifts toward retail-furniture-heavy (Article, WE, R&amp;B as primary spine; less canon CHI/OWIU-look-alike).</p>
+<h2 id="19-resale-future-flexibility-new-section-was-missing">19. Resale / future flexibility (NEW SECTION — was missing)</h2>
+<ul>
+<li><strong>10-year forever home posture confirmed.</strong> Resale not optimized.</li>
+<li><strong>But:</strong> Atlanta luxury buyers in DeKalb expect Southern-classical / millwork / traditional touches. Heavily-Japandi in a 1953 brick ranch may not fetch the premium per sqft that traditional remodels do.</li>
+<li><strong>Mitigation:</strong> the construction spec (Rubio floors, brass plumbing, marble counters, hand-glazed tile) is broadly desirable. The soft goods (Cathie Hong styling, Beni Ourain rug, hand-thrown ceramics) are easily refreshable.</li>
+<li><strong>Revisability layer:</strong> plan for major textile / accent refresh at year 5 (replace performance linen sofa, swap accent colors, refresh art). Don't lock specs that prevent this.</li>
+</ul>
+<h2 id="20-open-decisions-awaiting-owner-confirmation">20. Open decisions awaiting owner confirmation</h2>
+<p>Marked <strong>[OWNER CONFIRM]</strong> throughout this doc. Summary:</p>
+<ol>
+<li><strong>Kitchen backsplash:</strong> Cle Bejmat (current spec) OR pivot to Carrara slab + zellige (canon-consistent)? <em>Designer recommendation: PIVOT.</em></li>
+<li><strong>Beni Ourain rug:</strong> Year 1 or defer to year 4? <em>Designer recommendation: DEFER.</em></li>
+<li><strong>Performance fabrics:</strong> Pivot primary sofa + drapery to Crypton/Perennials? <em>Designer recommendation: PIVOT.</em></li>
+<li><strong>Brass maintenance:</strong> Accept annual Renaissance Wax + 18-30 month Rubio refresh? <em>Designer recommendation: ACCEPT.</em></li>
+<li><strong>Furniture envelope:</strong> $30K all-at-once OR $80-100K phased over 3-4 years? <em>Designer recommendation: PHASE.</em></li>
+<li><strong>Front door replacement P1?</strong> Walnut pivot vs keep existing.</li>
+<li><strong>Custom millwork budget:</strong> confirm $30-50K sub-budget available.</li>
+</ol>
+<h2 id="whats-locked-whats-owner-pending">What's locked / what's owner-pending</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aesthetic name + position</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>7 principles</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>6 canon designers + rejected list</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Walnut + Akari + density + vintage rules</td>
+<td>LOCKED (reconciled)</td>
+</tr>
+<tr>
+<td>Construction-budget specs (tile, paint, hardware, fixtures, hood)</td>
+<td>LOCKED</td>
+</tr>
+<tr>
+<td>Kitchen backsplash</td>
+<td><strong>OWNER CONFIRM</strong></td>
+</tr>
+<tr>
+<td>Beni Ourain timing</td>
+<td><strong>OWNER CONFIRM</strong></td>
+</tr>
+<tr>
+<td>Performance fabric pivot</td>
+<td><strong>OWNER CONFIRM</strong></td>
+</tr>
+<tr>
+<td>Furniture envelope size + phasing</td>
+<td><strong>OWNER CONFIRM</strong></td>
+</tr>
+<tr>
+<td>Brass maintenance commitment</td>
+<td><strong>OWNER CONFIRM</strong></td>
+</tr>
+<tr>
+<td>Per-image sourceability classification</td>
+<td>IN PROGRESS (image audit subagent running)</td>
+</tr>
+<tr>
+<td>Per-room sourcing briefs (Phase 3)</td>
+<td>NEXT</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Supersedes:</strong> <code>PHILOSOPHY.md</code>, <code>_DESIGN_LANGUAGE.md</code> (both will be renamed to <code>*-OLD.md</code> after this is confirmed by owner)
+<strong>Companion files:</strong> <code>mood_boards/session_01_philosophy/_CALIFORNIA_CANON.md</code> (image manifest), <code>mood_boards/session_01_philosophy/_IMAGE_AUDIT.md</code> (per-image classification, in progress), <code>locked_exemplars.html</code> (37-image mood board)</p>
+</div>
+</body>
+</html>
