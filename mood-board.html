@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Modern Japandi — Final Canon · 1490 Lively Ridge</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --ink: #2a2622;
+    --muted: #6b6660;
+    --accent: #8a7a5a;
+    --card-bg: #fff;
+    --target-tint: #e8efe2;
+    --warm-tint: #f7eedc;
+    --note-tint: #f0e8d8;
+    --border: #e8e2d6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav.posnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 248, 244, 0.94);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .posnav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 11px 28px;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px;
+  }
+  .posnav-inner .label { color: var(--muted); margin-right: 6px; font-weight: 600; }
+  .posnav-inner a {
+    color: var(--ink); text-decoration: none; padding: 4px 11px;
+    border-radius: 999px; border: 1px solid var(--border);
+  }
+  .posnav-inner a:hover { background: var(--card-bg); border-color: var(--accent); }
+
+  header.intro-header { max-width: 1180px; margin: 0 auto; padding: 40px 28px 12px; }
+  h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 8px; }
+  .subtitle { color: var(--muted); font-size: 17px; margin: 0 0 20px; }
+
+  .calibration-note {
+    background: var(--note-tint);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 0 0 18px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .calibration-note strong { color: #5c4f2f; }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 8px 28px 80px; }
+  .section-header {
+    margin: 48px 0 14px;
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    scroll-margin-top: 70px;
+  }
+  .section-header h2 { font-size: 24px; font-weight: 600; margin: 0; }
+  .section-header .count { color: var(--muted); font-size: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .card.hero {
+    background: var(--warm-tint);
+    border: 2px solid #c9b88a;
+  }
+  .card.new {
+    background: var(--target-tint);
+    border-color: #b8c4a8;
+  }
+  .card.mood-only {
+    border: 2px dashed #c9b88a;
+    opacity: 0.92;
+  }
+  .card.mood-only .card-title::after {
+    content: " · MOOD ONLY";
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #b85c44;
+    background: #f5e8e0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .card .imgwrap { background: #ece8e0; aspect-ratio: 4 / 3; overflow: hidden; }
+  .card .imgwrap a { display: block; width: 100%; height: 100%; cursor: zoom-in; }
+  .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .card-title { font-size: 14.5px; font-weight: 600; margin: 0; }
+  .card-project { font-size: 12px; color: var(--muted); margin: -6px 0 0; }
+  .card-why { font-size: 13px; line-height: 1.55; margin: 0; color: var(--ink); }
+  .card-key {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+  }
+  .card-src {
+    font-size: 11.5px; color: var(--muted);
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .card-src a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid rgba(138, 122, 90, 0.3);
+  }
+
+  footer { max-width: 1180px; margin: 0 auto; padding: 12px 28px 60px; color: var(--muted); font-size: 14px; text-align: center; }
+
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    h1 { font-size: 30px; }
+    header.intro-header, main, footer { padding-left: 18px; padding-right: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="posnav">
+  <div class="posnav-inner">
+    <span class="label">Jump:</span>
+    <a href="#living">Living (7)</a>
+    <a href="#kitchens">Kitchens (8)</a>
+    <a href="#dining">Dining (6)</a>
+    <a href="#bedrooms">Bedrooms (4)</a>
+    <a href="#bath">Bath (1)</a>
+    <a href="#nooks">Entry / Office / Outdoor (9)</a>
+  </div>
+</nav>
+
+<header class="intro-header">
+  <h1>California Modern Japandi — Final Canon v4 (Post-Audit)</h1>
+  <p class="subtitle">35 references · audited + classified · spec at <code>DESIGN_SPEC.md</code></p>
+
+  <div class="calibration-note">
+    <strong>v4 — post tri-audit (Claude + Gemini + Codex) + image-level audit (2026-05-12).</strong> Dropped 2 exact duplicates (loved_09 + loved_14 were duplicates of cali_16 + cali_08). Reclassified <code>cali_22</code> Mandy Moore mustard daybed nook from "bold accent anchor" to <strong>MOOD-ONLY</strong> — it's custom-built plaster bench under custom skylight, not procurement-spec-able. Architecturally-heavy refs (variety_07, variety_10, variety_15, loved_03/04/05/07, cali_22) tagged <strong>MOOD ONLY</strong> in their card titles — use for vibe only, do NOT try to replicate. The 18 SOURCEABLE anchors for per-room briefs are listed in <code>DESIGN_SPEC.md</code> §17. <strong>Cream cards (⭐)</strong> = HERO sourceable anchors. <strong>Sage cards</strong> = NEW projects added for variety. <strong>Dashed tan border + "MOOD ONLY" badge</strong> = absorb vibe but don't procure.
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ LIVING ROOMS ============ -->
+  <div class="section-header" id="living">
+    <h2>Living Rooms</h2>
+    <span class="count">7 references · 7 different projects · (loved_14 dropped — duplicate of cali_08)</span>
+  </div>
+  <div class="grid">
+
+    <div class="card hero mood-only"><div class="imgwrap"><a href="images/loved_01.jpg" target="_blank"><img src="images/loved_01.jpg" alt="loved_01"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ OWIU Palmero · LR travertine + plaster</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Warm limewash plaster walls, travertine cube coffee table, white modular sofa, light oak open shelving, sisal rug, paper-shade floor lamp. The warm-cozy Japandi tone.</p>
+    <p class="card-key">warm limewash plaster walls · travertine cube coffee table · white modular tufted sofa · light oak open shelving · sisal rug · paper-shade floor lamp · framed ink scroll art</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/interiors/palmero" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_02.jpg" target="_blank"><img src="images/variety_02.jpg" alt="variety_02"></a></div>
+    <div class="card-body"><h3 class="card-title">San Mateo Kakaru House · LR with fluted fireplace</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · NEW project</p>
+    <p class="card-why">Floor-to-ceiling fluted oak fireplace surround + walnut built-in shelves with brass mushroom sconces + olive green boucle armchair + small dog on wool rug. Family-with-character feel.</p>
+    <p class="card-key">fluted light oak fireplace surround · walnut built-in bookshelves · brass mushroom sconces · olive green boucle armchair · olive low sofa · round oak coffee table · ceramic vessel grouping · dog on the floor</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/san-mateo-kakaru-house" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card new mood-only"><div class="imgwrap"><a href="images/variety_10.jpg" target="_blank"><img src="images/variety_10.jpg" alt="variety_10"></a></div>
+    <div class="card-body"><h3 class="card-title">Santa Ynez Ranch · Great Room with vaulted ceiling</h3>
+    <p class="card-project">Jenni Kayne · Photo: Amanda Sanford · NEW project</p>
+    <p class="card-why">Vaulted whitewashed beadboard ceiling + steel gable window framing hills + four boucle swivel chairs around chunky oak coffee table + sisal rug + cream linen sectional + tall terracotta floor urn. California ranch + Japandi restraint at great-room scale.</p>
+    <p class="card-key">vaulted whitewashed beadboard ceiling · exposed white rafters · steel-framed gable window wall · four boucle swivel chairs · chunky oak round coffee table · sisal rug · cream linen sectional · tall terracotta floor urn · hillside view</p>
+    <p class="card-src"><a href="https://www.jennikayne.com/blogs/ripandtan/the-ranch-great-room" target="_blank">Rip &amp; Tan</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_08.jpg" target="_blank"><img src="images/cali_08.jpg" alt="cali_08"></a></div>
+    <div class="card-body"><h3 class="card-title">Campbell · LR Nelson Lantern (alt angle)</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin</p>
+    <p class="card-why">Different angle of Campbell House — tan-leather wing chair, cream sectional, oak round column-leg coffee table, Nelson bubble pendant, fiddle leaf fig. White walls + vaulted ceiling = max light.</p>
+    <p class="card-key">tan leather wing chair · cream linen sectional · oak column-leg coffee table · Nelson bubble pendant · fiddle leaf fig · woven wool rug · vaulted ceiling</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/campbell-modern" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_16.jpg" target="_blank"><img src="images/cali_16.jpg" alt="cali_16"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Echo Park Hill House · Tan leather sectional</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Honey-tan leather modular sectional, floor-to-ceiling oak bookshelves of well-loved books, surfboard art, wool shag rug, agave/cactus by window. Pure warm modern LA.</p>
+    <p class="card-key">honey tan modular leather sectional · floor-to-ceiling oak bookshelves · organic teak side table · ivory wool shag rug · framed beach art · light oak floor</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/echopark-hillhouse" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_24.jpg" target="_blank"><img src="images/cali_24.jpg" alt="cali_24"></a></div>
+    <div class="card-body"><h3 class="card-title">Jenni Kayne Lake House · Lake-view LR</h3>
+    <p class="card-project">Jenni Kayne Interiors</p>
+    <p class="card-why">Picture-window lake view + light oak + Beni Ourain rug + cream linen sofa + fiddle leaf fig + bleached oak chair with sheepskin. The textbook "Beni Ourain + fiddle leaf + cream + oak" formula.</p>
+    <p class="card-key">light oak wide-plank floor · vintage Beni Ourain rug · cream linen tight-back sofa · large fiddle leaf fig · bleached oak armchair · sheepskin throw · raw-wood coffee table</p>
+    <p class="card-src"><a href="https://www.dwell.com/home/jenni-kayne-lake-house-04201a67" target="_blank">dwell.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_23.jpg" target="_blank"><img src="images/cali_23.jpg" alt="cali_23"></a></div>
+    <div class="card-body"><h3 class="card-title">Mandy Moore home · Beni Ourain + sectional</h3>
+    <p class="card-project">Sarah Sherman Samuel · Photo: Trevor Tondro</p>
+    <p class="card-why">White modern sectional + vintage Beni Ourain rug (boho gesture) + reeded oak block screen as warm-wood gesture. Restrained palette with one rust-leather leg detail.</p>
+    <p class="card-key">white modern slipcovered sectional · vintage Beni Ourain rug · reeded oak block screen divider · bronze sculptural side table · brick-pattern wood floor</p>
+    <p class="card-src"><a href="https://sarahshermansamuel.com/projects/mandy-moores-mid-century-home/" target="_blank">sarahshermansamuel.com</a></p></div></div>
+
+  </div>
+
+  <!-- ============ KITCHENS ============ -->
+  <div class="section-header" id="kitchens">
+    <h2>Kitchens</h2>
+    <span class="count">8 references · 8 different projects</span>
+  </div>
+  <div class="grid">
+
+    <div class="card hero"><div class="imgwrap"><a href="images/loved_12.jpg" target="_blank"><img src="images/loved_12.jpg" alt="loved_12"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ Campbell House · Fluted oak island HERO</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · Rue Magazine</p>
+    <p class="card-why">THE kitchen reference. Fluted light oak island with curved waterfall + Caesarstone quartz + Carrara marble backsplash + brass gooseneck + Muuto Fiber black stools + open oak shelves with handmade ceramics.</p>
+    <p class="card-key">fluted light oak island · Caesarstone quartz · Carrara marble slab backsplash · brass arched faucet · Muuto Fiber stools · open oak shelves with ceramics · black-cord milk-glass pendants · light oak floor</p>
+    <p class="card-src"><a href="https://ruemag.com/a-minimalist-home-with-japandi-vibes/" target="_blank">Rue Magazine</a></p></div></div>
+
+    <div class="card hero mood-only"><div class="imgwrap"><a href="images/variety_07.jpg" target="_blank"><img src="images/variety_07.jpg" alt="variety_07"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ OWIU Brentwood · Kitchen NEW HERO</h3>
+    <p class="card-project">OWIU Design · Photo: Justin Chung · NEW project</p>
+    <p class="card-why">Floor-to-ceiling slab light-oak cabinets + custom oak island with built-in book niche + white Calacatta backsplash + open oak shelves with hand-thrown ceramics + brass pot filler. The "dream-state California Modern Japandi kitchen."</p>
+    <p class="card-key">floor-to-ceiling slab light-oak cabinets · oak island with cookbook niche · Calacatta marble backsplash · open oak shelving · hand-thrown ceramics · dried fan palm · black faucet · brass pot filler</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/brentwood" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_12.jpg" target="_blank"><img src="images/variety_12.jpg" alt="variety_12"></a></div>
+    <div class="card-body"><h3 class="card-title">Studio LIFE/STYLE · Honey-oak beam kitchen</h3>
+    <p class="card-project">Shannon Wollack + Brittany Zwickl · Photo: Nicki Sebastian · NEW designer</p>
+    <p class="card-why">Honey-oak ceiling beams + cream cabinets + book-matched marble + brushed-brass range hood + tan-leather sling chairs + chunky oak farm table + sheer linen Roman shades + sage banquette in distance. Six canon signature moves in one frame.</p>
+    <p class="card-key">honey-oak ceiling beams · cream Shaker cabinets · book-matched marble counters · brushed-brass range hood · tan-leather sling dining chairs · chunky oak farm table · sheer linen Romans · sage green banquette beyond</p>
+    <p class="card-src"><a href="https://www.jennikayne.com/blogs/ripandtan/studio-lifestyle-home-tour" target="_blank">Rip &amp; Tan</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_04.jpg" target="_blank"><img src="images/variety_04.jpg" alt="variety_04"></a></div>
+    <div class="card-body"><h3 class="card-title">Aloha + Ohayo House · Fluted walnut kitchen</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · NEW project · HGTV Magazine</p>
+    <p class="card-why">Fluted walnut island + light oak upper cabinets + sage-green square tile backsplash + fluted wood range hood + light-oak bar stools. Warmer/darker wood mix that shows the range can lean a notch deeper without going dark.</p>
+    <p class="card-key">fluted walnut island · light oak upper cabinets · sage green square tile backsplash · open light-oak shelves · fluted wood range hood · light-oak bar stools · ceramic vase with greenery</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/aloha-ohayo" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_01.jpg" target="_blank"><img src="images/variety_01.jpg" alt="variety_01"></a></div>
+    <div class="card-body"><h3 class="card-title">Pheasant House · Two-tone sage + oak kitchen</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · NEW project</p>
+    <p class="card-why">Light oak base + soft sage upper cabinets + book-matched Calacatta-style marble backsplash + oak waterfall island. Fresh take on the "wood + sage + marble + brass" formula.</p>
+    <p class="card-key">light oak base cabinets · sage green upper cabinets · book-matched marble backsplash · oak waterfall island · light oak bar stools with backs · white globe pendants · brass tap · light oak floor</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/pheasant-house" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_11.jpg" target="_blank"><img src="images/variety_11.jpg" alt="variety_11"></a></div>
+    <div class="card-body"><h3 class="card-title">Santa Ynez Ranch · Soft-grey Shaker kitchen</h3>
+    <p class="card-project">Jenni Kayne · Photo: Amanda Sanford · NEW project</p>
+    <p class="card-why">Soft-grey Shaker cabinets + brass knob hardware + zellige white tile backsplash + open oak interior shelves + black-and-brass Italian range. Slightly cooler/greyer — a "base cabs go grey-green instead of cream" alternative.</p>
+    <p class="card-key">soft-grey Shaker cabinets · brass knob hardware · white zellige tile backsplash · oak-lined open shelves · black-and-brass Italian range · cream marble counter · matte-grey ceramic stacks</p>
+    <p class="card-src"><a href="https://www.jennikayne.com/blogs/ripandtan/the-ranch-kitchen-dining" target="_blank">Rip &amp; Tan</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_02.jpg" target="_blank"><img src="images/cali_02.jpg" alt="cali_02"></a></div>
+    <div class="card-body"><h3 class="card-title">Saratoga Whimsy · Kitchen wide</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin</p>
+    <p class="card-why">Light oak island + warm-cream/oat cabinets, brass branching chandelier, plant on counter, sage-tan barstools. Bright window-lit.</p>
+    <p class="card-key">light oak island base · oat cream upper cabinets · brass branching chandelier · vase with greenery · brass hardware · runner rug · large kitchen window</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/saratoga-whimsy-house" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_21.jpg" target="_blank"><img src="images/cali_21.jpg" alt="cali_21"></a></div>
+    <div class="card-body"><h3 class="card-title">Mandy Moore · Sage olive kitchen</h3>
+    <p class="card-project">Sarah Sherman Samuel</p>
+    <p class="card-why">Sage-olive base cabinets (olive accent), Carrara marble waterfall, brass pendants, paper-cord/oak bar stools. Bright modern lived-in LA.</p>
+    <p class="card-key">sage-olive matte cabinets · Carrara marble waterfall island · brass globe pendants · paper-cord light oak bar stools · terrazzo floor · brass faucet</p>
+    <p class="card-src"><a href="https://sarahshermansamuel.com/projects/mandy-moores-mid-century-home/" target="_blank">sarahshermansamuel.com</a></p></div></div>
+
+  </div>
+
+  <!-- ============ DINING ============ -->
+  <div class="section-header" id="dining">
+    <h2>Dining</h2>
+    <span class="count">6 references · 6 different projects</span>
+  </div>
+  <div class="grid">
+
+    <div class="card hero"><div class="imgwrap"><a href="images/loved_13.jpg" target="_blank"><img src="images/loved_13.jpg" alt="loved_13"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ Campbell House · Dining with Wishbones</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · Rue Magazine</p>
+    <p class="card-why">Round organic-base oak table + Wegner CH24 Wishbone chairs + sculptural brass-branch chandelier + plaster wall.</p>
+    <p class="card-key">round oak dining table · Hans Wegner CH24 Wishbone chairs · sculptural brass-arm chandelier · light oak wide-plank floor · warm plaster wall · fiddle leaf in background</p>
+    <p class="card-src"><a href="https://ruemag.com/a-minimalist-home-with-japandi-vibes/" target="_blank">Rue Magazine</a></p></div></div>
+
+    <div class="card hero mood-only"><div class="imgwrap"><a href="images/loved_03.jpg" target="_blank"><img src="images/loved_03.jpg" alt="loved_03"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ OWIU Palmero · Kitchen+Dining HERO</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Travertine fluted-base dining table, exposed wood ceiling beams, Nelson pendants, Aalto stools, glass block partition, light oak floor.</p>
+    <p class="card-key">travertine fluted-column dining table · exposed light oak ceiling beams · Nelson Bubble + Saucer pendants · cream Aalto Stool 60 trio · glass-block partition · white plank ceiling · light oak floor</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/interiors/palmero" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card hero mood-only"><div class="imgwrap"><a href="images/loved_05.jpg" target="_blank"><img src="images/loved_05.jpg" alt="loved_05"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ OWIU Ryokan · Dining + entry HERO</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Travertine fluted oval table, exposed light oak beams, Nelson pendants, Aalto stools, warm limewash plaster, glass-block partition, black louver door. Palmero-grammar reprised in Ryokan, warmer wash.</p>
+    <p class="card-key">travertine fluted oval dining table · exposed light oak beams · Nelson pendants · cream Aalto Stool 60 trio · warm limewash plaster · glass-block partition · black louvered doors</p>
+    <p class="card-src"><a href="https://www.wallpaper.com/architecture/owiu-ryokan-house-los-angeles" target="_blank">wallpaper.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_05.jpg" target="_blank"><img src="images/variety_05.jpg" alt="variety_05"></a></div>
+    <div class="card-body"><h3 class="card-title">Castro Valley Ranch · Wishbone dining</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · NEW project · Rue Magazine 2025</p>
+    <p class="card-why">Wishbone-style light oak chairs around an oak pedestal table, white-brick painted fireplace, brass-and-glass branch chandelier, sheer cream linen drapes, fresh-cut flowers. Restraint + warmth at dinner-party scale.</p>
+    <p class="card-key">light oak wishbone chairs · oak pedestal dining table · painted white brick fireplace · brass branch chandelier · sheer cream linen drapes · fresh-cut flower centerpiece</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/castro-valley-ranch" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_13.jpg" target="_blank"><img src="images/variety_13.jpg" alt="variety_13"></a></div>
+    <div class="card-body"><h3 class="card-title">Studio LIFE/STYLE · Sage banquette nook</h3>
+    <p class="card-project">Shannon Wollack + Brittany Zwickl · Photo: Nicki Sebastian · NEW designer</p>
+    <p class="card-why">Sage-green channel-tufted banquette + light-oak base + cream linen pillows + round oak pedestal table + light-oak woven-back chairs + bay window with linen Romans. NEW designer doing the SAME canon language.</p>
+    <p class="card-key">sage green channel-tufted banquette · oak banquette base · oak pedestal round table · woven-cane oak dining chairs · sheer linen Romans · branchy dried floral · white plaster pendant</p>
+    <p class="card-src"><a href="https://www.jennikayne.com/blogs/ripandtan/studio-lifestyle-home-tour" target="_blank">Rip &amp; Tan</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/loved_11.jpg" target="_blank"><img src="images/loved_11.jpg" alt="loved_11"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Duane · Round walnut dining nook</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Round walnut pedestal table + curved-back walnut chairs + small Akari pendant + stoneware floor vase + sliding glass to courtyard. Warmer/darker variant.</p>
+    <p class="card-key">round walnut pedestal table · curved-back walnut chairs · small Akari pendant · stoneware floor urn with willow ikebana · light oak herringbone floor</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/duane-house" target="_blank">owiu-design.com</a></p></div></div>
+
+  </div>
+
+  <!-- ============ BEDROOMS ============ -->
+  <div class="section-header" id="bedrooms">
+    <h2>Bedrooms</h2>
+    <span class="count">4 references · 4 different projects · (loved_09 dropped — duplicate of cali_16)</span>
+  </div>
+  <div class="grid">
+
+    <div class="card hero"><div class="imgwrap"><a href="images/loved_15.jpg" target="_blank"><img src="images/loved_15.jpg" alt="loved_15"></a></div>
+    <div class="card-body"><h3 class="card-title">⭐ Campbell House · Bedroom mustard linen</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin · Rue Magazine</p>
+    <p class="card-why">Walnut spindle bed + mustard yellow linen duvet + sage green pillows + framed botanical print + Akari nightstand lamp + light oak floor. Real color (mustard) that lifts without trend-cottagey.</p>
+    <p class="card-key">walnut spindle bed · mustard yellow linen duvet · sage green lumbar pillow · white linen euro shams · walnut nightstand · Akari paper bedside lamp · framed botanical print · sheer cream drapes</p>
+    <p class="card-src"><a href="https://ruemag.com/a-minimalist-home-with-japandi-vibes/" target="_blank">Rue Magazine</a></p></div></div>
+
+    <div class="card new mood-only"><div class="imgwrap"><a href="images/variety_15.jpg" target="_blank"><img src="images/variety_15.jpg" alt="variety_15"></a></div>
+    <div class="card-body"><h3 class="card-title">Allprace Japandi House · Primary BR</h3>
+    <p class="card-project">Shanty Wijaya · Photo: Jenna Peffely · NEW designer · HGTV/Emily Henderson</p>
+    <p class="card-why">Vaulted ceiling with exposed white-painted rafters + white wood-clad accent wall + oak casement windows + cream linen headboard + soft white linens + sheepskin pillow + Beni Ourain rug + herringbone light-oak floor.</p>
+    <p class="card-key">vaulted ceiling with exposed white rafters · oak-framed casement windows · cream linen-upholstered headboard · sheepskin pillow · Beni Ourain rug · herringbone light-oak floor · framed nude oil portrait · oak nightstand with ball lamp</p>
+    <p class="card-src"><a href="https://stylebyemilyhenderson.com/allprace-japandi-style-home" target="_blank">Style by Emily Henderson</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_25.jpg" target="_blank"><img src="images/cali_25.jpg" alt="cali_25"></a></div>
+    <div class="card-body"><h3 class="card-title">Jenni Kayne Lake House · Bedroom</h3>
+    <p class="card-project">Jenni Kayne Interiors</p>
+    <p class="card-why">Light oak floor, cream linen upholstered bed, sculptural turned-oak stump side table, single live plant, black sconce. Soft white wall paneling reads bright not cottagey.</p>
+    <p class="card-key">light oak floor · cream linen upholstered bed · oak turned-stump side table · small live plant · black wall sconce · soft white plank walls</p>
+    <p class="card-src"><a href="https://www.dwell.com/home/jenni-kayne-lake-house-04201a67" target="_blank">dwell.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_19.jpg" target="_blank"><img src="images/cali_19.jpg" alt="cali_19"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Duane · Platform bed BR</h3>
+    <p class="card-project">OWIU Studio</p>
+    <p class="card-why">Floor-platform light oak bed + cream linen, light oak floor, Aalto-style stool, paper lantern, oak desk built-in. Lived-in warm Japandi minimalism.</p>
+    <p class="card-key">floor-platform light oak bed · cream linen bedding · light oak floor · paper globe lantern pendant · Aalto stool · light oak desk built-in</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/duane-house" target="_blank">owiu-design.com</a></p></div></div>
+
+  </div>
+
+  <!-- ============ BATH ============ -->
+  <div class="section-header" id="bath">
+    <h2>Bath</h2>
+    <span class="count">1 reference (more coming in per-room sourcing)</span>
+  </div>
+  <div class="grid">
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_08.jpg" target="_blank"><img src="images/variety_08.jpg" alt="variety_08"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Brentwood · Primary Bath vignette</h3>
+    <p class="card-project">OWIU Design · Photo: Justin Chung · NEW</p>
+    <p class="card-why">Sandstone tub deck + white plaster wall + brushed nickel towel bar + woven cream waffle towel + tall white vase of dried branches. Belgian-monastic restraint. Most Japandi-pure shot in the variety pass.</p>
+    <p class="card-key">sandstone-cast tub deck · white plaster wall · brushed nickel towel bar · woven cream waffle towel · dried branches in tall white vase · integrated tub fittings</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/brentwood" target="_blank">owiu-design.com</a></p></div></div>
+
+  </div>
+
+  <!-- ============ NOOKS / ENTRIES / OFFICE / OUTDOOR ============ -->
+  <div class="section-header" id="nooks">
+    <h2>Entry · Office · Nooks · Outdoor</h2>
+    <span class="count">9 references</span>
+  </div>
+  <div class="grid">
+
+    <div class="card"><div class="imgwrap"><a href="images/cali_09.jpg" target="_blank"><img src="images/cali_09.jpg" alt="cali_09"></a></div>
+    <div class="card-body"><h3 class="card-title">Campbell · Entry with tree</h3>
+    <p class="card-project">Cathie Hong · Photo: Margaret Austin</p>
+    <p class="card-why">Walnut warm-wood pivot door, large live tree, asymmetric organic-edge MCM mirror, grey MCM bench, vintage block-print kilim runner, light oak floor.</p>
+    <p class="card-key">walnut pivot front door · large indoor tree · organic-edge wood mirror · grey upholstered MCM bench · vintage block-print kilim runner · light oak floor</p>
+    <p class="card-src"><a href="https://www.cathiehonginteriors.com/portfolio/campbell-modern" target="_blank">cathiehonginteriors.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_14.jpg" target="_blank"><img src="images/variety_14.jpg" alt="variety_14"></a></div>
+    <div class="card-body"><h3 class="card-title">Allprace · Entry + walnut kitchen</h3>
+    <p class="card-project">Shanty Wijaya · Photo: Jenna Peffely · NEW designer</p>
+    <p class="card-why">White built-in entry bench + woven basket art + walnut Reform cabinets + black island with light-oak stools + plaster wall. Shows the canon scales from white walls + light wood to walnut + soft-black accents without losing warmth.</p>
+    <p class="card-key">white built-in entry bench · woven Bolga basket wall hanging · striped linen pillow · walnut Reform kitchen cabinets · soft-black island with light-oak round stools · indoor fiddle leaf · light oak wide-plank floor</p>
+    <p class="card-src"><a href="https://stylebyemilyhenderson.com/allprace-japandi-style-home" target="_blank">Style by Emily Henderson</a></p></div></div>
+
+    <div class="card mood-only"><div class="imgwrap"><a href="images/cali_22.jpg" target="_blank"><img src="images/cali_22.jpg" alt="cali_22"></a></div>
+    <div class="card-body"><h3 class="card-title">Mandy Moore · Mustard daybed nook</h3>
+    <p class="card-project">Sarah Sherman Samuel · Photo: Trevor Tondro</p>
+    <p class="card-why">Mustard/turmeric velvet built-in daybed + brass swing-arm sconce — exact "one bold accent per room" execution. White walls, skylight, vintage striped kilim.</p>
+    <p class="card-key">mustard/turmeric velvet daybed · recessed built-in plaster bench · brass swing-arm sconce · vintage striped kilim runner · sculptural turned oak side table · terrazzo floor · skylight</p>
+    <p class="card-src"><a href="https://sarahshermansamuel.com/projects/mandy-moores-mid-century-home/" target="_blank">sarahshermansamuel.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/loved_02.jpg" target="_blank"><img src="images/loved_02.jpg" alt="loved_02"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Palmero · Entry vignette</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Limewash plaster, black-framed Japanese woodblock-style botanical print, dark live-edge wood stool with X-base, white teardrop vase, ferns + scabiosa pods, dappled sunlight.</p>
+    <p class="card-key">warm bone limewash plaster wall · black-framed ink-print botanical scroll · dark live-edge wood stool · white teardrop ceramic vase · ferns + scabiosa pods · dappled sunlight</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/interiors/palmero" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card mood-only"><div class="imgwrap"><a href="images/loved_04.jpg" target="_blank"><img src="images/loved_04.jpg" alt="loved_04"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Palmero · Entry exterior at golden hour</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Black-framed steel windows + door on cream stucco, low-slung wood lounge on warm cedar deck, Akari floor lanterns through glass at dusk, pine bonsai. Indoor/outdoor flow + Japanese restraint.</p>
+    <p class="card-key">black steel-frame doors + windows + transom · cream stucco facade · golden cedar wood deck · low-slung mid-century wood lounge chair · twin Akari pendant + floor lamps · pine bonsai · dusk sky</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/interiors/palmero" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_06.jpg" target="_blank"><img src="images/variety_06.jpg" alt="variety_06"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Brentwood · LR vignette with dried wheat</h3>
+    <p class="card-project">OWIU Design · Photo: Justin Chung · NEW</p>
+    <p class="card-why">Pierre Jeanneret-style cane-back lounge chair + slim oak side table + black ceramic vase + dried wheat + small olive-green abstract canvases + linen casement window. "Vignette I could replicate" feel.</p>
+    <p class="card-key">Pierre Jeanneret-style cane-back chair · dried wheat in stone vase · small olive abstract canvases · fluted oak fireplace surround · slim oak side table · lipped-shade table lamp · linen casement window</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/brentwood" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card new"><div class="imgwrap"><a href="images/variety_09.jpg" target="_blank"><img src="images/variety_09.jpg" alt="variety_09"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Wellington Office · Light-oak millwork study</h3>
+    <p class="card-project">OWIU Design · Photo: Justin Chung · NEW</p>
+    <p class="card-why">Full-wall light oak millwork — slab uppers + fluted vertical-reed lowers as desk apron — with plaster nook window + pale ceramic vase + Eames soft-pad chair. "Quiet office I'd actually want to work in" — directly translatable to your WFH office.</p>
+    <p class="card-key">light oak slab upper cabinetry · fluted light oak desk apron · plaster nook window · light oak countertop · Eames soft-pad chair in beige leather · classical bust · pale ceramic bud vase · art book</p>
+    <p class="card-src"><a href="https://www.owiu-design.com/work/residential/wellington-office" target="_blank">owiu-design.com</a></p></div></div>
+
+    <div class="card"><div class="imgwrap"><a href="images/loved_08.jpg" target="_blank"><img src="images/loved_08.jpg" alt="loved_08"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Echo Park · WFH office</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Light oak L-shaped built-in desk + floating shelf, Eames Soft Pad chair in tan leather, warm window light, amber glass vase + book stack including "Wabi-Sabi Welcome."</p>
+    <p class="card-key">light oak built-in L-desk + floating shelf · Eames Soft Pad management chair in tan leather · amber glass vase · "Wabi-Sabi Welcome" book · dried wheat stems · wood-blind window light</p>
+    <p class="card-src"><a href="https://www.dwell.com/home/echo-park-hill-house-owiu-design-2c3a9b1f" target="_blank">dwell.com</a></p></div></div>
+
+    <div class="card mood-only"><div class="imgwrap"><a href="images/loved_07.jpg" target="_blank"><img src="images/loved_07.jpg" alt="loved_07"></a></div>
+    <div class="card-body"><h3 class="card-title">OWIU Ryokan · Bonsai garden vignette</h3>
+    <p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+    <p class="card-why">Cloud-pruned juniper niwaki against warm cedar fence at golden hour. Japanese garden discipline without theme-park costume. Direct reference for outdoor shower zone + deck planting.</p>
+    <p class="card-key">cloud-pruned niwaki conifer · warm vertical cedar fence · decomposed-granite gravel · mossy boulders · cypress in distance · dusk golden-hour light</p>
+    <p class="card-src"><a href="https://www.wallpaper.com/architecture/owiu-ryokan-house-los-angeles" target="_blank">wallpaper.com</a></p></div></div>
+
+  </div>
+
+</main>
+
+<footer>
+  Final canon v3 · 37 references across 12+ different projects · Cathie Hong + OWIU + SSS + Jenni Kayne + Studio LIFE/STYLE + Allprace · Ready for Annika review · Cream cards = HERO anchors · Sage cards = NEW projects added this round
+</footer>
+
+</body>
+</html>
