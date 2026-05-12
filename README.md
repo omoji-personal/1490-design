@@ -31,3 +31,4 @@ Those live in the private `omoji-personal/HomeAI` repo for owner reference.
 ## Acknowledgments
 
 Reference images sourced from editorial publications (Rue Magazine, Dwell, Yellowtrace, Wallpaper, Sunset, 1stDibs Introspective, Living Etc, Apartment Therapy). All images credited inline in the mood board with source links.
+<!-- last deploy: Tue May 12 11:44:52 EDT 2026 -->
