@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Spectrum · 1490 Lively Ridge</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --ink: #2a2622;
+    --muted: #6b6660;
+    --accent: #8a7a5a;
+    --card-bg: #fff;
+    --kill-tint: #f5e8e0;
+    --target-tint: #e8efe2;
+    --border: #e8e2d6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav.posnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 248, 244, 0.94);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .posnav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 11px 28px;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px;
+  }
+  .posnav-inner .label { color: var(--muted); margin-right: 6px; font-weight: 600; }
+  .posnav-inner a {
+    color: var(--ink); text-decoration: none; padding: 4px 11px;
+    border-radius: 999px; border: 1px solid var(--border);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .posnav-inner a:hover { background: var(--card-bg); border-color: var(--accent); }
+  .posnav-inner a.kill { color: #b85c44; }
+  .posnav-inner a.target { background: var(--target-tint); border-color: #b8c4a8; color: #4a5a38; font-weight: 600; }
+
+  header.intro-header { max-width: 1180px; margin: 0 auto; padding: 50px 28px 24px; }
+  h1 { font-size: 36px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 12px; }
+  .subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; }
+  .intro {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 28px;
+  }
+  .intro h2 {
+    font-size: 14px; font-weight: 600; margin: 0 0 12px;
+    text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent);
+  }
+  .intro p { margin: 0 0 12px; font-size: 15px; }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro ol { margin: 4px 0 0; padding-left: 24px; font-size: 15px; }
+  .intro li { margin: 6px 0; }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 8px 28px 80px; }
+
+  .position {
+    margin: 56px 0; padding: 26px 28px 30px; border-radius: 18px;
+    border: 1px solid var(--border); background: var(--card-bg);
+    scroll-margin-top: 70px;
+  }
+  .position.kill { background: var(--kill-tint); border-color: #e6d0c0; }
+  .position.target { background: var(--target-tint); border-color: #b8c4a8; }
+
+  .pos-header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pos-num { font-size: 36px; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -1px; }
+  .pos-title { font-size: 24px; font-weight: 600; margin: 0; }
+  .pos-count { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+  .pos-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px; margin-left: auto;
+  }
+  .pos-tag.kill { background: #b85c44; color: white; }
+  .pos-tag.target { background: #6a8055; color: white; }
+  .pos-zone { font-size: 15.5px; line-height: 1.6; color: var(--ink); margin: 4px 0 22px; max-width: 78ch; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .card {
+    background: rgba(255,255,255,0.6); border-radius: 10px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .position.kill .card { background: rgba(255,255,255,0.55); }
+  .position.target .card { background: rgba(255,255,255,0.7); }
+  .card .imgwrap { background: #ece8e0; aspect-ratio: 4 / 3; overflow: hidden; }
+  .card .imgwrap a { display: block; width: 100%; height: 100%; cursor: zoom-in; }
+  .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card-title { font-size: 14.5px; font-weight: 600; margin: 0; }
+  .card-project { font-size: 12.5px; color: var(--muted); margin: -6px 0 0; }
+  .card-read { font-size: 13.5px; line-height: 1.55; margin: 0; color: var(--ink); }
+  .card-src {
+    font-size: 12px; color: var(--muted); margin-top: auto;
+    padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .card-src a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid rgba(138, 122, 90, 0.3);
+  }
+  .card-src a:hover { border-bottom-color: var(--accent); }
+
+  footer { max-width: 1180px; margin: 0 auto; padding: 12px 28px 60px; color: var(--muted); font-size: 14px; text-align: center; }
+
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    h1 { font-size: 28px; }
+    header.intro-header, main, footer { padding-left: 18px; padding-right: 18px; }
+    .position { padding: 20px 18px 22px; }
+    .pos-num { font-size: 28px; }
+    .pos-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div style="background: rgba(250, 248, 244, 0.96); border-bottom: 1px solid #e8e2d6; padding: 11px 28px; font-size: 14px; position: sticky; top: 0; z-index: 60; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+  <div style="max-width: 1180px; margin: 0 auto; display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">
+    <a href="/" style="color: #6b6660; text-decoration: none; margin-right: auto; font-weight: 500;">← 1490 Lively Ridge</a>
+    <a href="/" style="color: #2a2622; text-decoration: none;">Home</a>
+    <a href="/mood-board" style="color: #2a2622; text-decoration: none;">Mood Board</a>
+    <a href="/spectrum" style="color: #8a7a5a; text-decoration: none; font-weight: 600;">Spectrum</a>
+    <a href="/decisions" style="color: #2a2622; text-decoration: none;">Decisions</a>
+    <a href="/spec" style="color: #2a2622; text-decoration: none;">Spec</a>
+  </div>
+</div>
+
+<nav class="posnav">
+  <div class="posnav-inner">
+    <span class="label">Jump:</span>
+    <a href="#pos1" class="kill">P1 · Too sparse (5)</a>
+    <a href="#pos2">P2 · Warm Japandi (12)</a>
+    <a href="#pos3" class="target">P3 · +Light boho (15)</a>
+    <a href="#pos4" class="target">P4 · Balanced (15)</a>
+    <a href="#pos5">P5 · Boho-leaning (12)</a>
+    <a href="#pos6" class="kill">P6 · Too boho (4)</a>
+    <a href="#pos7" class="kill">P7 · Too cold (4)</a>
+  </div>
+</nav>
+
+<header class="intro-header">
+  <h1>The Japandi-Boho Spectrum</h1>
+  <p class="subtitle">Phase 1: Philosophy Lock · 1490 Lively Ridge · 67 references audited across 7 positions</p>
+
+  <div class="intro">
+    <h2>What you're looking at</h2>
+    <p>Seven positions across the Japandi↔Boho spectrum, each shown with multiple reference rooms (3-15) so you can see the aesthetic as a <em>zone</em>, not as a single photo. Three positions (1, 6, 7) are <strong>kill cases</strong> — included to define what we're rejecting. The other four (2, 3, 4, 5) are real candidates.</p>
+    <p>Heavy audit pass: 15 of the prior 33 images were removed for being off-aesthetic, exterior shots, palette violations, or wrong-position attributions. The remaining 67 each had to pass per-position signature checks: clear exemplar, not borderline.</p>
+    <p><strong>How to react:</strong></p>
+    <ol>
+      <li>Scroll through all 7 positions — each is a zone, not a single image. The variety inside is the point.</li>
+      <li>Identify the position closest to where you instinctively want to land, and the adjacent position you also like.</li>
+      <li>Tell me the two adjacent positions. Example: "between 3 and 4, leaning 3" → we lock warm-Japandi-with-light-boho.</li>
+      <li><strong>Bonus:</strong> name a specific image you feel strongest about (e.g., "P3 — 3m specifically, the Azabu boucle"). That tells me about palette warmth, formality, room-type preferences inside the locked zone.</li>
+    </ol>
+    <p>Click any image to open it full-size in a new tab. Click "source" to read the original article.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ POSITION 1 (5 images) ============ -->
+  <section class="position kill" id="pos1">
+    <div class="pos-header">
+      <span class="pos-num">1</span>
+      <h2 class="pos-title">Pure Japandi Minimal</h2>
+      <span class="pos-count">5 refs</span>
+      <span class="pos-tag kill">Kill Case · Too Sparse</span>
+    </div>
+    <p class="pos-zone">Monk-quiet, near-empty, one painting on a wall, single objects load-bearing, dark or pale timber, zero textile layering, zero color. Beautiful, but reads as a meditation hall, not a place to live.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_01.jpg" target="_blank"><img src="images/position_01.jpg" alt="1a"></a></div>
+      <div class="card-body"><h3 class="card-title">1a · Azabu Residence, full LR</h3><p class="card-project">Norm Architects × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">The full editorial "purist" shot — dark timber wall, single sectional, single paper pendant, single painting. The reference standard for "too pure."</p>
+      <p class="card-src"><a href="https://thesefourwallsblog.com/home-tour-soft-minimalism-dark-earthy-tones-tokyo/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_01_b.jpg" target="_blank"><img src="images/position_01_b.jpg" alt="1b"></a></div>
+      <div class="card-body"><h3 class="card-title">1b · Azabu Residence, entry vignette</h3><p class="card-project">Norm Architects × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Entry vignette — a single dark niche framing a single white vase of dry blossoms over a stone-tiled floor. The discipline holds across rooms.</p>
+      <p class="card-src"><a href="https://www.dezeen.com/2021/06/09/azabu-residence-tokyo-references-norm-architects-keiji-ashizawa/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_01_c.jpg" target="_blank"><img src="images/position_01_c.jpg" alt="1c"></a></div>
+      <div class="card-body"><h3 class="card-title">1c · Kinuta Terrace, sofa-in-void</h3><p class="card-project">Norm Architects × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">A single linen sofa + low coffee table floating in a plaster volume with the bottom of the stair cutting the corner. Almost nothing in frame — the most extreme "empty discipline" example.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/kinuta-terrace/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_01_d.jpg" target="_blank"><img src="images/position_01_d.jpg" alt="1d"></a></div>
+      <div class="card-body"><h3 class="card-title">1d · Kinuta Terrace, lone bonsai</h3><p class="card-project">Norm Architects × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">One concrete planter, one tree, one chair under a steel staircase. A single object load-bears the entire emotional weight of the room. Pure P1.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/kinuta-terrace/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_01_e.jpg" target="_blank"><img src="images/position_01_e.jpg" alt="1e"></a></div>
+      <div class="card-body"><h3 class="card-title">1e · Plaster-textile bedroom</h3><p class="card-project">Editorial · via Living Etc</p>
+      <p class="card-read">One rough wood stool with a single chalk-white stone form on it; one large plaster-textile abstract canvas above the bed. Nothing else. The kill case in a bedroom — proves it isn't LR-only.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/japandi-bedroom-ideas" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 2 (12 images) ============ -->
+  <section class="position" id="pos2">
+    <div class="pos-header">
+      <span class="pos-num">2</span>
+      <h2 class="pos-title">Warm Japandi</h2>
+      <span class="pos-count">12 refs</span>
+    </div>
+    <p class="pos-zone">Light oak, oat/cream walls, restrained. ONE sculptural gesture per room (a branch, a vase, a ceramic). Strict palette discipline — no saturated color, zero textile stacking. The room breathes but a single human moment keeps it from being a museum.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02.jpg" target="_blank"><img src="images/position_02.jpg" alt="2a"></a></div>
+      <div class="card-body"><h3 class="card-title">2a · Norm Architects residential</h3><p class="card-project">Norm Architects studio photography</p>
+      <p class="card-read">Concrete-ceilinged living edge — light oak floor, dark wood shelving, single floor-vase branch, slim cream sofa through glass partition. Canonical "warm Japandi LR" with cool bones.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_b.jpg" target="_blank"><img src="images/position_02_b.jpg" alt="2b"></a></div>
+      <div class="card-body"><h3 class="card-title">2b · Kinuta, oak shelf + sculptures</h3><p class="card-project">Norm × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Pale-oak open shelving + paper-cord chair + three concrete sculptural objects + one stone bottle vase. Two materials only (oak + concrete), one sculptural conversation.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/kinuta-terrace/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_c.jpg" target="_blank"><img src="images/position_02_c.jpg" alt="2c"></a></div>
+      <div class="card-body"><h3 class="card-title">2c · Kinuta, dark-wood kitchen edge</h3><p class="card-project">Norm × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Dark-stained wood kitchen volume under concrete ceiling. Single ceramic vase + single ikebana branch. The dark-timber-plus-concrete strand of Japandi (vs pale-oak).</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/kinuta-terrace/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_d.jpg" target="_blank"><img src="images/position_02_d.jpg" alt="2d"></a></div>
+      <div class="card-body"><h3 class="card-title">2d · Kinuta, single chair room</h3><p class="card-project">Norm × Keiji Ashizawa · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Single wood-frame chair, small wood low table, single tree branch in floor vase, ivory linen drapes. The "Norm template" for a bedroom-sized room: one chair, one table, one plant, one curtain.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/kinuta-terrace/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_e.jpg" target="_blank"><img src="images/position_02_e.jpg" alt="2e"></a></div>
+      <div class="card-body"><h3 class="card-title">2e · Studio Zung kitchen</h3><p class="card-project">Studio Zung · Photo: Adrian Gaut</p>
+      <p class="card-read">Warm Japandi in a KITCHEN. Solid wood cabinetry floor-to-ceiling, no uppers (open shelf, 3 ceramics), one pendant. Monomaterial discipline rather than layered.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/japanese-kitchen-ideas" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_f.jpg" target="_blank"><img src="images/position_02_f.jpg" alt="2f"></a></div>
+      <div class="card-body"><h3 class="card-title">2f · Hiroo Residence, oak-panel BR</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Oak-panel headboard + slim oak nightstand + single branch in glass + AJ task lamp + cream bedding. The "warm Japandi primary bedroom" benchmark.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/hiroo-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_g.jpg" target="_blank"><img src="images/position_02_g.jpg" alt="2g"></a></div>
+      <div class="card-body"><h3 class="card-title">2g · Hiroo, oak dining + paper-cord</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Long oak dining table + 4-5 paper-cord chairs + single branch in glass vase + small ceramic on tray. One material (warm oak) + one quiet gesture. Most relevant ref for the dining room.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/hiroo-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_h.jpg" target="_blank"><img src="images/position_02_h.jpg" alt="2h"></a></div>
+      <div class="card-body"><h3 class="card-title">2h · Hiroo, cream sofa + sheer drape</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read"><strong>The cleanest "warm Japandi LR" example in the set.</strong> Cream linen sofa + travertine low table + slim reading lamp + sculptural ceramic head on plinth + sheer drape diffusing the back wall. Five elements maximum.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/hiroo-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_i.jpg" target="_blank"><img src="images/position_02_i.jpg" alt="2i"></a></div>
+      <div class="card-body"><h3 class="card-title">2i · Hiroo, oak kitchen + pantry</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Oak cabinetry + open pantry shelving + paper-cord chairs at oak dining + ceramic bowl + fruit + branch. Lived-in but tightly disciplined — P2 that admits real cooking.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/hiroo-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_j.jpg" target="_blank"><img src="images/position_02_j.jpg" alt="2j"></a></div>
+      <div class="card-body"><h3 class="card-title">2j · Azabu Hills, entry bench</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Entry vignette — single zelkova bench + grey throw + rust-brown abstract painting on cream plaster + small glass with green sprig. The most human-gesture-anchored vignette — restraint that still feels warm.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_k.jpg" target="_blank"><img src="images/position_02_k.jpg" alt="2k"></a></div>
+      <div class="card-body"><h3 class="card-title">2k · Azabu Hills, ribbed-zelkova console</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Long ribbed zelkova console + dark stoneware urn + small bronze sculptures + olive branch in dark vase + textured brown wall art above. "Art-curated Japandi."</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_02_l.jpg" target="_blank"><img src="images/position_02_l.jpg" alt="2l"></a></div>
+      <div class="card-body"><h3 class="card-title">2l · Azabu Hills, boucle armchair</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">One soft boucle round armchair + warm-oak round side table with marble top + tall white cylindrical floor lamp + warm-oak panel wall. Restrained but tactile — "warm Japandi reading-chair vignette."</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 3 (15 images) ============ -->
+  <section class="position target" id="pos3">
+    <div class="pos-header">
+      <span class="pos-num">3</span>
+      <h2 class="pos-title">Warm Japandi + Light Boho</h2>
+      <span class="pos-count">15 refs</span>
+      <span class="pos-tag target">Target Candidate</span>
+    </div>
+    <p class="pos-zone">The locked-target zone. A single Beni Ourain rug warms the floor, a linen daybed or upholstered sofa adds soft mass, one rough-hewn wood side table, hand-thrown stoneware on surfaces. Palette stays oat-cream-charcoal-warm wood — no saturated color — but the rug and textile soften the discipline so the room feels lived-in rather than staged.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03.jpg" target="_blank"><img src="images/position_03.jpg" alt="3a"></a></div>
+      <div class="card-body"><h3 class="card-title">3a · Daytrip Powerscroft, daybed + Beni</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">The canonical P3 LR — black-frame daybed + bolster + Berber-pattern shag rug on dark wood floor + single carved African stool + one framed pencil drawing.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_b.jpg" target="_blank"><img src="images/position_03_b.jpg" alt="3b"></a></div>
+      <div class="card-body"><h3 class="card-title">3b · Daytrip, shearling sofa LR</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">A second LR in the same townhouse — shearling-upholstered curved sofa + rocker + low wood stool + paper-globe pendant + small framed photo. "P3 is a vocabulary, not a single template."</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_c.jpg" target="_blank"><img src="images/position_03_c.jpg" alt="3c"></a></div>
+      <div class="card-body"><h3 class="card-title">3c · Daytrip, primary bedroom</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">P3 in a BEDROOM — black-frame daybed with linen + Berber-style shag rug + single carved African stool + one framed minimal drawing. Boho softening via rug + carved stool only.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_d.jpg" target="_blank"><img src="images/position_03_d.jpg" alt="3d"></a></div>
+      <div class="card-body"><h3 class="card-title">3d · Daytrip, sculptural mantel LR</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Formal-yet-restrained LR — stone mantelpiece + abstract Kline-style painting + cream alcove shelf with stacked ceramic vases + dark grey velvet slipper chair + tapered floor lamp. P3 with architecture doing more of the work.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_e.jpg" target="_blank"><img src="images/position_03_e.jpg" alt="3e"></a></div>
+      <div class="card-body"><h3 class="card-title">3e · Daytrip, same mantel (alt angle)</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Same room as 3d, opened up — paper-globe pendant, twin alcove shelves with ceramic sculptures, velvet slipper chair, plaster bust on plinth in foreground. Slightly higher density.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_f.jpg" target="_blank"><img src="images/position_03_f.jpg" alt="3f"></a></div>
+      <div class="card-body"><h3 class="card-title">3f · Daytrip, Cesca dining</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Marc Newson-style round marble pedestal + cane Cesca chairs + Akari ribbed lantern + single Japanese photograph + Camaleonda modular in background. The cleanest "P3 dining room."</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_g.jpg" target="_blank"><img src="images/position_03_g.jpg" alt="3g"></a></div>
+      <div class="card-body"><h3 class="card-title">3g · Daytrip, modular sofa + curated shelf</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Pale modular sectional + long pale-wood shelving wall + curated mid-century ceramics and small framed drawings on plinths above. <strong>At the upper edge of P3 — almost crosses to P4.</strong></p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_h.jpg" target="_blank"><img src="images/position_03_h.jpg" alt="3h"></a></div>
+      <div class="card-body"><h3 class="card-title">3h · Daytrip, sheepskin bedroom</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Bed with shaggy white throw + single rough-wood three-leg stool + plaster-textile abstract on wall + dark plank floor. P3 at very quiet end — almost P2 in density but rough wood stool + shaggy throw mark it P3.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_i.jpg" target="_blank"><img src="images/position_03_i.jpg" alt="3i"></a></div>
+      <div class="card-body"><h3 class="card-title">3i · Biscuit Loft, Wassily + jute</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Cream Wassily chair + cream sectional + jute fringed rug + travertine-base glass coffee table + small ceramic with tall grass. The "cool-leaning P3" — LA loft variant of the Daytrip aesthetic.</p>
+      <p class="card-src"><a href="https://www.dezeen.com/2021/04/03/owiu-studio-biscuit-loft-los-angeles-apartment/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_j.jpg" target="_blank"><img src="images/position_03_j.jpg" alt="3j"></a></div>
+      <div class="card-body"><h3 class="card-title">3j · Biscuit Loft, Eames + ash shelf</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read"><strong>Closest thing to what 1490 Lively Ridge would feel like.</strong> White Eames lounger + dark wood console + open ash shelving with curated ceramics + dried palm + abstract painting + jute rug. California organic-modern P3.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_k.jpg" target="_blank"><img src="images/position_03_k.jpg" alt="3k"></a></div>
+      <div class="card-body"><h3 class="card-title">3k · Biscuit Loft, cane Cesca + Akari</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Round travertine pedestal table + cane Cesca chairs + Akari paper globe + cloud-pendant trio + cream curved sofa in distance. Top-tier "warm Japandi + boho-softening" open plan.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_l.jpg" target="_blank"><img src="images/position_03_l.jpg" alt="3l"></a></div>
+      <div class="card-body"><h3 class="card-title">3l · Biscuit Loft, Cesca dining (clean)</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Pure dining shot — Cesca chairs, travertine table, paired Akari globe pendants, cream sectional in middle-ground. Cleaner-styled variant of 3k.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_m.jpg" target="_blank"><img src="images/position_03_m.jpg" alt="3m"></a></div>
+      <div class="card-body"><h3 class="card-title">3m · Azabu Hills, boucle + paper dome</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Curved boucle sectional + oval wood low table + oversized paper-shade pendant + tall ceramic floor vase with single sculptural branch + dark stoneware urn. The "Japandi soft-tactile LR" — three textile/material types, palette stays oat/cream/wood.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_n.jpg" target="_blank"><img src="images/position_03_n.jpg" alt="3n"></a></div>
+      <div class="card-body"><h3 class="card-title">3n · Azabu Hills, table styling detail</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Detail of the same room as 3m — sculpted oak low table + stacked design books + hand-formed ceramic urn + boucle armchair. P3 at table-styling scale.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_03_o.jpg" target="_blank"><img src="images/position_03_o.jpg" alt="3o"></a></div>
+      <div class="card-body"><h3 class="card-title">3o · Calderone, soapstone desk nook</h3><p class="card-project">Athena Calderone · Photo: Adrian Gaut</p>
+      <p class="card-read">Steel-framed window + slim soapstone-cantilever desk + single Jean Prouvé Standard chair + leather Brutalist stool + small dome lamp + bronze bust + small bowl. "P3 work-nook" — minimal furniture count, distinctly more human-warmth than P2.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/features/athena-calderone-home-brooklyn" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 4 (15 images) ============ -->
+  <section class="position target" id="pos4">
+    <div class="pos-header">
+      <span class="pos-num">4</span>
+      <h2 class="pos-title">Balanced Japandi-Boho</h2>
+      <span class="pos-count">15 refs</span>
+      <span class="pos-tag target">Target Candidate</span>
+    </div>
+    <p class="pos-zone">More layering than P3 but still strictly palette-disciplined. Multiple textiles + caned chairs + woven side tables + stacked firewood + one ceramic hero piece. At least four material conversations going on at once. Still all neutrals — no saturated color. Volume is up one notch from P3.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04.jpg" target="_blank"><img src="images/position_04.jpg" alt="4a"></a></div>
+      <div class="card-body"><h3 class="card-title">4a · Mahno residential LR</h3><p class="card-project">Serhii Mahno · Project photography via Living Etc</p>
+      <p class="card-read">The canonical "P4 volume turned up one notch." Boucle sectional + caned lounge chairs + woven side table + stacked firewood column + sculptural ceramic wreath above plaster fireplace.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_b.jpg" target="_blank"><img src="images/position_04_b.jpg" alt="4b"></a></div>
+      <div class="card-body"><h3 class="card-title">4b · Calderone, arched entry + burl</h3><p class="card-project">Athena Calderone · Photo: Adrian Gaut</p>
+      <p class="card-read">Arched black-trimmed glass door + checkerboard antique runner + burl-wood pedestal console + leather bench + abstract drawing + small antique chair. Six material conversations in a neutral palette. Textbook P4 vignette.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/features/athena-calderone-home-brooklyn" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_c.jpg" target="_blank"><img src="images/position_04_c.jpg" alt="4c"></a></div>
+      <div class="card-body"><h3 class="card-title">4c · Calderone, LR boucle + mirror</h3><p class="card-project">Athena Calderone · Photo: Adrian Gaut</p>
+      <p class="card-read">Mario Bellini Camaleonda cream sectional + bouclé Pacha chair + black marble fireplace + over-scaled gilt mirror + sculpted yellow wood "elephant" coffee table + plinth-mounted sculptures. P4 at maximum.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/features/athena-calderone-home-brooklyn" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_d.jpg" target="_blank"><img src="images/position_04_d.jpg" alt="4d"></a></div>
+      <div class="card-body"><h3 class="card-title">4d · Malcolm Davis architecture</h3><p class="card-project">Malcolm Davis Architecture · Photo: Joe Fletcher</p>
+      <p class="card-read">P4 with LIVING PLANTS as one of the layers. Sofa + ottoman + caned chair + side table + 2-3 plants. Closer to "California organic-modern" than to "Tokyo Japandi" — relevant if Annika wants real plants.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_e.jpg" target="_blank"><img src="images/position_04_e.jpg" alt="4e"></a></div>
+      <div class="card-body"><h3 class="card-title">4e · Calderone, DR with carved cabinet</h3><p class="card-project">Athena Calderone · Photo: Adrian Gaut</p>
+      <p class="card-read">Carved blond-oak Spanish-style sideboard + sculptural three-tier cream pendant + black ash dining table + boucle-seated dining chairs + large ceramic vases + brass sconces. Dining-room P4 — sculptural objects doing textural work.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/features/athena-calderone-home-brooklyn" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_f.jpg" target="_blank"><img src="images/position_04_f.jpg" alt="4f"></a></div>
+      <div class="card-body"><h3 class="card-title">4f · Macrame-and-cream LR</h3><p class="card-project">Editorial · via Living Etc</p>
+      <p class="card-read">Large dip-dyed macrame wall hanging + cream sectional + black turned-wood side table + branches in dark vase + textured grey rug + dark glass coffee table. Textile-forward P4 — softness from macrame.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_g.jpg" target="_blank"><img src="images/position_04_g.jpg" alt="4g"></a></div>
+      <div class="card-body"><h3 class="card-title">4g · Allprace paper-fan BR</h3><p class="card-project">Allprace · Photo: Alex Zarour</p>
+      <p class="card-read">P4 with ONE BIG ARTFUL GESTURE (paper fan mural) carrying the room. Layered linens + cane bench + ceramic. Shows P4 can lean on art instead of furniture density.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/japandi-bedroom-ideas" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_h.jpg" target="_blank"><img src="images/position_04_h.jpg" alt="4h"></a></div>
+      <div class="card-body"><h3 class="card-title">4h · Textured-panel headboard BR</h3><p class="card-project">Editorial · via Living Etc</p>
+      <p class="card-read">Linen-textured upholstered wall panels + warm wood half-height paneling + dome-and-disc sconces + warm-walnut nightstands + boucle accent chair + shag-wool stools + textured rug. P4 primary bedroom on full volume.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/japandi-bedroom-ideas" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_i.jpg" target="_blank"><img src="images/position_04_i.jpg" alt="4i"></a></div>
+      <div class="card-body"><h3 class="card-title">4i · Azabu Hills, ribbed-oak family room</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Long ribbed-oak audio sideboard + paired floorstanding speakers + paired wood-frame boucle lounge chairs + travertine round coffee table + small ceramics. "Japandi P4 family room" — admits multiple seating + equipment.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_j.jpg" target="_blank"><img src="images/position_04_j.jpg" alt="4j"></a></div>
+      <div class="card-body"><h3 class="card-title">4j · Azabu Hills, LR with balcony view</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Cream sectional + warm-oak round low coffee table + boucle lounge chair + woven sculptural wall art + sheer drapes + balcony view of older Japanese tile roofs. "P4 with a view" — layered neutral with strong window views.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_k.jpg" target="_blank"><img src="images/position_04_k.jpg" alt="4k"></a></div>
+      <div class="card-body"><h3 class="card-title">4k · Daytrip, concrete + Akari fireplace</h3><p class="card-project">Daytrip Studio · Photo: Jake Curtis</p>
+      <p class="card-read">Cast-concrete hearth with built-in firewood + Akari sculptural floor lantern + chrome Cesca + concrete polished floor + dried-grass bundle + chrome modular edge. Six materials (concrete, steel, cane, paper, wood, dried plant), strictly neutral.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/powerscroft-road/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_l.jpg" target="_blank"><img src="images/position_04_l.jpg" alt="4l"></a></div>
+      <div class="card-body"><h3 class="card-title">4l · Biscuit Loft, sculptural shelf</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Oval-plywood three-tier shelf + curated ceramics + ceramic with stacked dried branches + small framed prints + dried wheat in floor vase + book stacks. P4 vignette via STYLING, not furniture density.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_m.jpg" target="_blank"><img src="images/position_04_m.jpg" alt="4m"></a></div>
+      <div class="card-body"><h3 class="card-title">4m · Biscuit Loft, paper-lantern nook</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Two Akari paper lanterns + black-on-cream abstract paintings nested in plywood cubbies + tea-ceremony floor table + linen floor cushions. Reading-nook scale, P4 density.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_n.jpg" target="_blank"><img src="images/position_04_n.jpg" alt="4n"></a></div>
+      <div class="card-body"><h3 class="card-title">4n · Biscuit Loft, Wassily + plywood stair</h3><p class="card-project">OWIU Studio · Photo: Justin Chung</p>
+      <p class="card-read">Wassily chair + cream sectional + jute fringed rug + travertine-base glass table + single tropical leaf + plywood staircase volume. Six distinct materials (chrome, leather, plywood, travertine, jute, glass). LA-loft P4.</p>
+      <p class="card-src"><a href="https://www.yellowtrace.com.au/owiu-studio-biscuit-loft-downtown-los-angeles/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_04_o.jpg" target="_blank"><img src="images/position_04_o.jpg" alt="4o"></a></div>
+      <div class="card-body"><h3 class="card-title">4o · Azabu Hills, warm-wood LR boucle</h3><p class="card-project">Karimoku Case · Photo: Tomooki Kengaku</p>
+      <p class="card-read">Warm-zelkova grid-panel wall + low-slung boucle sofa + matching boucle armchair + paper-pendant dome + dark cushion. P4 at most restrained edge — three materials but density higher than any P2.</p>
+      <p class="card-src"><a href="https://leibal.com/interiors/azabu-hills-residence/" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 5 (12 images) ============ -->
+  <section class="position" id="pos5">
+    <div class="pos-header">
+      <span class="pos-num">5</span>
+      <h2 class="pos-title">Boho-Leaning Neutral</h2>
+      <span class="pos-count">12 refs</span>
+    </div>
+    <p class="pos-zone">Heavy textile stacking, vintage layering, cognac leather or printed sofa, antique rug as foundation, fiddle leaf tree, stacked books in every alcove. Palette still earth-toned (no jewel saturation, no macramé) but visual density tripled vs P3. This is where Japandi is overrun by a confident layered-vintage hand. <strong>Curator's flag:</strong> picking 5 over 4 means crossing into a meaningfully different aesthetic.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05.jpg" target="_blank"><img src="images/position_05.jpg" alt="5a"></a></div>
+      <div class="card-body"><h3 class="card-title">5a · Helgerson LA "French Eclectic" home</h3><p class="card-project">Jessica Helgerson · Photo: Aaron Leitz</p>
+      <p class="card-read">The canonical P5 — cognac leather sofa + boucle wing chair + Moroccan-cushion sofa + sheepskin slung chairs around blue Mahal rug, fiddle leaf tree + Gothic alcove built-ins.</p>
+      <p class="card-src"><a href="https://www.1stdibs.com/introspective-magazine/jessica-helgerson/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_b.jpg" target="_blank"><img src="images/position_05_b.jpg" alt="5b"></a></div>
+      <div class="card-body"><h3 class="card-title">5b · Caillier Kentfield CA</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Two deep recessed-arm sofas in muted neutral floral, vintage cane chairs, antique Tuareg rug, layered art, olive tree filtering light. Pattern energy higher than Helgerson — "English-eclectic" lean.</p>
+      <p class="card-src"><a href="https://www.1stdibs.com/introspective-magazine/heidi-caillier-memories-of-home/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_c.jpg" target="_blank"><img src="images/position_05_c.jpg" alt="5c"></a></div>
+      <div class="card-body"><h3 class="card-title">5c · Caillier Easthampton sitting</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Cream pinch-pleat drapes + dark French doors + small vintage tilt-top table + olive branch in spaghetti vase + small antique floral chair + carved gilt mirror + slim brass sconces. Restrained P5 — single floral as only pattern.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_d.jpg" target="_blank"><img src="images/position_05_d.jpg" alt="5d"></a></div>
+      <div class="card-body"><h3 class="card-title">5d · Caillier DC cabin</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Warm wood walls + ticking-stripe sofa + woven mid-century lounger + dark wood pedestal pillar + small spindle dining + Berber-style rug + framed antique landscapes. "Warm cabin P5" — pattern in rug + stripes only.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_e.jpg" target="_blank"><img src="images/position_05_e.jpg" alt="5e"></a></div>
+      <div class="card-body"><h3 class="card-title">5e · Caillier North 28th max</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read"><strong>P5 at MAXIMUM layering inside the "neutral" rule.</strong> Vintage rug + leather club chair + boucle ottoman + multiple cushions + dense gallery wall. The densest P5, edge of P6 territory. The boundary marker.</p>
+      <p class="card-src"><a href="https://www.1stdibs.com/introspective-magazine/heidi-caillier-memories-of-home/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_f.jpg" target="_blank"><img src="images/position_05_f.jpg" alt="5f"></a></div>
+      <div class="card-body"><h3 class="card-title">5f · Caillier Montana Cabin</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Log walls + dusty-rose velvet sofa + paper-globe pendant + stone fireplace + crimson velvet chairs + floral mid-century lounger + Beni-pattern rug + plaid ottoman + landscape painting. Heavy but muted-earth — no jewel saturation. P5 lodge end.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_g.jpg" target="_blank"><img src="images/position_05_g.jpg" alt="5g"></a></div>
+      <div class="card-body"><h3 class="card-title">5g · Caillier Olympic Manor</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Mango-wood campaign chest + dotted ceramic table lamp + branches in dark vase + framed cattle photograph + black-and-white printed sofa with maroon throw + small antique kilim rug. Very tightly composed P5 — neutral upholstery + high pattern count.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_h.jpg" target="_blank"><img src="images/position_05_h.jpg" alt="5h"></a></div>
+      <div class="card-body"><h3 class="card-title">5h · Caillier Inverness Cottage</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Striped grey-and-cream sofa + olive-green throw + cane chair with floral cushion + Indian dhurrie striped rug + black-painted small dining + boucle pendant + cattle landscape. "P5 at smallest footprint" — guest cottage scale.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_i.jpg" target="_blank"><img src="images/position_05_i.jpg" alt="5i"></a></div>
+      <div class="card-body"><h3 class="card-title">5i · Caillier cane bed + grasscloth</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Cane-back headboard + grasscloth walls + brown-gingham pillow + plaster-finish blanket + black bedside chest with leather pulls + black sconce + dark vase + branches + woven Roman shade. P5 in a primary BR — multiple textiles, neutral + brown.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_j.jpg" target="_blank"><img src="images/position_05_j.jpg" alt="5j"></a></div>
+      <div class="card-body"><h3 class="card-title">5j · Caillier Seattle traditional LR</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Forest-green sofa + leaded-glass cabinets + Louis Philippe gilt mirror + woven safari chair + pink wing chair + dark coffee table + diamond-pattern jute rug + landscape oil. P5 at "modern-traditional" — colored upholstery in muted shades, no jewel saturation.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_k.jpg" target="_blank"><img src="images/position_05_k.jpg" alt="5k"></a></div>
+      <div class="card-body"><h3 class="card-title">5k · Caillier Lamb BR (toile + stripes)</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Blue-and-cream toile wallpaper + matching upholstered headboard + slate-blue silk drapes + striped Berber-pattern quilt + mustard chenille throw + petite antique chest + tulips + pleated lamp. P5 at pattern-on-pattern end — neutral-base.</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_05_l.jpg" target="_blank"><img src="images/position_05_l.jpg" alt="5l"></a></div>
+      <div class="card-body"><h3 class="card-title">5l · Caillier Berkeley Hills LR</h3><p class="card-project">Heidi Caillier · Photo: Haris Kenjar</p>
+      <p class="card-read">Dark-stained beam ceiling + dusty-pink small print sofa + mid-century printed accent chair + chrome-and-glass coffee table + striped Tibetan rug + pleated rattan pendant + brick fireplace + woven-back armchair. Dense P5 with single warm accent (dusty pink).</p>
+      <p class="card-src"><a href="https://heidicaillierdesign.com/portfolio/" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 6 (4 images) ============ -->
+  <section class="position kill" id="pos6">
+    <div class="pos-header">
+      <span class="pos-num">6</span>
+      <h2 class="pos-title">Too Boho (Coachella-Adjacent)</h2>
+      <span class="pos-count">4 refs</span>
+      <span class="pos-tag kill">Kill Case · Color Overload</span>
+    </div>
+    <p class="pos-zone">Saturated walls (terracotta, mustard, cobalt), busy floral or kilim rugs, mustard velvet wingbacks, draped ferns and trailing plants spilling from every surface, antique brass tray tables. Every surface patterned. Every color amped.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_06.jpg" target="_blank"><img src="images/position_06.jpg" alt="6a"></a></div>
+      <div class="card-body"><h3 class="card-title">6a · Jungalow LR canonical</h3><p class="card-project">Justina Blakeney · Jungalow studio</p>
+      <p class="card-read">Canonical maximalist-boho reference — terracotta walls, mustard velvet, floral upholstery, plants everywhere. "You don't want this" anchor.</p>
+      <p class="card-src"><a href="https://www.jungalow.com/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_06_b.jpg" target="_blank"><img src="images/position_06_b.jpg" alt="6b"></a></div>
+      <div class="card-body"><h3 class="card-title">6b · Jungalow Decorate Wild lead</h3><p class="card-project">Justina Blakeney · Photo: Dabito</p>
+      <p class="card-read">Saturated cobalt-and-terracotta gallery wall, patterned cushions 4+ deep, rattan + macrame layered. P6 is a CONSISTENT design language, not one room.</p>
+      <p class="card-src"><a href="https://sunset.com/home-garden/design/justina-blakeney-jungalow-decorate-wild" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_06_c.jpg" target="_blank"><img src="images/position_06_c.jpg" alt="6c"></a></div>
+      <div class="card-body"><h3 class="card-title">6c · Jungalow West-African coastal</h3><p class="card-project">Justina Blakeney · Photo: Dabito</p>
+      <p class="card-read">Different subgenre — global-textile-layered with kilim cushions, baskets stacked on walls, 6+ plants. P6 has internal variety; rejecting multiple wrong directions.</p>
+      <p class="card-src"><a href="https://sunset.com/home-garden/design/justina-blakeney-jungalow-decorate-wild" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_06_d.jpg" target="_blank"><img src="images/position_06_d.jpg" alt="6d"></a></div>
+      <div class="card-body"><h3 class="card-title">6d · Jungalow AD home, terracotta dining</h3><p class="card-project">Justina Blakeney · Photo: Jenna Peffley</p>
+      <p class="card-read">Terracotta walls + saturated decorative-tile floor + white Panton chairs + hanging trailing ferns + framed Frida portrait + carved wood beams. The "saturated tile floor + plant ceiling" kill case.</p>
+      <p class="card-src"><a href="https://www.thewelllivedhome.com/blog/jennas-archive-justina-blakeneys-jungalicious-la-home" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+  <!-- ============ POSITION 7 (4 images) ============ -->
+  <section class="position kill" id="pos7">
+    <div class="pos-header">
+      <span class="pos-num">7</span>
+      <h2 class="pos-title">Scandi-Pure / Cold Concrete</h2>
+      <span class="pos-count">4 refs</span>
+      <span class="pos-tag kill">Kill Case · Too Cold</span>
+    </div>
+    <p class="pos-zone">Concrete walls, concrete floor, concrete ceiling. White/grey curved sofa, sculptural pebble-form chairs, chandelier of bone or stone fragments. Zero plants, zero warmth, zero textile softness — only hard sculptural composition in greyscale.</p>
+    <div class="grid">
+
+      <div class="card"><div class="imgwrap"><a href="images/position_07.jpg" target="_blank"><img src="images/position_07.jpg" alt="7a"></a></div>
+      <div class="card-body"><h3 class="card-title">7a · Direccion monochromatic LR</h3><p class="card-project">Photo: Fabian Martinez</p>
+      <p class="card-read">Canonical "warm-stripped" failure — concrete on every surface, grey curved sofa, white sculptural chairs, bone-fragment chandelier.</p>
+      <p class="card-src"><a href="https://www.livingetc.com/ideas/10-japandi-living-rooms-that-prove-this-minimalist-style-strikes-the-perfect-balance-between-uncluttered-and-cozy" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_07_b.jpg" target="_blank"><img src="images/position_07_b.jpg" alt="7b"></a></div>
+      <div class="card-body"><h3 class="card-title">7b · Casa Alferez bedroom</h3><p class="card-project">Ludwig Godefroy · Photo: Rory Gardiner</p>
+      <p class="card-read">Kill case in a BEDROOM. Raw concrete walls, raw concrete floor, white-linen bed floating. Wood beams add ONE warm element but the room reads brutal.</p>
+      <p class="card-src"><a href="https://www.dezeen.com/2024/11/17/exposed-concrete-bedrooms-lookbooks/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_07_c.jpg" target="_blank"><img src="images/position_07_c.jpg" alt="7c"></a></div>
+      <div class="card-body"><h3 class="card-title">7c · Villain House smooth-rendered</h3><p class="card-project">Office Claudia Raurell · project photography</p>
+      <p class="card-read">Different kill-case flavor — smooth white-rendered minimalism with a single platform bed, zero ornament. "Stripped Scandinavian" failure vs Casa Alferez's "stripped brutalist."</p>
+      <p class="card-src"><a href="https://www.dezeen.com/2024/11/17/exposed-concrete-bedrooms-lookbooks/" target="_blank">Source</a></p></div></div>
+
+      <div class="card"><div class="imgwrap"><a href="images/position_07_d.jpg" target="_blank"><img src="images/position_07_d.jpg" alt="7d"></a></div>
+      <div class="card-body"><h3 class="card-title">7d · Casa Alferez double-height LR</h3><p class="card-project">Ludwig Godefroy · Photo: Rory Gardiner</p>
+      <p class="card-read">Second view — triple-height cast-concrete volume, concrete cantilever stair, single Thonet bentwood chair on mezzanine, single faceted-stone side table with sculptural twig. "Concrete cathedral" — how cold the kill case feels at full-room scale.</p>
+      <p class="card-src"><a href="https://leibal.com/architecture/casa-alferez/" target="_blank">Source</a></p></div></div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  React in chat with the two adjacent positions you want to bracket — or per-image reactions in any natural language. Next session locks the wood tone.
+</footer>
+
+</body>
+</html>

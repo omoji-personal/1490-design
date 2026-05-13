@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decisions Locked · 1490 Lively Ridge</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --ink: #2a2622;
+    --muted: #6b6660;
+    --accent: #8a7a5a;
+    --card-bg: #fff;
+    --warm-tint: #f7eedc;
+    --note-tint: #f0e8d8;
+    --target-tint: #e8efe2;
+    --border: #e8e2d6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav.topnav {
+    background: rgba(250, 248, 244, 0.96);
+    border-bottom: 1px solid var(--border);
+    padding: 11px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .topnav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .topnav-inner a {
+    color: var(--ink); text-decoration: none;
+  }
+  .topnav-inner a.home {
+    color: var(--muted); margin-right: auto; font-weight: 500;
+  }
+  .topnav-inner a.active {
+    color: var(--accent); font-weight: 600;
+  }
+  .container {
+    max-width: 1080px; margin: 0 auto; padding: 50px 28px 80px;
+  }
+  h1 {
+    font-size: 40px; font-weight: 600; letter-spacing: -0.6px;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: var(--muted); font-size: 17px; margin: 0 0 28px;
+  }
+  .calibration-note {
+    background: var(--note-tint);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 0 0 36px;
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+
+  h2.section {
+    font-size: 14px; font-weight: 600; margin: 50px 0 16px;
+    text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent);
+  }
+
+  .decision {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin: 0 0 18px;
+  }
+  .decision.locked {
+    background: var(--target-tint);
+    border-color: #b8c4a8;
+  }
+  .decision-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .decision-num {
+    flex: 0 0 36px;
+    height: 36px;
+    background: white;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+  .decision-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+  }
+  .decision-status {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: #6a8055;
+    color: white;
+  }
+  .decision-body {
+    margin-left: 48px;
+    font-size: 14.5px;
+  }
+  .decision-body p { margin: 0 0 10px; }
+  .decision-body strong { color: var(--ink); }
+  .decision-q { color: var(--muted); margin-bottom: 8px; font-style: italic; }
+  .decision-rationale { background: rgba(255,255,255,0.5); padding: 12px 14px; border-radius: 6px; font-size: 13.5px; color: #5c4f2f; margin-top: 10px; }
+
+  .calibrations {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-top: 32px;
+  }
+  .calibrations h3 {
+    font-size: 16px;
+    margin: 0 0 16px;
+    color: var(--accent);
+  }
+  .calib-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 8px 18px;
+    font-size: 14.5px;
+  }
+  .calib-grid dt {
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .calib-grid dd {
+    margin: 0;
+    color: var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    .container { padding: 32px 20px 60px; }
+    h1 { font-size: 30px; }
+    .decision-body { margin-left: 0; margin-top: 8px; }
+    .calib-grid { grid-template-columns: 1fr; gap: 2px; }
+    .calib-grid dt { margin-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a>
+    <a href="/mood-board">Mood Board</a>
+    <a href="/spectrum">Spectrum</a>
+    <a href="/decisions" class="active">Decisions</a>
+    <a href="/spec">Spec</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Decisions Locked</h1>
+  <p class="subtitle">29 calibration questions → 7 owner-decisions. Locked 2026-05-13.</p>
+
+  <div class="calibration-note">
+    <strong>How we got here:</strong> 6+ rounds of mood-board iteration → tri-audit (Claude + Gemini + Codex) → 48-hour reconciliation sprint → 29 philosophical Q&A → 7 owner-decision locks. This page is the digestible summary. Full reasoning in the <a href="/spec">Design Spec</a>.
+  </div>
+
+  <h2 class="section">The 7 Owner Decisions</h2>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">1</span>
+      <h3 class="decision-title">Kitchen backsplash</h3>
+      <span class="decision-status">Pivot</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">Originally locked: Cle Weathered White Bejmat counter-to-ceiling.</p>
+      <p><strong>LOCKED: Pivot to Carrara slab on range wall + Cle Sea Salt zellige squares elsewhere.</strong> Keep Cle Bejmat in master bath shower walls only.</p>
+      <p class="decision-rationale">Image audit flagged Bejmat as visually inconsistent with the canon kitchens (every Cathie Hong + OWIU + Studio LIFE/STYLE kitchen uses Carrara/Calacatta slab + zellige, not Bejmat). The pivot aligns with our anchor projects without losing Cle as a high-impact bath moment.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">2</span>
+      <h3 class="decision-title">Beni Ourain vintage rug</h3>
+      <span class="decision-status">Defer</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">Source year 1 as the boho-softening LR rug, or defer to later?</p>
+      <p><strong>LOCKED: Defer to year 4+.</strong> Spec WE/Rejuvenation flat-weave wool placeholder for years 1-3 (~$800-1.5K vs $3-5K vintage). Real Beni Ourain becomes the post-pet-mature / post-potty-train indulgence.</p>
+      <p class="decision-rationale">40-lb Labradoodle + cat + newborn ~1yr makes vintage wool a near-certain catastrophic stain risk. Owner picked "no patina romance" — buying a $3-5K vintage rug that will be permanently stained by year 3 doesn't fit.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">3</span>
+      <h3 class="decision-title">Performance fabric pivot</h3>
+      <span class="decision-status">Pivot</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">Pure Belgian flax linen or performance-fabric pivot for primary seating + drapery?</p>
+      <p><strong>LOCKED: Pivot primary sofa + drapery to performance linen</strong> (Crypton Linen, Perennials, or similar). Pure flax retained only for master bedding (laundered weekly anyway).</p>
+      <p class="decision-rationale">Drops photographic look ~5%, drops maintenance panic ~80%. With curated-visibility household priority + heavy hosting + pets + baby, performance fabric is the rational choice. Owner's no-patina-romance reinforces the call.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">4</span>
+      <h3 class="decision-title">Brass finish</h3>
+      <span class="decision-status">Pivot to Lacquered</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">Unlacquered brass (patinates over time) or lacquered brass (stays shiny)?</p>
+      <p><strong>LOCKED: Lacquered brass throughout</strong> — plumbing, cabinet hardware, light fixtures. Stays shiny indefinitely.</p>
+      <p class="decision-rationale">Owner explicitly rejected patina romance (Q3 of philosophy calibration: "no I don't particularly see value in that"). Lacquered brass eliminates annual Renaissance Wax maintenance cycle and Atlanta humidity blotchy-tarnish failure mode. Lower wabi-sabi credit but matches owner's "stays looking good" priority.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">5</span>
+      <h3 class="decision-title">Furniture envelope</h3>
+      <span class="decision-status">$30K Cap</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">$30K vs $80-100K phased over 3-4 years for "mostly settled" day 1?</p>
+      <p><strong>LOCKED: $30K total cap.</strong> Focus on upstairs primary rooms. Reuse existing furniture in basement / overflow zones.</p>
+      <p class="decision-rationale">Owner has a hard ceiling at $30K in addition to renovation. Strategic allocation: LR ($10-12K) + Dining ($4-6K) + Master BR ($5-6K) + Office ($3-4K) + Outdoor deck ($5-7K). Day-1 "mostly settled" lands on upstairs only; basement looks functional-not-finished. Acceptable trade.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">6</span>
+      <h3 class="decision-title">Front door</h3>
+      <span class="decision-status">Walnut</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">Walnut pivot, walnut standard swing, or keep existing?</p>
+      <p><strong>LOCKED (designer commit, no owner pushback): Walnut natural-stain standard swing door</strong> (~$1-2K premium over standard prehung).</p>
+      <p class="decision-rationale">Walnut entry is the canon Campbell House move (Cathie Hong cali_09 reference — owner-loved). Standard swing keeps the budget reasonable vs a pivot mechanism. Walnut now permitted as accent per reconciled rules.</p>
+    </div>
+  </div>
+
+  <div class="decision locked">
+    <div class="decision-header">
+      <span class="decision-num">7</span>
+      <h3 class="decision-title">Custom millwork sub-budget</h3>
+      <span class="decision-status">$25-35K</span>
+    </div>
+    <div class="decision-body">
+      <p class="decision-q">How much custom millwork investment within the renovation construction budget?</p>
+      <p><strong>LOCKED: $25-35K custom millwork within the $340K construction budget.</strong> Scope:</p>
+      <ul>
+        <li>Kitchen oak island base + light interior built-ins ($8-12K)</li>
+        <li>Architected freestanding bar shelf wall (street-facing kitchen wall — solves bar + storage + console in one move) ($6-10K)</li>
+        <li>Office built-in desk wall (light Wellington-Office style) ($5-8K)</li>
+        <li>Mudroom built-in bench + hooks + storage ($2-4K)</li>
+        <li>LR TV/storage cabinetry (1 wall) ($4-6K)</li>
+      </ul>
+      <p class="decision-rationale">Canon look depends on custom millwork; can't get there with pure retail furniture at $30K. Owner can recheck the construction budget for headroom; if not available, aesthetic shifts toward retail-furniture-heavy.</p>
+    </div>
+  </div>
+
+  <h2 class="section">The 5 Philosophical Calibrations</h2>
+
+  <div class="calibrations">
+    <h3>How the design feels, not what to buy</h3>
+    <dl class="calib-grid">
+      <dt>1. Walking-in feeling</dt>
+      <dd>Warm + welcomed (priority over sanctuary, calm, focus)</dd>
+
+      <dt>2. Light strategy</dt>
+      <dd>Maximize light — tree-canopied lot has low ambient; design works AGAINST that with reflective surfaces, sheer drapery, recessed cans, light-color palette, NO moody-evening rooms</dd>
+
+      <dt>3. Patina philosophy</dt>
+      <dd>Owner rejected. Materials should stay looking good. Lacquered brass over unlacquered; durable plaster over limewash variation; Rubio floors stay (durable hardwax oil, not romantic patina language). Leather still fine (softens user-friendly).</dd>
+
+      <dt>4. Indoor/outdoor relationship</dt>
+      <dd>Like visual seamlessness (big windows, sliding glass) but don't actually live outdoors much in humid summer / cold winter. Outdoor = pleasant feature, not lifestyle anchor.</dd>
+
+      <dt>5. Rules vs permission</dt>
+      <dd>Selective breaks permitted. When an object brings real joy, rules become guidelines. Kill-list still firm (no saturated walls, no dark walnut primary, no jewel tones, no Modern Farmhouse).</dd>
+    </dl>
+  </div>
+
+  <div class="calibrations">
+    <h3>How the household uses the house</h3>
+    <dl class="calib-grid">
+      <dt>6. Hosting rhythm</dt>
+      <dd>Mixed + IMPORTANT. Weekly drinks + dinner gatherings. Monthly bigger parties up to 20 people. Omid makes craft cocktails. Bar zone = architected freestanding shelf on street-facing kitchen wall.</dd>
+
+      <dt>7. Universal vs uniquely "us"</dt>
+      <dd>Uniquely us. House should tell YOUR family's story, not magazine-elegant-anonymous.</dd>
+
+      <dt>8. "Real life" visibility</dt>
+      <dd>Curated. Some functional items live in the open (designed dog bed, charging station); other stuff hidden (TV in Frame mode, cables, baby toys, recycling).</dd>
+
+      <dt>9. Iranian heritage integration</dt>
+      <dd>Limited. One Persian rug somewhere + maybe one Iranian-modern art piece. Not a dominant theme.</dd>
+
+      <dt>10. Annika's voice</dt>
+      <dd>Aligned with direction. No separate Annika-specific design process needed.</dd>
+
+      <dt>11. Day rhythm</dt>
+      <dd>Mornings: front or back deck when weather is nice; otherwise office. Skip breakfast usually. Evenings: kitchen + LR couch (cooking, drinking, TV, catching up).</dd>
+
+      <dt>16. Music infrastructure</dt>
+      <dd>HUGE. Sony floor-standing speakers + amplifier + HUE lights everywhere. Speakers + amp live by the TV; couch is the listening sweet-spot. No vinyl. Loud, high-quality, not gimmicky.</dd>
+
+      <dt>22. TV</dt>
+      <dd>Samsung Frame TV wall-mounted (existing, may upgrade size). Disappears as art when off.</dd>
+
+      <dt>14. Color direction</dt>
+      <dd>Earthy warm preferred: rust, mustard, deep olive, oxblood, terracotta. Less cool-leaning warm (sage / petrol used selectively, not dominantly).</dd>
+
+      <dt>15. Spatial preference</dt>
+      <dd>Maximize open feeling — already enforced in kitchen/LR/dining area. Don't add walls back.</dd>
+
+      <dt>23. Office (WFH)</dt>
+      <dd>Heavy Zoom. 1 monitor + laptop monitor. Mostly work, secondary library if room. No privacy concern.</dd>
+
+      <dt>27. Plant care</dt>
+      <dd>Full commitment. 3-5 per social room, 1-2 private. Cat-safe defaults (parlor palm not fiddle leaf in cat zones).</dd>
+
+      <dt>28. Nursery timing</dt>
+      <dd>TBD. Design framework only, defer real sourcing.</dd>
+
+      <dt>29. Outdoor deck</dt>
+      <dd>Moderate. Outdoor dining for 4 + 2 lounge chairs (~$5-7K within the $30K furniture envelope).</dd>
+    </dl>
+  </div>
+
+</div>
+</body>
+</html>
