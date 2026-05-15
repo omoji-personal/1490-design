@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bathrooms · 1490 Lively Ridge</title>
+<meta name="description" content="Three bath gut. Master ($23.5K), Hall ($15.4K), Basement ¾ ($17K). Cle Bejmat master-only. Delta Trinsic Champagne Bronze across all.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths" class="current">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Bathrooms</h1>
+  <p class="subtitle">Three bath gut. Master ($23.5K), Hall ($15.4K), Basement ¾ ($17K). Cle Bejmat master-only. Delta Trinsic Champagne Bronze across all.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>Three bath gut.</strong> Master ($23,500 honest), Hall ($15,400), Basement ¾ ($11,800 → $17K honest). Cle Bejmat is master ONLY (kitchen pivoted to Carrara + Sea Salt zellige). Delta Trinsic Champagne Bronze plumbing is the non-negotiable contract callout across all three.
+</div>
+
+<section class="section-header">
+  <h2>Master bath — $23,500 honest</h2>
+  <div class="count">33 sf · vanity wall 48"</div>
+</section>
+<div class="grid">
+  <div class="card">
+    <img src="/images/cathiehong_11.jpg" alt="Cathie Hong marble vanity bath">
+    <div class="meta">
+      <div class="title">Cathie Hong marble bath vanity</div>
+      <div class="caption">Light oak vanity + marble + lacquered brass fixtures — master direction.</div>
+      <span class="tag">cathiehong_11</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_09.jpg" alt="Cathie Hong bath alt">
+    <div class="meta">
+      <div class="title">Cathie Hong bath alt</div>
+      <div class="caption">Curbless walk-in shower direction with frameless glass.</div>
+      <span class="tag">cathiehong_09</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/lifestyle_04.jpg" alt="Studio LIFE/STYLE primary bath">
+    <div class="meta">
+      <div class="title">Studio LIFE/STYLE primary bath</div>
+      <div class="caption">Light oak vanity + Calacatta + brass — closest alt to our master spec.</div>
+      <span class="tag">lifestyle_04</span>
+    </div>
+  </div>
+</div>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
+<tr><td>Toilet</td><td>Toto Drake II One-Piece + Toto Washlet C5</td></tr>
+<tr><td>Shower walls</td><td>Cle Weathered White Bejmat 2×6 (master ONLY)</td></tr>
+<tr><td>Shower floor / drain</td><td>Daltile Choice Ivory 24×24 honed + Schluter linear drain</td></tr>
+<tr><td>Shower glass</td><td>Frameless 48×36 walk-in (curbless)</td></tr>
+<tr><td>Floor</td><td>Daltile Choice Ivory + heated mat (whole bath)</td></tr>
+<tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze (NOT chrome)</td></tr>
+<tr><td>Sconces</td><td>Schoolhouse Princeton — flanking mirror</td></tr>
+<tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed</td></tr>
+<tr><td>Door</td><td>Pocket door — premium hardware</td></tr>
+<tr><td>Exhaust</td><td>New w/ wall vent (humidity microclimate spec)</td></tr>
+</table>
+
+<section class="section-header">
+  <h2>Hall bath — $15,400 honest</h2>
+  <div class="count">42 sf · tub install</div>
+</section>
+<div class="grid">
+  <div class="card">
+    <img src="/images/jennikayne_05.jpg" alt="Jenni Kayne bath mood">
+    <div class="meta">
+      <div class="title">Jenni Kayne Lake House bath</div>
+      <div class="caption">Soaking tub + light oak + brass + restrained palette.</div>
+      <span class="tag">jennikayne_05</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/sss_05.jpg" alt="SSS Mandy Moore bath">
+    <div class="meta">
+      <div class="title">SSS Mandy Moore bath</div>
+      <div class="caption">Mid-century-meets-Japandi bath — alt direction reference.</div>
+      <span class="tag">sss_05</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/allprace_04.jpg" alt="Allprace Japandi bath">
+    <div class="meta">
+      <div class="title">Allprace Japandi bath</div>
+      <div class="caption">Freestanding tub + oak vanity + penny tile floor.</div>
+      <span class="tag">allprace_04</span>
+    </div>
+  </div>
+</div>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
+<tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
+<tr><td>Tub</td><td>Kohler Bellwether cast iron (60") — alcove install</td></tr>
+<tr><td>Wall tile</td><td>Bedrosians Cloé wall tile (handmade zellige character)</td></tr>
+<tr><td>Floor</td><td>Daltile Portfolio White 12×24 honed</td></tr>
+<tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze</td></tr>
+<tr><td>Sconces</td><td>Cedar & Moss — flanking mirror</td></tr>
+<tr><td>Mirror</td><td>Framed wood-edge round</td></tr>
+<tr><td>Shelf</td><td>Slim wall shelf above tub</td></tr>
+</table>
+
+<section class="section-header">
+  <h2>Basement ¾ bath — $11,800 sheet / $17,000 honest</h2>
+  <div class="count">~30 sf · slab cut for shower drain</div>
+</section>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount</td></tr>
+<tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
+<tr><td>Shower</td><td>32×32 neo-angle frameless enclosure</td></tr>
+<tr><td>Wall tile</td><td>Bedrosians Cloé (match hall)</td></tr>
+<tr><td>Floor</td><td>Daltile Portfolio (match hall)</td></tr>
+<tr><td>Mirror</td><td>Small framed circular</td></tr>
+<tr><td>Plumbing</td><td>Slab cut for shower drain ($1.5-2K of the line) + Washlet C5 dedicated GFCI</td></tr>
+</table>
+
+<div class="kill-list">
+<strong>Bath kill list (all three):</strong>
+<ul>
+<li>NO chrome plumbing — Delta Trinsic Champagne Bronze is the contract callout</li>
+<li>NO subway tile</li>
+<li>NO Carrara in baths (kitchen only) — Cle/Bedrosians/Daltile is the bath palette</li>
+<li>NO Cle Bejmat outside master bath</li>
+<li>NO framed shower doors — frameless only</li>
+<li>NO white melamine vanities — WE Hutchinson blonde oak only</li>
+<li>NO vinyl flooring — porcelain tile only (humidity microclimate)</li>
+</ul>
+</div>
+
+</main>
+</body>
+</html>

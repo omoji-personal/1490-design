@@ -116,8 +116,35 @@
     .pos-title { font-size: 20px; }
   }
 </style>
+
+<style>
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250,248,244,0.96);
+  backdrop-filter: saturate(140%) blur(8px); border-bottom: 1px solid #e8e2d6; }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: #8a7a5a; }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: #2a2622; text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid #e8e2d6; }
+.topnav-inner a:not(.home):hover { background: #fff; border-color: #8a7a5a; }
+.topnav-inner a.current { background: #f7eedc; border-color: #c9b88a; }
+</style>
+
 </head>
 <body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum" class="current">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
 
 <div style="background: rgba(250, 248, 244, 0.96); border-bottom: 1px solid #e8e2d6; padding: 11px 28px; font-size: 14px; position: sticky; top: 0; z-index: 60; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
   <div style="max-width: 1180px; margin: 0 auto; display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">

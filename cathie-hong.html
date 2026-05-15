@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathie Hong Interiors · 1490 Lively Ridge</title>
+<meta name="description" content="The anchor designer. Campbell House (Rue Magazine) is THE spine project — kitchen, LR, dining, bedroom all canonical.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong" class="current">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Cathie Hong Interiors</h1>
+  <p class="subtitle">The anchor designer. Campbell House (Rue Magazine) is THE spine project — kitchen, LR, dining, bedroom all canonical.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>The anchor.</strong> Cathie Hong Interiors is the spine of 1490's canon. Campbell House (Rue Magazine, 2023) is THE single reference that ties the whole direction together — kitchen, LR, dining, primary bedroom all land within the canon.
+</div>
+
+<section class="section-header"><h2>Why she anchors</h2></section>
+<ul class="bullet">
+<li><strong>Warmth without messiness.</strong> Light oak + cream + brass without veering boho or rustic. The exact temperature of "warm Japandi."</li>
+<li><strong>Repeatable formula.</strong> Multiple projects (Campbell House, plus 5+ others) hit the same 9-element signature — proves it's a language, not a one-off.</li>
+<li><strong>Color discipline.</strong> One real-color accent per room. Never more. Never primary. Never tufted.</li>
+<li><strong>California sensibility, transferable to Atlanta.</strong> Her work is climate-agnostic enough that the formula translates to a 1953 Atlanta brick ranch without feeling out-of-place.</li>
+</ul>
+
+<section class="section-header">
+  <h2>Campbell House — THE spine project</h2>
+  <div class="count">Rue Magazine feature, 2023</div>
+</section>
+<div class="grid">
+  <div class="card hero">
+    <img src="/images/cathiehong_05.jpg" alt="Campbell Modern kitchen">
+    <div class="meta">
+      <div class="title">Campbell Modern kitchen</div>
+      <div class="caption">Reeded oak island + Carrara backsplash + brass pendants. The kitchen anchor.</div>
+      <span class="tag">cathiehong_05</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_01.jpg" alt="Campbell Modern LR">
+    <div class="meta">
+      <div class="title">Campbell Modern LR</div>
+      <div class="caption">Cream linen sectional + light oak coffee table + brass floor lamp.</div>
+      <span class="tag">cathiehong_01</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_08.jpg" alt="Campbell Modern dining">
+    <div class="meta">
+      <div class="title">Campbell Modern dining</div>
+      <div class="caption">Wegner wishbone paper-cord chairs + light oak pedestal table.</div>
+      <span class="tag">cathiehong_08</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_10.jpg" alt="Campbell Modern bedroom">
+    <div class="meta">
+      <div class="title">Campbell Modern bedroom</div>
+      <div class="caption">Cream linen bed, light oak nightstands, brass sconces.</div>
+      <span class="tag">cathiehong_10</span>
+    </div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Kitchen — 3 angles of the same project</h2></section>
+<div class="grid three">
+  <div class="card">
+    <img src="/images/cathiehong_05.jpg" alt="Campbell kitchen angle 1">
+    <div class="meta"><div class="title">Angle 1 — island side</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_06.jpg" alt="Campbell kitchen angle 2">
+    <div class="meta"><div class="title">Angle 2 — range wall</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_07.jpg" alt="Campbell kitchen angle 3">
+    <div class="meta"><div class="title">Angle 3 — into dining</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>LR + entry + nook</h2></section>
+<div class="grid">
+  <div class="card">
+    <img src="/images/cathiehong_02.jpg" alt="LR angle 2">
+    <div class="meta"><div class="title">LR alternate angle</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_12.jpg" alt="LR angle 3">
+    <div class="meta"><div class="title">LR third angle</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_03.jpg" alt="Built-in oak nook">
+    <div class="meta"><div class="title">Built-in oak bench entry</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_04.jpg" alt="Front door entry">
+    <div class="meta"><div class="title">Front door entry — Pheasant House</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Baths — Pheasant House</h2></section>
+<div class="grid">
+  <div class="card">
+    <img src="/images/cathiehong_09.jpg" alt="Pheasant House bath 1">
+    <div class="meta"><div class="title">Marble vanity bath</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_11.jpg" alt="Pheasant House bath 2">
+    <div class="meta"><div class="title">Marble vanity bath alt</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>What to steal directly</h2></section>
+<ul class="bullet">
+<li>The kitchen cabinet color + counter + backsplash trinity</li>
+<li>The "one warm-wood gesture per surface" discipline (the oak island IS the wood; the floor and built-in stay neutral)</li>
+<li>The brass pendant density (3-4 per kitchen, not 1-2 — repetition creates rhythm)</li>
+<li>The plant placement convention — kentia palm or bird of paradise (NOT fiddle leaf, which is toxic to cats)</li>
+<li>The cream-linen-sofa decisiveness — no patterns, no tufting, just one anchor</li>
+<li>The ceramic restraint — 3-5 pieces per surface, never more</li>
+</ul>
+
+<div class="note-card target">
+<strong>Owner takeaway:</strong> If a decision feels unclear, ask "what would Cathie Hong do here?" She's the tie-breaker.
+</div>
+
+</main>
+</body>
+</html>

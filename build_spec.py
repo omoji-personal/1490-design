@@ -42,22 +42,30 @@ html = f"""<!DOCTYPE html>
   }}
   nav.topnav {{
     position: sticky; top: 0; z-index: 50;
-    background: rgba(250, 248, 244, 0.94);
+    background: rgba(250, 248, 244, 0.96);
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
     border-bottom: 1px solid var(--border);
   }}
   .topnav-inner {{
-    max-width: 880px; margin: 0 auto; padding: 12px 28px;
-    display: flex; gap: 18px; align-items: center; font-size: 14px;
+    max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+    display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
   }}
-  .topnav-inner a {{
-    color: var(--ink); text-decoration: none; font-weight: 500;
-  }}
-  .topnav-inner a:hover {{ color: var(--accent); }}
   .topnav-inner .home {{
-    color: var(--muted); margin-right: auto;
+    color: var(--muted); margin-right: 14px; font-weight: 600;
+    text-decoration: none;
   }}
+  .topnav-inner .home:hover {{ color: var(--accent); }}
+  .topnav-inner .group-label {{
+    color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    margin: 0 4px 0 12px; font-weight: 600;
+  }}
+  .topnav-inner a:not(.home) {{
+    color: var(--ink); text-decoration: none; padding: 4px 10px;
+    border-radius: 999px; border: 1px solid var(--border);
+  }}
+  .topnav-inner a:not(.home):hover {{ background: var(--card-bg); border-color: var(--accent); }}
+  .topnav-inner a.current {{ background: #f7eedc; border-color: #c9b88a; }}
   .container {{
     max-width: 880px;
     margin: 0 auto;
@@ -162,9 +170,12 @@ html = f"""<!DOCTYPE html>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a>
-    <a href="/mood-board">Mood Board</a>
-    <a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec" class="current">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
 

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OWIU Studio · 1490 Lively Ridge</title>
+<meta name="description" content="LA Japandi precision. Palmero, Ryokan, Echo Park, Duane, Brentwood, Wellington Office are canon. Biscuit Loft + Glass Ridge are NOT.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu" class="current">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>OWIU Studio</h1>
+  <p class="subtitle">LA Japandi precision. Palmero, Ryokan, Echo Park, Duane, Brentwood, Wellington Office are canon. Biscuit Loft + Glass Ridge are NOT.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>The LA Japandi voice.</strong> OWIU Studio brings the precision and warmth-from-wood that anchors California Modern Japandi. <strong>Only WARM projects.</strong>
+</div>
+
+<section class="section-header"><h2>Warm projects (canon)</h2></section>
+<ul class="bullet">
+<li><strong>Palmero House</strong> (Atwater Village) — kitchen anchor</li>
+<li><strong>Ryokan House</strong> — bath + entry anchor</li>
+<li><strong>Echo Park Hill House</strong> — LR + dining</li>
+<li><strong>Duane House</strong> — full-house warm Japandi</li>
+<li><strong>Brentwood Residence</strong> — kitchen + LR boundary of "warm enough"</li>
+<li><strong>Wellington Office</strong> — office built-in inspiration</li>
+</ul>
+
+<section class="section-header"><h2>Rejected projects (do NOT use)</h2></section>
+<div class="kill-list">
+<strong>OWIU projects that are NOT canon (too cold/austere/loft-industrial):</strong>
+<ul>
+<li>Biscuit Loft — too pale, lacks coziness, reads industrial</li>
+<li>Glass Ridge — too minimal-to-the-point-of-clinical</li>
+</ul>
+The boundary is "warm enough." If a project reads austere, it's not us.
+</div>
+
+<section class="section-header">
+  <h2>Visual canon</h2>
+</section>
+<div class="grid">
+  <div class="card hero">
+    <img src="/images/owiu_12.jpg" alt="Wellington Office">
+    <div class="meta">
+      <div class="title">Wellington Office — aspirational</div>
+      <div class="caption">Light oak built-in desk + warm wood acoustic ceiling.</div>
+      <span class="tag">owiu_12</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_10.jpg" alt="Brentwood kitchen">
+    <div class="meta">
+      <div class="title">Brentwood Residence kitchen</div>
+      <div class="caption">Boundary of "warm enough" — confirms the threshold.</div>
+      <span class="tag">owiu_10</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_11.jpg" alt="Brentwood LR">
+    <div class="meta">
+      <div class="title">Brentwood Residence LR</div>
+      <div class="caption">Cream linen + oak + brass — architectural precision.</div>
+      <span class="tag">owiu_11</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_09.jpg" alt="Duane House bedroom">
+    <div class="meta">
+      <div class="title">Duane House bedroom</div>
+      <div class="caption">The cooler edge — useful boundary marker.</div>
+      <span class="tag">owiu_09</span>
+    </div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Palmero House (3 angles)</h2></section>
+<div class="grid three">
+  <div class="card">
+    <img src="/images/owiu_01.jpg" alt="Palmero 1">
+    <div class="meta"><div class="title">Palmero — angle 1</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_02.jpg" alt="Palmero 2">
+    <div class="meta"><div class="title">Palmero — angle 2</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_03.jpg" alt="Palmero 3">
+    <div class="meta"><div class="title">Palmero — angle 3</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Echo Park Hill House (3 angles)</h2></section>
+<div class="grid three">
+  <div class="card">
+    <img src="/images/owiu_04.jpg" alt="Echo Park 1">
+    <div class="meta"><div class="title">Echo Park — angle 1</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_05.jpg" alt="Echo Park 2">
+    <div class="meta"><div class="title">Echo Park — angle 2</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_06.jpg" alt="Echo Park 3">
+    <div class="meta"><div class="title">Echo Park — angle 3</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Duane House (3 angles)</h2></section>
+<div class="grid three">
+  <div class="card">
+    <img src="/images/owiu_07.jpg" alt="Duane 1">
+    <div class="meta"><div class="title">Duane House — LR</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_08.jpg" alt="Duane 2">
+    <div class="meta"><div class="title">Duane House — alt</div></div>
+  </div>
+  <div class="card">
+    <img src="/images/owiu_09.jpg" alt="Duane 3">
+    <div class="meta"><div class="title">Duane House — bedroom</div></div>
+  </div>
+</div>
+
+<section class="section-header"><h2>What to steal directly</h2></section>
+<ul class="bullet">
+<li>The light-oak built-in discipline — built-ins are oak, not painted</li>
+<li>The wood acoustic ceiling concept (consider for office)</li>
+<li>The architectural precision — clean lines, recessed lighting, restrained moldings</li>
+<li>The "one bold timber move" idea — a single dramatic oak gesture per room</li>
+<li>The skylight handling (relevant for office, current master)</li>
+</ul>
+
+</main>
+</body>
+</html>

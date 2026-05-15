@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nursery · 1490 Lively Ridge</title>
+<meta name="description" content="Annika's domain. Same California Modern Japandi palette extended to nursery — NOT pastel, NOT primary-color. Light oak + cream + ONE accent.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery" class="current">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Nursery</h1>
+  <p class="subtitle">Annika's domain. Same California Modern Japandi palette extended to nursery — NOT pastel, NOT primary-color. Light oak + cream + ONE accent.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>Annika's domain.</strong> Kid 1 expected within ~1 year. The future nursery is currently the Guest Bedroom (~125 sf est — needs tape-measure verification). Sound insulation locked between master and nursery wall.
+</div>
+
+<div class="dims">
+  <div class="dim"><div class="label">Footprint</div><div class="value">~9' × 14' est</div></div>
+  <div class="dim"><div class="label">Area</div><div class="value">~125 sf</div></div>
+  <div class="dim"><div class="label">Verification needed</div><div class="value">Tape-measure</div></div>
+</div>
+
+<section class="section-header"><h2>Aesthetic framework</h2></section>
+<table class="spec-table">
+<tr><th>Element</th><th>Direction</th></tr>
+<tr><td>Approach</td><td>Same California Modern Japandi palette — cream, plaster, light oak, sage accent. NOT pastel. NOT primary-color nursery.</td></tr>
+<tr><td>Floor</td><td>Existing hardwood refinished — soft cream wool rug 5×7 with washable cover</td></tr>
+<tr><td>Walls</td><td>BM White Dove (OC-17) matte. NO accent wall.</td></tr>
+<tr><td>Crib</td><td>Light oak — Babyletto Hudson / Million Dollar Baby Foothill / Oeuf Sparrow (all in oak/natural)</td></tr>
+<tr><td>Glider</td><td>Cream performance linen, lacquered brass legs</td></tr>
+<tr><td>Dresser / changer</td><td>Light oak, doubles as changing table</td></tr>
+<tr><td>Color accent</td><td>ONE: sage olive curtain OR mustard mobile OR rust throw blanket. Not all three.</td></tr>
+<tr><td>Lighting</td><td>Brass overhead pendant (dimmable) + brass sconce or table lamp for night feeds</td></tr>
+<tr><td>Mobile / art</td><td>Hand-thrown or hand-woven (no commercial cartoon characters)</td></tr>
+<tr><td>Window treatments</td><td>Blackout linen Roman (sheer + blackout)</td></tr>
+</table>
+
+<section class="section-header"><h2>Mood references</h2></section>
+<div class="grid">
+  <div class="card">
+    <img src="/images/cathiehong_10.jpg" alt="Japandi bedroom palette for nursery">
+    <div class="meta">
+      <div class="title">Cathie Hong palette — extend to nursery</div>
+      <div class="caption">Same canon, smaller scale: light oak + cream linen + restrained accent.</div>
+      <span class="tag">cathiehong_10</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/allprace_03.jpg" alt="Allprace plaster bedroom">
+    <div class="meta">
+      <div class="title">Allprace plaster bedroom direction</div>
+      <div class="caption">Plaster walls + oak beams + paper-fan art — extends into a kid's room cleanly.</div>
+      <span class="tag">allprace_03</span>
+    </div>
+  </div>
+</div>
+
+<div class="kill-list">
+<strong>Nursery kill list:</strong>
+<ul>
+<li>NO pastels (no baby blue, no baby pink, no mint green)</li>
+<li>NO Disney / cartoon characters</li>
+<li>NO primary-color stimulation room</li>
+<li>NO IKEA white melamine (light oak only)</li>
+<li>NO ABC alphabet wall decals</li>
+<li>NO mobile with primary-color cartoon shapes</li>
+<li>NO matching nursery furniture sets from buybuy BABY</li>
+</ul>
+</div>
+
+<div class="note-card target">
+<strong>Phase plan:</strong> nursery doesn't get built out during P1 reno (timing is post-move-back-in, when arrival is closer). P1 just preps the room: paint + floor refinish + sound insulation wall. Furniture/decor happens in the months before arrival, within the $30K envelope.
+</div>
+
+</main>
+</body>
+</html>

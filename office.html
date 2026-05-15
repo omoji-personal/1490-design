@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office · 1490 Lively Ridge</title>
+<meta name="description" content="Omid's WFH office — current Master BR + skylight. 134 sf, best light in house. Light oak built-in desk + brass + skylight shade.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office" class="current">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Office</h1>
+  <p class="subtitle">Omid's WFH office — current Master BR + skylight. 134 sf, best light in house. Light oak built-in desk + brass + skylight shade.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>Omid's WFH office.</strong> The new office is the current Master Bedroom + attached skylight (10'-1" × 13'-3" = 134 sf). Has the most natural light in the house. South-facing windows + skylight.
+</div>
+
+<div class="dims">
+  <div class="dim"><div class="label">Footprint</div><div class="value">10'-1" × 13'-3"</div></div>
+  <div class="dim"><div class="label">Area</div><div class="value">134 sf</div></div>
+  <div class="dim"><div class="label">Light</div><div class="value">South windows + skylight (kept + shade)</div></div>
+  <div class="dim"><div class="label">Use</div><div class="value">WFH primary</div></div>
+</div>
+
+<section class="section-header"><h2>Construction specs</h2></section>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Floor</td><td>Existing hardwood refinished</td></tr>
+<tr><td>Walls</td><td>BM White Dove matte (Aura)</td></tr>
+<tr><td>Skylight</td><td>KEEP + add shade (cell shade or sheer linen Roman)</td></tr>
+<tr><td>Built-in (optional, within $25-35K custom millwork allowance)</td><td>Light oak built-in desk + bookcase, full wall</td></tr>
+<tr><td>Lighting</td><td>Overhead brass pendant + desk lamp (brass, swing-arm)</td></tr>
+<tr><td>Electrical</td><td>Cat6 already in scope, surge protector, dedicated computer circuit if WFH-heavy</td></tr>
+</table>
+
+<section class="section-header"><h2>Mood references</h2></section>
+<div class="grid">
+  <div class="card hero">
+    <img src="/images/owiu_12.jpg" alt="OWIU Wellington Office">
+    <div class="meta">
+      <div class="title">OWIU Wellington Office — aspirational reference</div>
+      <div class="caption">Light oak built-in desk + warm wood acoustic ceiling. The dream.</div>
+      <span class="tag">owiu_12</span>
+    </div>
+  </div>
+  <div class="card">
+    <img src="/images/cathiehong_03.jpg" alt="Cathie Hong built-in nook">
+    <div class="meta">
+      <div class="title">Cathie Hong built-in oak nook</div>
+      <div class="caption">Smaller-scale built-in oak under window — closer to our 134 sf footprint.</div>
+      <span class="tag">cathiehong_03</span>
+    </div>
+  </div>
+</div>
+
+<section class="section-header"><h2>Furniture brief</h2></section>
+<table class="spec-table">
+<tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
+<tr><td>Desk</td><td>Light oak — standing desk capable OR fixed wood top. ~60×30.</td><td>Custom millwork built-in OR Article Madera / WE Hutchinson desk</td></tr>
+<tr><td>Office chair</td><td>Ergonomic but visually quiet (no gaming chair).</td><td>Herman Miller Aeron (timeless) or Steelcase Leap</td></tr>
+<tr><td>Bookcase / shelving</td><td>Light oak built-in OR freestanding. Hand-thrown ceramic groupings + plants.</td><td>Custom millwork or Rejuvenation Mast</td></tr>
+<tr><td>Desk lamp</td><td>Brass swing-arm</td><td>Schoolhouse Hudson swing arm</td></tr>
+<tr><td>Rug</td><td>Cream/oat flat-weave 6×9</td><td>Loloi II</td></tr>
+<tr><td>Plant</td><td>Kentia palm (cat-safe) under skylight</td><td>Local nursery</td></tr>
+</table>
+
+<div class="kill-list">
+<strong>Office kill list:</strong>
+<ul>
+<li>NO black industrial desk</li>
+<li>NO RGB-anything (cables, monitors, ambient)</li>
+<li>NO motivational wall art with capital letters</li>
+<li>NO ergonomic furniture in primary colors (Aeron in graphite, not red)</li>
+<li>NO Edison-cage pendant lights</li>
+</ul>
+</div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materials · 1490 Lively Ridge</title>
+<meta name="description" content="Every locked material spec with vendor + alt options. Owner-facing reference for samples + TCW verification.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --ink: #2a2622;
+  --muted: #6b6660;
+  --accent: #8a7a5a;
+  --card-bg: #fff;
+  --target-tint: #e8efe2;
+  --warm-tint: #f7eedc;
+  --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df;
+  --border: #e8e2d6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+nav.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 248, 244, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
+}
+.topnav-inner .home {
+  color: var(--muted); margin-right: 14px; font-weight: 600;
+  text-decoration: none;
+}
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label {
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 4px 0 12px; font-weight: 600;
+}
+.topnav-inner a:not(.home) {
+  color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border);
+}
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+
+header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
+h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
+.subtitle { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 70ch; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
+
+.section-header {
+  margin: 44px 0 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  scroll-margin-top: 70px;
+}
+.section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+.section-header .count { color: var(--muted); font-size: 13px; }
+
+.note-card {
+  background: var(--note-tint);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin: 18px 0;
+  font-size: 14.5px;
+}
+.note-card.warm { background: var(--warm-tint); }
+.note-card.target { background: var(--target-tint); border-left-color: #6b8e57; }
+.note-card.reject { background: var(--reject-tint); border-left-color: #a85a4a; }
+.note-card strong { color: #5c4f2f; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card.hero {
+  background: var(--warm-tint);
+  border: 2px solid #c9b88a;
+}
+.card img {
+  width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+  display: block;
+}
+.card .meta {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.card .meta .title { font-weight: 600; color: var(--ink); }
+.card .meta .caption { color: var(--muted); margin-top: 3px; }
+.card .meta .tag {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  background: var(--note-tint); color: #5c4f2f;
+  border-radius: 999px; margin-top: 6px;
+}
+
+.spec-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.spec-table th, .spec-table td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.spec-table th {
+  background: var(--warm-tint); color: var(--ink);
+  font-weight: 600; font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+
+.dims {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin: 12px 0 22px;
+}
+.dims .dim {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  min-width: 130px;
+}
+.dims .dim .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.dims .dim .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+ul.bullet { padding-left: 22px; margin: 12px 0; }
+ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
+
+.kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
+.kill-list strong { color: #7a3a2a; }
+.kill-list ul { margin: 8px 0 0; padding-left: 22px; }
+.kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
+
+@media (max-width: 768px) {
+  h1 { font-size: 28px; }
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
+  main, header.page-header { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials" class="current">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Materials</h1>
+  <p class="subtitle">Every locked material spec with vendor + alt options. Owner-facing reference for samples + TCW verification.</p>
+</header>
+<main>
+
+<div class="note-card warm">
+<strong>Bookmark this page.</strong> Every locked material spec with closeups + vendor + alt options. The owner-facing reference for sample orders + TCW change-order verification.
+</div>
+
+<section class="section-header"><h2>Wood floors</h2></section>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th><th>Vendor</th></tr>
+<tr><td>Refinish process</td><td><strong>Bleach + Rubio Monocoat Pure</strong> — NOT Bona poly + "natural" stain (contract callout)</td><td>Rhodes Hardwood Atlanta — $7.48/sf published</td></tr>
+<tr><td>Existing floor</td><td>Red oak strip — refinishing reveals warm-honey-white-oak tone</td><td>—</td></tr>
+<tr><td>Basement LVP</td><td>Mid-grade LVP — vapor underlayment + transitions</td><td>Owner-direct (Build.com Pro / Lowe's Pro)</td></tr>
+<tr><td>Wood rules</td><td>White oak primary, ash/beech secondary, light walnut accent ONLY. NO dark walnut, NO espresso, NO pickled.</td><td>—</td></tr>
+</table>
+
+<section class="section-header"><h2>Tile</h2></section>
+<table class="spec-table">
+<tr><th>Where</th><th>Spec</th><th>Vendor / SKU</th></tr>
+<tr><td>Master bath shower walls</td><td>Cle Weathered White Bejmat 2×6 — handmade specialty</td><td>cletile.com (master ONLY)</td></tr>
+<tr><td>Master bath + Kitchen floor</td><td>Daltile Choice Ivory porcelain 24×24 honed</td><td>Daltile via Atlanta dealer</td></tr>
+<tr><td>Hall bath wall</td><td>Bedrosians Cloé 4×4 zellige-character (NOT actual zellige)</td><td>Bedrosians</td></tr>
+<tr><td>Hall + Basement bath floor</td><td>Daltile Portfolio White 12×24 honed</td><td>Daltile</td></tr>
+<tr><td>Kitchen range backsplash (PIVOT)</td><td>Carrara slab — bookmatched or single piece</td><td>Atlanta fab shop slab</td></tr>
+<tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt zellige 4×4 — handmade actual zellige (NOT Cloé character-only)</td><td>cletile.com</td></tr>
+</table>
+
+<section class="section-header"><h2>Paint</h2></section>
+<table class="spec-table">
+<tr><th>Where</th><th>Color</th><th>Sheen</th><th>Product line</th></tr>
+<tr><td>Walls — most rooms</td><td>BM White Dove (OC-17)</td><td>Matte</td><td><strong>BM Aura</strong></td></tr>
+<tr><td>Walls — bedroom alt</td><td>SW Accessible Beige (SW 7036)</td><td>Matte</td><td>BM Aura (color-matched)</td></tr>
+<tr><td>Bath accent wall</td><td>BM Saybrook Sage (HC-114)</td><td>Matte</td><td>BM Aura</td></tr>
+<tr><td>Trim + doors</td><td>BM Simply White (OC-117)</td><td>Satin</td><td>BM Aura</td></tr>
+<tr><td>Wet rooms (baths, kitchen, basement)</td><td>same colors</td><td>Matte/eggshell</td><td><strong>BM Aura Bath & Spa</strong></td></tr>
+<tr><td>Exterior</td><td>TBD — coordinate with brick</td><td>—</td><td><strong>BM Aura Exterior</strong></td></tr>
+</table>
+
+<div class="note-card target">
+<strong>Why Aura, not Regal Select or ben:</strong> 1490's lot is heavily tree-canopied + close to creek = persistent high humidity year-round. Aura is BM's premium washable + mildew-resistant line. Non-negotiable in this microclimate. Marginal cost ~$30-40/gal premium = $1,500-2,000 total project upcharge.
+</div>
+
+<section class="section-header"><h2>Plumbing fixtures</h2></section>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Faucet line (all baths + kitchen)</td><td><strong>Delta Trinsic in Champagne Bronze</strong> — contract callout (NOT chrome, NOT polished nickel)</td></tr>
+<tr><td>Toilet</td><td>Toto Drake II (One-Piece in master, Two-Piece in hall + basement)</td></tr>
+<tr><td>Washlet</td><td>Toto Washlet C5 in all 3 baths — dedicated GFCI per bath</td></tr>
+<tr><td>Master vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
+<tr><td>Hall vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
+<tr><td>Basement vanity</td><td>PB Mason 24" wall-mount</td></tr>
+<tr><td>Hall bath tub</td><td>Kohler Bellwether cast iron 60" alcove</td></tr>
+<tr><td>Master shower drain</td><td>Schluter linear drain + Kerdi waterproofing system</td></tr>
+<tr><td>Kitchen sink</td><td>Stainless undermount (owner-direct, Build.com Pro)</td></tr>
+</table>
+
+<section class="section-header"><h2>Hardware</h2></section>
+<table class="spec-table">
+<tr><th>Where</th><th>Spec</th><th>Vendor</th></tr>
+<tr><td>Kitchen cabinet pulls</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix (5:1 brass:black)</td><td>Rejuvenation trade account</td></tr>
+<tr><td>Front door handleset</td><td>Schoolhouse Mortise OR Rejuvenation Emry — lacquered brass</td><td>Schoolhouse / Rejuvenation trade</td></tr>
+<tr><td>Secondary entry door</td><td>Standard matte black or brass — Emtek (less premium)</td><td>Emtek</td></tr>
+<tr><td>Interior doors (10)</td><td>Emtek Modern matte black</td><td>Emtek via Build.com</td></tr>
+<tr><td>Bath fixtures</td><td>Delta Trinsic Champagne Bronze (faucet + shower trim)</td><td>—</td></tr>
+<tr><td>Lighting fixtures</td><td>Schoolhouse Princeton / Hudson / Apex + Rejuvenation Putman</td><td>Schoolhouse + Rejuvenation</td></tr>
+</table>
+
+<div class="note-card target">
+<strong>Patina rule:</strong> LACQUERED brass throughout — "no patina romance." Schoolhouse's lacquered finish stays color-fast, vs unlacquered which develops patina. Owner explicitly chose lacquered (locked decision #4). This is consistent with the warm-but-stays-looking-good philosophy.
+</div>
+
+<section class="section-header"><h2>Counters</h2></section>
+<table class="spec-table">
+<tr><th>Where</th><th>Spec</th></tr>
+<tr><td>Kitchen island + perimeter</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
+<tr><td>Bath vanity tops</td><td>Matches respective tile / vanity spec (Hutchinson is integral)</td></tr>
+</table>
+
+<section class="section-header"><h2>Roof + envelope</h2></section>
+<table class="spec-table">
+<tr><th>Element</th><th>Spec</th></tr>
+<tr><td>Shingle</td><td>Premium 50-yr impact with AR (algae-resistant) granules + 10-yr algae warranty</td></tr>
+<tr><td>Underlayment</td><td>Synthetic + ice-and-water shield at eaves, valleys, penetrations</td></tr>
+<tr><td>Gutter</td><td>Heavy-duty + micro-mesh leaf guard (LeafFilter-tier)</td></tr>
+<tr><td>Exterior paint</td><td>BM Aura Exterior — full repaint (humidity microclimate)</td></tr>
+</table>
+
+<section class="section-header"><h2>Sample order list (owner action)</h2></section>
+<div class="note-card warm">
+Lead times: Cle = 4-6 weeks. Bedrosians = 2-3 weeks. Daltile = 1 week. Order this weekend or sample arrival pushes construction prep.
+</div>
+<ul class="bullet">
+<li>Cle Bejmat Weathered White sample box ($7 + ship)</li>
+<li>Cle Sea Salt zellige sample (separate order)</li>
+<li>Daltile Choice Ivory + Portfolio chip set (free)</li>
+<li>Bedrosians Cloé sample</li>
+<li>BM Aura paint chips: White Dove, Saybrook Sage, Simply White; Aura B&S samples</li>
+<li>SW Accessible Beige chip</li>
+<li>Rubio Monocoat Pure + Smoke 5% finish samples (Rhodes Hardwood Atlanta or Rubio direct)</li>
+<li>Crypton Suede + Perennials Linen swatches (for sofa + drapery)</li>
+<li>Rejuvenation Westmore brass + Pinnock pulls samples</li>
+<li>Schoolhouse Princeton sconce spec sheet (no sample, but full dimensions)</li>
+<li>Caesarstone Statuario slab swatch (full sample, not chip)</li>
+</ul>
+
+</main>
+</body>
+</html>

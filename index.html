@@ -158,8 +158,35 @@
     .hero-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
+
+<style>
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250,248,244,0.96);
+  backdrop-filter: saturate(140%) blur(8px); border-bottom: 1px solid #e8e2d6; }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: #8a7a5a; }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: #2a2622; text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid #e8e2d6; }
+.topnav-inner a:not(.home):hover { background: #fff; border-color: #8a7a5a; }
+.topnav-inner a.current { background: #f7eedc; border-color: #c9b88a; }
+</style>
+
 </head>
 <body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/" class="current">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
 <div class="container">
 
   <h1>1490 Lively Ridge</h1>
@@ -177,12 +204,12 @@
   </div>
 
   <div class="hero-grid">
-    <img src="images/loved_12.jpg" alt="Campbell House kitchen">
-    <img src="images/cali_08.jpg" alt="Campbell Modern LR">
-    <img src="images/cali_24.jpg" alt="Jenni Kayne Lake House LR">
-    <img src="images/loved_15.jpg" alt="Campbell House bedroom">
-    <img src="images/variety_07.jpg" alt="OWIU Brentwood kitchen">
-    <img src="images/loved_13.jpg" alt="Campbell House dining">
+    <img src="images/cathiehong_05.jpg" alt="Campbell Modern kitchen">
+    <img src="images/cathiehong_01.jpg" alt="Campbell Modern LR">
+    <img src="images/jennikayne_03.jpg" alt="Jenni Kayne Lake House dining">
+    <img src="images/cathiehong_10.jpg" alt="Campbell Modern bedroom">
+    <img src="images/owiu_12.jpg" alt="OWIU Wellington Office">
+    <img src="images/lifestyle_01.jpg" alt="Studio LIFE/STYLE Brentwood-2 kitchen">
   </div>
 
   <div class="links">
@@ -224,6 +251,26 @@
       <span class="link-arrow">→</span>
     </a>
 
+  </div>
+
+  <div class="links">
+    <h2>Rooms — per-space deep dives</h2>
+    <a class="link-card" href="kitchen.html"><span class="link-emoji">🍳</span><div class="link-text"><p class="link-title">Kitchen</p><p class="link-desc">Cathie Hong Campbell Modern as anchor. KraftMaid Vantage cabinets, Statuario waterfall, Cle Sea Salt zellige, brass pendants. Most construction-locked room in the house.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="master.html"><span class="link-emoji">🛏️</span><div class="link-text"><p class="link-title">Master Bedroom</p><p class="link-desc">Annika's domain. King-bed-capable. Jenni Kayne + SSS anchor with cream linen + light oak.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="baths.html"><span class="link-emoji">🛁</span><div class="link-text"><p class="link-title">Bathrooms (3)</p><p class="link-desc">Master $23.5K · Hall $15.4K · Basement $17K honest. Delta Trinsic Champagne Bronze + Cle Bejmat master-only.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="lr.html"><span class="link-emoji">🛋️</span><div class="link-text"><p class="link-title">Living Room</p><p class="link-desc">Cream linen + light oak + brass. Cocktail-hour ready. Performance fabric for Sonja + cat + future kids.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="nursery.html"><span class="link-emoji">🌿</span><div class="link-text"><p class="link-title">Nursery</p><p class="link-desc">Annika's domain. Same canon palette extended — NOT pastel, NOT primary-color. ONE accent.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="office.html"><span class="link-emoji">💻</span><div class="link-text"><p class="link-title">Office</p><p class="link-desc">Omid's WFH. Current Master BR + skylight. 134 sf, best light in house. Light oak built-in desk.</p></div><span class="link-arrow">→</span></a>
+  </div>
+
+  <div class="links">
+    <h2>Canon designers + materials + rejected</h2>
+    <a class="link-card" href="cathie-hong.html"><span class="link-emoji">⭐</span><div class="link-text"><p class="link-title">Cathie Hong Interiors — THE anchor</p><p class="link-desc">Campbell Modern (Rue Magazine) is the spine project. 12 images across kitchen / LR / dining / bedroom / bath / entry.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="owiu.html"><span class="link-emoji">🌲</span><div class="link-text"><p class="link-title">OWIU Studio — warm projects only</p><p class="link-desc">Palmero, Echo Park, Duane, Brentwood, Wellington Office. NOT Biscuit Loft, NOT Glass Ridge.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="sss.html"><span class="link-emoji">🕯️</span><div class="link-text"><p class="link-title">Sarah Sherman Samuel</p><p class="link-desc">Mandy Moore mid-century home redesign — parallel to 1490's 1953 Atlanta brick ranch.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="jenni-kayne.html"><span class="link-emoji">🌾</span><div class="link-text"><p class="link-title">Jenni Kayne Interiors</p><p class="link-desc">Lake House + Santa Ynez Ranch. Elevated rustic without farmhouse pastiche.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="materials.html"><span class="link-emoji">🧱</span><div class="link-text"><p class="link-title">Materials</p><p class="link-desc">Every locked spec — tile, paint, plumbing, hardware, wood, counters, roof. Owner-facing sample-order reference.</p></div><span class="link-arrow">→</span></a>
+    <a class="link-card" href="rejected.html"><span class="link-emoji">🚫</span><div class="link-text"><p class="link-title">Rejected — anti-patterns</p><p class="link-desc">Norm Architects austere · Daytrip Studio dark · Athena Calderone Brooklyn · Heidi Caillier cottage · Reath jewel-tone · Justina Blakeney boho. Boundaries matter as much as anchors.</p></div><span class="link-arrow">→</span></a>
   </div>
 
   <div class="principles">
