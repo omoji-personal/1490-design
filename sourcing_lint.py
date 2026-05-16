@@ -79,8 +79,24 @@ def check_wood_tone(items: List[Item], expected_treatment: str) -> List[LintFind
     return findings
 
 
+# Substrate tile/counter keywords — these are out-of-scope of the decorative palette lock
+# (floor porcelain + counter quartz/stone aren't part of the zellige/slab/bejmat palette)
+SUBSTRATE_KEYWORDS = ["daltile", "caesarstone", "silestone", "porcelain", "quartz counter", "engineered stone", "marble counter"]
+
+
+def _tile_decision_text(item: Item) -> str:
+    """Tighter text for tile palette check: decided_sku + options[].sku only.
+    Excludes notes + reasoning (which often reference rejected/alternate tiles for context)."""
+    parts = [item.decided_sku or ""]
+    if item.options:
+        for o in item.options:
+            parts.append(o.sku)
+    return " ".join(parts).lower()
+
+
 def check_tile_palette(items: List[Item], allowed: List[str]) -> List[LintFinding]:
-    """Error if a tile_stone item uses a 4th tile line or places Bejmat outside master bath."""
+    """Error if a decorative tile_stone item uses a 4th palette entry or places Bejmat outside master bath.
+    Floor/counter substrate tiles (Daltile porcelain, Caesarstone, etc.) are out of palette scope."""
     findings = []
     allowed_keywords = {
         "cle_sea_salt_zellige": ["sea salt", "zellige"],
@@ -90,8 +106,11 @@ def check_tile_palette(items: List[Item], allowed: List[str]) -> List[LintFindin
     for item in items:
         if item.category != "tile_stone":
             continue
-        text = _item_text(item)
+        text = _tile_decision_text(item)
         if not text.strip():
+            continue
+        # Substrate tiles (floor porcelain, counter stone) are out of palette scope — skip the check
+        if any(sub in text for sub in SUBSTRATE_KEYWORDS):
             continue
         matched_keys = set()
         for key, kws in allowed_keywords.items():
@@ -179,8 +198,8 @@ def check_budget_rollup(items: List[Item], meta: Meta) -> List[LintFinding]:
     furniture_total = by_source.get("furniture_envelope", 0)
     if furniture_total > meta.budgets.furniture_envelope:
         findings.append(LintFinding(
-            severity="error",
-            message=f"furniture_envelope = ${furniture_total:,.0f} > allocation ${meta.budgets.furniture_envelope:,.0f}",
+            severity="warning",                 # soft target per OWNER CONFIRM #5; phased plan
+            message=f"furniture_envelope = ${furniture_total:,.0f} > allocation ${meta.budgets.furniture_envelope:,.0f} (soft target; phased per DESIGN_SPEC #5)",
         ))
     p3_total = by_source.get("path3_direct", 0)
     if p3_total > meta.budgets.path3_owner_direct_ceiling:

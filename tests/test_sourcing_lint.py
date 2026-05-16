@@ -78,12 +78,24 @@ def test_tile_palette_allowed_tiles_no_error():
 
 
 def test_tile_palette_fourth_tile_errors():
+    # Use a non-substrate decorative tile that isn't in the allowed palette
     items = [
-        _i("T1", category="tile_stone", room="kitchen", decided_sku="Daltile Linden Point"),
+        _i("T1", category="tile_stone", room="kitchen", decided_sku="Cle Glaze Mist penny round"),
     ]
     findings = check_tile_palette(items, allowed=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"])
     assert len(findings) >= 1
     assert any(f.severity == "error" for f in findings)
+
+
+def test_tile_palette_substrate_tile_skipped():
+    """Daltile porcelain / Caesarstone / other substrate tiles must NOT trigger palette errors."""
+    items = [
+        _i("T1", category="tile_stone", room="bath_1", decided_sku="Daltile Linden Point porcelain"),
+        _i("T2", category="tile_stone", room="kitchen", decided_sku="Caesarstone Statuario counter"),
+        _i("T3", category="tile_stone", room="bath_2", decided_sku="MSI porcelain floor"),
+    ]
+    findings = check_tile_palette(items, allowed=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"])
+    assert findings == []
 
 
 def test_tile_palette_bejmat_outside_master_bath_errors():
@@ -160,12 +172,13 @@ def test_budget_rollup_under_no_error():
     assert findings == []
 
 
-def test_budget_rollup_furniture_overshoot_errors():
+def test_budget_rollup_furniture_overshoot_warns():
+    """furniture_envelope is a soft target — overshoot is warning, not error."""
     items = [_i("X1", category="furniture")]
     items[0].budget_source = "furniture_envelope"
     items[0].budget_target_usd = 35000  # over $30K
     findings = check_budget_rollup(items, _meta())
-    assert any(f.severity == "error" and "furniture_envelope" in f.message for f in findings)
+    assert any(f.severity == "warning" and "furniture_envelope" in f.message for f in findings)
 
 
 # --- Lint aggregator ---
@@ -176,14 +189,14 @@ from sourcing_lint import run_all_lints
 def test_run_all_lints_returns_aggregated_findings():
     items = [
         _i("BR1", category="hardware", tags=["lacquered_brass"], decided_sku="WE matte brass"),  # warning
-        _i("T1", category="tile_stone", room="kitchen", decided_sku="Daltile Linden"),  # error
+        _i("T1", category="tile_stone", room="kitchen", decided_sku="Cle Glaze Mist penny round"),  # error (non-substrate 4th tile)
     ]
     items[0].budget_source = "furniture_envelope"
-    items[0].budget_target_usd = 35000  # over $30K → error
+    items[0].budget_target_usd = 35000  # over $30K → warning (soft target)
     findings = run_all_lints(items, _meta())
     severities = [f.severity for f in findings]
-    assert "error" in severities  # tile + budget
-    assert "warning" in severities  # brass
+    assert "error" in severities  # tile palette violation
+    assert "warning" in severities  # brass + furniture envelope
 
 
 def test_run_all_lints_empty_items_no_findings():
