@@ -93,3 +93,29 @@ def render_full_tracker(items: List[Item], meta: Meta) -> str:
                 lines.append(_format_item(it))
 
     return "\n".join(lines) + "\n"
+
+
+def render_decision_queue(items: List[Item], meta: Meta, lookup: ScheduleLookup, manual_trigger_t3: bool) -> str:
+    queue_items = [it for it in items if is_in_decision_queue(it, lookup, manual_trigger_t3)]
+    lines = [f"# Decide This Week", "", f"*Last updated: {meta.last_updated}*", ""]
+    if not queue_items:
+        lines.append("_No items in the decision queue right now._\n")
+        return "\n".join(lines)
+    lines.append(f"{len(queue_items)} item(s) need a decision in the urgency window.\n")
+    for it in sorted(queue_items, key=lambda x: (x.urgency, x.id)):
+        lines.append("")
+        lines.append(_format_item(it))
+    return "\n".join(lines) + "\n"
+
+
+def render_annika_queue(items: List[Item], meta: Meta) -> str:
+    annika_items = [it for it in items if it.annika_loop and it.decision_status != "stub"]
+    lines = [f"# Annika's Sourcing Queue", "", f"*Last updated: {meta.last_updated}*", "",
+             f"Items where Annika weighs in before owner decides: master_br, master_bath, nursery, kitchen — and tile/lighting/paint/furniture/decor only.", ""]
+    if not annika_items:
+        lines.append("_No items in Annika's queue right now._\n")
+        return "\n".join(lines)
+    for it in sorted(annika_items, key=lambda x: (x.urgency, x.room, x.id)):
+        lines.append("")
+        lines.append(_format_item(it))
+    return "\n".join(lines) + "\n"
