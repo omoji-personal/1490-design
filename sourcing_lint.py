@@ -1,10 +1,10 @@
 # sourcing_lint.py
-"""6 cross-cutting consistency lint checks for sourcing.yaml.
+"""9 cross-cutting consistency lint checks for sourcing.yaml.
 Each check returns a list of LintFinding objects."""
 from dataclasses import dataclass
 from typing import List, Optional
 
-from sourcing_schema import Item
+from sourcing_schema import Item, Meta
 
 Severity = str  # "error" | "warning" | "info"
 
@@ -110,4 +110,82 @@ def check_tile_palette(items: List[Item], allowed: List[str]) -> List[LintFindin
                 message=f"{item.id}: Bejmat tile used outside master_bath (room={item.room})",
                 item_id=item.id,
             ))
+    return findings
+
+
+def check_paint_line(items: List[Item], expected_line: str) -> List[LintFinding]:
+    """Warn if paint_finish item references a brand other than expected (e.g. 'aura' = BM Aura)."""
+    findings = []
+    for item in items:
+        if item.category != "paint_finish":
+            continue
+        text = _item_text(item)
+        if not text.strip():
+            continue
+        # Forbidden brands
+        forbidden = ["sherwin-williams", "sw cashmere", "sw duration", "behr ", "valspar", "farrow ball"]
+        if any(f in text for f in forbidden):
+            findings.append(LintFinding(
+                severity="warning",
+                message=f"{item.id}: paint references non-{expected_line} brand",
+                item_id=item.id,
+            ))
+            continue
+        # If text mentions paint but not expected line keyword
+        if "paint" in text or "aura" in text or "bm " in text:
+            if expected_line.lower() not in text and "benjamin moore" not in text:
+                findings.append(LintFinding(
+                    severity="warning",
+                    message=f"{item.id}: paint item missing '{expected_line}' reference",
+                    item_id=item.id,
+                ))
+    return findings
+
+
+def check_hardware_mix(items: List[Item]) -> List[LintFinding]:
+    """Info-level: in any room with ≥3 hardware items, both 'lacquered_brass' AND 'matte_black' tags should appear ≥3× each."""
+    findings = []
+    by_room: dict = {}
+    for item in items:
+        if item.category in ("hardware", "lighting_fixture", "plumbing_fixture"):
+            by_room.setdefault(item.room, []).append(item)
+    for room, room_items in by_room.items():
+        if len(room_items) < 3:
+            continue
+        brass = sum(1 for i in room_items if "lacquered_brass" in i.cross_room_consistency)
+        black = sum(1 for i in room_items if "matte_black" in i.cross_room_consistency)
+        if brass < 3 or black < 3:
+            findings.append(LintFinding(
+                severity="info",
+                message=f"{room}: hardware mix unbalanced (brass={brass}, matte_black={black}; rule wants ≥3 each)",
+                item_id=None,
+            ))
+    return findings
+
+
+def check_budget_rollup(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Error if sum of budget_target_usd per budget_source exceeds the allocated allowance."""
+    findings = []
+    by_source: dict = {}
+    for item in items:
+        by_source[item.budget_source] = by_source.get(item.budget_source, 0) + item.budget_target_usd
+
+    construction_total = by_source.get("construction_allowance", 0) + by_source.get("path3_direct", 0)
+    if construction_total > meta.budgets.construction_cap:
+        findings.append(LintFinding(
+            severity="error",
+            message=f"construction_allowance + path3_direct = ${construction_total:,.0f} > cap ${meta.budgets.construction_cap:,.0f}",
+        ))
+    furniture_total = by_source.get("furniture_envelope", 0)
+    if furniture_total > meta.budgets.furniture_envelope:
+        findings.append(LintFinding(
+            severity="error",
+            message=f"furniture_envelope = ${furniture_total:,.0f} > allocation ${meta.budgets.furniture_envelope:,.0f}",
+        ))
+    p3_total = by_source.get("path3_direct", 0)
+    if p3_total > meta.budgets.path3_owner_direct_ceiling:
+        findings.append(LintFinding(
+            severity="warning",
+            message=f"path3_direct = ${p3_total:,.0f} > ceiling ${meta.budgets.path3_owner_direct_ceiling:,.0f}",
+        ))
     return findings

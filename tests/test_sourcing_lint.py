@@ -92,3 +92,77 @@ def test_tile_palette_bejmat_outside_master_bath_errors():
     ]
     findings = check_tile_palette(items, allowed=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"])
     assert any(f.severity == "error" and "master" in f.message.lower() for f in findings)
+
+
+from sourcing_lint import (
+    check_paint_line, check_hardware_mix, check_budget_rollup,
+)
+from sourcing_schema import Meta, Budgets, ConsistencyLocks
+
+
+# --- Paint line ---
+
+def test_paint_line_aura_no_warning():
+    items = [_i("P1", category="paint_finish", decided_sku="BM Aura White Dove OC-17")]
+    findings = check_paint_line(items, expected_line="aura")
+    assert findings == []
+
+
+def test_paint_line_non_aura_warns():
+    items = [_i("P1", category="paint_finish", decided_sku="SW Cashmere Eider White")]
+    findings = check_paint_line(items, expected_line="aura")
+    assert any(f.severity == "warning" and "P1" in f.message for f in findings)
+
+
+# --- Hardware mix ---
+
+def test_hardware_mix_balanced_room_no_warning():
+    items = [
+        _i(f"K{i}", room="kitchen", category="hardware", tags=["lacquered_brass"], decided_sku="brass pull")
+        for i in range(3)
+    ] + [
+        _i(f"K{i+10}", room="kitchen", category="hardware", tags=["matte_black"], decided_sku="matte black knob")
+        for i in range(3)
+    ]
+    findings = check_hardware_mix(items)
+    assert all(f.severity != "warning" for f in findings)
+
+
+def test_hardware_mix_unbalanced_room_info():
+    items = [
+        _i(f"K{i}", room="kitchen", category="hardware", tags=["lacquered_brass"], decided_sku="brass")
+        for i in range(3)
+    ] + [_i("K10", room="kitchen", category="hardware", tags=["matte_black"], decided_sku="matte black")]
+    findings = check_hardware_mix(items)
+    assert any(f.severity == "info" and "kitchen" in f.message.lower() for f in findings)
+
+
+# --- Budget rollup ---
+
+def _meta(cap=342000, furn=30000, p3=10000):
+    return Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=cap, furniture_envelope=furn, path3_owner_direct_ceiling=p3),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+
+
+def test_budget_rollup_under_no_error():
+    items = [_i("X1", category="furniture")]
+    items[0].budget_source = "furniture_envelope"
+    items[0].budget_target_usd = 25000
+    findings = check_budget_rollup(items, _meta())
+    assert findings == []
+
+
+def test_budget_rollup_furniture_overshoot_errors():
+    items = [_i("X1", category="furniture")]
+    items[0].budget_source = "furniture_envelope"
+    items[0].budget_target_usd = 35000  # over $30K
+    findings = check_budget_rollup(items, _meta())
+    assert any(f.severity == "error" and "furniture_envelope" in f.message for f in findings)
