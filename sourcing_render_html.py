@@ -445,6 +445,29 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 {_render_filter_bar()}
 {cards_html}
 </main>
+<div style="max-width:900px;margin:0 auto 48px;padding:0 16px;">
+<details style="border:1px solid #e8e2d6;border-radius:10px;overflow:hidden;">
+  <summary style="padding:11px 16px;cursor:pointer;font-size:13.5px;font-weight:600;color:#8a7a5a;background:#f0e8d8;list-style:none;user-select:none;">
+    &#9654;&nbsp; Design jargon quick-reference (tap to expand)
+  </summary>
+  <div style="padding:14px 18px;font-size:14px;line-height:1.7;color:#4a4540;">
+    <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+      <dt style="font-weight:600;white-space:nowrap;">Boucle</dt>
+      <dd style="margin:0 0 6px;">Textured loop-pile fabric — soft, casual, slightly nubby.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">Crypton</dt>
+      <dd style="margin:0 0 6px;">Stain/spill-resistant performance fabric — wipe-clean, pet-safe, washable.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">Thermostatic</dt>
+      <dd style="margin:0 0 6px;">Shower valve that holds set temperature regardless of pressure fluctuations — no scalding when someone flushes.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">GREENGUARD Gold</dt>
+      <dd style="margin:0 0 6px;">Low-VOC emissions certification — required for nursery furniture per spec.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">CFM</dt>
+      <dd style="margin:0 0 6px;">Cubic Feet per Minute — airflow measure for range hoods. Higher = more powerful extraction.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">T0 / T1 / T2 / T3</dt>
+      <dd style="margin:0 0 6px;">Urgency tier: T0 = order now, T1 = week 4, T2 = week 8, T3 = year 1+.</dd>
+    </dl>
+  </div>
+</details>
+</div>
 {FILTER_JS}
 </body>
 </html>
@@ -456,7 +479,13 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
                      design_hub_url: Optional[str] = None) -> str:
     """Render a single-room view. rooms_filter is a list of room IDs to include
     (e.g., ['master_br','master_bath'] for master suite).
-    design_hub_url: optional URL to the corresponding design hub page (e.g. '/kitchen')."""
+    design_hub_url: optional URL to the corresponding design hub page (e.g. '/kitchen').
+
+    N2 TRADE-OFF NOTE: The topnav highlights /sourcing (not the current room page) when on
+    a room sourcing view (e.g. /sourcing-kitchen). Per-room topnav entries would clutter the
+    nav bar significantly. The breadcrumb at the top of this page ("Sourcing › Kitchen") is
+    the accepted "you are here" signal. This is an intentional design trade-off, not a bug.
+    """
     visible = [it for it in items if it.decision_status != "stub" and it.room in rooms_filter]
     banner_mode = _schedule_banner_mode(visible, schedule_lookup)
     schedule_banner_html = (
@@ -621,10 +650,32 @@ ANNIKA_TOPNAV_HTML = """<nav class="topnav">
   </div>
 </nav>"""
 
+ANNIKA_GLOSSARY_HTML = """<details class="annika-glossary" style="max-width:760px;margin:0 auto 32px;border:1px solid #e8e2d6;border-radius:10px;overflow:hidden;">
+  <summary style="padding:11px 16px;cursor:pointer;font-size:13.5px;font-weight:600;color:#8a7a5a;background:#f0e8d8;list-style:none;user-select:none;">
+    &#9654;&nbsp; Design jargon quick-reference (tap to expand)
+  </summary>
+  <div style="padding:14px 18px;font-size:14px;line-height:1.7;color:#4a4540;">
+    <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+      <dt style="font-weight:600;white-space:nowrap;">Boucle</dt>
+      <dd style="margin:0 0 6px;">Textured loop-pile fabric — soft, casual, slightly nubby. Very current in Californian interiors.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">Crypton</dt>
+      <dd style="margin:0 0 6px;">Stain/spill-resistant performance fabric — wipe-clean, pet-safe, washable. The practical choice for high-use pieces.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">Thermostatic</dt>
+      <dd style="margin:0 0 6px;">Shower valve that holds your set temperature regardless of pressure fluctuations (so no scalding when someone flushes). More expensive than pressure-balance but more comfortable.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">GREENGUARD Gold</dt>
+      <dd style="margin:0 0 6px;">Low-VOC emissions certification for indoor air quality — required for nursery furniture per our spec.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">CFM</dt>
+      <dd style="margin:0 0 6px;">Cubic Feet per Minute — airflow measure for range hoods. Higher = more powerful extraction.</dd>
+      <dt style="font-weight:600;white-space:nowrap;">T0 / T1 / T2 / T3</dt>
+      <dd style="margin:0 0 6px;">Urgency tier: T0 = critical-path (order now), T1 = order by week 4, T2 = order by week 8, T3 = year 1+ / no rush.</dd>
+    </dl>
+  </div>
+</details>"""
+
 # Room groupings for the Annika page sections (display-label, [room ids], anchor, locked-note)
 ANNIKA_ROOM_SECTIONS = [
     (
-        "Master suite",
+        "Master Suite",
         ["master_br", "master_bath"],
         "master-suite",
         "Bedroom + bath",
@@ -1028,6 +1079,7 @@ def render_for_annika(
 {ANNIKA_TOPNAV_HTML}
 {cover_html}
 {toc_html}
+{ANNIKA_GLOSSARY_HTML}
 {sections_html}
 {summary_cta_html}
 </body>
