@@ -114,6 +114,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
   font-size: 13px; color: #7a5a20; }
 .locked-note { margin-top: 10px; color: var(--muted); font-size: 14px; font-style: italic; }
 
+/* Collapsible why-block */
+details.why-block { margin-top: 12px; border: 1px solid var(--soft-line);
+  border-radius: 8px; overflow: hidden; }
+details.why-block summary { padding: 9px 14px; cursor: pointer; font-size: 13px;
+  font-weight: 600; color: var(--accent); list-style: none; background: var(--note-tint);
+  user-select: none; }
+details.why-block summary::-webkit-details-marker { display: none; }
+details.why-block summary::before { content: "\25B6  "; font-size: 10px; }
+details.why-block[open] summary::before { content: "\25BC  "; }
+details.why-block .why-inner { padding: 12px 14px; font-size: 14.5px; color: #4a4540;
+  line-height: 1.6; }
+details.why-block .why-inner p { margin: 0 0 8px; }
+details.why-block .why-inner p:last-child { margin-bottom: 0; }
+
 .summary-cta { max-width: 760px; margin: 60px auto 0; padding: 30px;
   background: var(--card-bg); border: 2px solid #c9b88a; border-radius: 14px; }
 .summary-cta h2 { margin: 0 0 14px; font-size: 22px; font-weight: 600; }
@@ -122,6 +136,9 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
   margin: 16px 0 8px; }
 .summary-cta .format-line { font-size: 14.5px; color: var(--muted); }
 .summary-cta a { color: var(--accent); }
+
+.urgency-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px;
+  color: white; background: #9a9080; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -140,16 +157,16 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="cover">
   <h1>Annika, your design review pass</h1>
-  <p class="draft-meta">2026-05-16 · Omid + Claude</p>
-  <p>Hi A — design direction is locked. I've got ~25 picks that need your eye before we order. Most are things that touch you every day (bedding, the glider, the nursery crib) or that shape the room visually and I want your read before committing.</p>
-  <p class="callout"><strong>What I'm asking:</strong> scan, react, text or voicemail your gut response. "Keep it," "swap for X," or "show me the other options" — that's enough. <strong>Not asking:</strong> to approve every spec detail. That's my job. Just tell me if something feels off.</p>
+  <p class="draft-meta">2026-05-16 &middot; Omid + Claude &middot; v3</p>
+  <p>Hi A &mdash; design direction is locked. I've got ~43 picks that need your eye before we order. Most are things that touch you every day (bedding, the glider, the nursery crib) or that shape the room visually.</p>
+  <p class="callout"><strong>What I'm asking:</strong> scan, react, text or voicemail your gut response. "Keep it," "swap for X," or "show me the other options" is enough. <strong>Not asking:</strong> to approve every spec. That's my job. Just tell me if something feels off.</p>
 </div>
 
 <div class="cta-block">
   <div class="cta-inner">
     <div>
       <div class="cta-deadline">Please react by Friday May 23</div>
-      <div class="cta-sub">Text or voicemail as you scroll — that's all I need.<br>That's when I lock the long-lead orders.</div>
+      <div class="cta-sub">Text or voicemail as you scroll &mdash; that's all I need.<br>That's when I lock the long-lead orders.</div>
     </div>
   </div>
 </div>
@@ -157,19 +174,19 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 <div class="toc">
   <h3>Sections</h3>
   <ul>
-    <li><a href="#master-suite">Master suite</a><span class="count">14 items</span></li>
-    <li><a href="#nursery">Nursery</a><span class="count">5 items</span></li>
-    <li><a href="#kitchen-dining">Kitchen + dining</a><span class="count">5 items</span></li>
-    <li><a href="#finishes">Whole-house paint</a><span class="count">2 locked, no input needed</span></li>
-    <li><a href="#watch-list">Long-horizon watch list</a><span class="count">2 deferred, awareness only</span></li>
+    <li><a href="#master-suite">Master suite</a><span class="count">&mdash; 15 items (6 already locked, 9 need your read)</span></li>
+    <li><a href="#nursery">Nursery</a><span class="count">&mdash; 7 items</span></li>
+    <li><a href="#kitchen-dining">Kitchen + dining</a><span class="count">&mdash; 8 items (6 already locked)</span></li>
+    <li><a href="#finishes">Whole-house paint</a><span class="count">&mdash; 2 locked, FYI only</span></li>
+    <li><a href="#watch-list">Long-horizon watch list</a><span class="count">&mdash; 2 deferred, no decision needed</span></li>
   </ul>
 </div>
 
 <div class="section-divider"><a id="master-suite"></a>
   <h2>Master suite</h2>
-  <div class="section-sub">Bedroom + bath — 12 items for your read</div>
+  <div class="section-sub">Bedroom + bath &mdash; 9 items need your read (6 already locked)</div>
 </div>
-<p class="section-note">Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint. Those are done.</p>
+<p class="section-note">Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint.</p>
 <main>
 
     <!-- MB-SHOWER-SYSTEM -->
@@ -179,22 +196,25 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Shower controls + rain head</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">The system that controls water temperature and delivers rain from above + a hand shower for rinsing.</p>
+      <p class="item-tagline">The system that controls water temp and delivers rain from above + a hand shower for rinsing.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-shower-system-1.jpg" alt="Delta Trinsic thermostatic shower system in champagne bronze" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Delta Trinsic thermostatic system — champagne bronze</div>
+          <div class="pick-image-caption">Delta Trinsic thermostatic &mdash; champagne bronze</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">Delta Trinsic thermostatic system, champagne bronze — temperature stays locked even when someone flushes ($780)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Consistent temperature (no scald surprises), matches the faucet finish throughout the bath, includes both rain head and hand shower.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Pressure-balance version saves ~$260 but temperature can spike when someone flushes — not ideal for a curbless walk-in shower.</p>
+          <p class="pick">Delta Trinsic thermostatic system, champagne bronze &mdash; temp stays locked even when someone flushes ($780)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">OK with the champagne bronze family across the whole bath, or is this where we go richer with Brizo Luxe Gold (more jewelry-box, $300 more)?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — concept stands, exact rainhead model being confirmed.</div>
+          <p class="question-text">OK with champagne bronze family across the whole bath, or go richer with Brizo Luxe Gold (more jewelry-box, $300 more)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Consistent temperature (no scald surprises), matches the faucet finish throughout the bath, includes both rain head and hand shower.</p>
+              <p><strong>vs</strong> Pressure-balance version saves ~$260 but temp can spike when someone flushes &mdash; not ideal for a curbless walk-in shower.</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact rainhead model being confirmed.</div>
         </div>
       </div>
     </article>
@@ -214,14 +234,17 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">Lacquered-brass flush mount with opal glass, 13-inch — soft, diffuse, warm over the bed (~$395)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Same brass family running through the rest of the house. Opal glass means no harsh glare.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Larger 16-inch version — more presence and light spread.</p>
+          <p class="pick">Lacquered-brass flush mount with opal glass, 13-inch &mdash; soft, diffuse, warm (~$395)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Small and quiet (my lean) or big enough to feel like a real fixture?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — Schoolhouse current equivalent being confirmed.</div>
+          <p class="question-text">Small and quiet (my lean) or big enough to feel like a real fixture (16-inch)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Same brass family running through the rest of the house. Opal glass means no harsh glare.</p>
+              <p><strong>vs</strong> Larger 16-inch version &mdash; more presence and light spread.</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse current equivalent being confirmed.</div>
         </div>
       </div>
     </article>
@@ -237,18 +260,21 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mba-sconces-0.jpg" alt="Lacquered brass wall sconces with milk glass globes" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Lacquered brass, 4-inch milk glass globes — hardwired pair</div>
+          <div class="pick-image-caption">Lacquered brass, 4-inch milk glass globes &mdash; hardwired pair</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Lacquered-brass wall sconces with 4-inch milk-glass globes, hardwired pair (~$590)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Right scale for a 60-inch double vanity. Milk glass = even flattering light (vs bare bulb).</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Smaller 3-inch globes ($70 less); larger 5-inch ($80 more, more output for makeup).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Light at the vanity matters for mornings. Comfortable with the 4-inch, or step up to the 5-inch for more brightness?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — Schoolhouse availability being confirmed.</div>
+          <p class="question-text">Comfortable with the 4-inch, or step up to 5-inch for more brightness at the vanity? Light here matters for mornings.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Right scale for a 60-inch double vanity. Milk glass = even flattering light (vs bare bulb).</p>
+              <p><strong>vs</strong> Smaller 3-inch globes ($70 less, cleaner); larger 5-inch ($80 more, more output for makeup).</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse Princeton availability being confirmed.</div>
         </div>
       </div>
     </article>
@@ -264,17 +290,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/master-closet-0.jpg" alt="California Closets natural white oak reach-in system" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">California Closets — natural white oak, custom-measured</div>
+          <div class="pick-image-caption">California Closets &mdash; natural white oak, custom-measured</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">California Closets, Sandy Springs showroom — designer-measured, custom-built, professional install ($3,800)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Real oak finish, one-shot install, they take measurements so no guessing.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Container Store Elfa (~$1.9K — wire-shelf utility look, less warm); custom local mill (~$4.8K — most beautiful, longest lead).</p>
+          <p class="pick">California Closets, Sandy Springs showroom &mdash; designer-measured, custom-built, professional install ($3,800)</p>
           <div class="label">Question for you</div>
           <p class="question-text">OK going California Closets, or would you rather spread the budget across all closets with Elfa?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Real oak finish, one-shot install, they take measurements so no guessing on sizing.</p>
+              <p><strong>vs</strong> Container Store Elfa (~$1.9K &mdash; wire-shelf utility look, less warm); custom local mill (~$4.8K &mdash; most beautiful, longest lead).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -290,18 +319,21 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-sconces-0.jpg" alt="Brass swing-arm sconces with milk glass globes" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Brass swing-arm with milk glass globe — hardwired pair</div>
+          <div class="pick-image-caption">Brass swing-arm with milk glass globe &mdash; hardwired pair</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Brass swing-arm with milk-glass globe, hardwired pair (~$690)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Read without overhead. Hard-wired = no cord on the nightstand.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Plug-in version if we skip the in-wall wiring — cheaper, but cord shows.</p>
           <div class="label">Question for you</div>
           <p class="question-text">Hard-wired (cleaner, commit to placement now) or plug-in (moveable)?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — current swing-arm equivalent being confirmed.</div>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Read without overhead. Hard-wired = no cord on the nightstand.</p>
+              <p><strong>vs</strong> Plug-in version &mdash; cheaper, but cord shows.</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; current swing-arm equivalent being confirmed.</div>
         </div>
       </div>
     </article>
@@ -317,18 +349,50 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-cab-hardware-0.jpg" alt="Lacquered brass 5-inch bar pulls" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Lacquered brass 5-inch bar pulls, ×4</div>
+          <div class="pick-image-caption">Lacquered brass 5-inch bar pulls, &times;4</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Lacquered brass 5-inch bar pulls, four total (~$128)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Architectural, clean, matches the whole brass family.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Unlacquered brass ($232) — will develop a patina and get more character over the years; lacquered stays shiny.</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Lacquered (stays as-is) vs unlacquered (patinates over time)? Master bath is the right room to splurge on the patina version.</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — current Schoolhouse pull equivalent being confirmed.</div>
+          <p class="question-text">Lacquered (stays shiny as-is) vs unlacquered (develops a patina over time)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Architectural, clean, matches the whole brass family.</p>
+              <p><strong>vs</strong> Unlacquered brass ($232) &mdash; develops patina and more character over years. This is the right room to splurge on the patina version.</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; current Schoolhouse equivalent being confirmed.</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MB-MIRROR -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">MB-MIRROR</span>
+        <h3 class="item-title">Master bedroom mirror</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Full-length or wall-mounted &mdash; the get-dressed mirror.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/mb-mirror-0.jpg" alt="Brass-framed arch mirror, full-length" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Brass-framed arch mirror &mdash; 24&times;72 inch</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">Brass-framed arch mirror, 24&times;72-inch &mdash; wall-leaning or flush-mount (~$595)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Full-length leaner (flexible placement, no hardware) or flush wall-mount (cleaner, commits to one spot)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Arch shape softens the room against the rectangular bed and dresser lines. Brass frame continues the metal family.</p>
+              <p><strong>vs</strong> Frameless rectangle (cleaner, $200 less); round brass (decorative, not functional for dressing).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -344,17 +408,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-bed-0.jpg" alt="West Elm Andes King in cream performance linen" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Andes King — cream performance linen (Crypton)</div>
+          <div class="pick-image-caption">West Elm Andes King &mdash; cream performance linen (Crypton)</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">West Elm Andes King, cream performance linen — washable fabric that survives baby and pet life ($2,199)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Soft, sanctuary-feeling, cream upholstered — lives in the Cathie Hong direction. Crypton fabric is actually washable.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Natural oak spindle bed ($1,199) — more architectural, more rustic, wood frame instead of upholstered.</p>
+          <p class="pick">West Elm Andes King, cream performance linen &mdash; washable fabric ($2,199)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Cream upholstered linen (my lean) vs natural oak spindle bed?</p>
+          <p class="question-text">Cream upholstered linen (my lean) vs natural oak spindle bed ($1,199)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Soft, sanctuary-feeling, cream upholstered &mdash; lives in the Cathie Hong direction. Crypton fabric is actually washable.</p>
+              <p><strong>vs</strong> Natural oak spindle bed &mdash; more architectural, more rustic, wood frame instead of upholstered.</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -370,17 +437,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-bedding-0.jpg" alt="Cultiver washed linen in Oat/Bone" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Cultiver washed linen — Oat/Bone</div>
+          <div class="pick-image-caption">Cultiver washed linen &mdash; Oat/Bone</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">Cultiver, Oat/Bone colorway — pre-washed soft from day one ($580)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Belgian flax linen wears better than cotton, pre-washed so it softens immediately. The palette is warm cream — not white, not sage.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Quince European linen ($270) — basically the same fabric, much cheaper, possibly thinner.</p>
+          <p class="pick">Cultiver, Oat/Bone colorway &mdash; pre-washed soft from day one ($580)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Bedding is one where I genuinely want your read — you sleep in this every night. Cultiver (premium, long-lasting) or Quince (half the price)?</p>
+          <p class="question-text">This is one where I genuinely want your read &mdash; you sleep in this every night. Cultiver (premium, long-lasting) or Quince European linen (half the price)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Belgian flax linen wears better than cotton, pre-washed so it softens immediately. Warm cream palette &mdash; not white, not sage.</p>
+              <p><strong>vs</strong> Quince European linen ($270) &mdash; basically the same fabric, much cheaper, possibly thinner.</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -392,21 +462,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Master bedroom rug</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Flat-weave wool, 8×10, Warm Sand / Ivory.</p>
+      <p class="item-tagline">Flat-weave wool, 8&times;10, Warm Sand / Ivory.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-rug-0.jpg" alt="West Elm Dhurrie Wool Rug in Warm Sand/Ivory" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Dhurrie Wool — Warm Sand/Ivory, 8×10</div>
+          <div class="pick-image-caption">West Elm Dhurrie Wool &mdash; Warm Sand/Ivory, 8&times;10</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">West Elm Dhurrie Wool Rug, 8×10, Warm Sand/Ivory ($799)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Flat-weave wool is easy underfoot in the morning. A step warmer than the living room rug so the master reads as its own room.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Room &amp; Board Linden (denser pile, softer, $150 more); Serena &amp; Lily Piazza (more texture, $300 more).</p>
+          <p class="pick">West Elm Dhurrie Wool Rug, 8&times;10, Warm Sand/Ivory ($799)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Fine with the WE pick, or want denser/softer underfoot? Or want me to redirect rug dollars into bedding instead?</p>
+          <p class="question-text">Fine with the WE pick, or want denser/softer underfoot?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Flat-weave wool is easy underfoot in the morning. A step warmer than the living room rug so the master reads as its own room.</p>
+              <p><strong>vs</strong> Room &amp; Board Linden (denser pile, softer, $150 more); Serena &amp; Lily Piazza (more texture, $300 more).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -422,17 +495,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-bench-0.jpg" alt="West Elm Tillary Bench in Ivory Boucle" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Tillary Bench — Ivory Boucle, 52 inch</div>
+          <div class="pick-image-caption">West Elm Tillary Bench &mdash; Ivory Boucle, 52 inch</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">West Elm Tillary Bench, Ivory Boucle, 52-inch ($699)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Soft, low, scaled to a king bed. Matches the upholstered bed.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Rejuvenation oak slab bench — wood instead of upholstery, creates contrast to the cream bed.</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Cream upholstered (matches the bed, safer) or wood slab (more interesting contrast)?</p>
+          <p class="question-text">Cream upholstered (matches the bed) or wood slab (more interesting contrast)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Soft, low, scaled to a king bed. Matches the upholstered bed.</p>
+              <p><strong>vs</strong> Rejuvenation oak slab bench &mdash; wood instead of upholstery, creates contrast to the cream bed.</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -444,21 +520,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Master dresser</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">6-drawer in white oak — matches the nightstand family.</p>
+      <p class="item-tagline">6-drawer in white oak &mdash; matches the nightstand family.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-dresser-0.jpg" alt="West Elm Mid-Century 6-Drawer Dresser in White Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Mid-Century 6-Drawer — White Oak</div>
+          <div class="pick-image-caption">West Elm Mid-Century 6-Drawer &mdash; White Oak</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">West Elm Mid-Century 6-Drawer Dresser, White Oak (~$1,499)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Matches the nightstand family, keeps the room from looking over-designed.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Room &amp; Board Linnea ($400 more — thicker drawer fronts, better hardware, more lasting).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Anything you'd actively push back on with the West Elm look, or fine to have this recede into the room?</p>
+          <p class="question-text">Anything you'd push back on here, or fine for this to recede into the room?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Matches the nightstand family, keeps the room from looking over-designed.</p>
+              <p><strong>vs</strong> Room &amp; Board Linnea ($400 more &mdash; thicker drawer fronts, better hardware, longer-lasting).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -470,21 +549,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Nightstands (pair)</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">2-drawer nightstands in white oak, tapered legs — pair.</p>
+      <p class="item-tagline">2-drawer nightstands in white oak, tapered legs &mdash; pair.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-nightstands-0.jpg" alt="West Elm Mid-Century Nightstands in White Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Mid-Century Nightstands — White Oak ×2</div>
+          <div class="pick-image-caption">West Elm Mid-Century Nightstands &mdash; White Oak &times;2</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">West Elm Mid-Century Nightstands ×2 — White Oak ($998)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Tapered legs keep them visually light against the bleached floor.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Room &amp; Board Linnea — solid oak, soft-close drawers, $200 more.</p>
+          <p class="pick">West Elm Mid-Century Nightstands &times;2, White Oak ($998)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">West Elm fine here, or worth the upgrade to Room &amp; Board?</p>
+          <p class="question-text">West Elm fine here, or worth the upgrade to Room &amp; Board Linnea ($200 more)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Tapered legs keep them visually light against the bleached floor.</p>
+              <p><strong>vs</strong> Room &amp; Board Linnea &mdash; solid oak, soft-close drawers.</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -496,21 +578,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Master bedroom window treatments</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Layered: blackout shade behind sheer linen drape panels — 2 windows.</p>
+      <p class="item-tagline">Layered: blackout shade behind sheer linen drape panels &mdash; 2 windows.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/wt-master-0.jpg" alt="Hunter Douglas blackout Roman shade with Pottery Barn linen sheer panels" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Hunter Douglas blackout Roman + PB Belgian flax linen sheer — layered</div>
+          <div class="pick-image-caption">Hunter Douglas blackout Roman + PB Belgian flax linen sheer</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Hunter Douglas blackout Roman shade + Pottery Barn Belgian flax linen sheer panels in Ivory, 2 windows ($1,380)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Sleep-grade blackout install happens during construction; sheer panels add softness for daytime.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Shade Store single-vendor system ($180 less, simpler scheduling).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Want this fully locked now, or do you want to pick the sheer drape layer yourself later? Blackout has to happen during construction; sheers can wait.</p>
+          <p class="question-text">Lock this now, or do you want to pick the sheer layer yourself later? Blackout must happen during construction; sheers can wait.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Sleep-grade blackout installed during construction; sheer panels add softness for daytime.</p>
+              <p><strong>vs</strong> Shade Store single-vendor system ($180 less, simpler scheduling).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -522,21 +607,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Accent pillows</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Two sage linen covers + one hand-loomed mudcloth lumbar — keeps the bed from reading all-cream.</p>
+      <p class="item-tagline">Two sage linen covers + one hand-loomed mudcloth lumbar &mdash; keeps the bed from reading all-cream.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/mb-pillows-0.jpg" alt="West Elm sage linen pillow covers plus Etsy mudcloth lumbar" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm sage linen pair + Etsy mudcloth lumbar in mustard/cream</div>
+          <div class="pick-image-caption">West Elm sage linen pair + Etsy mudcloth lumbar</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">West Elm sage linen pair + Etsy mudcloth lumbar in mustard/cream ($290)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Keeps the bed from reading all-cream-on-cream. Sage echoes the bath accent wall color.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Caramel/mustard pair (shifts the accent warmer — more interesting but breaks the sage echo).</p>
           <div class="label">Question for you</div>
           <p class="question-text">Sage accent (my lean) or warm mustard?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Keeps the bed from reading all-cream-on-cream. Sage echoes the bath accent wall color.</p>
+              <p><strong>vs</strong> Caramel/mustard pair &mdash; shifts the accent warmer, more interesting but breaks the sage echo.</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -545,7 +633,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="section-divider"><a id="nursery"></a>
   <h2>Nursery</h2>
-  <div class="section-sub">5 items for your read</div>
+  <div class="section-sub">7 items for your read</div>
 </div>
 <main>
 
@@ -556,21 +644,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Crib</h3>
         <span class="status-pill options">Your call</span>
       </div>
-      <p class="item-tagline">Convertible crib in pale natural finish — converts to toddler bed and daybed.</p>
+      <p class="item-tagline">Convertible crib in pale natural finish &mdash; converts to toddler bed and daybed.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/nursery-crib-0.jpg" alt="Babyletto Hudson 3-in-1 in Washed Natural" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Babyletto Hudson 3-in-1 — Washed Natural finish</div>
+          <div class="pick-image-caption">Babyletto Hudson 3-in-1 &mdash; Washed Natural finish</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">Babyletto Hudson 3-in-1, Washed Natural finish — non-toxic certified ($499)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Converts to toddler bed + daybed so you don't buy again at age 2. Solid pine construction with non-toxic finishes. Reads clean and calm at nursery scale.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Nestig Cloud ($200 more, rounded corners, softer silhouette); West Elm × PBK Boho spindle crib ($799, most premium).</p>
+          <p class="pick">Babyletto Hudson 3-in-1, Washed Natural finish &mdash; non-toxic certified ($499)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">This is 100% your call. Babyletto Hudson is the sane default — but if you've seen the Nestig Cloud and it felt better, say so. The rounded corners are noticeably different in person.</p>
+          <p class="question-text">This is 100% your call. Babyletto Hudson is the sane default &mdash; but if you've seen the Nestig Cloud and it felt better, say so. The rounded corners are noticeably different in person.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Converts to toddler bed + daybed so you don't buy again at age 2. Non-toxic finishes. Reads clean and calm at nursery scale.</p>
+              <p><strong>vs</strong> Nestig Cloud ($200 more, rounded corners, softer silhouette); West Elm &times; PBK Boho spindle crib ($799, most premium).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -586,17 +677,20 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/nursery-glider-0.jpg" alt="West Elm Organic Glider in Ivory Boucle" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Organic Glider — Ivory performance boucle</div>
+          <div class="pick-image-caption">West Elm Organic Glider &mdash; Ivory performance boucle</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">West Elm Organic Glider, Ivory performance boucle — washable fabric ($1,099)</p>
-          <div class="label">Why</div>
-          <p class="why-text">You live in this chair for the first year. Performance boucle fabric is actually washable.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Article Ceni (~$300 less, deeper seat); PBK Comfort Swivel (adds 360° swivel — reach the bassinet without standing up).</p>
+          <p class="pick">West Elm Organic Glider, Ivory performance boucle &mdash; washable fabric ($1,099)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Hard to pick this one without sitting in it. Want swivel (PBK), max seat depth (Article), or the WE cream-boucle look?</p>
+          <p class="question-text">Hard to pick without sitting in them. Want swivel (PBK), max seat depth (Article), or the WE cream-boucle look?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>You live in this chair for the first year. Performance boucle is actually washable.</p>
+              <p><strong>vs</strong> Article Ceni (~$300 less, deeper seat); PBK Comfort Swivel (adds 360&deg; swivel &mdash; reach the bassinet without standing up).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -608,21 +702,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Nursery ceiling light</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Paper lantern pendant — warm ambient glow of the room.</p>
+      <p class="item-tagline">Paper lantern pendant &mdash; warm ambient glow of the room.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/nursery-pendant-0.jpg" alt="Isamu Noguchi Akari UF4-L1 paper pendant" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Noguchi Akari UF4-L1 — natural mulberry paper, 17 inch</div>
+          <div class="pick-image-caption">Noguchi Akari UF4-L1 &mdash; natural mulberry paper, 17 inch</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Isamu Noguchi Akari UF4-L1, 17-inch natural mulberry paper pendant ($310)</p>
-          <div class="label">Why</div>
-          <p class="why-text">The Akari is the only paper-lantern moment in the house. Warm, beautiful, quiet presence in the nursery.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Smaller 13-inch sphere (softer, more lullaby-scaled); larger 21-inch (design statement, $45 more).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Quiet ambient glow (small) or real piece-of-art feeling (large)? I'm leaning middle.</p>
+          <p class="question-text">Quiet ambient glow (small 13-inch) or real piece-of-art feeling (large 21-inch)? I'm leaning middle.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>The Akari is the only paper-lantern moment in the house. Warm, beautiful, quiet presence in the nursery.</p>
+              <p><strong>vs</strong> Smaller 13-inch sphere (softer, more lullaby-scaled); larger 21-inch (design statement, $45 more).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -634,21 +731,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Nursery dresser (doubles as changing station)</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">6-drawer dresser with changing tray on top — no separate changing table needed.</p>
+      <p class="item-tagline">6-drawer dresser + changing tray on top &mdash; no separate changing table needed.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/nursery-dresser-0.jpg" alt="Babyletto Palma 6-Drawer in Light Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Babyletto Palma 6-Drawer + changing tray — Light Oak</div>
+          <div class="pick-image-caption">Babyletto Palma 6-Drawer + changing tray &mdash; Light Oak</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Babyletto Palma 6-Drawer, Light Oak + matching changing tray ($649)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Doubles as changing station + diaper storage, all one piece — no separate changing table taking up floor space.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">West Elm 4-drawer (prettier, fewer drawers); IKEA Hemnes 8-drawer ($299, max storage, less pretty).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">6 drawers (our pick), 4 (prettier but tight on storage), or 8 (max storage)?</p>
+          <p class="question-text">6 drawers (our pick), 4 drawers (prettier but tight on storage), or 8 drawers (max storage, IKEA Hemnes $299)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Doubles as changing station + diaper storage &mdash; no separate changing table taking floor space.</p>
+              <p><strong>vs</strong> West Elm 4-drawer (prettier, fewer drawers); IKEA Hemnes 8-drawer ($299, max storage, less pretty).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -660,21 +760,82 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Nursery rug</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Washable cotton dhurrie, 5×8 — machine washable is non-negotiable.</p>
+      <p class="item-tagline">Washable cotton dhurrie, 5&times;8 &mdash; machine washable is non-negotiable.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/nursery-rug-0.jpg" alt="West Elm Cotton Dhurrie in Ivory/Natural stripe" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Cotton Dhurrie — Ivory/Natural stripe, 5×8, washable</div>
+          <div class="pick-image-caption">West Elm Cotton Dhurrie &mdash; Ivory/Natural stripe, 5&times;8, washable</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">West Elm Cotton Dhurrie, Ivory/Natural stripe, 5×8 — machine washable ($299)</p>
-          <div class="label">Why</div>
-          <p class="why-text">You will need to wash this rug. Machine-washable is not optional in a nursery.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Lorena Canals washable cotton ($50 less, thicker weave — specifically designed for tummy time and crawling).</p>
+          <p class="pick">West Elm Cotton Dhurrie, Ivory/Natural stripe, 5&times;8 &mdash; machine washable ($299)</p>
           <div class="label">Question for you</div>
-          <p class="question-text">WE dhurrie for the look, or Lorena Canals specifically engineered for crawling?</p>
+          <p class="question-text">WE dhurrie for the look, or Lorena Canals specifically engineered for tummy time + crawling?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>You will need to wash this rug. Machine-washable is not optional in a nursery.</p>
+              <p><strong>vs</strong> Lorena Canals washable cotton ($50 less, thicker weave &mdash; designed for tummy time and crawling).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <!-- WT-NURSERY -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">WT-NURSERY</span>
+        <h3 class="item-title">Nursery window treatments</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Blackout cellular shade + sheer linen overlay &mdash; sleep-grade for naps.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/wt-nursery-0.jpg" alt="Hunter Douglas blackout cellular shade with sheer panel" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Hunter Douglas blackout cellular + sheer linen panel, Natural</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">Hunter Douglas blackout cellular shade + sheer linen panel in Natural, 1 window (~$680)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Lock the sheer layer now or pick it yourself later? Blackout must happen during construction.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Sleep-grade blackout for naps. Cellular shade insulates &mdash; room stays cooler in Atlanta summers.</p>
+              <p><strong>vs</strong> Blackout roller only (simpler, ~$200 less, no softness layer).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <!-- NURSERY-ART -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">NURSERY-ART</span>
+        <h3 class="item-title">Nursery art</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Soft abstract or botanical &mdash; the quiet visual anchor in the room.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/nursery-art-0.jpg" alt="Minted botanical watercolor print in thin oak frame" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Minted botanical watercolor, 11&times;14, thin oak frame</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">Minted botanical watercolor print, 11&times;14, thin oak frame (~$120)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Want to pick this together? Happy to defer. Or if you have something in mind already &mdash; that wins automatically.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Soft, non-character art that grows with the room past infancy. Minted has strong botanical/abstract options in the sage/oat palette.</p>
+              <p><strong>vs</strong> Etsy hand-lettered print (more personal); framed fabric art (tactile, interesting texture).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -683,10 +844,98 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="section-divider"><a id="kitchen-dining"></a>
   <h2>Kitchen + dining</h2>
-  <div class="section-sub">5 items for your read</div>
+  <div class="section-sub">8 items for your read (6 already locked)</div>
 </div>
-<p class="section-note">Already locked (no input needed): counters, floor tile, backsplash, cabinets, kitchen faucet, cabinet finish. <em>Pendants still need a decision — see K-PENDANTS card below.</em></p>
+<p class="section-note">Already locked (no input needed): counters, floor tile, backsplash, cabinets, kitchen faucet, cabinet finish.</p>
 <main>
+
+    <!-- K-PENDANTS -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">K-PENDANTS</span>
+        <h3 class="item-title">Kitchen island pendants</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Three pendants over the island &mdash; the everyday light you cook and eat under.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/nursery-pendant-2.jpg" alt="Schoolhouse Soho Pendant in brass with opal glass" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Schoolhouse Soho Pendant, brass + opal glass, 10-inch &times;3</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">Schoolhouse Soho Pendant, brass + opal glass, 10-inch, &times;3 (~$870 set)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Happy with classic opal glass, or want to see a more industrial exposed-bulb option?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Ties the brass family from the dining chandelier over the island. Opal glass = diffuse, warm light for food prep.</p>
+              <p><strong>vs</strong> Exposed-bulb cage pendants (more industrial, clashes with cream palette); ceramic pendants (interesting, less tied to the metal family).</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming current Schoolhouse Soho availability.</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- K-CAB-HARDWARE -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">K-CAB-HARDWARE</span>
+        <h3 class="item-title">Kitchen cabinet pulls</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Matte black pulls on uppers + lowers &mdash; the kitchen's hardware moment.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/k-cab-hardware-0.jpg" alt="Amerock 5-inch matte black bar pulls" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Amerock 5-inch bar pull &mdash; matte black, qty ~24</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">Amerock 5-inch bar pull, matte black, qty ~24 (~$285)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Matte black only, or mix in a few brass knobs on the upper cabinet doors?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Matte black hardware anchors the hood (also matte black) into the whole kitchen. Bar pulls are easiest to grab with wet hands.</p>
+              <p><strong>vs</strong> All-brass pulls (warmer, matches the rest of the house but competes with the black hood); mixed black + brass (intentional designer look, more complex to spec).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <!-- K-PANTRY-BUILTIN -->
+    <article class="item">
+      <div class="item-header">
+        <span class="item-id">K-PANTRY-BUILTIN</span>
+        <h3 class="item-title">Kitchen pantry built-in</h3>
+        <span class="status-pill options">Your read</span>
+      </div>
+      <p class="item-tagline">Full-height oak cabinet run beside the refrigerator &mdash; the kitchen's largest storage piece.</p>
+      <div class="item-body">
+        <div class="pick-image-wrap">
+          <img class="pick-image" src="/images/sourcing/k-pantry-builtin-0.jpg" alt="TCW custom full-height pantry cabinet in white oak veneer" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">TCW custom full-height pantry &mdash; white oak veneer, pull-out shelves</div>
+        </div>
+        <div class="brief-block">
+          <div class="label">Pick</div>
+          <p class="pick">TCW custom full-height pantry cabinet, white oak veneer, pull-out shelves (~$3,200 labor + material)</p>
+          <div class="label">Question for you</div>
+          <p class="question-text">Fine locking this as part of the contractor scope, or want to see a freestanding furniture alternative?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Built-in ties into the cabinet run &mdash; reads as one kitchen. Pull-outs are more functional than fixed shelves.</p>
+              <p><strong>vs</strong> IKEA SEKTION column (~$600, built-in look with custom fronts); freestanding hutch (furniture feel, moveable, less integrated).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </article>
 
     <!-- K-POT-FILLER -->
     <article class="item">
@@ -695,22 +944,25 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Pot filler (behind the range)</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Wall-mounted faucet arm above the cooktop — fill a pot without carrying water across the kitchen.</p>
+      <p class="item-tagline">Wall-mounted faucet arm above the cooktop &mdash; fill a pot without carrying water across the kitchen.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-pot-filler-0.jpg" alt="Delta Trinsic wall-mount pot filler in champagne bronze" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Delta Trinsic wall-mount pot filler — champagne bronze</div>
+          <img class="pick-image" src="/images/sourcing/k-pot-filler-1.jpg" alt="Delta Trinsic wall-mount pot filler in champagne bronze" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Delta Trinsic wall-mount pot filler &mdash; champagne bronze</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">Delta Trinsic wall-mount pot filler, champagne bronze — articulated arm (~$390)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Same family as the kitchen faucet. Articulated arm means you can fill from the back burner.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Brizo Litze in Luxe Gold (richer gold tone, more of a statement, $190 more).</p>
+          <p class="pick">Delta Trinsic wall-mount pot filler, champagne bronze &mdash; articulated arm (~$390)</p>
           <div class="label">Question for you</div>
           <p class="question-text">Stay Trinsic cohesive, or step up to Brizo Luxe Gold for this one moment?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — confirming correct pot filler model number.</div>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Same family as the kitchen faucet. Articulated arm so you can fill from the back burner.</p>
+              <p><strong>vs</strong> Brizo Litze in Luxe Gold (richer gold tone, more of a statement, $190 more).</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming correct model number.</div>
         </div>
       </div>
     </article>
@@ -722,22 +974,25 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Kitchen sink</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">30-inch undermount stainless, insulated — doesn't ring loudly when dishes hit it.</p>
+      <p class="item-tagline">30-inch undermount stainless, sound-insulated &mdash; doesn't ring loudly at 6am.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-sink-0.jpg" alt="Kohler 30-inch undermount stainless sink" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Kohler 30-inch undermount stainless — sound-insulated</div>
+          <img class="pick-image" src="/images/sourcing/k-sink-1.jpg" alt="Kohler 30-inch undermount stainless sink" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="pick-image-caption">Kohler 30-inch undermount stainless &mdash; sound-insulated</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Kohler 30-inch undermount stainless, sound-insulated ($590)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Single bowl for a 30-inch base cabinet. The insulation matters at 6am with the baby asleep nearby.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Ruvati 33-inch (bigger basin, lower-tier brand, $280).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Comfortable with a 30-inch Kohler, or want the wider 33-inch basin?</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — confirming exact Kohler model number.</div>
+          <p class="question-text">Comfortable with 30-inch Kohler, or want the wider 33-inch basin?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Single bowl fits the 30-inch base cabinet. Insulation matters at 6am with the baby asleep nearby.</p>
+              <p><strong>vs</strong> Ruvati 33-inch (bigger basin, lower-tier brand, $280).</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming exact Kohler model.</div>
         </div>
       </div>
     </article>
@@ -749,21 +1004,24 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Range hood</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">42-inch matte black chimney hood over the range — the one bold moment in the kitchen.</p>
+      <p class="item-tagline">42-inch matte black chimney hood over the range &mdash; the one bold moment in the kitchen.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/g3-hood-0.jpg" alt="Vent-A-Hood 42-inch matte black chimney hood" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Vent-A-Hood 42-inch — matte black, high-output ventilation</div>
+          <div class="pick-image-caption">Vent-A-Hood 42-inch &mdash; matte black, high-output ventilation</div>
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">Vent-A-Hood 42-inch matte black chimney hood, high-output ventilation ($3,800)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Real ventilation for a gas range. Matte black grounds the kitchen against all the cream and oak — the one bold moment in the room.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Same brand at lower output (saves ~$1,150 but may not keep up with a high-output range).</p>
           <div class="label">Question for you</div>
           <p class="question-text">Comfortable committing to the Vent-A-Hood, or want to see other matte-black chimney hoods first?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Real ventilation for a gas range. Matte black grounds the kitchen against all the cream and oak &mdash; the one bold moment.</p>
+              <p><strong>vs</strong> Same brand at lower output (saves ~$1,150 but may not keep up with a high-BTU range).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -775,7 +1033,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Dining room chandelier</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">Brass branch chandelier over the dining table — visual centerpiece of the open dining area.</p>
+      <p class="item-tagline">Brass branch chandelier over the dining table &mdash; visual centerpiece of the open dining area.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/dr-chandelier-0.jpg" alt="5-arm brass branching chandelier, 30-inch" loading="lazy" onerror="this.style.opacity=0.3;">
@@ -784,13 +1042,16 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <div class="brief-block">
           <div class="label">Pick</div>
           <p class="pick">5-arm brass branching chandelier, 30-inch diameter (~$1,095)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Warm, sculptural, matches the brass family everywhere else. The dining room deserves a real moment.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Wider 8-arm Rejuvenation (better table framing, $100 less); Visual Comfort Bryant (premium, hand-rubbed antique brass, $180 more).</p>
           <div class="label">Question for you</div>
-          <p class="question-text">Calm 5-arm, wider 8-arm, or splurge on Visual Comfort? This is the room where splurging makes the most sense.</p>
-          <div class="sku-flag">&#9733; SKU verification in progress — Schoolhouse Edith discontinued, confirming current equivalent.</div>
+          <p class="question-text">Calm 5-arm, wider 8-arm (better table framing, $100 less), or splurge on Visual Comfort Bryant (hand-rubbed antique brass, $180 more)? This is the room where splurging makes sense.</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Warm, sculptural, matches the brass family throughout. The dining room deserves a real moment.</p>
+              <p><strong>vs</strong> Wider 8-arm Rejuvenation (better table framing, $100 less); Visual Comfort Bryant (premium, hand-rubbed antique brass).</p>
+            </div>
+          </details>
+          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse Edith discontinued, confirming current equivalent.</div>
         </div>
       </div>
     </article>
@@ -802,7 +1063,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         <h3 class="item-title">Open shelf styling</h3>
         <span class="status-pill options">Your read</span>
       </div>
-      <p class="item-tagline">What lives on the kitchen open shelves — the visible everyday ceramics.</p>
+      <p class="item-tagline">The visible everyday ceramics on the kitchen open shelves.</p>
       <div class="item-body">
         <div class="pick-image-wrap">
           <img class="pick-image" src="/images/sourcing/kitchen-open-shelf-0.jpg" alt="East Fork ceramics, olive wood cutting board, cookbooks" loading="lazy" onerror="this.style.opacity=0.3;">
@@ -810,13 +1071,16 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
         </div>
         <div class="brief-block">
           <div class="label">Pick</div>
-          <p class="pick">East Fork bowls + mugs (chalk/fog), one olive-wood cutting board, 2–3 cookbooks ($395)</p>
-          <div class="label">Why</div>
-          <p class="why-text">Hand-thrown ceramics, deliberately not-matched — the visual centerpiece of a Japandi kitchen. East Fork is the right scale and aesthetic.</p>
-          <div class="label">vs alternates</div>
-          <p class="alts-text">Full Etsy hunt (most personal, every piece a one-off — same price, more time); CB2 matte stoneware ($240, looks similar, feels mass-produced).</p>
+          <p class="pick">East Fork bowls + mugs (chalk/fog), one olive-wood cutting board, 2&ndash;3 cookbooks ($395)</p>
           <div class="label">Question for you</div>
           <p class="question-text">East Fork (designed, consistent), Etsy hunt together (most personal), or CB2 (safe save)?</p>
+          <details class="why-block">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Hand-thrown ceramics, deliberately unmatched &mdash; the visual centerpiece of a Japandi kitchen.</p>
+              <p><strong>vs</strong> Full Etsy hunt (most personal, same price range, more time); CB2 matte stoneware ($240, looks similar, feels mass-produced).</p>
+            </div>
+          </details>
         </div>
       </div>
     </article>
@@ -825,7 +1089,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="section-divider"><a id="finishes"></a>
   <h2>Whole-house paint</h2>
-  <div class="section-sub">Both locked — no input needed, just so you've seen them</div>
+  <div class="section-sub">Both locked &mdash; no input needed, just so you've seen them</div>
 </div>
 <main>
 
@@ -833,14 +1097,14 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
     <article class="item">
       <div class="item-header">
         <span class="item-id">PAINT-BATH-ACCENT</span>
-        <h3 class="item-title">Bath accent wall — Saybrook Sage</h3>
+        <h3 class="item-title">Bath accent wall &mdash; Saybrook Sage</h3>
         <span class="status-pill decided">Locked</span>
       </div>
       <div class="item-body" style="grid-template-columns: 1fr;">
         <div class="brief-block">
           <div class="label">Locked</div>
-          <p class="decided-text">Benjamin Moore Saybrook Sage (HC-114) — a warm sage that reads green-gray, not bright green. Wet-room paint formula so it holds up in the bath.</p>
-          <p class="locked-note">No input needed — just FYI on the color direction.</p>
+          <p class="decided-text">Benjamin Moore Saybrook Sage (HC-114) &mdash; a warm sage that reads green-gray, not bright green. Wet-room paint formula so it holds up in the bath.</p>
+          <p class="locked-note">No input needed &mdash; just FYI on the color direction.</p>
         </div>
       </div>
     </article>
@@ -849,14 +1113,14 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
     <article class="item">
       <div class="item-header">
         <span class="item-id">PAINT-BEDROOM-ALT</span>
-        <h3 class="item-title">Master bedroom alt wall — Accessible Beige</h3>
+        <h3 class="item-title">Master bedroom alt wall &mdash; Accessible Beige</h3>
         <span class="status-pill decided">Locked</span>
       </div>
       <div class="item-body" style="grid-template-columns: 1fr;">
         <div class="brief-block">
           <div class="label">Locked</div>
-          <p class="decided-text">Sherwin-Williams Accessible Beige (SW 7036) — a warm greige, not yellow, not pink. Reads very differently depending on light; sample is required before painting.</p>
-          <p class="locked-note">No input needed — just FYI on the color direction.</p>
+          <p class="decided-text">Sherwin-Williams Accessible Beige (SW 7036) &mdash; a warm greige, not yellow, not pink. Reads very differently depending on light; sample required before painting.</p>
+          <p class="locked-note">No input needed &mdash; just FYI on the color direction.</p>
         </div>
       </div>
     </article>
@@ -865,7 +1129,7 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="section-divider"><a id="watch-list"></a>
   <h2>Long-horizon watch list</h2>
-  <div class="section-sub">Deferred — no decision needed now, just awareness</div>
+  <div class="section-sub">Deferred &mdash; no decision needed now, just awareness</div>
 </div>
 <main>
 
@@ -873,18 +1137,16 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
     <article class="item">
       <div class="item-header">
         <span class="item-id">LR-RUG-VINTAGE</span>
-        <h3 class="item-title">LR Beni Ourain — vintage hunt (year 4+)</h3>
-        <span class="urgency-pill">T3 · deferred</span>
+        <h3 class="item-title">LR Beni Ourain &mdash; vintage hunt (year 4+)</h3>
+        <span class="urgency-pill">T3 &middot; deferred</span>
         <span class="status-pill" style="background:#8a85a0;">Watch list</span>
       </div>
       <div class="item-body" style="grid-template-columns: 1fr;">
         <div class="brief-block">
           <div class="label">Why deferred</div>
-          <p class="why-text">Deferred to year 4+ post-potty-train and post-pet-maturity per §7. No white rug in the house until the kids and dog are reliably clean.</p>
-          <div class="label">What we're hunting for (when the time comes)</div>
-          <p class="why-text">Authentic Beni Ourain, neutral cream + sumi black diamond, 8×10 or 9×12. Budget $3,000–5,000. Avoid: synthetic, fringe-less, high-contrast geometric, kilim flat-weave.</p>
-          <div class="label">Where to hunt</div>
-          <p class="alts-text">Mellah, Berber Trading Company, Etsy vetted dealers, Atlanta vintage dealers.</p>
+          <p class="why-text">Deferred to year 4+ post-potty-train and post-pet-maturity. No white rug in the house until the kids and dog are reliably clean.</p>
+          <div class="label">What we're hunting for</div>
+          <p class="why-text">Authentic Beni Ourain, neutral cream + sumi black diamond, 8&times;10 or 9&times;12. Budget $3,000&ndash;5,000. Mellah, Berber Trading Company, Etsy vetted dealers.</p>
         </div>
       </div>
     </article>
@@ -893,20 +1155,16 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
     <article class="item">
       <div class="item-header">
         <span class="item-id">MB-ART</span>
-        <h3 class="item-title">Master BR art — over-bed placement</h3>
-        <span class="urgency-pill">T3 · deferred</span>
+        <h3 class="item-title">Master BR art &mdash; over-bed placement</h3>
+        <span class="urgency-pill">T3 &middot; deferred</span>
         <span class="status-pill" style="background:#8a85a0;">Watch list</span>
       </div>
       <div class="item-body" style="grid-template-columns: 1fr;">
         <div class="brief-block">
           <div class="label">Brief</div>
-          <p class="why-text">Sleep-sanctuary calm. Over-bed placement. Calming abstract or landscape, 24–36 inch, sage/oat palette. Budget $400–800.</p>
-          <div class="label">Avoid</div>
-          <p class="alts-text">No figurative portrait, no kids' art, no saturated abstract.</p>
-          <div class="label">Where to look</div>
-          <p class="alts-text">Tappan Collective, Saatchi Art, Minted, Etsy.</p>
+          <p class="why-text">Sleep-sanctuary calm. Over-bed placement. Calming abstract or landscape, 24&ndash;36 inch, sage/oat palette. Budget $400&ndash;800.</p>
           <div class="label">Placeholder option</div>
-          <p class="alts-text">West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) ~$449 — reads quieter than a gallery print, fits the sleep-sanctuary brief.</p>
+          <p class="alts-text">West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract) ~$449 &mdash; reads quieter than a gallery print.</p>
         </div>
       </div>
     </article>
@@ -915,11 +1173,11 @@ main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
 
 <div class="summary-cta" style="margin: 60px auto 80px;">
   <h2>What happens next</h2>
-  <p>Once you send reactions, I'll lock the long-lead orders — the items that need 4–8 weeks to arrive before the contractor is ready for them. You don't need to have an opinion on every item. "Looks fine" is a complete answer.</p>
-  <p>A few items above are marked <strong>★ SKU verification in progress</strong> — I'm confirming those products are in stock and current before we order. The concept for each stands; just the exact model is being confirmed.</p>
+  <p>Once you send reactions, I'll lock the long-lead orders &mdash; the items that need 4&ndash;8 weeks to arrive before the contractor is ready for them. You don't need to have an opinion on every item. "Looks fine" is a complete answer.</p>
+  <p>A few items are marked <strong>&#9733; SKU verification in progress</strong> &mdash; I'm confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
   <div class="deadline-line">Please react by Friday May 23.</div>
   <div class="format-line">Text as you scroll, or a short voicemail. No need to reference item IDs unless you want to be precise.</div>
-  <p style="margin-top: 16px;"><a href="https://1490-design-site.vercel.app/for-annika">https://1490-design-site.vercel.app/for-annika</a> — forward this link if you want to view it again later.</p>
+  <p style="margin-top: 16px;"><a href="https://1490-design-site.vercel.app/for-annika">https://1490-design-site.vercel.app/for-annika</a> &mdash; forward this link to view later.</p>
 </div>
 
 </body>
