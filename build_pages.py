@@ -165,6 +165,7 @@ def topnav(current=""):
         ("/spectrum", "Spectrum"),
         ("/decisions", "Decisions"),
         ("/budget", "Budget"),
+        ("/sourcing", "Sourcing"),
         ("/spec", "Spec"),
     ]
     items_rooms = [
