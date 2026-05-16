@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta
 from typing import Tuple
 
 from sourcing_loader import Schedule
-from sourcing_schema import Item, Option
+from sourcing_schema import Item
 
 
 def _parse_iso(d: str) -> date:
