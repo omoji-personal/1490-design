@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sourcing · 1490 Lively Ridge</title>
-<meta name="description" content="Sourcing tracker for every design-decision item — vendor, SKU, lead time, status. 0 items.">
+<meta name="description" content="Sourcing tracker for every design-decision item — vendor, SKU, lead time, status. 5 items.">
 <style>
 :root {
   --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
@@ -92,10 +92,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </nav>
 <header class="page-header">
   <h1>Sourcing</h1>
-  <p class="subtitle">Every design-decision item the renovation will consume. 0 items tracked. Updated 2026-05-16.</p>
+  <p class="subtitle">Every design-decision item the renovation will consume. 5 items tracked. Updated 2026-05-16.</p>
 </header>
 <main>
-
+<div class="lint-alert"><h4>Lint warnings (1)</h4><ul><li>FRONT-DOOR: brass-tagged but doesn&#x27;t match expected family &#x27;Rejuvenation lacquered brass&#x27;</li></ul></div>
 <div class="filter-bar">
       <button data-filter="all" class="active">All</button>
       <button data-filter="decide-now">Decide this week</button>
@@ -104,7 +104,161 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <select id="category-filter"><option value="">By category</option><option value="plumbing_fixture">plumbing_fixture</option><option value="lighting_fixture">lighting_fixture</option><option value="hardware">hardware</option><option value="tile_stone">tile_stone</option><option value="cabinetry_millwork">cabinetry_millwork</option><option value="appliance">appliance</option><option value="paint_finish">paint_finish</option><option value="window_treatment">window_treatment</option><option value="furniture">furniture</option><option value="decor_softgoods">decor_softgoods</option></select>
       <select id="status-filter"><option value="">By status</option><option value="options_drafted">options_drafted</option><option value="awaiting_sample">awaiting_sample</option><option value="sample_in_hand">sample_in_hand</option><option value="decided">decided</option><option value="ordered">ordered</option><option value="received">received</option><option value="installed">installed</option><option value="deferred_p2">deferred_p2</option><option value="cancelled">cancelled</option><option value="watch_list">watch_list</option><option value="found_candidate">found_candidate</option></select>
     </div>
-
+<article class="item-card" data-id="G3-HOOD"
+       data-urgency="T0" data-room="kitchen"
+       data-category="appliance" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">G3-HOOD</span>
+        <h3>Kitchen range hood</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $1,500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">CDGA (Atlanta)</div>
+      <div class="sku"><span class="star">★</span> Vent-A-Hood SLDH9-K42 SS</div>
+      <div class="price">$1,480</div>
+      <div class="reasoning">Verified-in-catalog Magic Lung successor to the speculative K2240SS; 900 CFM matches kitchen size.</div>
+    </div><div class="option-card ">
+      <div class="vendor">AJ Madison</div>
+      <div class="sku">Zephyr Tempest 36 ZTI-E36BS</div>
+      <div class="price">$1,599</div>
+      <div class="reasoning">Original spec; sleeker face; 1100 CFM.</div>
+    </div><div class="option-card ">
+      <div class="vendor">AJ Madison</div>
+      <div class="sku">Best WP29M36SB</div>
+      <div class="price">$1,199</div>
+      <div class="reasoning">Budget alt; saves $280-400; less canon-on-camera.</div>
+    </div></div>
+      <div class="notes-line">Vent-A-Hood K2240SS in original spec doesn&#x27;t exist in catalog — CDGA must confirm actual SKU.</div>
+      <div class="revision-history"><span><strong>2026-05-16:</strong> stub created</span> · <span><strong>2026-05-16:</strong> options_drafted, 3 candidates</span></div>
+    </article>
+<article class="item-card" data-id="MB-FAUCET"
+       data-urgency="T0" data-room="master_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-FAUCET</span>
+        <h3>Master bath sink faucet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $450 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div>
+      <div class="notes-line">Canon-locked per DESIGN_SPEC.md — Delta Trinsic Champagne Bronze, non-negotiable.</div>
+      <div class="revision-history"><span><strong>2026-05-13:</strong> decided by canon lock</span></div>
+    </article>
+<article class="item-card" data-id="LR-SOFA"
+       data-urgency="T2" data-room="lr"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-SOFA</span>
+        <h3>Living room primary sofa</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 10 wk ·
+        <strong>Budget:</strong> $3,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Andes 86&quot; Sofa, Performance Velvet, Stone White</div>
+      <div class="price">$2,899</div>
+      <div class="reasoning">Anchor brand per design spec; performance fabric pivot satisfied; cream-stone palette fits.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Lyle Sofa, Performance Cipriani Linen, Quartz</div>
+      <div class="price">$2,299</div>
+      <div class="reasoning">$600 less; Lyle has wider arm, slightly less Japandi-trim.</div>
+    </div></div>
+      <div class="notes-line">Need fabric memo before deciding — performance velvet vs linen drape differs significantly.</div>
+      
+    </article>
+<article class="item-card" data-id="K-TILE-BACKSPLASH"
+       data-urgency="T0" data-room="kitchen"
+       data-category="tile_stone" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-TILE-BACKSPLASH</span>
+        <h3>Kitchen backsplash</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $2,200 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">MSI / Cle</div>
+      <div class="sku"><span class="star">★</span> Carrara honed slab backsplash (range wall), 4ft × 8ft slab + Cle Sea Salt zellige 2x6 (rest of perimeter)</div>
+      <div class="price">$2,150</div>
+      <div class="reasoning">Locked design decision 2026-05-13; Carrara on range wall, zellige around perimeter; resolves the prior tile-conflict.</div>
+    </div></div>
+      <div class="notes-line">Cle 4-6 week lead — sample order this week or bath gut starts without spec confirmed.</div>
+      
+    </article>
+<article class="item-card" data-id="FRONT-DOOR"
+       data-urgency="T1" data-room="exterior"
+       data-category="hardware" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">FRONT-DOOR</span>
+        <h3>Front entry door + hardware</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> exterior ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $4,500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Custom mill + Schoolhouse Electric</div>
+      <div class="sku"><span class="star">★</span> Walnut slab front door, 36×80 + Schoolhouse Mortise Bishop set, unlacquered brass</div>
+      <div class="price">$4,400</div>
+      <div class="reasoning">Canon Campbell House move; locked decision 2026-05-13; Schoolhouse Mortise is the canon hardware family.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Home Depot / Emtek</div>
+      <div class="sku">Therma-Tru Classic Craft walnut-stained CCA200 + Emtek Modern entry set, unlacquered brass</div>
+      <div class="price">$2,900</div>
+      <div class="reasoning">Saves $1.5K; not solid walnut but well-stained fiberglass; harder to tell at glance.</div>
+    </div></div>
+      <div class="notes-line">Walnut splurge is the locked move; option 2 is cap-defer fallback only if Path 3 fails.</div>
+      
+    </article>
 </main>
 
 <script>
