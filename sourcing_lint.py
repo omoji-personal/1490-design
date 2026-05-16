@@ -1,5 +1,5 @@
 # sourcing_lint.py
-"""9 cross-cutting consistency lint checks for sourcing.yaml.
+"""12 cross-cutting consistency lint checks for sourcing.yaml.
 Each check returns a list of LintFinding objects."""
 import re
 from dataclasses import dataclass
@@ -371,29 +371,192 @@ def check_no_fictional_sku_urls(items: List[Item], meta: Meta) -> List[LintFindi
     return findings
 
 
+def check_no_collection_landing_urls(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Warning if a ★ recommended option's product_url points at a category/collection landing
+    page rather than a specific product page.
+
+    Catches the R4 failure mode where BB-SHOWER-SYSTEM ★ was given a Delta collection URL
+    (e.g. /category/trinsic) instead of a direct product page.  The fictional-SKU guard only
+    catches /search?q= style URLs; this rule catches path-based landing pages.
+    """
+    findings = []
+    LANDING_PATTERNS = [
+        "/category/",
+        "/collections/",
+        "/c/",
+        "/shop/",
+        "/browse/",
+        "/sitemap",
+    ]
+    for item in items:
+        if not item.options:
+            continue
+        for idx, opt in enumerate(item.options):
+            if not opt.recommend:
+                continue
+            url = opt.product_url or ""
+            if not url:
+                continue
+            url_lower = url.lower()
+            # Check known landing-page path patterns
+            for pattern in LANDING_PATTERNS:
+                if pattern in url_lower:
+                    findings.append(LintFinding(
+                        severity="warning",
+                        message=(
+                            f"{item.id} opt {idx} ★ product_url looks like category/collection "
+                            f"landing, not specific product: {url[:100]}"
+                        ),
+                        item_id=item.id,
+                    ))
+                    break
+            else:
+                # Heuristic: a specific product page should have ≥2 path segments after the domain
+                path_segments = [s for s in url.split("/")[3:] if s]
+                if len(path_segments) < 2:
+                    findings.append(LintFinding(
+                        severity="warning",
+                        message=(
+                            f"{item.id} opt {idx} ★ product_url path too shallow for a product page "
+                            f"(expected ≥2 segments): {url[:100]}"
+                        ),
+                        item_id=item.id,
+                    ))
+    return findings
+
+
+KNOWN_VENDOR_FINISHES: dict = {
+    "Cedar & Moss": {"brass", "heirloom brass", "matte black", "white"},
+    "Delta Trinsic": {"champagne bronze", "matte black", "chrome", "stainless"},
+    "Schoolhouse": {"natural brass", "antique brass", "satin brass", "true black", "polished nickel"},
+    "Rejuvenation": {
+        "natural brass", "aged brass", "antique brass", "satin brass",
+        "matte black", "polished nickel", "oil rubbed bronze", "lacquered brass",
+    },
+}
+
+def check_known_vendor_finishes(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Warning if a ★ option names a finish that isn't in the vendor's known finish vocabulary.
+
+    Catches the R4 failure mode where Cedar & Moss "Lacquered Brass" was specified —
+    Cedar & Moss doesn't offer lacquered brass; their brass finish is simply "Brass".
+
+    Algorithm:
+    1. Only fires when the option vendor is in KNOWN_VENDOR_FINISHES.
+    2. Builds a list of "finish candidates" from the text by looking for known finish-modifier
+       words (lacquered, polished, etc.) followed by a material noun (brass, black, etc.).
+    3. If any finish candidate is NOT a substring of any known finish for that vendor → warn.
+
+    This correctly flags "lacquered brass" for Cedar & Moss (whose known finish is just
+    "brass", not "lacquered brass") while not flagging "brass" alone.
+    """
+    # Modifier words that narrow a finish beyond the base material
+    _MODIFIERS = frozenset([
+        "lacquered", "polished", "brushed", "matte", "aged", "antique", "satin",
+        "heirloom", "champagne", "oil rubbed", "oiled", "raw", "unlacquered",
+        "natural", "true", "ebony",
+    ])
+    # Material nouns that can follow a modifier
+    _MATERIALS = frozenset(["brass", "black", "bronze", "nickel", "chrome", "white", "gold"])
+
+    findings = []
+    for item in items:
+        if not item.options:
+            continue
+        for idx, opt in enumerate(item.options):
+            if not opt.recommend:
+                continue
+            vendor = (opt.vendor or "").strip()
+            if vendor not in KNOWN_VENDOR_FINISHES:
+                continue
+            known = KNOWN_VENDOR_FINISHES[vendor]
+            text = ((opt.sku or "") + " " + (opt.details or "")).lower()
+
+            # Build finish candidates: any multi-word (modifier + material) or
+            # single-word finish that matches a modifier (e.g. "lacquered" alone)
+            candidates: list = []
+            for mod in _MODIFIERS:
+                if mod not in text:
+                    continue
+                for mat in _MATERIALS:
+                    phrase = f"{mod} {mat}"
+                    if phrase in text:
+                        candidates.append(phrase)
+                # Also record bare modifier if no material follows within text
+                # (e.g. "lacquered finish" without a material — still a signal)
+                if not any(f"{mod} {mat}" in text for mat in _MATERIALS):
+                    candidates.append(mod)
+
+            if not candidates:
+                continue  # No finish modifier language detected — skip
+
+            # Check each candidate against known finishes.
+            # A candidate is "known" only if it exactly matches a known finish or is a
+            # substring of one (e.g. candidate "antique" matches known "antique brass").
+            # The reverse (known finish being substring of candidate) is NOT a match —
+            # "brass" being in "lacquered brass" doesn't make "lacquered brass" known.
+            unknown_candidates = [
+                c for c in candidates
+                if not any(
+                    c == known_f or c in known_f  # candidate is contained in a known phrase
+                    for known_f in known
+                )
+            ]
+            if unknown_candidates:
+                findings.append(LintFinding(
+                    severity="warning",
+                    message=(
+                        f"{item.id} opt {idx} ★ finish '{unknown_candidates[0]}' not in "
+                        f"'{vendor}' known vocabulary. Known finishes: {sorted(known)}"
+                    ),
+                    item_id=item.id,
+                ))
+    return findings
+
+
 def check_per_item_budget_overshoot(items: List[Item], meta: Meta) -> List[LintFinding]:
     """Error if a ★ option's price exceeds item.budget_target_usd by >5%.
+
+    Also flags decided items (no options array) that have a budget_target_usd > 0 but
+    no priced option, since their actual price can't be validated.  This catches the R4
+    failure mode where HB-TUB-FILLER was decided at $999 vs a $500 budget but escaped
+    because it had no options[].recommend entry.
 
     Exception: budget_target_usd == 0 (canon-locked items with no budget target — skip).
     Exception: item.notes contains 'approved_overshoot' keyword (explicit owner sign-off).
     """
     findings = []
     for item in items:
-        if not item.options or item.budget_target_usd <= 0:
+        if item.budget_target_usd <= 0:
             continue
-        rec = next((o for o in item.options if o.recommend), None)
-        if not rec:
-            continue
-        if rec.price_usd > item.budget_target_usd * 1.05:
+        if item.options:
+            # Standard path: check the ★ recommended option
+            rec = next((o for o in item.options if o.recommend), None)
+            if not rec:
+                continue
+            if rec.price_usd > item.budget_target_usd * 1.05:
+                if "approved_overshoot" in (item.notes or "").lower():
+                    continue
+                overshoot_pct = (rec.price_usd / item.budget_target_usd - 1) * 100
+                findings.append(LintFinding(
+                    severity="error",
+                    message=(
+                        f"{item.id} ★ price ${rec.price_usd:.0f} exceeds budget_target "
+                        f"${item.budget_target_usd:.0f} by {overshoot_pct:.0f}% — revise budget UP "
+                        f"or add 'approved_overshoot' to notes"
+                    ),
+                    item_id=item.id,
+                ))
+        elif item.decision_status == "decided" and item.decided_sku:
+            # Decided item with no options array — actual price is unknown, can't validate
             if "approved_overshoot" in (item.notes or "").lower():
                 continue
-            overshoot_pct = (rec.price_usd / item.budget_target_usd - 1) * 100
             findings.append(LintFinding(
-                severity="error",
+                severity="info",
                 message=(
-                    f"{item.id} ★ price ${rec.price_usd:.0f} exceeds budget_target "
-                    f"${item.budget_target_usd:.0f} by {overshoot_pct:.0f}% — revise budget UP "
-                    f"or add 'approved_overshoot' to notes"
+                    f"{item.id} is decided ({item.decided_sku}) with budget "
+                    f"${item.budget_target_usd:.0f} but has no priced option — "
+                    f"actual price unknown, budget compliance unverifiable"
                 ),
                 item_id=item.id,
             ))
@@ -445,6 +608,8 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_hardware_mix(items)
     findings += check_budget_rollup(items, meta)
     findings += check_no_fictional_sku_urls(items, meta)
+    findings += check_no_collection_landing_urls(items, meta)
+    findings += check_known_vendor_finishes(items, meta)
     findings += check_per_item_budget_overshoot(items, meta)
     findings += check_no_orphan_sku_refs_in_notes(items, meta)
     return findings

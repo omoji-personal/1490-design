@@ -145,7 +145,9 @@ def test_tile_palette_bejmat_outside_master_bath_errors():
 
 from sourcing_lint import (
     check_paint_line, check_hardware_mix, check_budget_rollup,
-    check_no_fictional_sku_urls, check_per_item_budget_overshoot,
+    check_no_fictional_sku_urls, check_no_collection_landing_urls,
+    check_known_vendor_finishes,
+    check_per_item_budget_overshoot,
     check_no_orphan_sku_refs_in_notes,
 )
 from sourcing_schema import Meta, Budgets, ConsistencyLocks
@@ -369,6 +371,153 @@ def test_orphan_sku_refs_no_notes_no_warning():
     items[0].notes = ""
     findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
     assert findings == []
+
+
+# --- Rule 10: collection / landing-page URLs ---
+
+def test_collection_landing_category_path_warns():
+    """★ URL containing /category/ should be flagged as a landing page."""
+    items = [_i("BB1", options=[
+        _opt(sku="Delta T14259-SS", price=500, recommend=True,
+             product_url="https://www.deltafaucet.com/category/trinsic"),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert any(f.severity == "warning" and "BB1" in f.message for f in findings)
+
+
+def test_collection_landing_collections_path_warns():
+    """★ URL containing /collections/ (Shopify-style) should be flagged."""
+    items = [_i("BB2", options=[
+        _opt(sku="Some Fixture", price=200, recommend=True,
+             product_url="https://example.com/collections/bathroom-fixtures"),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert any(f.severity == "warning" and "BB2" in f.message for f in findings)
+
+
+def test_collection_landing_specific_product_no_warning():
+    """★ URL pointing at a real product page should NOT be flagged."""
+    items = [_i("BB3", options=[
+        _opt(sku="Delta T14259-SS", price=500, recommend=True,
+             product_url="https://www.deltafaucet.com/bathroom/showers/T14259-SS"),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert findings == []
+
+
+def test_collection_landing_shallow_path_warns():
+    """★ URL with only one path segment (domain/segment) is too shallow for a product page."""
+    items = [_i("BB4", options=[
+        _opt(sku="Widget", price=100, recommend=True,
+             product_url="https://example.com/trinsic"),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert any(f.severity == "warning" and "BB4" in f.message for f in findings)
+
+
+def test_collection_landing_empty_url_skipped():
+    """★ option with no product_url should not trigger collection-landing check."""
+    items = [_i("BB5", options=[
+        _opt(sku="Widget", price=100, recommend=True, product_url=None),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert findings == []
+
+
+def test_collection_landing_non_recommend_ignored():
+    """Non-★ option with landing URL should be ignored."""
+    items = [_i("BB6", options=[
+        _opt(sku="Widget", price=100, recommend=False,
+             product_url="https://example.com/category/all-fixtures"),
+    ])]
+    findings = check_no_collection_landing_urls(items, _meta_simple())
+    assert findings == []
+
+
+# --- Rule 11: known vendor finishes ---
+
+def test_known_vendor_finishes_cedar_moss_lacquered_warns():
+    """Cedar & Moss 'lacquered brass' is not in their known finish set — should warn."""
+    items = [_i("CM1", options=[
+        _opt(sku="Cedar & Moss Globe Sconce lacquered brass", price=200,
+             recommend=True, details="lacquered brass finish"),
+    ])]
+    items[0].options[0].vendor = "Cedar & Moss"
+    findings = check_known_vendor_finishes(items, _meta_simple())
+    assert any(f.severity == "warning" and "CM1" in f.message for f in findings)
+
+
+def test_known_vendor_finishes_cedar_moss_brass_no_warning():
+    """Cedar & Moss 'brass' is a known finish — should not warn."""
+    items = [_i("CM2", options=[
+        _opt(sku="Cedar & Moss Globe Sconce brass", price=200,
+             recommend=True, details="brass finish"),
+    ])]
+    items[0].options[0].vendor = "Cedar & Moss"
+    findings = check_known_vendor_finishes(items, _meta_simple())
+    assert not any("CM2" in f.message for f in findings)
+
+
+def test_known_vendor_finishes_rejuvenation_antique_brass_no_warning():
+    """Rejuvenation antique brass is known — should not warn."""
+    items = [_i("RJ1", options=[
+        _opt(sku="Rejuvenation Westmore antique brass", price=150,
+             recommend=True, details="antique brass finish"),
+    ])]
+    items[0].options[0].vendor = "Rejuvenation"
+    findings = check_known_vendor_finishes(items, _meta_simple())
+    assert not any("RJ1" in f.message for f in findings)
+
+
+def test_known_vendor_finishes_unknown_vendor_skipped():
+    """Vendor not in KNOWN_VENDOR_FINISHES dict should never fire."""
+    items = [_i("UK1", options=[
+        _opt(sku="SomeBrand Fixture matte antique lacquered", price=300,
+             recommend=True, details="lacquered bronze"),
+    ])]
+    items[0].options[0].vendor = "Unknown Brand Co"
+    findings = check_known_vendor_finishes(items, _meta_simple())
+    assert findings == []
+
+
+def test_known_vendor_finishes_no_finish_words_skipped():
+    """If option text has no finish-indicating words at all, skip — avoid false positives."""
+    items = [_i("CM3", options=[
+        _opt(sku="Cedar & Moss Globe Sconce 4-inch", price=200, recommend=True),
+    ])]
+    items[0].options[0].vendor = "Cedar & Moss"
+    findings = check_known_vendor_finishes(items, _meta_simple())
+    assert not any("CM3" in f.message for f in findings)
+
+
+# --- Rule 8 extended: decided items with budget but no priced option ---
+
+def test_per_item_budget_decided_no_options_info():
+    """Decided item with budget but no options array should emit info (price unverifiable)."""
+    items = [_i("HB1", decided_sku="Waterworks Henry Tub Filler HB-12345")]
+    items[0].budget_target_usd = 500.0
+    items[0].decision_status = "decided"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert any(f.severity == "info" and "HB1" in f.message for f in findings)
+
+
+def test_per_item_budget_decided_no_options_approved_suppressed():
+    """approved_overshoot keyword in notes should suppress the info finding for decided items."""
+    items = [_i("HB2", decided_sku="Waterworks Henry Tub Filler HB-12345")]
+    items[0].budget_target_usd = 500.0
+    items[0].decision_status = "decided"
+    items[0].notes = "Confirmed by owner — approved_overshoot per Annika"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert not any("HB2" in f.message for f in findings)
+
+
+def test_per_item_budget_decided_zero_budget_skipped():
+    """Decided item with budget_target_usd == 0 should be skipped entirely."""
+    items = [_i("HB3", decided_sku="Some Faucet SKU-999")]
+    items[0].budget_target_usd = 0.0
+    items[0].decision_status = "decided"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert not any("HB3" in f.message for f in findings)
 
 
 # --- Lint aggregator ---
