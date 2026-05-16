@@ -96,6 +96,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
   border: 1px solid #e9c97f; color: #6e4f1a; }
+.schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
+  padding: 10px 16px; margin: 0 0 16px; font-size: 13px; color: #5c3a10; }
 .revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
   font-size: 11.5px; color: var(--muted); }
 .revision-history strong { color: var(--ink); margin-right: 6px; }
@@ -233,12 +235,14 @@ def _render_revision_history(item: Item) -> str:
     return '<div class="revision-history">' + " · ".join(entries) + '</div>'
 
 
-def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = None) -> str:
+def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = None,
+                      suppress_sched_badge: bool = False) -> str:
     badge_class, badge_text = STATUS_BADGE.get(item.decision_status, ("", item.decision_status))
     annika_flag = ' · 👩 Annika' if item.annika_loop else ''
     sample_flag = ' · ⚠️ sample required' if item.sample_required else ''
     sched_locked = _schedule_locked_for_item(item, schedule_lookup)
-    sched_badge = '' if sched_locked else '<span class="schedule-not-locked">⚠️ schedule not locked</span>'
+    # Per-card badge only shown when banner mode is off (< 50% unlocked)
+    sched_badge = '' if (sched_locked or suppress_sched_badge) else '<span class="schedule-not-locked">⚠️ schedule not locked</span>'
     body = ""
 
     if item.decided_sku:
@@ -395,11 +399,29 @@ ROOM_LINKS_HTML = """<div style="max-width:1200px;margin:8px auto 0;padding:0 28
 </div>"""
 
 
+def _schedule_banner_mode(items: List[Item], schedule_lookup: Optional[ScheduleLookup]) -> bool:
+    """Return True (banner mode) when >50% of non-T3 visible items have unlocked schedules."""
+    if schedule_lookup is None:
+        return False
+    urgency_sensitive = [it for it in items if it.urgency != "T3" and it.decision_status != "stub"]
+    if not urgency_sensitive:
+        return False
+    unlocked_count = sum(
+        1 for it in urgency_sensitive if not _schedule_locked_for_item(it, schedule_lookup)
+    )
+    return unlocked_count > len(urgency_sensitive) * 0.5
+
+
 def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFinding],
                      schedule_lookup: Optional[ScheduleLookup] = None) -> str:
     visible = [it for it in items if it.decision_status != "stub"]
     lint_html = _render_lint_alerts(lint_findings)
-    cards_html = "\n".join(_render_item_card(it, schedule_lookup) for it in visible)
+    banner_mode = _schedule_banner_mode(visible, schedule_lookup)
+    schedule_banner_html = (
+        '<div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>'
+        if banner_mode else ""
+    )
+    cards_html = "\n".join(_render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode) for it in visible)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -418,6 +440,7 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 {ROOM_LINKS_HTML}
 <main>
 {lint_html}
+{schedule_banner_html}
 {_render_filter_bar()}
 {cards_html}
 </main>
@@ -432,7 +455,12 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
     """Render a single-room view. rooms_filter is a list of room IDs to include
     (e.g., ['master_br','master_bath'] for master suite)."""
     visible = [it for it in items if it.decision_status != "stub" and it.room in rooms_filter]
-    cards_html = "\n".join(_render_item_card(it, schedule_lookup) for it in visible)
+    banner_mode = _schedule_banner_mode(visible, schedule_lookup)
+    schedule_banner_html = (
+        '<div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>'
+        if banner_mode else ""
+    )
+    cards_html = "\n".join(_render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode) for it in visible)
 
     subtitle = f"{len(visible)} items in {room_label}. Updated {meta.last_updated}."
 
@@ -453,6 +481,7 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
   <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
 </header>
 <main>
+{schedule_banner_html}
 {cards_html if visible else '<p style="color:var(--muted);">No items yet for this room.</p>'}
 </main>
 </body>

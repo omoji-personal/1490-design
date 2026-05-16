@@ -42,6 +42,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
   border: 1px solid #e9c97f; color: #6e4f1a; }
+.schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
+  padding: 10px 16px; margin: 0 0 16px; font-size: 13px; color: #5c3a10; }
 .revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
   font-size: 11.5px; color: var(--muted); }
 .revision-history strong { color: var(--ink); margin-right: 6px; }
@@ -124,6 +126,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
 </header>
 <main>
+<div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
 <article class="item-card" data-id="HB-TILE-WALL"
        data-urgency="T0" data-room="hall_bath"
        data-category="tile_stone" data-status="options_drafted"
@@ -133,7 +136,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-TILE-WALL</span>
         <h3>Hall bath wall tile</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -180,7 +183,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-TILE-FLOOR</span>
         <h3>Hall bath floor tile</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -203,7 +206,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-TILE-WALL</span>
         <h3>Basement bath wall tile</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -250,7 +253,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-TILE-FLOOR</span>
         <h3>Basement bath floor tile</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -273,7 +276,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-FAUCET</span>
         <h3>Hall bath sink faucet</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -296,7 +299,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-TUB-FILLER</span>
         <h3>Hall bath tub filler</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -319,7 +322,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-TUB</span>
         <h3>Hall bath tub (Kohler Bellwether)</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -342,7 +345,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-FAUCET</span>
         <h3>Basement bath sink faucet</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -389,7 +392,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-SHOWER-SYSTEM</span>
         <h3>Basement bath shower trim + valve</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -436,7 +439,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-TOILET</span>
         <h3>Hall bath toilet + washlet</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -459,7 +462,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-TOILET</span>
         <h3>Basement bath toilet + washlet</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -482,7 +485,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-SCONCES</span>
         <h3>Hall bath sconces (Cedar &amp; Moss)</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -529,7 +532,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-SCONCES</span>
         <h3>Basement bath sconces</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -576,7 +579,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-CAB-HARDWARE</span>
         <h3>Hall bath vanity pulls</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -623,7 +626,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-CAB-HARDWARE</span>
         <h3>Basement bath vanity pulls</h3>
         <span class="status-badge decide-now">Decide now</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·
@@ -662,7 +665,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">HB-VANITY</span>
         <h3>Hall bath vanity (WE Hutchinson 36-inch Single)</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> hall_bath ·
@@ -685,7 +688,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <span class="item-id">BB-VANITY</span>
         <h3>Basement bath vanity (Pottery Barn Mason 24)</h3>
         <span class="status-badge decided">Decided</span>
-        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+        
       </div>
       <div class="item-meta">
         <strong>Room:</strong> basement_bath ·

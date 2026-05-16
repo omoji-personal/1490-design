@@ -48,20 +48,25 @@ def test_render_site_page_topnav_marks_sourcing_current():
 
 
 def test_render_site_page_schedule_not_locked_badge_shows_when_phase_null():
-    """Per spec Open Question #1: every urgency-sensitive card shows a
-    'schedule-not-locked' warning badge when its phase date is null."""
+    """When >50% of urgency-sensitive items are unlocked (all phases null), the renderer
+    emits a single top-of-page banner instead of per-card badges. The data-attribute is
+    still written false so the filter JS knows the state."""
     from sourcing_queue import ScheduleLookup
     data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
-    # All phases null → all T0/T1/T2 cards should warn
+    # All phases null → banner mode (all T0/T1/T2 items unlocked = 100% > 50%)
     sched = Schedule(phases={k: None for k in [
         "roof_phase_start", "bath_gut_start", "kitchen_gut_start",
         "electrical_rough_start", "plumbing_rough_start",
         "finish_phase_start", "move_back_in"]})
     lookup = ScheduleLookup(schedule=sched, meta_last_updated=data.meta.last_updated, today=date(2026, 5, 16))
     html = render_site_page(data.items, data.meta, lint_findings=[], schedule_lookup=lookup)
-    # G3-HOOD is T0 → should have schedule-not-locked attribute
+    # data-attribute still written for filter JS
     assert 'data-schedule-locked="false"' in html
-    assert 'schedule-not-locked' in html  # CSS class on the badge
+    # Banner replaces per-card badges in bulk-unlocked case
+    assert 'schedule-banner' in html
+    assert 'Construction schedule not yet locked' in html
+    # Per-card badge suppressed in banner mode
+    assert 'schedule-not-locked' not in html or 'schedule-banner' in html
 
 
 def test_render_site_page_shows_recent_revision_history():
