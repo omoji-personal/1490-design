@@ -167,3 +167,92 @@ def test_render_for_annika_toc_generated():
     html = render_for_annika(data.items, data.meta)
     assert 'class="toc"' in html
     assert "Sections" in html
+
+
+# ---------------------------------------------------------------------------
+# R6 new: approved-overshoots block (#4)
+# ---------------------------------------------------------------------------
+
+def test_approved_overshoots_block_appears_for_overshoot_item():
+    """Items with approved_overshoot in notes and price > budget should appear in the slate block."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_site_page
+
+    opt = Option(
+        sku="Fancy Widget", vendor="V", price_usd=500.0, image="",
+        reasoning="approved", recommend=True,
+        details=None, product_url=None,
+    )
+    item = Item(
+        id="TEST-OVER", title="Test Overshoot", category="hardware", room="kitchen",
+        urgency="T0", lead_time_weeks=1,
+        budget_source="construction_allowance", budget_target_usd=300.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=False, options=[opt],
+        notes="approved_overshoot per owner confirmation",
+    )
+    meta = Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_site_page([item], meta, lint_findings=[])
+    assert "approved-overshoots-block" in html
+    assert "TEST-OVER" in html
+
+
+def test_approved_overshoots_block_absent_when_no_overshoots():
+    """When no approved_overshoot items exist, the dynamic block header should not appear."""
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    # Ensure no approved_overshoot in fixture items
+    for it in data.items:
+        it.notes = ""
+    html = render_site_page(data.items, data.meta, lint_findings=[])
+    # The dynamic h4 "Approved overshoots" header should not appear
+    assert "Approved overshoots" not in html
+
+
+# ---------------------------------------------------------------------------
+# R6 new: double-vendor bug (#11)
+# ---------------------------------------------------------------------------
+
+def test_for_annika_no_double_vendor_in_alts():
+    """Alt options whose SKU already starts with the vendor name must not repeat it."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_for_annika
+
+    pick = Option(
+        sku="Babyletto Toco Glider Eco-Weave", vendor="Babyletto", price_usd=499.0,
+        image="", reasoning="canonical glider", recommend=True,
+    )
+    alt = Option(
+        sku="West Elm Organic Glider Crypton Ivory", vendor="West Elm", price_usd=1099.0,
+        image="", reasoning="anchor brand option", recommend=False,
+    )
+    item = Item(
+        id="TEST-GLIDER", title="Nursery glider", category="furniture", room="nursery",
+        urgency="T2", lead_time_weeks=10,
+        budget_source="furniture_envelope", budget_target_usd=900.0,
+        sourcing_actor="owner_furniture", decision_status="options_drafted",
+        annika_loop=True, options=[pick, alt],
+    )
+    meta = Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_for_annika([item], meta)
+    # "West Elm West Elm" should NOT appear
+    assert "West Elm West Elm" not in html
+    # But "West Elm" should still appear (the SKU text itself)
+    assert "West Elm" in html

@@ -68,6 +68,7 @@ SHARED_CSS = """
   --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
   --status-awaiting: #c9893a; --status-installed: #6b6660;
   --status-deferred: #8a85a0;
+  --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -95,6 +96,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.approved-overshoots-block { background: var(--approved-overshoot-bg); border: 1px solid var(--approved-overshoot-border);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0; color: #3a4060; }
+.approved-overshoots-block h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #4a5280; }
+.approved-overshoots-block ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
   border: 1px solid #e9c97f; color: #6e4f1a; }
 .schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
@@ -299,6 +305,32 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
     </article>"""
 
 
+def _approved_overshoots_block(items: List[Item]) -> str:
+    """Show items with approved_overshoot=true in a distinct slate block so they remain visible."""
+    overshoots = []
+    for item in items:
+        if "approved_overshoot" not in (item.notes or "").lower():
+            continue
+        if not item.options:
+            continue
+        rec = next((o for o in item.options if o.recommend), None)
+        if rec and rec.price_usd > item.budget_target_usd:
+            pct = (rec.price_usd / item.budget_target_usd - 1) * 100
+            overshoots.append((item.id, rec.price_usd, item.budget_target_usd, pct))
+    if not overshoots:
+        return ""
+    rows = "".join(
+        f"<li>{escape(i)} &mdash; ${p:,.0f} vs target ${b:,.0f} (+{pct:.0f}%)</li>"
+        for i, p, b, pct in overshoots
+    )
+    return (
+        f'<div class="approved-overshoots-block">'
+        f'<h4>Approved overshoots ({len(overshoots)})</h4>'
+        f'<ul>{rows}</ul>'
+        f'</div>'
+    )
+
+
 def _render_lint_alerts(findings: List[LintFinding]) -> str:
     if not findings:
         return ""
@@ -417,6 +449,7 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
                      schedule_lookup: Optional[ScheduleLookup] = None) -> str:
     visible = [it for it in items if it.decision_status != "stub"]
     lint_html = _render_lint_alerts(lint_findings)
+    overshoot_html = _approved_overshoots_block(visible)
     banner_mode = _schedule_banner_mode(visible, schedule_lookup)
     schedule_banner_html = (
         '<div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>'
@@ -440,6 +473,7 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 </header>
 {ROOM_LINKS_HTML}
 <main>
+{overshoot_html}
 {lint_html}
 {schedule_banner_html}
 {_render_filter_bar()}
@@ -679,7 +713,7 @@ ANNIKA_ROOM_SECTIONS = [
         ["master_br", "master_bath"],
         "master-suite",
         "Bedroom + bath",
-        "Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint.",
+        "Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet. (Bath accent paint is in the whole-house paint section below.)",
     ),
     (
         "Nursery",
@@ -743,9 +777,17 @@ def _load_annika_questions(questions_path: Optional[Path]) -> Dict[str, str]:
 
 def _load_cover_note(cover_note_path: Optional[Path]) -> str:
     """Load cover note markdown and return as plain text paragraphs. Returns '' on error."""
-    if cover_note_path is None or not cover_note_path.exists():
+    import sys
+    if cover_note_path is None:
         return ""
-    return cover_note_path.read_text()
+    if not cover_note_path.exists():
+        print(f"WARNING: cover note file not found at {cover_note_path}", file=sys.stderr)
+        return ""
+    content = cover_note_path.read_text()
+    if not content.strip():
+        print(f"WARNING: cover note file is empty at {cover_note_path}", file=sys.stderr)
+        return ""
+    return content
 
 
 def _render_annika_cover(cover_md: str, meta: Meta, item_count: int) -> str:
@@ -914,7 +956,17 @@ def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
         if alt_opts:
             alt_parts = []
             for a in alt_opts[:3]:
-                alt_parts.append(f"<strong>vs</strong> {escape(a.vendor)} {escape(a.sku)} (${a.price_usd:,.0f}) &mdash; {escape(a.reasoning[:120])}")
+                # Avoid double-vendor: if SKU already starts with the vendor name, skip vendor prefix
+                vendor_str = escape(a.vendor)
+                sku_str = escape(a.sku)
+                # Compare normalised (lowercase, strip punctuation) to catch "West Elm" + "West Elm Andes..."
+                _vendor_norm = (a.vendor or "").strip().lower()
+                _sku_norm = (a.sku or "").strip().lower()
+                if _sku_norm.startswith(_vendor_norm):
+                    label = sku_str
+                else:
+                    label = f"{vendor_str} {sku_str}"
+                alt_parts.append(f"<strong>vs</strong> {label} (${a.price_usd:,.0f}) &mdash; {escape(a.reasoning[:120])}")
             alts_html = "".join(f"<p>{p}</p>" for p in alt_parts)
 
         why_html = ""
@@ -930,8 +982,18 @@ def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
 
         # SKU flag if sample_required or has sku-verify note
         sku_flag_html = ""
+        # Detect wrong-product-class language in reasoning or details → escalate to error severity
+        _wrong_class_signals = ["not a pot filler", "wrong product", "not a ", "doesn't exist",
+                                 "does not exist", "not found", "bar/prep faucet", "wrong product class"]
+        _opt_text_lower = ((pick_opt.details or "") + " " + (pick_opt.reasoning or "")).lower()
+        _has_wrong_class = any(sig in _opt_text_lower for sig in _wrong_class_signals)
         if item.sample_required:
             sku_flag_html = '<div class="annika-sku-flag">&#9733; Sample required before ordering.</div>'
+        elif _has_wrong_class:
+            sku_flag_html = (
+                '<div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">'
+                '&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>'
+            )
         elif pick_opt.details and ("SKU verify" in pick_opt.details or "verify" in pick_opt.details.lower()):
             sku_flag_html = '<div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>'
 

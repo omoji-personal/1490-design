@@ -13,6 +13,7 @@
   --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
   --status-awaiting: #c9893a; --status-installed: #6b6660;
   --status-deferred: #8a85a0;
+  --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -40,6 +41,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.approved-overshoots-block { background: var(--approved-overshoot-bg); border: 1px solid var(--approved-overshoot-border);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0; color: #3a4060; }
+.approved-overshoots-block h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #4a5280; }
+.approved-overshoots-block ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
   border: 1px solid #e9c97f; color: #6e4f1a; }
 .schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;

@@ -563,6 +563,18 @@ def check_per_item_budget_overshoot(items: List[Item], meta: Meta) -> List[LintF
     return findings
 
 
+SENTINEL_WORDS = {
+    "CONFIRM", "OWNER", "DEFER", "DEFERRED", "REMOVED",
+    "MED-HIGH", "MED-LOW", "TBD", "VERIFY", "FIXME", "TODO",
+    "APPROVED", "PENDING", "REVIEW", "DRAFT", "FINAL",
+    "WIP", "YES", "USD", "EUR", "CFM",
+    "GFCI", "ADA", "LRV", "GREENGUARD", "GSM",
+    "RULE", "HARD", "RULES", "NOTES", "NOTE", "SPEC", "SPECS",
+    "HARD-RULE", "HARD-RULES", "CRITICAL", "FIXED", "STATUS",
+    "CAUTION", "WARNING", "UPDATE", "PAUSED", "DONE", "BUDGET",
+}
+
+
 def check_no_orphan_sku_refs_in_notes(items: List[Item], meta: Meta) -> List[LintFinding]:
     """Warning if item.notes references a capitalized model-number token not in any current option.
 
@@ -570,10 +582,15 @@ def check_no_orphan_sku_refs_in_notes(items: List[Item], meta: Meta) -> List[Lin
     in any option's sku or details text, it's likely an orphan reference left over after a
     SKU swap — flag it so it can be cleaned up or confirmed.
 
+    Sentinel words (CONFIRM, OWNER, DEFER, etc.) and item IDs from the full items list are
+    excluded — they are not SKU references.
+
     Cap at 30 findings total to avoid flooding output on a freshly-imported item set.
     """
     findings = []
     sku_pattern = re.compile(r"\b[A-Z][A-Z0-9\-]{4,}\b")
+    # Build full set of known item IDs so we can exclude cross-references
+    all_item_ids = {item.id for item in items}
     for item in items:
         if not item.notes:
             continue
@@ -585,6 +602,12 @@ def check_no_orphan_sku_refs_in_notes(items: List[Item], meta: Meta) -> List[Lin
             for o in item.options:
                 current_options_text += (o.sku or "") + " " + (o.details or "")
         for token in notes_tokens:
+            # Skip sentinel words that are not SKU references
+            if token in SENTINEL_WORDS:
+                continue
+            # Skip known item IDs (cross-item dependencies mentioned in notes)
+            if token in all_item_ids:
+                continue
             if token not in current_options_text and token != item.id:
                 findings.append(LintFinding(
                     severity="warning",

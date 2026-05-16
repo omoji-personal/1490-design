@@ -520,6 +520,35 @@ def test_per_item_budget_decided_zero_budget_skipped():
     assert not any("HB3" in f.message for f in findings)
 
 
+# --- R6: sentinel words in orphan-SKU check ---
+
+def test_orphan_sku_sentinel_words_not_flagged():
+    """CONFIRM, OWNER, DEFER etc. must NOT be flagged as orphan SKU references."""
+    items = [_i("SN1", options=[_opt(sku="REALSKU-123")])]
+    items[0].notes = "CONFIRM with OWNER before ordering. DEFER to VERIFY pricing. APPROVED by Annika. GREENGUARD required."
+    findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
+    # None of the sentinel tokens should appear in findings for SN1
+    assert not any("SN1" in f.message for f in findings)
+
+
+def test_orphan_sku_item_id_cross_ref_not_flagged():
+    """Notes referencing another item's ID (e.g. K-SINK) should not be flagged as orphan."""
+    item_a = _i("K-SINK", options=[_opt(sku="RUVATI-7300")])
+    item_b = _i("K-RO-FAUCET", options=[_opt(sku="AQ-SFRO2-BN")])
+    item_b.notes = "Depends on K-SINK installation. Coordinate with K-SINK plumber."
+    findings = check_no_orphan_sku_refs_in_notes([item_a, item_b], _meta_simple())
+    # K-SINK cross-reference in notes should NOT fire as orphan
+    assert not any("K-SINK" in f.message for f in findings)
+
+
+def test_orphan_sku_real_orphan_still_flagged():
+    """A genuine orphan (old SKU removed from options but still in notes) should still flag."""
+    items = [_i("OR1", options=[_opt(sku="NEWSKU-999")])]
+    items[0].notes = "Previously was OLDSKU-789 but swapped out in R4."
+    findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
+    assert any("OR1" in f.message and "OLDSKU-789" in f.message for f in findings)
+
+
 # --- Lint aggregator ---
 
 from sourcing_lint import run_all_lints

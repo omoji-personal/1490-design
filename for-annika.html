@@ -13,6 +13,7 @@
   --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
   --status-awaiting: #c9893a; --status-installed: #6b6660;
   --status-deferred: #8a85a0;
+  --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -40,6 +41,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.approved-overshoots-block { background: var(--approved-overshoot-bg); border: 1px solid var(--approved-overshoot-border);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0; color: #3a4060; }
+.approved-overshoots-block h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #4a5280; }
+.approved-overshoots-block ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
   border: 1px solid #e9c97f; color: #6e4f1a; }
 .schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
@@ -274,7 +280,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
   <h2>Master Suite</h2>
   <div class="section-sub">Bedroom + bath</div>
 </div>
-<p class="section-note">Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint.</p>
+<p class="section-note">Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet. (Bath accent paint is in the whole-house paint section below.)</p>
 <main class="annika-main">
 <article class="annika-item">
       <div class="annika-item-header">
@@ -370,10 +376,10 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Schoolhouse Otto 6&quot; Flush Mount returns HTTP 404 across 4 catalog references (MB-CEILING, MUDROOM-LIGHTING, OFFICE-LIGHTING, this item). Rejuvenation Crawford 14&quot; is the §11-compliant secondary-brand replacement. Cascading fix: this same SKU fix applies to MUDROOM-LIGHTING opt 0 and OFFICE-LIGHTING opt 3 substitution note (Otto references there are also dead).</p>
-              <p><strong>vs</strong> Rejuvenation Rejuvenation Burbank Large Flush Mount, lacquered brass, 16-inch opal glass, E26 ($495) &mdash; Rejuvenation Burbank&#x27;s 16-inch shade provides more diffuse ambient light over a king bed — meaningful if the room has no</p><p><strong>vs</strong> Rejuvenation Rejuvenation Hartwell Medium Flush Mount, lacquered brass, 14-inch opal globe, E26 ($420) &mdash; Rejuvenation Hartwell Medium is the midpoint between Vera/Otto and Burbank if the 16-inch Burbank reads oversized for th</p>
+              <p><strong>vs</strong> Rejuvenation Burbank Large Flush Mount, lacquered brass, 16-inch opal glass, E26 ($495) &mdash; Rejuvenation Burbank&#x27;s 16-inch shade provides more diffuse ambient light over a king bed — meaningful if the room has no</p><p><strong>vs</strong> Rejuvenation Hartwell Medium Flush Mount, lacquered brass, 14-inch opal globe, E26 ($420) &mdash; Rejuvenation Hartwell Medium is the midpoint between Vera/Otto and Burbank if the 16-inch Burbank reads oversized for th</p>
             </div>
           </details>
-          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+          <div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>
         </div>
       </div>
     </article>
@@ -398,7 +404,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Schoolhouse Isaac Mid-Arm Sconce URL 404. Crawford Single is the Rejuvenation equivalent for bedside brass sconce. Note: Crawford is fixed-arm not swing-arm. If swing-arm reading function is essential, use Rejuvenation Eastmoreland Swing-Arm instead (already listed as opt 3). Owner should confirm fixed vs swing-arm preference before ordering.</p>
-              <p><strong>vs</strong> Cedar &amp; Moss Cedar &amp; Moss Cylinder Swing Arm Sconce, lacquered brass, linen shade, hardwire — pair ($319) &mdash; Cedar &amp; Moss is the accent-tier canon brand; linen shade softens and directs reading light more gently than milk glass, </p><p><strong>vs</strong> Rejuvenation Rejuvenation Westmore Plug-In Swing Arm Sconce, lacquered brass, linen shade — pair ($400) &mdash; Rejuvenation Westmore plug-in version defers in-wall wiring at a T1 urgency item, saving electrician cost if bedside out</p>
+              <p><strong>vs</strong> Cedar &amp; Moss Cylinder Swing Arm Sconce, lacquered brass, linen shade, hardwire — pair ($319) &mdash; Cedar &amp; Moss is the accent-tier canon brand; linen shade softens and directs reading light more gently than milk glass, </p><p><strong>vs</strong> Rejuvenation Westmore Plug-In Swing Arm Sconce, lacquered brass, linen shade — pair ($400) &mdash; Rejuvenation Westmore plug-in version defers in-wall wiring at a T1 urgency item, saving electrician cost if bedside out</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -426,7 +432,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Princeton Mid Sconce FINAL SALE across all 4 MBA-SCONCES options that reference it. Crawford is the canonical §11 Rejuvenation replacement. Same fix for MBA-SCONCES opt 1 (3&quot; variant — select smallest available Crawford shade for scale match).</p>
-              <p><strong>vs</strong> Cedar &amp; Moss (cedarandmoss.com) Cedar &amp; Moss Moss 6&quot; Wall Sconce, Brass, hardwire — pair ($558) &mdash; Smaller-scale sconce option for vanity flanking when the mirror is narrower than 48&quot; or placement is offset. Cedar &amp; Mos</p><p><strong>vs</strong> Schoolhouse Schoolhouse Mortise Wall Sconce, lacquered brass, 5-inch opal glass, single, hardwire — pair ($279) &mdash; Schoolhouse Mortise is the step-up series within the same brand family; 5-inch opal globe delivers meaningfully more lig</p><p><strong>vs</strong> Rejuvenation Rejuvenation Carson 6&quot; Wall Sconce, Matte Black, hardwire — pair ($458) &mdash; Matte-black alt to provide finish mix per §6a brass+black rule; pick this if owner wants more weight away from brass in </p>
+              <p><strong>vs</strong> Cedar &amp; Moss (cedarandmoss.com) Cedar &amp; Moss Moss 6&quot; Wall Sconce, Brass, hardwire — pair ($558) &mdash; Smaller-scale sconce option for vanity flanking when the mirror is narrower than 48&quot; or placement is offset. Cedar &amp; Mos</p><p><strong>vs</strong> Schoolhouse Mortise Wall Sconce, lacquered brass, 5-inch opal glass, single, hardwire — pair ($279) &mdash; Schoolhouse Mortise is the step-up series within the same brand family; 5-inch opal globe delivers meaningfully more lig</p><p><strong>vs</strong> Rejuvenation Carson 6&quot; Wall Sconce, Matte Black, hardwire — pair ($458) &mdash; Matte-black alt to provide finish mix per §6a brass+black rule; pick this if owner wants more weight away from brass in </p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -454,7 +460,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Somerset Pull FINAL SALE. Edgecliff is the direct Schoolhouse replacement in Natural Brass. 4 pulls at $136 within $200 budget. Verify stock.</p>
-              <p><strong>vs</strong> Rejuvenation Rejuvenation Putman Pull 5&quot; cc, Lacquered Brass × 4 (4 @ $28ea = $112) ($76) &mdash; Rejuvenation Putman pull at $112 for four is a marginally thinner profile — choose it if the Hutchinson&#x27;s door rails are</p><p><strong>vs</strong> Hamilton Sinkler Hamilton Sinkler No. 1 Bar Pull 128mm cc, Polished Unlacquered Brass × 4 (4 @ $58ea = $232) ($232) &mdash; Hamilton Sinkler No. 1 Bar in polished unlacquered brass is the premium upgrade — solid hand-finished brass with genuine</p>
+              <p><strong>vs</strong> Rejuvenation Putman Pull 5&quot; cc, Lacquered Brass × 4 (4 @ $28ea = $112) ($76) &mdash; Rejuvenation Putman pull at $112 for four is a marginally thinner profile — choose it if the Hutchinson&#x27;s door rails are</p><p><strong>vs</strong> Hamilton Sinkler No. 1 Bar Pull 128mm cc, Polished Unlacquered Brass × 4 (4 @ $58ea = $232) ($232) &mdash; Hamilton Sinkler No. 1 Bar in polished unlacquered brass is the premium upgrade — solid hand-finished brass with genuine</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -568,7 +574,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>West Elm anchor brand (~40-45%). Andes is the spec-named master bed (DESIGN_SPEC §11); Crypton linen is the locked performance-fabric pivot for the pet-access master. Cream upholstered platform per cali_25 canon. Andes family cohesion with LR-SOFA creates cross-room visual language. At $2,199, hits the $2,200 budget ceiling. ★ spec-named, performance fabric, at-budget.</p>
-              <p><strong>vs</strong> Crate &amp; Barrel Crate &amp; Barrel Tate Upholstered Bed, King, Crypton Linen — Sand ($2,499) &mdash; Crate &amp; Barrel holds part of the ~20% combined share. Tate&#x27;s lower headboard profile is a genuine advantage under 8-ft c</p><p><strong>vs</strong> Article Article Berel Spindle Bed, King, Solid Oak — Natural ($879) &mdash; Article holds ~20% of split. Berel spindle solid oak is the loved_15 canon direction (walnut/oak spindle alternate). At </p>
+              <p><strong>vs</strong> Crate &amp; Barrel Tate Upholstered Bed, King, Crypton Linen — Sand ($2,499) &mdash; Crate &amp; Barrel holds part of the ~20% combined share. Tate&#x27;s lower headboard profile is a genuine advantage under 8-ft c</p><p><strong>vs</strong> Article Berel Spindle Bed, King, Solid Oak — Natural ($879) &mdash; Article holds ~20% of split. Berel spindle solid oak is the loved_15 canon direction (walnut/oak spindle alternate). At </p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
@@ -596,7 +602,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>West Elm anchor brand (~40-45%). Mid-Century Nightstand is the spec primary direction for master BR case goods — tapered leg, white oak, 2-drawer. Two drawers provide storage without bulk in a typical master footprint. At $998/pair, $202 under the $1,200 budget. ★ canonical brand, correct wood tone, functional, under budget.</p>
-              <p><strong>vs</strong> Room &amp; Board Room &amp; Board Linnea Nightstand, White Oak — quantity 2 ($1,198) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea is the explicit canon reference. Solid white oak drawer box (</p><p><strong>vs</strong> Article Article Nera Nightstand, White Oak — quantity 2 ($898) &mdash; Article holds ~20% of split. Nera at $598/pair saves $400 vs. WE — correct as a receding nightstand when the MB-BED is t</p>
+              <p><strong>vs</strong> Room &amp; Board Linnea Nightstand, White Oak — quantity 2 ($1,198) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea is the explicit canon reference. Solid white oak drawer box (</p><p><strong>vs</strong> Article Nera Nightstand, White Oak — quantity 2 ($898) &mdash; Article holds ~20% of split. Nera at $598/pair saves $400 vs. WE — correct as a receding nightstand when the MB-BED is t</p>
             </div>
           </details>
           
@@ -624,7 +630,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>★ switched to Article Lenia 6-Drawer White Oak to honor $1,400 budget — original WE Mid-Century ($1,499) demoted to alt; Lenia at $1,299 is $101 under budget and white-oak confirmed. Also reduces WE master-BR mono-brand concentration. CORRECTION: SKU was labeled &quot;Melos&quot; (fictional) — now corrected to Lenia which is the confirmed Article product at this URL.</p>
-              <p><strong>vs</strong> West Elm West Elm Mid-Century 6-Drawer Dresser, White Oak ($1,499) &mdash; West Elm anchor brand (~40-45%). Mid-Century 6-drawer is the explicit §7 spec. Tapered legs keep it visually light under</p><p><strong>vs</strong> Room &amp; Board Room &amp; Board Linnea 6-Drawer Dresser, White Oak ($1,899) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea 6-drawer has thicker solid-oak drawer fronts and soft-close h</p>
+              <p><strong>vs</strong> West Elm Mid-Century 6-Drawer Dresser, White Oak ($1,499) &mdash; West Elm anchor brand (~40-45%). Mid-Century 6-drawer is the explicit §7 spec. Tapered legs keep it visually light under</p><p><strong>vs</strong> Room &amp; Board Linnea 6-Drawer Dresser, White Oak ($1,899) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea 6-drawer has thicker solid-oak drawer fronts and soft-close h</p>
             </div>
           </details>
           
@@ -652,7 +658,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>★ switched to Article Cassie Bench to honor $600 budget — WE Tillary Boucle ($699) demoted to alt. Cassie at $449 is well under budget; natural oak legs + ivory chenille upholstery matches spec direction (boucle/performance linen, cream). CORRECTION: prior ★ was labeled &quot;Loa&quot; (fictional Article product name) — Cassie is the real product at the URL.</p>
-              <p><strong>vs</strong> West Elm West Elm Tillary Bench, Boucle — Ivory, 52-inch ($699) &mdash; West Elm anchor brand (~40-45%). Tillary Boucle Ivory is the spec-named direction (notes: &quot;boucle or performance linen —</p><p><strong>vs</strong> Rejuvenation Rejuvenation Oak Slab Bench, White Oak, 48-inch ($599) &mdash; Rejuvenation holds ~15% of the accent-furniture split. Oak slab bench provides material contrast if MB-BED goes upholste</p>
+              <p><strong>vs</strong> West Elm Tillary Bench, Boucle — Ivory, 52-inch ($699) &mdash; West Elm anchor brand (~40-45%). Tillary Boucle Ivory is the spec-named direction (notes: &quot;boucle or performance linen —</p><p><strong>vs</strong> Rejuvenation Oak Slab Bench, White Oak, 48-inch ($599) &mdash; Rejuvenation holds ~15% of the accent-furniture split. Oak slab bench provides material contrast if MB-BED goes upholste</p>
             </div>
           </details>
           
@@ -680,7 +686,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>West Elm anchor brand (~40-45%). WE Dhurrie Wool flat-weave is the correct placeholder category per spec. Warm Sand is deliberately one step warmer than LR-RUG Oatmeal — creating room distinction without clashing. At $799, hits the $800 budget exactly. ★ correct brand, correct material category, thoughtfully differentiated colorway from the LR rug.</p>
-              <p><strong>vs</strong> Room &amp; Board Room &amp; Board Linden Wool Rug, Natural / Oatmeal, 8x10 flat-weave ($949) &mdash; Room &amp; Board holds part of the ~20% combined share. Linden has a denser pile than WE Dhurrie — measurably softer for bar</p><p><strong>vs</strong> Serena &amp; Lily Serena &amp; Lily Piazza Handwoven Wool Rug, Cream, 8x10 ($1,098) &mdash; Serena &amp; Lily holds part of the ~10% PB + Anthropologie + S&amp;L accents tier. Piazza handwoven wool adds tactile Japandi q</p>
+              <p><strong>vs</strong> Room &amp; Board Linden Wool Rug, Natural / Oatmeal, 8x10 flat-weave ($949) &mdash; Room &amp; Board holds part of the ~20% combined share. Linden has a denser pile than WE Dhurrie — measurably softer for bar</p><p><strong>vs</strong> Serena &amp; Lily Piazza Handwoven Wool Rug, Cream, 8x10 ($1,098) &mdash; Serena &amp; Lily holds part of the ~10% PB + Anthropologie + S&amp;L accents tier. Piazza handwoven wool adds tactile Japandi q</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
@@ -739,7 +745,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
               <p><strong>vs</strong> Anthropologie + Hawkins New York Anthropologie Linen Slub Throw Pillow — Sage (set of 2, 20in) + Hawkins New York Stripe Linen Pillow — Natural/Oat ($65) &mdash; Anthropologie sage linen slub introduces more surface texture than the flat WE weave, which reads richer in a sleep sanc</p><p><strong>vs</strong> Schoolhouse (schoolhouse.com) Schoolhouse Muted Check Pillow Cover — Caramel/Oat × 2 + insert ($250) &mdash; Schoolhouse&#x27;s muted caramel-check shifts the room&#x27;s single accent from sage to warm mustard territory — valid only if LR</p>
             </div>
           </details>
-          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+          <div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>
         </div>
       </div>
     </article>
@@ -783,7 +789,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>★ switched to vintage oak floor mirror per R3 vintage-redistribution (R2-C5). Master BR had 0 vintage ★ picks (target 1-2 per §4 principle 7 + §5d). Vintage mid-century oak floor mirror (Westside Modern / Mid Mod Market, ~$250) is $150 under $400 budget and delivers patinated provenance in the sleep sanctuary that Rejuvenation production piece cannot match. Item notes say &#x27;WE or vintage oak frame&#x27; — vintage is the canon-stronger path when hunt timing allows. Fallback to Rejuvenation Oak Wood Wall Mirror (opt0, ~$549) if hunt stalls; note budget revision required for Rejuvenation.</p>
-              <p><strong>vs</strong> Rejuvenation (rejuvenation.com) Rejuvenation Oak Wood Wall Mirror Natural — wall-hung, ~24×36in or nearest available size ($549) &mdash; Prior ★ (West Elm Arched Full-Length Mirror) resolves to the West Elm Streamline which is an ALUMINUM frame — the SKU, r</p><p><strong>vs</strong> Pottery Barn Pottery Barn Cayman Leaning Floor Mirror — Natural Oak, 26×72in ($399) &mdash; Pottery Barn Cayman leaning mirror in Natural Oak is taller and slimmer (26×72) than the WE arched option — better propo</p>
+              <p><strong>vs</strong> Rejuvenation (rejuvenation.com) Rejuvenation Oak Wood Wall Mirror Natural — wall-hung, ~24×36in or nearest available size ($549) &mdash; Prior ★ (West Elm Arched Full-Length Mirror) resolves to the West Elm Streamline which is an ALUMINUM frame — the SKU, r</p><p><strong>vs</strong> Pottery Barn Cayman Leaning Floor Mirror — Natural Oak, 26×72in ($399) &mdash; Pottery Barn Cayman leaning mirror in Natural Oak is taller and slimmer (26×72) than the WE arched option — better propo</p>
             </div>
           </details>
           
@@ -875,7 +881,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Babyletto is the §10 designated nursery-specialist brand. Hudson 3-in-1 is the explicit §10 canon reference: converts to toddler bed + daybed, survives 4-5 years. Light oak slat reads Japandi at nursery scale. GREENGUARD Gold for infant room. At $499, $101 under $600 budget. ★ spec-named, correct wood tone, correct price, right certification.</p>
-              <p><strong>vs</strong> Nestig Nestig Cloud Convertible Crib, Natural Oak ($849) &mdash; Nestig Cloud is the §10 co-reference alongside Hudson — both are legitimate canon. Cloud&#x27;s rounded corners read slightly</p><p><strong>vs</strong> West Elm / Pottery Barn Kids West Elm x Pottery Barn Kids Boho Crib, Natural Oak slat ($799) &mdash; West Elm / PBK is in the ~10% PB + S&amp;L accents tier. Spindle silhouette matches the loved_15 bedroom canon, tying nurser</p>
+              <p><strong>vs</strong> Nestig Cloud Convertible Crib, Natural Oak ($849) &mdash; Nestig Cloud is the §10 co-reference alongside Hudson — both are legitimate canon. Cloud&#x27;s rounded corners read slightly</p><p><strong>vs</strong> West Elm / Pottery Barn Kids West Elm x Pottery Barn Kids Boho Crib, Natural Oak slat ($799) &mdash; West Elm / PBK is in the ~10% PB + S&amp;L accents tier. Spindle silhouette matches the loved_15 bedroom canon, tying nurser</p>
             </div>
           </details>
           
@@ -896,14 +902,14 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
         </div>
 <div class="annika-brief-block">
           <div class="annika-label">Pick</div>
-          <p class="annika-pick"><a href="https://www.babyletto.com/collections/gliders" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural &rarr;</a> &mdash; $499</p>
+          <p class="annika-pick"><a href="https://www.babyletto.com/collections/gliders/products/toco-swivel-glider-and-ottoman-in-eco-performance-fabric-water-repellent-stain-resistant" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural &rarr;</a> &mdash; $499</p>
           <div class="annika-label">Question for you</div>
           <p class="annika-question">Hard to pick without sitting in them. Want swivel (PBK), max seat depth (Article), or the WE cream-boucle look?</p>
           <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>R4 ★ — replaces Article Ceni which is a sofa collection (not a glider; R3 CRITICAL NR-11/N-16). Babyletto Toco Glider is an actual nursery glider: 360-degree swivel + glide, GREENGUARD Gold, Eco-Weave performance fabric meets §10 performance-fabric requirement. Canon-coordinated with Babyletto Hudson crib (NURSERY-CRIB ★). At ~$499 (R5 price correction from $799 yaml error — actual price verified R4 WebFetch), well within $900 budget. Eco-Weave cream/natural colorway matches cream palette. Article does not make a glider.</p>
-              <p><strong>vs</strong> West Elm West Elm Organic Glider, Crypton Performance Boucle — Ivory ($1,099) &mdash; West Elm anchor brand (~40-45%). Organic Glider in Crypton Performance Boucle Ivory meets both §10 requirements simultan</p><p><strong>vs</strong> Pottery Barn Kids Pottery Barn Kids Comfort Swivel Glider, Performance Linen Blend — Natural ($1,199) &mdash; Pottery Barn Kids holds part of the ~10% PB + S&amp;L accents tier. The 360-degree swivel adds real nursing functionality — </p>
+              <p><strong>vs</strong> West Elm Organic Glider, Crypton Performance Boucle — Ivory ($1,099) &mdash; West Elm anchor brand (~40-45%). Organic Glider in Crypton Performance Boucle Ivory meets both §10 requirements simultan</p><p><strong>vs</strong> Pottery Barn Kids Comfort Swivel Glider, Performance Linen Blend — Natural ($1,199) &mdash; Pottery Barn Kids holds part of the ~10% PB + S&amp;L accents tier. The 360-degree swivel adds real nursing functionality — </p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
@@ -931,7 +937,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>§3a wood-tone spec: &quot;light oak primary — Bleach + Rubio Pure finish.&quot; Babyletto Palma (prior ★) is acacia veneer over New Zealand pine — not white oak and cannot be Rubio-finished; lint on /sourcing already flags this. West Elm Mid-Century Dresser in white oak is genuine engineered/solid white oak that matches the house-wide wood-tone lock. GREENGUARD Gold certification meets nursery air-quality standard same as Babyletto. Changing tray topper available separately from WE or compatible third-party. At ~$1,799 it is $1,099 over the $700 budget — flag for budget target revision per revisions-UP-only rule; or absorb from furniture envelope if nursery priority is confirmed.</p>
-              <p><strong>vs</strong> Babyletto (via buybuyBaby or Amazon) Babyletto Palma 7-Drawer Dresser, Light Oak — with Babyletto changing tray topper ($649) &mdash; Babyletto Palma pairs with the Hudson crib for brand-set continuity — a cheaper alt to WE ★ that keeps the nursery as a </p><p><strong>vs</strong> IKEA IKEA Hemnes 8-Drawer Dresser, White Stain Oak effect — IKEA-hack with oak pulls ($299) &mdash; IKEA is the only non-primary context where IKEA is explicitly noted as an allowed §10 exception. Hemnes 8-drawer maximiz</p>
+              <p><strong>vs</strong> Babyletto (via buybuyBaby or Amazon) Babyletto Palma 7-Drawer Dresser, Light Oak — with Babyletto changing tray topper ($649) &mdash; Babyletto Palma pairs with the Hudson crib for brand-set continuity — a cheaper alt to WE ★ that keeps the nursery as a </p><p><strong>vs</strong> IKEA Hemnes 8-Drawer Dresser, White Stain Oak effect — IKEA-hack with oak pulls ($299) &mdash; IKEA is the only non-primary context where IKEA is explicitly noted as an allowed §10 exception. Hemnes 8-drawer maximiz</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -959,7 +965,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>West Elm anchor brand (~40-45%). Cotton Dhurrie machine-washable is the explicit §10 spec — cotton dhurrie, NOT vintage wool. Ivory/Natural stripe is within the cream palette. Note: verify current ivory machine-washable cotton rug SKU (not wool Souk) at WE before ordering. At $299, $101 under budget. ★ spec-compliant material, anchor brand, under budget.</p>
-              <p><strong>vs</strong> Lorena Canals (via Amazon or specialty) Lorena Canals Washable Cotton Rug, Natural, 5x8 ($123) &mdash; Lorena Canals is the best-in-class machine-washable nursery rug specialist — not in primary canon split but universally </p><p><strong>vs</strong> Pottery Barn Kids Pottery Barn Kids Cushy Solid Nursery Rug, Ivory, 5x8 — machine washable ($399) &mdash; Pottery Barn Kids holds part of the ~10% accents tier. Higher pile height is the best option for infant crawling comfort</p>
+              <p><strong>vs</strong> Lorena Canals (via Amazon or specialty) Lorena Canals Washable Cotton Rug, Natural, 5x8 ($123) &mdash; Lorena Canals is the best-in-class machine-washable nursery rug specialist — not in primary canon split but universally </p><p><strong>vs</strong> Pottery Barn Kids Cushy Solid Nursery Rug, Ivory, 5x8 — machine washable ($399) &mdash; Pottery Barn Kids holds part of the ~10% accents tier. Higher pile height is the best option for infant crawling comfort</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -987,7 +993,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Minted&#x27;s independent-artist archival prints clear the §11 &#x27;NOT commercial poster&#x27; bar while remaining immediately available and professionally framed. The oat/sage palette is calm and non-stimulating per §10 modern-abstract-over-crib directive. Compared to the Etsy original, Minted offers curated selection without commission lead time; compared to HAY, it has genuine independent-artist provenance rather than design-brand poster.</p>
-              <p><strong>vs</strong> Etsy + IKEA Etsy original watercolor — botanicals or soft abstract, unframed + IKEA HOVSTA oak frame ($190) &mdash; Etsy original watercolor — botanical or soft abstract — is the truest interpretation of §11 art canon (hand-created, non</p><p><strong>vs</strong> HAY (hay.dk / 2Modern) HAY Colour Plinth Poster Set — Sand/Sage, A2 × 2 with gallery frame ($220) &mdash; HAY Colour Plinth posters straddle design object and art — sand/sage A2 format is restrained and Japandi-compatible. The</p><p><strong>vs</strong> West Elm West Elm Come Ashore Framed Wall Art by Minted (30W × 40H, natural wood frame, abstract neutral landscape) ($299) &mdash; Minted-for-WE collab is the direct WE answer to the Minted ★ pick at $40 more — same artist pool, brand consolidation, n</p>
+              <p><strong>vs</strong> Etsy + IKEA Etsy original watercolor — botanicals or soft abstract, unframed + IKEA HOVSTA oak frame ($190) &mdash; Etsy original watercolor — botanical or soft abstract — is the truest interpretation of §11 art canon (hand-created, non</p><p><strong>vs</strong> HAY (hay.dk / 2Modern) HAY Colour Plinth Poster Set — Sand/Sage, A2 × 2 with gallery frame ($220) &mdash; HAY Colour Plinth posters straddle design object and art — sand/sage A2 format is restrained and Japandi-compatible. The</p><p><strong>vs</strong> West Elm Come Ashore Framed Wall Art by Minted (30W × 40H, natural wood frame, abstract neutral landscape) ($299) &mdash; Minted-for-WE collab is the direct WE answer to the Minted ★ pick at $40 more — same artist pool, brand consolidation, n</p>
             </div>
           </details>
           <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
@@ -1101,7 +1107,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
               <p><strong>vs</strong> Build.com / Ferguson Kohler Sous K-7348-BV Wall-Mount Pot Filler Vibrant Brushed Bronze ($707) &mdash; Right pick if owner wants a commercial-arm silhouette over the Trinsic&#x27;s residential geometry. Sous&#x27;s wider throw reads </p><p><strong>vs</strong> Ferguson (special order) Brizo Litze RP100613GL Wall-Mount Pot Filler Luxe Gold ($1,797) &mdash; Owner-rejected finish tier. Brizo Litze &quot;Luxe Gold&quot; (-GL suffix) is a bright PVD gold finish — explicitly excluded from </p>
             </div>
           </details>
-          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+          <div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>
         </div>
       </div>
     </article>
@@ -1129,7 +1135,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
               <p><strong>vs</strong> Build.com / eFaucets Elkay Crosstown EFRU281610 28-inch Undermount Stainless ($805) &mdash; Right pick if budget forces a $70 save at the sink. Elkay is reputable, 18-gauge, clean profile — the 28&quot; bowl works in </p><p><strong>vs</strong> Build.com / Amazon Ruvati RVH7300 33-inch Undermount Stainless 16-Gauge ($359) &mdash; Right pick only under hard budget constraint where the sink allowance is being raided for an overrun elsewhere. Ruvati&#x27;s</p>
             </div>
           </details>
-          
+          <div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>
         </div>
       </div>
     </article>
@@ -1144,7 +1150,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
         <div class="annika-pick-image-wrap"><div class="annika-img-placeholder">Kitchen island pendants (3+1)<br><small>no image on file</small></div></div>
 <div class="annika-brief-block">
           <div class="annika-label">Pick</div>
-          <p class="annika-pick"><a href="https://schoolhouse.com/collections/pendants" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Schoolhouse Hyatt 8-inch Pendant in Natural Brass × 3 (island) + matched 4th from Build.com or salvage — image pending &rarr;</a> &mdash; $1,260</p>
+          <p class="annika-pick"><a href="https://schoolhouse.com/products/hyatt-pendant" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Schoolhouse Hyatt 8-inch Pendant in Natural Brass × 3 (island) + matched 4th from Build.com or salvage &rarr;</a> &mdash; $1,260</p>
           <div class="annika-label">Question for you</div>
           <p class="annika-question">Happy with classic opal glass, or want to see a more industrial exposed-bulb option?</p>
           <details class="annika-why">
@@ -1179,10 +1185,10 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Schoolhouse Isaac 5 Chandelier returns HTTP 404. Rejuvenation Eastham 8-arm is the §11-compliant secondary-brand brass branching chandelier available in catalog. Price verify required at rejuvenation.com (403 block during research). Budget is $1,100; Eastham is typically priced $895–$1,100 at Rejuvenation&#x27;s mid-tier chandelier range. Confirm lacquered brass finish and exact price before ordering.</p>
-              <p><strong>vs</strong> Rejuvenation Rejuvenation Otis 8-Arm Brass Chandelier, lacquered brass, 36-inch, E12 candelabra ($995) &mdash; Rejuvenation is the secondary canon brand; the Otis 36-inch spread better frames a large round dining table as a centerp</p><p><strong>vs</strong> Visual Comfort Visual Comfort Bryant Chandelier, Hand-Rubbed Antique Brass, 5-arm, 27-inch, E12 ($1,299) &mdash; Visual Comfort is the premium-upgrade tier per design canon; HARAB finish reads visually identical to lacquered brass in</p>
+              <p><strong>vs</strong> Rejuvenation Otis 8-Arm Brass Chandelier, lacquered brass, 36-inch, E12 candelabra ($995) &mdash; Rejuvenation is the secondary canon brand; the Otis 36-inch spread better frames a large round dining table as a centerp</p><p><strong>vs</strong> Visual Comfort Bryant Chandelier, Hand-Rubbed Antique Brass, 5-arm, 27-inch, E12 ($1,299) &mdash; Visual Comfort is the premium-upgrade tier per design canon; HARAB finish reads visually identical to lacquered brass in</p>
             </div>
           </details>
-          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+          <div class="annika-sku-flag" style="border-left-color:#c94d4d;background:#fde8e6;color:#7a2020;">&#9888; Wrong product class flagged &mdash; verify exact model before order.</div>
         </div>
       </div>
     </article>
@@ -1207,9 +1213,9 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Somerset Pull FINAL SALE. Edgecliff is the Schoolhouse successor pull — same brand, same finish family, handcrafted USA. Budget gap: $816 vs $500 budgeted. Owner must approve ~$316 overage or accept fewer pulls (reduce qty) or switch to Rejuvenation bar pull (~$28/ea at Rejuvenation, $672 for 24 units). Verify Edgecliff 4&quot; Natural Brass and True Black in stock before ordering.</p>
-              <p><strong>vs</strong> Schoolhouse Schoolhouse Sutton Pull 5\&quot; cc, Lacquered Brass × 14 + Schoolhouse Tab Knob, Matte Black × 10
+              <p><strong>vs</strong> Schoolhouse Sutton Pull 5\&quot; cc, Lacquered Brass × 14 + Schoolhouse Tab Knob, Matte Black × 10
 (14 @ $32ea = $448 + 10 @ $22ea = $220 → $668; single-vendor; note over budget)
- ($556) &mdash; All-Schoolhouse Somerset pull (Sutton successor) plus Mid Century Knob (Tab successor) in matte black is the single-vend</p><p><strong>vs</strong> Forge Hardware Studio Forge Hardware Studio Low Arch Pull 4\&quot; cc, Lacquered Brass × 14 + Matte Black × 10 (mixed finish same SKU)
+ ($556) &mdash; All-Schoolhouse Somerset pull (Sutton successor) plus Mid Century Knob (Tab successor) in matte black is the single-vend</p><p><strong>vs</strong> Forge Hardware Studio Low Arch Pull 4\&quot; cc, Lacquered Brass × 14 + Matte Black × 10 (mixed finish same SKU)
 (14 @ $24ea = $336 + 10 @ $24ea = $240 → $576)
  ($816) &mdash; Forge Hardware Studio Low Arch pull in both finishes satisfies the mix rule with a subtle arch geometry that flatters Sh</p>
             </div>
@@ -1310,7 +1316,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>§3a anti-signal: &quot;Open shelves carrying matched-set commercial dishware.&quot; §3a element 9: &quot;Hand-thrown ceramics in restrained groupings, matte-clay or muted-glaze, never matched commercial dinnerware.&quot; East Fork 4-packs in a single colorway are matched commercial dishware — the anti-signal. Fix: order East Fork bowls and mugs as individual pieces across 3-4 different colorways so no two pieces match. Supplement with 2 Atlanta-maker hand-thrown vases (Etsy search &quot;Atlanta pottery&quot; or Westside Modern) for genuine hand-thrown provenance layer. Olive wood board and cookbook stacks complete the surface. §3a compliant: hand-thrown variation, no matched-set commercial dishware.</p>
-              <p><strong>vs</strong> Etsy + Fog Linen Work Etsy hand-thrown stoneware bowl + mug set (4 of each, artisan studio) + Olive wood trivet × 2 + Fog Linen Work apron × 1 ($380) &mdash; Full Etsy sourcing is the strongest §3a interpretation: no two pieces match, artisan variation is visible, Atlanta-studi</p><p><strong>vs</strong> CB2 + Amazon CB2 Matte Stoneware Mug × 4 + Bowl × 4 (Chalk) + Acacia wood board × 1 + 2 cookbooks ($240) &mdash; CB2 Chalk matte stoneware reads similar to East Fork at roughly half the per-piece cost, saving ~$155. At $240 it frees </p><p><strong>vs</strong> West Elm West Elm Gharyan Stoneware Olive Wood Bread Slicing Board + Artisan Olive Wood Cutting Board (large 21.5W) + Pure White Stoneware Bowl 4-pack + Pure White Mug 4-pack + 2 cookbooks (Bookshop.org) ($320) &mdash; Gharyan x WE collab is artisan Tunisian stoneware + olive wood — matches the §3a anti-signal exactly (NOT matched commer</p>
+              <p><strong>vs</strong> Etsy + Fog Linen Work Etsy hand-thrown stoneware bowl + mug set (4 of each, artisan studio) + Olive wood trivet × 2 + Fog Linen Work apron × 1 ($380) &mdash; Full Etsy sourcing is the strongest §3a interpretation: no two pieces match, artisan variation is visible, Atlanta-studi</p><p><strong>vs</strong> CB2 + Amazon CB2 Matte Stoneware Mug × 4 + Bowl × 4 (Chalk) + Acacia wood board × 1 + 2 cookbooks ($240) &mdash; CB2 Chalk matte stoneware reads similar to East Fork at roughly half the per-piece cost, saving ~$155. At $240 it frees </p><p><strong>vs</strong> West Elm Gharyan Stoneware Olive Wood Bread Slicing Board + Artisan Olive Wood Cutting Board (large 21.5W) + Pure White Stoneware Bowl 4-pack + Pure White Mug 4-pack + 2 cookbooks (Bookshop.org) ($320) &mdash; Gharyan x WE collab is artisan Tunisian stoneware + olive wood — matches the §3a anti-signal exactly (NOT matched commer</p>
             </div>
           </details>
           
