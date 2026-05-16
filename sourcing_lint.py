@@ -1,6 +1,7 @@
 # sourcing_lint.py
 """9 cross-cutting consistency lint checks for sourcing.yaml.
 Each check returns a list of LintFinding objects."""
+import re
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -345,6 +346,96 @@ def check_budget_rollup(items: List[Item], meta: Meta) -> List[LintFinding]:
     return findings
 
 
+def check_no_fictional_sku_urls(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Error if a ★ recommended option's product_url is a search-fallback URL.
+
+    Search URLs (/search?q=, ?q=, /search?keyword=, google.com/search) mean the product
+    was never actually verified — fictional-SKU territory. Empty/None product_url is allowed
+    (no claim made is better than a false claim).
+    """
+    findings = []
+    SEARCH_PATTERNS = ["/search?q=", "?q=", "/search?keyword=", "google.com/search"]
+    for item in items:
+        if not item.options:
+            continue
+        for idx, opt in enumerate(item.options):
+            if not opt.recommend:
+                continue
+            url = opt.product_url or ""
+            if any(pattern in url for pattern in SEARCH_PATTERNS):
+                findings.append(LintFinding(
+                    severity="error",
+                    message=f"{item.id} opt {idx} ★ has search-URL product_url (fictional-SKU risk): {url[:80]}...",
+                    item_id=item.id,
+                ))
+    return findings
+
+
+def check_per_item_budget_overshoot(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Error if a ★ option's price exceeds item.budget_target_usd by >5%.
+
+    Exception: budget_target_usd == 0 (canon-locked items with no budget target — skip).
+    Exception: item.notes contains 'approved_overshoot' keyword (explicit owner sign-off).
+    """
+    findings = []
+    for item in items:
+        if not item.options or item.budget_target_usd <= 0:
+            continue
+        rec = next((o for o in item.options if o.recommend), None)
+        if not rec:
+            continue
+        if rec.price_usd > item.budget_target_usd * 1.05:
+            if "approved_overshoot" in (item.notes or "").lower():
+                continue
+            overshoot_pct = (rec.price_usd / item.budget_target_usd - 1) * 100
+            findings.append(LintFinding(
+                severity="error",
+                message=(
+                    f"{item.id} ★ price ${rec.price_usd:.0f} exceeds budget_target "
+                    f"${item.budget_target_usd:.0f} by {overshoot_pct:.0f}% — revise budget UP "
+                    f"or add 'approved_overshoot' to notes"
+                ),
+                item_id=item.id,
+            ))
+    return findings
+
+
+def check_no_orphan_sku_refs_in_notes(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Warning if item.notes references a capitalized model-number token not in any current option.
+
+    Heuristic: find tokens matching [A-Z][A-Z0-9\\-]{4,} in notes.  If a token doesn't appear
+    in any option's sku or details text, it's likely an orphan reference left over after a
+    SKU swap — flag it so it can be cleaned up or confirmed.
+
+    Cap at 30 findings total to avoid flooding output on a freshly-imported item set.
+    """
+    findings = []
+    sku_pattern = re.compile(r"\b[A-Z][A-Z0-9\-]{4,}\b")
+    for item in items:
+        if not item.notes:
+            continue
+        notes_tokens = set(sku_pattern.findall(item.notes))
+        if not notes_tokens:
+            continue
+        current_options_text = ""
+        if item.options:
+            for o in item.options:
+                current_options_text += (o.sku or "") + " " + (o.details or "")
+        for token in notes_tokens:
+            if token not in current_options_text and token != item.id:
+                findings.append(LintFinding(
+                    severity="warning",
+                    message=(
+                        f"{item.id} notes references SKU '{token}' not in current options "
+                        f"— possible orphan reference after sku swap"
+                    ),
+                    item_id=item.id,
+                ))
+                if len(findings) >= 30:  # Cap to avoid flood
+                    return findings
+    return findings
+
+
 def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings: List[LintFinding] = []
     findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
@@ -353,4 +444,7 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_paint_line(items, meta.consistency_locks.paint_line)
     findings += check_hardware_mix(items)
     findings += check_budget_rollup(items, meta)
+    findings += check_no_fictional_sku_urls(items, meta)
+    findings += check_per_item_budget_overshoot(items, meta)
+    findings += check_no_orphan_sku_refs_in_notes(items, meta)
     return findings

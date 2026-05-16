@@ -145,6 +145,8 @@ def test_tile_palette_bejmat_outside_master_bath_errors():
 
 from sourcing_lint import (
     check_paint_line, check_hardware_mix, check_budget_rollup,
+    check_no_fictional_sku_urls, check_per_item_budget_overshoot,
+    check_no_orphan_sku_refs_in_notes,
 )
 from sourcing_schema import Meta, Budgets, ConsistencyLocks
 
@@ -249,6 +251,124 @@ def test_budget_rollup_furniture_overshoot_warns():
     items[0].budget_target_usd = 35000  # over $30K
     findings = check_budget_rollup(items, _meta())
     assert any(f.severity == "warning" and "furniture_envelope" in f.message for f in findings)
+
+
+# --- Rule 7: fictional SKU URLs ---
+
+def _meta_simple():
+    return _meta()
+
+
+def _opt(sku="SKU1", price=100.0, recommend=False, product_url=None, details=None):
+    from sourcing_schema import Option
+    return Option(
+        sku=sku, vendor="V", price_usd=price, image="",
+        reasoning="r", recommend=recommend,
+        product_url=product_url, details=details,
+    )
+
+
+def test_fictional_sku_url_search_q_errors():
+    """★ option with /search?q= URL should be flagged as error."""
+    items = [_i("F1", options=[
+        _opt(sku="Thing", price=50, recommend=True,
+             product_url="https://example.com/search?q=chrome+faucet"),
+    ])]
+    findings = check_no_fictional_sku_urls(items, _meta_simple())
+    assert any(f.severity == "error" and "F1" in f.message for f in findings)
+
+
+def test_fictional_sku_url_google_search_errors():
+    """★ option pointing at google.com/search should be flagged."""
+    items = [_i("F2", options=[
+        _opt(sku="Thing", price=50, recommend=True,
+             product_url="https://www.google.com/search?q=best+faucet"),
+    ])]
+    findings = check_no_fictional_sku_urls(items, _meta_simple())
+    assert any(f.severity == "error" and "F2" in f.message for f in findings)
+
+
+def test_fictional_sku_url_real_url_no_error():
+    """★ option with a direct product page URL should NOT be flagged."""
+    items = [_i("F3", options=[
+        _opt(sku="Thing", price=50, recommend=True,
+             product_url="https://www.rejuvenation.com/products/westmore-faucet-abc123"),
+    ])]
+    findings = check_no_fictional_sku_urls(items, _meta_simple())
+    assert findings == []
+
+
+def test_fictional_sku_url_empty_url_no_error():
+    """★ option with empty/None product_url should NOT be flagged (no claim made)."""
+    items = [_i("F4", options=[
+        _opt(sku="Thing", price=50, recommend=True, product_url=None),
+        _opt(sku="Other", price=60, recommend=False,
+             product_url="https://example.com/search?q=other"),  # non-★, should be ignored
+    ])]
+    findings = check_no_fictional_sku_urls(items, _meta_simple())
+    assert findings == []
+
+
+# --- Rule 8: per-item budget overshoot ---
+
+def test_per_item_budget_overshoot_within_5pct_no_error():
+    """Price exactly at 5% over budget should NOT fire (boundary: > 1.05, not >=)."""
+    items = [_i("B1", options=[_opt(price=105.0, recommend=True)])]
+    items[0].budget_target_usd = 100.0
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert findings == []
+
+
+def test_per_item_budget_overshoot_over_5pct_errors():
+    """Price >5% over budget should fire as error."""
+    items = [_i("B2", options=[_opt(price=200.0, recommend=True)])]
+    items[0].budget_target_usd = 100.0
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert any(f.severity == "error" and "B2" in f.message for f in findings)
+
+
+def test_per_item_budget_overshoot_approved_overshoot_keyword_suppresses():
+    """'approved_overshoot' in notes should suppress the error."""
+    items = [_i("B3", options=[_opt(price=200.0, recommend=True)])]
+    items[0].budget_target_usd = 100.0
+    items[0].notes = "Price confirmed by owner — approved_overshoot per Annika 2026-05-15"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert findings == []
+
+
+def test_per_item_budget_overshoot_zero_budget_skipped():
+    """Items with budget_target_usd == 0 should be skipped entirely."""
+    items = [_i("B4", options=[_opt(price=999.0, recommend=True)])]
+    items[0].budget_target_usd = 0
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert findings == []
+
+
+# --- Rule 9: orphan SKU refs in notes ---
+
+def test_orphan_sku_refs_missing_token_warns():
+    """A notes token matching the model-number heuristic but absent from options SKUs → warning."""
+    items = [_i("N1", options=[_opt(sku="REALSKU123", details="some detail")])]
+    items[0].notes = "Previously considered OLDSKU-789 but replaced"
+    findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
+    assert any(f.severity == "warning" and "N1" in f.message and "OLDSKU-789" in f.message
+               for f in findings)
+
+
+def test_orphan_sku_refs_present_token_no_warning():
+    """A notes token that actually appears in an option's SKU should NOT be flagged."""
+    items = [_i("N2", options=[_opt(sku="REALSKU-789", details=None)])]
+    items[0].notes = "Using REALSKU-789 per Annika recommendation"
+    findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
+    assert not any("N2" in f.message for f in findings)
+
+
+def test_orphan_sku_refs_no_notes_no_warning():
+    """Item with empty notes should never fire."""
+    items = [_i("N3", options=[_opt(sku="THING-001")])]
+    items[0].notes = ""
+    findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
+    assert findings == []
 
 
 # --- Lint aggregator ---
