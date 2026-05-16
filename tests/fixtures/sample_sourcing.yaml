@@ -1,0 +1,68 @@
+# Small, valid fixture used across multiple tests.
+meta:
+  last_updated: 2026-05-16
+  budgets:
+    construction_cap: 342000
+    furniture_envelope: 30000
+    path3_owner_direct_ceiling: 10000
+  consistency_locks:
+    brass_finish_family: "Rejuvenation lacquered brass"
+    wood_tone: "white_oak_bleach_rubio_pure"
+    tile_palette: [cle_sea_salt_zellige, carrara_slab, cle_bejmat_master_only]
+    paint_line: aura
+
+items:
+  - id: G3-HOOD
+    title: "Kitchen range hood"
+    category: appliance
+    room: kitchen
+    urgency: T0
+    lead_time_weeks: 4
+    budget_source: construction_allowance
+    budget_target_usd: 1500
+    sourcing_actor: owner_direct
+    decision_status: options_drafted
+    annika_loop: true
+    cross_room_consistency: []
+    dependencies: []
+    sample_required: false
+    options:
+      - sku: "Vent-A-Hood SLDH9-K42 SS"
+        vendor: "CDGA"
+        price_usd: 1480
+        image: images/sourcing/g3-hood-1.jpg
+        reasoning: "Verified-in-catalog Magic Lung; 900 CFM."
+        recommend: true
+      - sku: "Zephyr Tempest 36"
+        vendor: "AJ Madison"
+        price_usd: 1599
+        image: images/sourcing/g3-hood-2.jpg
+        reasoning: "Sleeker face; 1100 CFM."
+        recommend: false
+    decided_sku: null
+    ordered_date: null
+    received_date: null
+    installed_date: null
+    notes: ""
+    revision_history:
+      - 2026-05-16: "stub created"
+      - 2026-05-16: "options_drafted, 2 candidates"
+
+  - id: MB-FAUCET
+    title: "Master bath sink faucet"
+    category: plumbing_fixture
+    room: master_bath
+    urgency: T0
+    lead_time_weeks: 2
+    budget_source: construction_allowance
+    budget_target_usd: 450
+    sourcing_actor: owner_direct
+    decision_status: decided
+    annika_loop: true
+    cross_room_consistency: ["lacquered_brass"]
+    dependencies: []
+    sample_required: false
+    decided_sku: "Delta Trinsic 559LF-CZMPU Champagne Bronze"
+    notes: "Canon-locked per DESIGN_SPEC.md."
+    revision_history:
+      - 2026-05-13: "decided by canon lock"
