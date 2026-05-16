@@ -189,3 +189,14 @@ def check_budget_rollup(items: List[Item], meta: Meta) -> List[LintFinding]:
             message=f"path3_direct = ${p3_total:,.0f} > ceiling ${meta.budgets.path3_owner_direct_ceiling:,.0f}",
         ))
     return findings
+
+
+def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
+    findings: List[LintFinding] = []
+    findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
+    findings += check_wood_tone(items, meta.consistency_locks.wood_tone)
+    findings += check_tile_palette(items, meta.consistency_locks.tile_palette)
+    findings += check_paint_line(items, meta.consistency_locks.paint_line)
+    findings += check_hardware_mix(items)
+    findings += check_budget_rollup(items, meta)
+    return findings

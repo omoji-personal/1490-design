@@ -166,3 +166,26 @@ def test_budget_rollup_furniture_overshoot_errors():
     items[0].budget_target_usd = 35000  # over $30K
     findings = check_budget_rollup(items, _meta())
     assert any(f.severity == "error" and "furniture_envelope" in f.message for f in findings)
+
+
+# --- Lint aggregator ---
+
+from sourcing_lint import run_all_lints
+
+
+def test_run_all_lints_returns_aggregated_findings():
+    items = [
+        _i("BR1", category="hardware", tags=["lacquered_brass"], decided_sku="WE matte brass"),  # warning
+        _i("T1", category="tile_stone", room="kitchen", decided_sku="Daltile Linden"),  # error
+    ]
+    items[0].budget_source = "furniture_envelope"
+    items[0].budget_target_usd = 35000  # over $30K → error
+    findings = run_all_lints(items, _meta())
+    severities = [f.severity for f in findings]
+    assert "error" in severities  # tile + budget
+    assert "warning" in severities  # brass
+
+
+def test_run_all_lints_empty_items_no_findings():
+    findings = run_all_lints([], _meta())
+    assert findings == []
