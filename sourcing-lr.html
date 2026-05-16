@@ -37,6 +37,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -85,13 +86,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -427,7 +446,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link">The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set →</a></div>
       <div class="price">$820</div>
       <img class="option-img-main" src="/images/sourcing/wt-lr-1.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-lr-b.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-lr-c.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Custom flat Roman shade, Belgian linen or Luxe Linen weave in Natural/Cream, cordless or motorized (PowerView), inside or outside mount, blackout or privacy liner free; starts ~$405/window, 2-window set ~$810–1,000+; ships 10 days or less from Buckhead showroom.</div>
       <div class="reasoning">Premium-mid alternative when full Hunter Douglas isn&#x27;t warranted. Belgian Linen Natural at The Shade Store reads cream in warm light and flat-fold stack keeps the LR feel clean. Blackout liner available as add-on if sleep use ever shifts. Free in-home measure from Buckhead showroom reduces coordination cost vs. online-only competitors.</div>
     </div><div class="option-card ">
@@ -435,7 +454,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.smithandnoble.com/layer-with-romans" target="_blank" rel="noopener" class="sku-link">Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set →</a></div>
       <div class="price">$680</div>
       <img class="option-img-main" src="/images/sourcing/wt-lr-2.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-lr-b.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-lr-c.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Flat Roman shade, Essential Linen now sold via 3 Day Blinds (Smith &amp; Noble rebranded); Ivory linen flat-fold, cordless, inside or outside mount, light-filtering; price est. ~$300–400/window for 2-window set; in-home measurement available; lead 3–5 wk.</div>
       <div class="reasoning">Online-order path with lowest friction: Smith &amp; Noble Essential Linen in Ivory is the closest off-the-shelf match to the cream canon. Layered light-filter + separate blackout shade allows daytime diffused-light mode without sacrificing full coverage — useful in a room that doubles as a media zone. Least expensive of the three at $680.</div>
     </div></div>
@@ -474,7 +493,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.theshadestore.com/drapery/custom-drapes" target="_blank" rel="noopener" class="sku-link">The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets →</a></div>
       <div class="price">$760</div>
       <img class="option-img-main" src="/images/sourcing/wt-dining-1.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-dining-b.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-dining-c.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">The Shade Store custom sheer linen drapery panel: sheer linen fabric in Natural, custom-width ring-and-rod or rod pocket, ceiling or outside mount, sheer light control; starts ~$325–440/panel custom-width; Buckhead showroom measurement included; 10-day ship.</div>
       <div class="reasoning">Custom-width sheer from The Shade Store guarantees edge-to-edge coverage — important for a formal dining room where side gaps would read as cheap. Natural linen is a true warm-cream in their catalog, not the blue-tinged neutrals common in off-the-shelf sheers. Single-source with other Shade Store items reduces install scheduling complexity; $760 is within the $800 envelope.</div>
     </div><div class="option-card ">
@@ -482,7 +501,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.ikea.com/us/en/p/lill-sheer-curtains-1-pair-white-with-rod-pocket-90111980/" target="_blank" rel="noopener" class="sku-link">IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment →</a></div>
       <div class="price">$60</div>
       <img class="option-img-main" src="/images/sourcing/wt-dining-2.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-dining-b.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-dining-c.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">IKEA LILL Sheer curtain pair: 100% recycled polyester sheer, 110×98&quot; per pair (rod pocket), white/off-white, sheer light control; $4.99/pair; requires hem for floor-length; inside rod mount; available Cobb County store. Budget fallback only.</div>
       <div class="reasoning">Budget fallback only. IKEA LILL sheer provides coverage for formal occasions at minimal cost if the dining budget must be reallocated elsewhere in the house. Off-white reads noticeably cooler than the cream canon — a visible palette compromise in a room anchored by warm wood tones. Acceptable only as a temporary hold while other priorities clear.</div>
     </div></div>
@@ -607,7 +626,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
           <div><strong>Avoid:</strong> no glass top, no chrome legs, no veneer, no espresso stain</div>
           <div><strong>Target $:</strong> 800-1500</div>
           <div><strong>Hunt at:</strong> Westside Modern, City Issue, Mid Mod Market, Chairish online</div>
-        </div>
+        </div><div class="img-placeholder">LR coffee table (vintage walnut oval)<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">One real vintage gesture per major room per §4 principle 7. | WE option: West Elm Reeve Mid-Century Oval Coffee Table, Pecan (58W × 24D × 17H, walnut veneer top + solid wood legs, pecan finish) @ $899.0 — Tapered-leg oval mid-century silhouette in walnut tones is the direct WE expression of the vintage-walnut-oval spec; a t...</div>
       
     </article>
@@ -737,7 +756,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
           <div><strong>Avoid:</strong> no synthetic, no fringe-less, no high-contrast geometric, no kilim flat-weave</div>
           <div><strong>Target $:</strong> 3000-5000</div>
           <div><strong>Hunt at:</strong> Mellah, Berber Trading Company, Etsy vetted dealers, Atlanta vintage dealers</div>
-        </div>
+        </div><div class="img-placeholder">LR Beni Ourain (year 4+)<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</div>
       
     </article>
@@ -1000,7 +1019,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
           <div><strong>Avoid:</strong> no posters, no mass-print canvas, no jewel-tone saturation</div>
           <div><strong>Target $:</strong> 800-1500</div>
           <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Tew Galleries Atlanta, Atlanta Contemporary, Etsy original artists</div>
-        </div>
+        </div><div class="img-placeholder">LR primary wall art<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Soul-layer piece — slow hunt. | WE option: West Elm Abstract Landscape Framed Wall Art by Minted (Kirsta Niemie Benedetti, 30×30, Black Wood Frame) @ $356.0 — WE+Minted&#x27;s neutral abstract landscape program is a legitimate drop-in placeholder for the LR primary art moment while t...</div>
       
     </article>
@@ -1028,7 +1047,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
           <div><strong>Avoid:</strong> no commercial print</div>
           <div><strong>Target $:</strong> 500-1000</div>
           <div><strong>Hunt at:</strong> Tew Galleries, Atlanta Contemporary, Mid Mod Market</div>
-        </div>
+        </div><div class="img-placeholder">Dining art / wall moment<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Dining is canon-classic dinner moment — wall art carries weight. | WE option: West Elm The Arts Capsule Framed Print (32W × 24H, white wood frame, neutral abstract) @ $399.0 — Dining wall benefits from a single calmer framed moment vs. busy gallery wall — Arts Capsule format reads restrained at ...</div>
       
     </article>
@@ -1166,7 +1185,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/65-inch-the-frame-pro-neo-qled-4k-tv-ls03hw-sku-qn65ls03hwfxza/" target="_blank" rel="noopener" class="sku-link">Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) →</a></div>
       <div class="price">$1,999</div>
       <img class="option-img-main" src="/images/sourcing/frame-tv-1.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/frame-tv-b.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/frame-tv-c.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">65&quot; The Frame Pro 2026, Neo QLED 4K, Glare-Free, Art Mode + Art Store, Wireless One Connect Box (no cable clutter), Pantone-Validated, Vision AI, Tizen smart TV.</div>
       <div class="reasoning">Frame Pro adds wireless One Connect Box — eliminates the cable-chase problem at the mantel entirely, which matters if LR-BUILTIN millwork makes wire routing difficult. $500 over budget but the trade-off is real; escalate to owner only after LR-BUILTIN final dimensions confirm a routing constraint.</div>
     </div><div class="option-card ">
@@ -1174,7 +1193,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/75-inch-the-frame-qled-4k-tv-ls03he-sku-qn75ls03hefxza/" target="_blank" rel="noopener" class="sku-link">Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) →</a></div>
       <div class="price">$1,999</div>
       <img class="option-img-main" src="/images/sourcing/frame-tv-2.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/frame-tv-b.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/frame-tv-c.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">75&quot; The Frame 2026, QLED 4K (3840×2160), Glare-Free anti-reflective panel, Art Mode + Art Store, Pantone-Validated color, Vision AI, Tizen smart TV; larger footprint may overpower mantel surround.</div>
       <div class="reasoning">Actual street price confirmed $1,999 — not the $2,186 previously listed — narrowing the budget gap to $499. Still requires LR-BUILTIN surround dimensions to support 75&quot; before committing; flag for owner review once millwork is finalized rather than auto-declining on price alone.</div>
     </div></div>

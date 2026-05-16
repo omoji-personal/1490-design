@@ -37,6 +37,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -85,13 +86,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -239,7 +258,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/vignette" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
       <div class="price">$540</div>
       <img class="option-img-main" src="/images/sourcing/wt-office-1.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-office-b.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-office-c.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Vignette Roman, Linen Weave woven fabric in Oatmeal (warm linen tone), light-filtering, cordless LiteRise or PowerView motorized, inside or outside mount; ~$450–600/window; 4–6 wk lead via authorized dealer; cross-room visual match with LR WT-LR option 0.</div>
       <div class="reasoning">Hunter Douglas Vignette in Oatmeal gives the office visual continuity with the LR Roman — same brand, same construction, slightly warmer tone that reads natural-linen under office task lighting. Oatmeal is a better pick than Stone for a north- or east-facing office window. 2-window config runs ~8% over the $500 budget; justified if LR and office are ordered together at the dealer.</div>
     </div><div class="option-card ">
@@ -247,7 +266,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.blinds.com/p/levolor-cellular-shades/656658" target="_blank" rel="noopener" class="sku-link">Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
       <div class="price">$220</div>
       <img class="option-img-main" src="/images/sourcing/wt-office-2.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-office-b.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-office-c.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Levolor cellular shade in Abaca Linen Alabaster (warm neutral), 3/4&quot; or 1-1/4&quot; single cell, light-filtering, cordless, inside or outside mount; $76–$157/window (sale pricing 40% off at blinds.com); standard size only (not custom Roman fold); ships ~10 days via Lowe&#x27;s or blinds.com.</div>
       <div class="reasoning">Budget fallback: Levolor Trilight Cellular in Antique Linen delivers a linen-adjacent tone at $220 for a 2-window config. Cellular construction adds minor insulation — useful for a room that may double as a home office in all seasons. Does not match the Roman profile seen elsewhere in the house; acceptable for a low-visibility secondary zone only.</div>
     </div></div>

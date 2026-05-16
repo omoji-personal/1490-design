@@ -13,12 +13,14 @@ from sourcing_queue import ScheduleLookup, T0_PHASES
 SITE_DIR = Path(__file__).parent
 
 
-def _supplementary_paths(image_path: str) -> list:
+def _supplementary_paths(image_path: str, recommend: bool = False) -> list:
     """Given 'images/sourcing/k-faucet-1.jpg', return list of existing supplementary paths.
 
     Checks two conventions agents used:
     1. Option-level:  images/sourcing/k-faucet-1-b.jpg  (most items)
     2. Item-level:    images/sourcing/k-faucet-b.jpg    (strip trailing -N digit block)
+       NOTE: item-level fallback is ONLY used for the recommended (★) option to prevent
+       the same -b/-c image from appearing under every vendor option.
     Returns only paths whose files exist on disk.
     """
     if not image_path:
@@ -26,17 +28,19 @@ def _supplementary_paths(image_path: str) -> list:
     base = image_path[:-4]  # strip .jpg
     results = []
     for suffix in ["-b", "-c"]:
-        # Convention 1: option-level
+        # Convention 1: option-level (always safe — file is keyed to this specific option)
         candidate = f"{base}{suffix}.jpg"
         if (SITE_DIR / candidate).exists():
             results.append(candidate)
             continue  # prefer this; skip item-level if option-level found
-        # Convention 2: item-level — strip trailing -<digits> block
-        item_base = re.sub(r"-\d+$", "", base)
-        if item_base != base:
-            candidate2 = f"{item_base}{suffix}.jpg"
-            if (SITE_DIR / candidate2).exists():
-                results.append(candidate2)
+        # Convention 2: item-level — only apply for the recommended option to avoid
+        # showing the same alternate-view image under every vendor in the options grid.
+        if recommend:
+            item_base = re.sub(r"-\d+$", "", base)
+            if item_base != base:
+                candidate2 = f"{item_base}{suffix}.jpg"
+                if (SITE_DIR / candidate2).exists():
+                    results.append(candidate2)
     return results
 
 
@@ -87,6 +91,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -135,13 +140,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 """
 
 
 TOPNAV_HTML = """<nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -157,8 +180,8 @@ def _render_option(opt) -> str:
     img_html = ""
     if opt.image and (SITE_DIR / opt.image).exists():
         img_html = f'<img class="option-img-main" src="/{opt.image}" alt="{escape(opt.sku)}" loading="lazy" onerror="this.style.opacity=0.3;">'
-    # Supplementary images (-b, -c)
-    supp_paths = _supplementary_paths(opt.image)
+    # Supplementary images (-b, -c) — only use item-level fallback for recommended option
+    supp_paths = _supplementary_paths(opt.image, recommend=opt.recommend)
     supp_html = ""
     if supp_paths:
         thumbs = "".join(
@@ -220,6 +243,14 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
 
     if item.decided_sku:
         body = f'<div class="decided-line">✅ {escape(item.decided_sku)}</div>'
+        # Show placeholder if no option images exist for decided items
+        has_img = any(
+            (SITE_DIR / o.image).exists()
+            for o in (item.options or [])
+            if o.image
+        )
+        if not has_img and not item.options:
+            body += f'<div class="img-placeholder">{escape(item.title)}<br><small>locked · no image on file</small></div>'
     elif item.vintage_brief:
         v = item.vintage_brief
         body = f'''<div class="vintage-brief">
@@ -228,6 +259,9 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
           <div><strong>Target $:</strong> {escape(v.target_price_usd)}</div>
           <div><strong>Hunt at:</strong> {escape(', '.join(v.hunt_venues))}</div>
         </div>'''
+        # Placeholder if watch_list item has no option images
+        if not item.options:
+            body += f'<div class="img-placeholder">{escape(item.title)}<br><small>vintage hunt · no image yet</small></div>'
     elif item.options:
         body = '<div class="options-grid">' + "".join(_render_option(o) for o in item.options) + '</div>'
 
@@ -271,7 +305,7 @@ def _render_lint_alerts(findings: List[LintFinding]) -> str:
         parts.append('<div class="lint-alert lint-error"><h4>Lint errors ({})</h4><ul>{}</ul></div>'.format(
             len(errors), "".join(f'<li>{escape(f.message)}</li>' for f in errors)))
     if warnings:
-        parts.append('<div class="lint-alert"><h4>Lint warnings ({})</h4><ul>{}</ul></div>'.format(
+        parts.append('<div class="lint-alert lint-warning"><h4>Lint warnings ({})</h4><ul>{}</ul></div>'.format(
             len(warnings), "".join(f'<li>{escape(f.message)}</li>' for f in warnings)))
     if infos:
         parts.append('<div class="lint-alert"><h4>Lint info ({})</h4><ul>{}</ul></div>'.format(
@@ -291,7 +325,7 @@ def _render_filter_bar() -> str:
                 "watch_list", "found_candidate"]
     return f"""<div class="filter-bar">
       <button data-filter="all" class="active">All</button>
-      <button data-filter="decide-now">Decide this week</button>
+      <button data-filter="decide-now" title="All items with options drafted — schedule not yet locked so &#39;this week&#39; is heuristic">Currently drafted</button>
       <button data-filter="annika">Annika queue</button>
       <select id="room-filter"><option value="">By room</option>{
         "".join(f'<option value="{r}">{r}</option>' for r in rooms)

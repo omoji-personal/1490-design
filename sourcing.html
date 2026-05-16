@@ -37,6 +37,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -85,13 +86,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -113,11 +132,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   <a href="/sourcing-office">Office</a>
 </div>
 <main>
-<div class="lint-alert"><h4>Lint warnings (5)</h4><ul><li>CABINET-FINISH-KITCHEN: wood-finish item missing rubio reference (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>OFFICE-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>K-PANTRY-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>NURSERY-DRESSER: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>furniture_envelope = $50,800 &gt; allocation $30,000 (soft target; phased per DESIGN_SPEC #5)</li></ul></div>
+<div class="lint-alert lint-warning"><h4>Lint warnings (5)</h4><ul><li>CABINET-FINISH-KITCHEN: wood-finish item missing rubio reference (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>OFFICE-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>K-PANTRY-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>NURSERY-DRESSER: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>furniture_envelope = $50,800 &gt; allocation $30,000 (soft target; phased per DESIGN_SPEC #5)</li></ul></div>
 <div class="lint-alert"><h4>Lint info (4)</h4><ul><li>kitchen: hardware mix unbalanced (brass=1, matte_black=0; rule wants ≥2 each for 7-item room)</li><li>master_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 7-item room)</li><li>hall_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 6-item room)</li><li>exterior: hardware mix unbalanced (brass=4, matte_black=0; rule wants ≥2 each for 8-item room)</li></ul></div>
 <div class="filter-bar">
       <button data-filter="all" class="active">All</button>
-      <button data-filter="decide-now">Decide this week</button>
+      <button data-filter="decide-now" title="All items with options drafted — schedule not yet locked so &#39;this week&#39; is heuristic">Currently drafted</button>
       <button data-filter="annika">Annika queue</button>
       <select id="room-filter"><option value="">By room</option><option value="kitchen">kitchen</option><option value="master_br">master_br</option><option value="master_bath">master_bath</option><option value="hall_bath">hall_bath</option><option value="basement_bath">basement_bath</option><option value="lr">lr</option><option value="dining">dining</option><option value="office">office</option><option value="nursery">nursery</option><option value="mudroom_carport">mudroom_carport</option><option value="basement">basement</option><option value="exterior">exterior</option><option value="common">common</option></select>
       <select id="category-filter"><option value="">By category</option><option value="plumbing_fixture">plumbing_fixture</option><option value="lighting_fixture">lighting_fixture</option><option value="hardware">hardware</option><option value="tile_stone">tile_stone</option><option value="cabinetry_millwork">cabinetry_millwork</option><option value="appliance">appliance</option><option value="paint_finish">paint_finish</option><option value="window_treatment">window_treatment</option><option value="furniture">furniture</option><option value="decor_softgoods">decor_softgoods</option></select>
@@ -142,7 +161,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $11,200 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.</div>
+      <div class="decided-line">✅ Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.</div><div class="img-placeholder">Hardwood refinish (Bleach + Rubio Pure)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Non-negotiable contract callout per DESIGN_SPEC Section 6. Bleach test on real boards required pre-finish.</div>
       
     </article>
@@ -165,7 +184,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $8,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ BM Aura interior — White Dove (OC-17), matte</div>
+      <div class="decided-line">✅ BM Aura interior — White Dove (OC-17), matte</div><div class="img-placeholder">Interior wall paint — primary (BM Aura, White Dove)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Aura product line locked 2026-05-14 (humidity microclimate). Sample on real wall in this house before whole-house roll.</div>
       
     </article>
@@ -188,7 +207,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ SW Accessible Beige (SW 7036), matte — color matched in BM Aura base</div>
+      <div class="decided-line">✅ SW Accessible Beige (SW 7036), matte — color matched in BM Aura base</div><div class="img-placeholder">Bedroom alt wall color (Accessible Beige)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per DESIGN_SPEC §6. Master BR alt option.</div>
       
     </article>
@@ -211,7 +230,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte</div>
+      <div class="decided-line">✅ BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte</div><div class="img-placeholder">Bath accent wall paint (Saybrook Sage)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Wet-room formulation per §6. Sample required, color reads different in compressed Atlanta ceilings.</div>
       
     </article>
@@ -234,7 +253,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ BM Simply White (OC-117), Aura satin</div>
+      <div class="decided-line">✅ BM Simply White (OC-117), Aura satin</div><div class="img-placeholder">Trim + doors paint (Simply White)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Trim + interior doors. Locked per §6.</div>
       
     </article>
@@ -351,7 +370,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</div>
+      <div class="decided-line">✅ KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</div><div class="img-placeholder">Kitchen cabinet finish<br><small>locked · no image on file</small></div>
       <div class="notes-line">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak floor required at sample stage.</div>
       
     </article>
@@ -374,7 +393,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div>
+      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div><div class="img-placeholder">Master bath wall tile (shower walls)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</div>
       
     </article>
@@ -397,7 +416,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div>
+      <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div><div class="img-placeholder">Master bath floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
       
     </article>
@@ -467,7 +486,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed</div>
+      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed</div><div class="img-placeholder">Hall bath floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6.</div>
       
     </article>
@@ -537,7 +556,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed (match hall bath)</div>
+      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed (match hall bath)</div><div class="img-placeholder">Basement bath floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6.</div>
       
     </article>
@@ -560,7 +579,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div>
+      <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div><div class="img-placeholder">Kitchen backsplash<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per DESIGN_SPEC §7 [OWNER CONFIRM #1]: PIVOT from Bejmat to Carrara+zellige (canon-consistent). Cle lead 4-6 wk.</div>
       
     </article>
@@ -583,7 +602,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Choice Ivory porcelain</div>
+      <div class="decided-line">✅ Daltile Choice Ivory porcelain</div><div class="img-placeholder">Kitchen floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6.</div>
       
     </article>
@@ -606,7 +625,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div>
+      <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div><div class="img-placeholder">Kitchen counters + waterfall island<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked. Template after cab install. 5-week fab+install typical.</div>
       
     </article>
@@ -629,7 +648,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $550 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div>
+      <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div><div class="img-placeholder">Kitchen faucet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 — Delta Trinsic Champagne Bronze line. Pull-down for kitchen workflow.</div>
       
     </article>
@@ -793,7 +812,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $450 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div><div class="img-placeholder">Master bath sink faucet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</div>
       
     </article>
@@ -863,7 +882,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div>
+      <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div><div class="img-placeholder">Master bath linear shower drain (Schluter)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Curbless walk-in spec per G2. TCW orders with rough plumbing.</div>
       
     </article>
@@ -886,7 +905,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</div><div class="img-placeholder">Hall bath sink faucet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked — Champagne Bronze family consistency.</div>
       
     </article>
@@ -909,7 +928,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Delta Trinsic wall-mount tub filler + handshower, Champagne Bronze</div>
+      <div class="decided-line">✅ Delta Trinsic wall-mount tub filler + handshower, Champagne Bronze</div><div class="img-placeholder">Hall bath tub filler<br><small>locked · no image on file</small></div>
       <div class="notes-line">Kohler Bellwether cast iron tub per G2; Trinsic trim.</div>
       
     </article>
@@ -932,7 +951,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Kohler Bellwether 60-inch cast iron alcove tub, White</div>
+      <div class="decided-line">✅ Kohler Bellwether 60-inch cast iron alcove tub, White</div><div class="img-placeholder">Hall bath tub (Kohler Bellwether)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -1049,7 +1068,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div>
+      <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div><div class="img-placeholder">Master bath toilet + washlet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line. One-piece form for master.</div>
       
     </article>
@@ -1072,7 +1091,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div>
+      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div><div class="img-placeholder">Hall bath toilet + washlet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -1095,7 +1114,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div>
+      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div><div class="img-placeholder">Basement bath toilet + washlet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -1212,7 +1231,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $4,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Aquasana whole-house carbon + softener + RO under kitchen sink</div>
+      <div class="decided-line">✅ Aquasana whole-house carbon + softener + RO under kitchen sink</div><div class="img-placeholder">Whole-house carbon + softener + RO<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G4 line.</div>
       
     </article>
@@ -1235,7 +1254,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Keep existing 3 white dome pendants + source matching 4th</div>
+      <div class="decided-line">✅ Keep existing 3 white dome pendants + source matching 4th</div><div class="img-placeholder">Kitchen island pendants (3+1)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match.</div>
       
     </article>
@@ -1885,7 +1904,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans</div>
+      <div class="decided-line">✅ Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans</div><div class="img-placeholder">Recessed lighting (25-35 cans whole-house)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per §15. Inside G1 electrical line. 2700K NOT 3000K for Atlanta cloudy/tree-shaded days.</div>
       
     </article>
@@ -2198,7 +2217,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Emtek Modern lever sets, matte black — 10 sets bundled with doors</div>
+      <div class="decided-line">✅ Emtek Modern lever sets, matte black — 10 sets bundled with doors</div><div class="img-placeholder">Interior door hardware (10 doors, Emtek matte black)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G1 line $8,580 (doors + hardware combined). Lever-type for toddler safety per §9.</div>
       
     </article>
@@ -2221,7 +2240,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $7,080 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ 10 interior solid-core 5-panel doors, paint-grade primed</div>
+      <div class="decided-line">✅ 10 interior solid-core 5-panel doors, paint-grade primed</div><div class="img-placeholder">Interior solid-core 5-panel doors (10)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G1 line $8,580 incl Emtek hardware. Door bodies = $7,080; INTERIOR-DOOR-HARDWARE covers hardware.</div>
       
     </article>
@@ -2611,7 +2630,7 @@ McGee &amp; Co. Cora Round Mirror 18\&quot;, same (basement, $148)
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div>
+      <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div><div class="img-placeholder">Master bath medicine cabinet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -2709,7 +2728,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $9,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div>
+      <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div><div class="img-placeholder">Kitchen cabinets (KraftMaid Vantage)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line. Sample door required for finish match to floor.</div>
       
     </article>
@@ -2732,7 +2751,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $2,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div>
+      <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div><div class="img-placeholder">Kitchen storage cabinet adder<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line.</div>
       
     </article>
@@ -2755,7 +2774,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
-      <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div>
+      <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div><div class="img-placeholder">Master bath vanity (WE Hutchinson 60-inch Double)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</div>
       
     </article>
@@ -2778,7 +2797,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,800 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture
       </div>
-      <div class="decided-line">✅ West Elm Hutchinson Single Vanity 36-inch, Blonde</div>
+      <div class="decided-line">✅ West Elm Hutchinson Single Vanity 36-inch, Blonde</div><div class="img-placeholder">Hall bath vanity (WE Hutchinson 36-inch Single)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 + G2 line.</div>
       
     </article>
@@ -2801,7 +2820,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture
       </div>
-      <div class="decided-line">✅ Pottery Barn Mason 24-inch wall-mount vanity</div>
+      <div class="decided-line">✅ Pottery Barn Mason 24-inch wall-mount vanity</div><div class="img-placeholder">Basement bath vanity (Pottery Barn Mason 24)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -3114,7 +3133,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,200 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Stair tread refacing + matching Bleach + Rubio finish</div>
+      <div class="decided-line">✅ Stair tread refacing + matching Bleach + Rubio finish</div><div class="img-placeholder">Stair refacing<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G1 line.</div>
       
     </article>
@@ -3137,7 +3156,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div>
+      <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div><div class="img-placeholder">Kitchen range (LG ThinQ — owned)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
@@ -3160,7 +3179,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div>
+      <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div><div class="img-placeholder">Dishwasher (Bosch — owned)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
@@ -3183,7 +3202,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div>
+      <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div><div class="img-placeholder">Refrigerator (owned, stays)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Existing fridge stays — no change.</div>
       
     </article>
@@ -3219,7 +3238,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.universityelectric.com/product/vent-a-hood-42-black-contemporary-wall-mounted-range-hood-cweh9-242-bl-168264" target="_blank" rel="noopener" class="sku-link">Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) →</a></div>
       <div class="price">$2,650</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-1.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/g3-hood-b.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/g3-hood-c.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">42&quot;W × ~20&quot;D × 18&quot;H wall-mount, Magic Lung 600 CFM (900 CFM equiv), 3 LED lights, ducted only, contemporary gloss-black finish; CFM may require MAU damper resize for high-output range.</div>
       <div class="reasoning">Saves ~$1,150 vs. canon PRH18342SS-BK but drops to 600 CFM — below the 900 CFM minimum for a high-BTU range that does smoke and steak. MAU damper would need resizing. Contemporary silhouette is a style step down from the PRH18 chimney profile; gloss black diverges from the matte-black hardware scheme.</div>
     </div><div class="option-card ">
@@ -3227,7 +3246,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.bestbuy.com/site/zephyr-arc-collection-42-inches-wall-range-hood-stainless-steel-black-glass/4550744.p?skuId=4550744" target="_blank" rel="noopener" class="sku-link">Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) →</a></div>
       <div class="price">$1,400</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-2.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/g3-hood-b.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/g3-hood-c.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">42&quot;W wall-mount chimney, blower options up to 1000 CFM (external/inline), tri-level LED lighting, 3-speed capacitive touch + wireless remote, ducted or recirculating (10&quot; round), 6 sones max; black glass + stainless combo.</div>
       <div class="reasoning">Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be conflated with it. Black glass panel diverges from matte-black chimney aesthetic. At $1,400 it under-delivers on the design brief; use only if Vent-A-Hood lead time collapses the kitchen TCO.</div>
     </div></div>
@@ -3253,7 +3272,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Aprilaire 1850 — in HVAC $17K bundle</div>
+      <div class="decided-line">✅ Aprilaire 1850 — in HVAC $17K bundle</div><div class="img-placeholder">Aprilaire 1850 whole-house dehumidifier<br><small>locked · no image on file</small></div>
       <div class="notes-line">Inside HVAC bundle, not separate spend. Load-bearing for humidity protocol §8d.</div>
       
     </article>
@@ -3289,7 +3308,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link">The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set →</a></div>
       <div class="price">$820</div>
       <img class="option-img-main" src="/images/sourcing/wt-lr-1.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-lr-b.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-lr-c.jpg" alt="The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Custom flat Roman shade, Belgian linen or Luxe Linen weave in Natural/Cream, cordless or motorized (PowerView), inside or outside mount, blackout or privacy liner free; starts ~$405/window, 2-window set ~$810–1,000+; ships 10 days or less from Buckhead showroom.</div>
       <div class="reasoning">Premium-mid alternative when full Hunter Douglas isn&#x27;t warranted. Belgian Linen Natural at The Shade Store reads cream in warm light and flat-fold stack keeps the LR feel clean. Blackout liner available as add-on if sleep use ever shifts. Free in-home measure from Buckhead showroom reduces coordination cost vs. online-only competitors.</div>
     </div><div class="option-card ">
@@ -3297,7 +3316,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.smithandnoble.com/layer-with-romans" target="_blank" rel="noopener" class="sku-link">Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set →</a></div>
       <div class="price">$680</div>
       <img class="option-img-main" src="/images/sourcing/wt-lr-2.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-lr-b.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-lr-c.jpg" alt="Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Flat Roman shade, Essential Linen now sold via 3 Day Blinds (Smith &amp; Noble rebranded); Ivory linen flat-fold, cordless, inside or outside mount, light-filtering; price est. ~$300–400/window for 2-window set; in-home measurement available; lead 3–5 wk.</div>
       <div class="reasoning">Online-order path with lowest friction: Smith &amp; Noble Essential Linen in Ivory is the closest off-the-shelf match to the cream canon. Layered light-filter + separate blackout shade allows daytime diffused-light mode without sacrificing full coverage — useful in a room that doubles as a media zone. Least expensive of the three at $680.</div>
     </div></div>
@@ -3336,7 +3355,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link">The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows →</a></div>
       <div class="price">$1,200</div>
       <img class="option-img-main" src="/images/sourcing/wt-master-1.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-master-b.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-master-c.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">The Shade Store flat Roman + drapery single-source: linen fabric in Natural/Cream, cordless or motorized, blackout liner free, inside/outside mount; Roman starts $405/window; sheer linen drapery panel custom-width starts $325+; Buckhead showroom, 10-day ship on Romans.</div>
       <div class="reasoning">Single-vendor convenience from The Shade Store Buckhead simplifies measure, fabrication, and install scheduling. Blackout liner on their linen Roman is independently verified to ANNIKA-LOOP standard; sheer panel in Natural holds the cream canon without brand-mixing. $200 under budget, leaving margin for motorization upgrade.</div>
     </div><div class="option-card ">
@@ -3344,7 +3363,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roller-shades/sonnette-cellular" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) →</a></div>
       <div class="price">$1,250</div>
       <img class="option-img-main" src="/images/sourcing/wt-master-2.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-master-b.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-master-c.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Sonnette Cellular Roller Shade: proprietary 2&quot; honeycomb cell, semi-opaque to room-darkening + optional LightLock blackout, PowerView motorized or cordless LiteRise or SoftTouch wand, inside or outside mount; ~$400–650/window motorized; 4–6 wk lead. Note: cellular roller, not traditional Roman fold.</div>
       <div class="reasoning">Motorized-only option for Annika&#x27;s sleep priority: Sonnette cellular blackout handles the ANNIKA-LOOP requirement and adds thermal insulation value in the master. Sheer drapery layer is intentionally deferred so Annika can select independently — keeps the blackout install unblocked without locking in a panel she hasn&#x27;t approved.</div>
     </div></div>
@@ -3383,7 +3402,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/vignette" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
       <div class="price">$540</div>
       <img class="option-img-main" src="/images/sourcing/wt-office-1.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-office-b.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-office-c.jpg" alt="Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Oatmeal) — light-filtering, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Vignette Roman, Linen Weave woven fabric in Oatmeal (warm linen tone), light-filtering, cordless LiteRise or PowerView motorized, inside or outside mount; ~$450–600/window; 4–6 wk lead via authorized dealer; cross-room visual match with LR WT-LR option 0.</div>
       <div class="reasoning">Hunter Douglas Vignette in Oatmeal gives the office visual continuity with the LR Roman — same brand, same construction, slightly warmer tone that reads natural-linen under office task lighting. Oatmeal is a better pick than Stone for a north- or east-facing office window. 2-window config runs ~8% over the $500 budget; justified if LR and office are ordered together at the dealer.</div>
     </div><div class="option-card ">
@@ -3391,7 +3410,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.blinds.com/p/levolor-cellular-shades/656658" target="_blank" rel="noopener" class="sku-link">Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
       <div class="price">$220</div>
       <img class="option-img-main" src="/images/sourcing/wt-office-2.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-office-b.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-office-c.jpg" alt="Levolor Trilight Cellular Shade — Antique Linen — light-filtering, 36–48&quot; w × 72–84&quot; h, 1–2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Levolor cellular shade in Abaca Linen Alabaster (warm neutral), 3/4&quot; or 1-1/4&quot; single cell, light-filtering, cordless, inside or outside mount; $76–$157/window (sale pricing 40% off at blinds.com); standard size only (not custom Roman fold); ships ~10 days via Lowe&#x27;s or blinds.com.</div>
       <div class="reasoning">Budget fallback: Levolor Trilight Cellular in Antique Linen delivers a linen-adjacent tone at $220 for a 2-window config. Cellular construction adds minor insulation — useful for a room that may double as a home office in all seasons. Does not match the Roman profile seen elsewhere in the house; acceptable for a low-visibility secondary zone only.</div>
     </div></div>
@@ -3430,7 +3449,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.theshadestore.com/drapery/custom-drapes" target="_blank" rel="noopener" class="sku-link">The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets →</a></div>
       <div class="price">$760</div>
       <img class="option-img-main" src="/images/sourcing/wt-dining-1.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-dining-b.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-dining-c.jpg" alt="The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">The Shade Store custom sheer linen drapery panel: sheer linen fabric in Natural, custom-width ring-and-rod or rod pocket, ceiling or outside mount, sheer light control; starts ~$325–440/panel custom-width; Buckhead showroom measurement included; 10-day ship.</div>
       <div class="reasoning">Custom-width sheer from The Shade Store guarantees edge-to-edge coverage — important for a formal dining room where side gaps would read as cheap. Natural linen is a true warm-cream in their catalog, not the blue-tinged neutrals common in off-the-shelf sheers. Single-source with other Shade Store items reduces install scheduling complexity; $760 is within the $800 envelope.</div>
     </div><div class="option-card ">
@@ -3438,7 +3457,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.ikea.com/us/en/p/lill-sheer-curtains-1-pair-white-with-rod-pocket-90111980/" target="_blank" rel="noopener" class="sku-link">IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment →</a></div>
       <div class="price">$60</div>
       <img class="option-img-main" src="/images/sourcing/wt-dining-2.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-dining-b.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-dining-c.jpg" alt="IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">IKEA LILL Sheer curtain pair: 100% recycled polyester sheer, 110×98&quot; per pair (rod pocket), white/off-white, sheer light control; $4.99/pair; requires hem for floor-length; inside rod mount; available Cobb County store. Budget fallback only.</div>
       <div class="reasoning">Budget fallback only. IKEA LILL sheer provides coverage for formal occasions at minimal cost if the dining budget must be reallocated elsewhere in the house. Off-white reads noticeably cooler than the cream canon — a visible palette compromise in a room anchored by warm wood tones. Acceptable only as a temporary hold while other priorities clear.</div>
     </div></div>
@@ -3477,7 +3496,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.hunterdouglas.com/enhancements/duette-architella" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Duette Architella Honeycomb Shade — Mist (warm neutral) — single-cell, bottom-up/top-down, 24–36&quot; w × 36–60&quot; h, qty 3 →</a></div>
       <div class="price">$900</div>
       <img class="option-img-main" src="/images/sourcing/wt-baths-1.jpg" alt="Hunter Douglas Duette Architella Honeycomb Shade — Mist (warm neutral) — single-cell, bottom-up/top-down, 24–36&quot; w × 36–60&quot; h, qty 3" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-baths-b.jpg" alt="Hunter Douglas Duette Architella Honeycomb Shade — Mist (warm neutral) — single-cell, bottom-up/top-down, 24–36&quot; w × 36–60&quot; h, qty 3 detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-baths-c.jpg" alt="Hunter Douglas Duette Architella Honeycomb Shade — Mist (warm neutral) — single-cell, bottom-up/top-down, 24–36&quot; w × 36–60&quot; h, qty 3 detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Duette Architella Honeycomb, single-cell 3/4&quot; or 1-1/4&quot;, cordless LiteRise or top-down/bottom-up, inside or outside mount, room-darkening or light-filtering, honeycomb-within-honeycomb energy efficiency; ~$350–600/window; 4–6 wk lead; Mist colorway is warm neutral closest to cream. Bathroom humidity suitability varies by fabric — confirm with dealer.</div>
       <div class="reasoning">Hunter Douglas Duette Architella is the premium humidity-resistant cellular option: superior cordless lift mechanism, tighter cell construction for better moisture management in a steam-exposed master bath, and Mist is the closest HD neutral to the warm-cream canon. $200 over the 3-bath budget; justified if master bath is spec&#x27;d at a higher tier than the secondary baths and ordered separately.</div>
     </div><div class="option-card ">
@@ -3485,7 +3504,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.ikea.com/us/en/p/hoppvals-cellular-blind-white-70431402/" target="_blank" rel="noopener" class="sku-link">IKEA HOPPVALS Cellular Blind — White — 60×155 cm / 80×155 cm — qty 3 (one per bath) →</a></div>
       <div class="price">$120</div>
       <img class="option-img-main" src="/images/sourcing/wt-baths-2.jpg" alt="IKEA HOPPVALS Cellular Blind — White — 60×155 cm / 80×155 cm — qty 3 (one per bath)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-baths-b.jpg" alt="IKEA HOPPVALS Cellular Blind — White — 60×155 cm / 80×155 cm — qty 3 (one per bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-baths-c.jpg" alt="IKEA HOPPVALS Cellular Blind — White — 60×155 cm / 80×155 cm — qty 3 (one per bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">IKEA HOPPVALS cellular blind: 100% recycled polyester honeycomb, 34×64&quot; US size, light-dimming (not blackout — silhouettes visible at night), cord hidden inside, wall or ceiling mount; $39.99/unit, qty 3 = $119.97; white only, not cream-toned; no bottom-up feature.</div>
       <div class="reasoning">IKEA HOPPVALS is the lowest-cost humidity-tolerant path at $40/blind. White-only colorway does not match the cream canon, and the product lacks the bottom-up feature that enables lower-half privacy per spec. Acceptable only for a powder room or secondary guest bath where functional coverage matters more than palette alignment.</div>
     </div></div>
@@ -3524,7 +3543,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/cellular-shades/duette" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Duette Blackout Shade — Warm White — custom 36–48&quot; w × 72–84&quot; h + Pottery Barn Kids Linen Sheer Panel (50×96&quot;) in Ivory — 1 window →</a></div>
       <div class="price">$590</div>
       <img class="option-img-main" src="/images/sourcing/wt-nursery-1.jpg" alt="Hunter Douglas Duette Blackout Shade — Warm White — custom 36–48&quot; w × 72–84&quot; h + Pottery Barn Kids Linen Sheer Panel (50×96&quot;) in Ivory — 1 window" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-nursery-b.jpg" alt="Hunter Douglas Duette Blackout Shade — Warm White — custom 36–48&quot; w × 72–84&quot; h + Pottery Barn Kids Linen Sheer Panel (50×96&quot;) in Ivory — 1 window detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-nursery-c.jpg" alt="Hunter Douglas Duette Blackout Shade — Warm White — custom 36–48&quot; w × 72–84&quot; h + Pottery Barn Kids Linen Sheer Panel (50×96&quot;) in Ivory — 1 window detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Duette blackout shade: single-cell or double-cell honeycomb, Warm White colorway, cordless LiteRise (child-safe), inside or outside mount, blackout light control; ~$350–600/window; 4–6 wk lead. PBK Linen Sheer Panel (100% natural linen, rod pocket, 50×96&quot; Ivory) est. ~$40–60/panel retail — potterybarnkids.com site blocked; verify at order.</div>
       <div class="reasoning">Premium nursery spec: Hunter Douglas Duette blackout is child-safe cordless — no lift cords, no bead chains — and rated for the most light-sensitive sleep environments, meeting ANNIKA-LOOP blackout requirement at the highest confidence level. PBK Linen Sheer in Ivory matches nursery palette and is sized for 8–9 ft ceilings. Runs ~$90 over the $500 budget; justified by cord-safety advantage in a nursery.</div>
     </div><div class="option-card ">
@@ -3532,7 +3551,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.levolor.com/products.html" target="_blank" rel="noopener" class="sku-link">Levolor Blackout Roller Shade — Alabaster — cordless, 36–48&quot; w × 72–84&quot; h + Levolor Sheer Roller Shade in same size — 1 window dual-shade system →</a></div>
       <div class="price">$280</div>
       <img class="option-img-main" src="/images/sourcing/wt-nursery-2.jpg" alt="Levolor Blackout Roller Shade — Alabaster — cordless, 36–48&quot; w × 72–84&quot; h + Levolor Sheer Roller Shade in same size — 1 window dual-shade system" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-nursery-b.jpg" alt="Levolor Blackout Roller Shade — Alabaster — cordless, 36–48&quot; w × 72–84&quot; h + Levolor Sheer Roller Shade in same size — 1 window dual-shade system detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-nursery-c.jpg" alt="Levolor Blackout Roller Shade — Alabaster — cordless, 36–48&quot; w × 72–84&quot; h + Levolor Sheer Roller Shade in same size — 1 window dual-shade system detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">Levolor Blackout Roller Shade (Alabaster) + Levolor Sheer Roller (dual-bracket same header), cordless, inside or outside mount; blackout + sheer in one system; est. $80–150/window for dual-roller at Lowe&#x27;s; Alabaster reads warmer than white. Under-budget by $220.</div>
       <div class="reasoning">Levolor dual-roller system mounts blackout and sheer on a single bracket with one header — the most compact install and the cleanest look on a single nursery window. Alabaster reads warmer than white. Meets ANNIKA-LOOP blackout requirement at standard (not premium) confidence. Under-budget by $220, leaving room for nursery décor or a crib textile upgrade.</div>
     </div></div>
@@ -3657,7 +3676,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
           <div><strong>Avoid:</strong> no glass top, no chrome legs, no veneer, no espresso stain</div>
           <div><strong>Target $:</strong> 800-1500</div>
           <div><strong>Hunt at:</strong> Westside Modern, City Issue, Mid Mod Market, Chairish online</div>
-        </div>
+        </div><div class="img-placeholder">LR coffee table (vintage walnut oval)<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">One real vintage gesture per major room per §4 principle 7. | WE option: West Elm Reeve Mid-Century Oval Coffee Table, Pecan (58W × 24D × 17H, walnut veneer top + solid wood legs, pecan finish) @ $899.0 — Tapered-leg oval mid-century silhouette in walnut tones is the direct WE expression of the vintage-walnut-oval spec; a t...</div>
       
     </article>
@@ -3787,7 +3806,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
           <div><strong>Avoid:</strong> no synthetic, no fringe-less, no high-contrast geometric, no kilim flat-weave</div>
           <div><strong>Target $:</strong> 3000-5000</div>
           <div><strong>Hunt at:</strong> Mellah, Berber Trading Company, Etsy vetted dealers, Atlanta vintage dealers</div>
-        </div>
+        </div><div class="img-placeholder">LR Beni Ourain (year 4+)<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</div>
       
     </article>
@@ -4904,7 +4923,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
           <div><strong>Avoid:</strong> no posters, no mass-print canvas, no jewel-tone saturation</div>
           <div><strong>Target $:</strong> 800-1500</div>
           <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Tew Galleries Atlanta, Atlanta Contemporary, Etsy original artists</div>
-        </div>
+        </div><div class="img-placeholder">LR primary wall art<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Soul-layer piece — slow hunt. | WE option: West Elm Abstract Landscape Framed Wall Art by Minted (Kirsta Niemie Benedetti, 30×30, Black Wood Frame) @ $356.0 — WE+Minted&#x27;s neutral abstract landscape program is a legitimate drop-in placeholder for the LR primary art moment while t...</div>
       
     </article>
@@ -4932,7 +4951,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
           <div><strong>Avoid:</strong> no figurative portrait, no kids&#x27; art, no saturated abstract</div>
           <div><strong>Target $:</strong> 400-800</div>
           <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Minted, Etsy</div>
-        </div>
+        </div><div class="img-placeholder">Master BR art<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Sleep-sanctuary calm. Over-bed placement. | WE option: West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) @ $449.0 — Soft fabric-mounted minimalist piece reads quieter than gallery print — fits the sleep-sanctuary calm brief; over-bed sc...</div>
       
     </article>
@@ -5015,7 +5034,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
           <div><strong>Avoid:</strong> no commercial print</div>
           <div><strong>Target $:</strong> 500-1000</div>
           <div><strong>Hunt at:</strong> Tew Galleries, Atlanta Contemporary, Mid Mod Market</div>
-        </div>
+        </div><div class="img-placeholder">Dining art / wall moment<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Dining is canon-classic dinner moment — wall art carries weight. | WE option: West Elm The Arts Capsule Framed Print (32W × 24H, white wood frame, neutral abstract) @ $399.0 — Dining wall benefits from a single calmer framed moment vs. busy gallery wall — Arts Capsule format reads restrained at ...</div>
       
     </article>
@@ -5438,7 +5457,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $2,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ 2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)</div>
+      <div class="decided-line">✅ 2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)</div><div class="img-placeholder">2-zone drip/rotor irrigation<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 + G6 line.</div>
       
     </article>
@@ -5461,7 +5480,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $720 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Nest Protect × 6 hardwired</div>
+      <div class="decided-line">✅ Nest Protect × 6 hardwired</div><div class="img-placeholder">Smart smoke/CO × 6 (Nest Protect)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G5 line. Hardwired to electrical.</div>
       
     </article>
@@ -5531,7 +5550,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Custom cabinet + dedicated vent for Robolitter — basement utility</div>
+      <div class="decided-line">✅ Custom cabinet + dedicated vent for Robolitter — basement utility</div><div class="img-placeholder">Robolitter cabinet enclosure + vent<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G5 line. Connect utility + storage + kitty-litter vent per G1.</div>
       
     </article>
@@ -5554,7 +5573,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Existing Lifesmart hot tub on slab — stays, deck rebuild works around</div>
+      <div class="decided-line">✅ Existing Lifesmart hot tub on slab — stays, deck rebuild works around</div><div class="img-placeholder">Hot tub (Lifesmart — existing, stays)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Already owned. Listed for deck-design coordination only.</div>
       
     </article>
@@ -5590,7 +5609,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/65-inch-the-frame-pro-neo-qled-4k-tv-ls03hw-sku-qn65ls03hwfxza/" target="_blank" rel="noopener" class="sku-link">Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) →</a></div>
       <div class="price">$1,999</div>
       <img class="option-img-main" src="/images/sourcing/frame-tv-1.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/frame-tv-b.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/frame-tv-c.jpg" alt="Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">65&quot; The Frame Pro 2026, Neo QLED 4K, Glare-Free, Art Mode + Art Store, Wireless One Connect Box (no cable clutter), Pantone-Validated, Vision AI, Tizen smart TV.</div>
       <div class="reasoning">Frame Pro adds wireless One Connect Box — eliminates the cable-chase problem at the mantel entirely, which matters if LR-BUILTIN millwork makes wire routing difficult. $500 over budget but the trade-off is real; escalate to owner only after LR-BUILTIN final dimensions confirm a routing constraint.</div>
     </div><div class="option-card ">
@@ -5598,7 +5617,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/75-inch-the-frame-qled-4k-tv-ls03he-sku-qn75ls03hefxza/" target="_blank" rel="noopener" class="sku-link">Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) →</a></div>
       <div class="price">$1,999</div>
       <img class="option-img-main" src="/images/sourcing/frame-tv-2.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/frame-tv-b.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/frame-tv-c.jpg" alt="Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">75&quot; The Frame 2026, QLED 4K (3840×2160), Glare-Free anti-reflective panel, Art Mode + Art Store, Pantone-Validated color, Vision AI, Tizen smart TV; larger footprint may overpower mantel surround.</div>
       <div class="reasoning">Actual street price confirmed $1,999 — not the $2,186 previously listed — narrowing the budget gap to $499. Still requires LR-BUILTIN surround dimensions to support 75&quot; before committing; flag for owner review once millwork is finalized rather than auto-declining on price alone.</div>
     </div></div>
@@ -5637,7 +5656,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
       <div class="sku"><a href="https://www.lg.com/us/tvs/lg-75qned75bua-qned-4k-tv" target="_blank" rel="noopener" class="sku-link">LG 75QNED75BUA (75&quot; 2026 QNED AI Mini LED 4K, webOS, 120Hz) →</a></div>
       <div class="price">$729</div>
       <img class="option-img-main" src="/images/sourcing/basement-tv-1.jpg" alt="LG 75QNED75BUA (75&quot; 2026 QNED AI Mini LED 4K, webOS, 120Hz)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/basement-tv-b.jpg" alt="LG 75QNED75BUA (75&quot; 2026 QNED AI Mini LED 4K, webOS, 120Hz) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">75&quot; LG QNED75B 2026, QNED Mini LED 4K (3840×2160), 60Hz native, HDR10/HLG/HDR10 Pro, webOS 26 w/Google Gemini + MS Copilot, α7 AI Processor Gen9, Game Optimizer, FILMMAKER MODE.</div>
       <div class="reasoning">Upgrades to 75&quot; on the same 2026 QNED platform; at ~$700 it now fits within the $800 budget given the 65&quot; actual of ~$530. Right call if the basement wall can absorb the larger footprint — owner should confirm wall span before choosing between 65&quot; and 75&quot;.</div>
     </div><div class="option-card ">

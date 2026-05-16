@@ -37,6 +37,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -85,13 +86,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -124,7 +143,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div>
+      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div><div class="img-placeholder">Master bath wall tile (shower walls)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</div>
       
     </article>
@@ -147,7 +166,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div>
+      <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div><div class="img-placeholder">Master bath floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
       
     </article>
@@ -170,7 +189,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $450 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div><div class="img-placeholder">Master bath sink faucet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</div>
       
     </article>
@@ -240,7 +259,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div>
+      <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div><div class="img-placeholder">Master bath linear shower drain (Schluter)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Curbless walk-in spec per G2. TCW orders with rough plumbing.</div>
       
     </article>
@@ -263,7 +282,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div>
+      <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div><div class="img-placeholder">Master bath toilet + washlet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line. One-piece form for master.</div>
       
     </article>
@@ -482,7 +501,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div>
+      <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div><div class="img-placeholder">Master bath medicine cabinet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
@@ -505,7 +524,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
-      <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div>
+      <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div><div class="img-placeholder">Master bath vanity (WE Hutchinson 60-inch Double)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</div>
       
     </article>
@@ -588,7 +607,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link">The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows →</a></div>
       <div class="price">$1,200</div>
       <img class="option-img-main" src="/images/sourcing/wt-master-1.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-master-b.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-master-c.jpg" alt="The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">The Shade Store flat Roman + drapery single-source: linen fabric in Natural/Cream, cordless or motorized, blackout liner free, inside/outside mount; Roman starts $405/window; sheer linen drapery panel custom-width starts $325+; Buckhead showroom, 10-day ship on Romans.</div>
       <div class="reasoning">Single-vendor convenience from The Shade Store Buckhead simplifies measure, fabrication, and install scheduling. Blackout liner on their linen Roman is independently verified to ANNIKA-LOOP standard; sheer panel in Natural holds the cream canon without brand-mixing. $200 under budget, leaving margin for motorization upgrade.</div>
     </div><div class="option-card ">
@@ -596,7 +615,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roller-shades/sonnette-cellular" target="_blank" rel="noopener" class="sku-link">Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) →</a></div>
       <div class="price">$1,250</div>
       <img class="option-img-main" src="/images/sourcing/wt-master-2.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/wt-master-b.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/wt-master-c.jpg" alt="Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">HD Sonnette Cellular Roller Shade: proprietary 2&quot; honeycomb cell, semi-opaque to room-darkening + optional LightLock blackout, PowerView motorized or cordless LiteRise or SoftTouch wand, inside or outside mount; ~$400–650/window motorized; 4–6 wk lead. Note: cellular roller, not traditional Roman fold.</div>
       <div class="reasoning">Motorized-only option for Annika&#x27;s sleep priority: Sonnette cellular blackout handles the ANNIKA-LOOP requirement and adds thermal insulation value in the master. Sheer drapery layer is intentionally deferred so Annika can select independently — keeps the blackout install unblocked without locking in a panel she hasn&#x27;t approved.</div>
     </div></div>
@@ -964,7 +983,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
           <div><strong>Avoid:</strong> no figurative portrait, no kids&#x27; art, no saturated abstract</div>
           <div><strong>Target $:</strong> 400-800</div>
           <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Minted, Etsy</div>
-        </div>
+        </div><div class="img-placeholder">Master BR art<br><small>vintage hunt · no image yet</small></div>
       <div class="notes-line">Sleep-sanctuary calm. Over-bed placement. | WE option: West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) @ $449.0 — Soft fabric-mounted minimalist piece reads quieter than gallery print — fits the sleep-sanctuary calm brief; over-bed sc...</div>
       
     </article>

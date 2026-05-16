@@ -37,6 +37,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
   padding: 12px 16px; margin: 16px 0; }
 .lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
 .lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
 .lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
 .schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
@@ -85,13 +86,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -124,7 +143,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</div>
+      <div class="decided-line">✅ KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</div><div class="img-placeholder">Kitchen cabinet finish<br><small>locked · no image on file</small></div>
       <div class="notes-line">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak floor required at sample stage.</div>
       
     </article>
@@ -147,7 +166,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div>
+      <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div><div class="img-placeholder">Kitchen backsplash<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per DESIGN_SPEC §7 [OWNER CONFIRM #1]: PIVOT from Bejmat to Carrara+zellige (canon-consistent). Cle lead 4-6 wk.</div>
       
     </article>
@@ -170,7 +189,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Daltile Choice Ivory porcelain</div>
+      <div class="decided-line">✅ Daltile Choice Ivory porcelain</div><div class="img-placeholder">Kitchen floor tile<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6.</div>
       
     </article>
@@ -193,7 +212,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div>
+      <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div><div class="img-placeholder">Kitchen counters + waterfall island<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked. Template after cab install. 5-week fab+install typical.</div>
       
     </article>
@@ -216,7 +235,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $550 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div>
+      <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div><div class="img-placeholder">Kitchen faucet<br><small>locked · no image on file</small></div>
       <div class="notes-line">Locked per §6 — Delta Trinsic Champagne Bronze line. Pull-down for kitchen workflow.</div>
       
     </article>
@@ -380,7 +399,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
-      <div class="decided-line">✅ Keep existing 3 white dome pendants + source matching 4th</div>
+      <div class="decided-line">✅ Keep existing 3 white dome pendants + source matching 4th</div><div class="img-placeholder">Kitchen island pendants (3+1)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match.</div>
       
     </article>
@@ -511,7 +530,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $9,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div>
+      <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div><div class="img-placeholder">Kitchen cabinets (KraftMaid Vantage)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line. Sample door required for finish match to floor.</div>
       
     </article>
@@ -534,7 +553,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
-      <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div>
+      <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div><div class="img-placeholder">Kitchen storage cabinet adder<br><small>locked · no image on file</small></div>
       <div class="notes-line">Per G3 line.</div>
       
     </article>
@@ -604,7 +623,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div>
+      <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div><div class="img-placeholder">Kitchen range (LG ThinQ — owned)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
@@ -627,7 +646,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div>
+      <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div><div class="img-placeholder">Dishwasher (Bosch — owned)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
@@ -650,7 +669,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
-      <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div>
+      <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div><div class="img-placeholder">Refrigerator (owned, stays)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Existing fridge stays — no change.</div>
       
     </article>
@@ -686,7 +705,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.universityelectric.com/product/vent-a-hood-42-black-contemporary-wall-mounted-range-hood-cweh9-242-bl-168264" target="_blank" rel="noopener" class="sku-link">Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) →</a></div>
       <div class="price">$2,650</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-1.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/g3-hood-b.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/g3-hood-c.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">42&quot;W × ~20&quot;D × 18&quot;H wall-mount, Magic Lung 600 CFM (900 CFM equiv), 3 LED lights, ducted only, contemporary gloss-black finish; CFM may require MAU damper resize for high-output range.</div>
       <div class="reasoning">Saves ~$1,150 vs. canon PRH18342SS-BK but drops to 600 CFM — below the 900 CFM minimum for a high-BTU range that does smoke and steak. MAU damper would need resizing. Contemporary silhouette is a style step down from the PRH18 chimney profile; gloss black diverges from the matte-black hardware scheme.</div>
     </div><div class="option-card ">
@@ -694,7 +713,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="sku"><a href="https://www.bestbuy.com/site/zephyr-arc-collection-42-inches-wall-range-hood-stainless-steel-black-glass/4550744.p?skuId=4550744" target="_blank" rel="noopener" class="sku-link">Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) →</a></div>
       <div class="price">$1,400</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-2.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/g3-hood-b.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/g3-hood-c.jpg" alt="Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      
       <div class="option-details">42&quot;W wall-mount chimney, blower options up to 1000 CFM (external/inline), tri-level LED lighting, 3-speed capacitive touch + wireless remote, ducted or recirculating (10&quot; round), 6 sones max; black glass + stainless combo.</div>
       <div class="reasoning">Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be conflated with it. Black glass panel diverges from matte-black chimney aesthetic. At $1,400 it under-delivers on the design brief; use only if Vent-A-Hood lead time collapses the kitchen TCO.</div>
     </div></div>

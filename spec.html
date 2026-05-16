@@ -154,7 +154,7 @@
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/spec" class="current">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec" class="current">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
@@ -335,6 +335,27 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 </tr>
 </tbody>
 </table>
+<h3 id="5e-brass-vs-bright-gold-distinction-owner-clarified-2026-05-16">5e. Brass vs bright-gold distinction (owner clarified 2026-05-16)</h3>
+<p>The canon's "warm brass + matte black mix" includes the lacquered, unlacquered, antique, and aged-brass family, plus Champagne Bronze (plumbing, Delta Trinsic) — all warm, restrained, matte-leaning gold tones.</p>
+<p><strong>EXCLUDED from the canon — do not specify or select:</strong>
+- Bright gold ("Luxe Gold," Brizo Litze -GL suffix)
+- Polished gold (mirror-finish, hotel-bathroom register)
+- "Brushed Gold" when the product reads shiny/modern rather than warm-matte
+- PVD gold / champagne gold variants that read lighter/brighter than Champagne Bronze
+- Any bare "gold" finish without a "bronze" or "brass" qualifier, when the finish looks reflective rather than warm-matte</p>
+<p><strong>Practical filter rule:</strong> If a fixture looks like it belongs in a hotel-luxury bathroom or a modern minimalist showroom, it is too shiny. Stay in the warm-brass family.</p>
+<p><strong>Canonical warm brass examples (these are fine):</strong>
+- Lacquered brass (Schoolhouse, Rejuvenation, Cedar &amp; Moss)
+- Unlacquered / natural / antique / aged brass (Emtek, Hamilton Sinkler, Visual Comfort HARAB)
+- Champagne Bronze — Delta Trinsic CZ family (plumbing, locked canon)
+- Vibrant Brushed Bronze — Kohler BV family (warm bronze variant, acceptable)
+- Brushed Brass — Sonoma Forge and similar (warm matte brass, acceptable for outdoor/accent)</p>
+<p><strong>Non-canonical bright gold examples (reject on sight):</strong>
+- Brizo Litze Luxe Gold (-GL SKU suffix)
+- Any faucet/fixture described as "Brushed Gold" by Brizo, WINGSOL, or similar modern faucet brands
+- "Champagne Gold" (lighter and brighter than Champagne Bronze — distinct and excluded)
+- Loqed or other hardware in generic "Gold finish" (shiny gold, not warm brass)</p>
+<p><em>This clarification supersedes any prior option reasoning that described Luxe Gold or Brushed Gold finishes as premium upgrades or acceptable alternate finish families. Those options remain in sourcing.yaml for reference but are tagged as owner-rejected.</em></p>
 <h2 id="6-construction-spec-callouts-from-renovation-budget-locked">6. Construction spec callouts (from renovation budget — LOCKED)</h2>
 <p>These were locked in the construction phase and constrain design execution.</p>
 <table>
@@ -463,6 +484,18 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 </tr>
 </tbody>
 </table>
+<h3 id="6a-goldbrass-weight-calibration-2026-05-16-owner-feedback">6a. Gold/brass weight calibration (2026-05-16 owner feedback)</h3>
+<p>Prior canon described "brass + matte black mix" but the sourcing tracker defaulted brass-first on most lighting and hardware ★ picks. Owner feedback 2026-05-16: "this is using too much gold overall." Calibration rule:</p>
+<ul>
+<li><strong>Matte black is the DEFAULT for utility tier</strong> — basement bath cabinet hardware, basement bath sconces, hall bath sconces, mudroom lighting, mudroom hooks (when not in mixed-finish mode), back-deck-door hardware, exterior lighting (already locked black per §8d Atlanta humidity), interior cabinet pulls in secondary rooms.</li>
+<li><strong>Matte black is tied to FUNCTIONAL ZONES inside finish-locked rooms</strong> — example: in any bath, the towel BARS stay Champagne Bronze (consistent with the Trinsic plumbing finish-family lock — see §6 plumbing row) but the HOOKS, robe hooks, and accessory pulls can shift to matte black to enforce the brass+black mix without violating the plumbing lock.</li>
+<li><strong>Brass remains the ANCHOR finish for hero items</strong> — kitchen pendants (when active), dining chandelier, master bedroom ceiling + sconces, master bath sconces (Princeton family), front-door hardware, plumbing trim throughout (Champagne Bronze LOCKED), kitchen + master cabinet pulls (brass-led in mixed-finish K-CAB).</li>
+<li><strong>Bath mirrors default to bleached / natural wood frames</strong> in secondary baths — the brass-framed mirror moment is reserved for places where the wall needs the metal anchor (LR / entry), not stacked on top of brass cabinet pulls + brass plumbing trim in a small bath.</li>
+<li><strong>Target finish ratio across ★ recommends in finish-relevant categories (lighting + hardware + plumbing):</strong> roughly <strong>50% brass, 35% matte black, 15% other</strong> (silver / wood / painted / Trinsic-locked-counts-as-brass). Audit-baseline pre-calibration was 51% brass / 8% black — the calibration shifts 7 ★ flags from brass to matte black or natural wood across HB-SCONCES, BB-SCONCES, MUDROOM-LIGHTING, LR-FLOOR-LAMP, BACK-DECK-DOOR, TOWEL-BARS-HOOKS, BATH-MIRRORS. See <code>audits/2026-05-16-gold-rebalance/</code> for the full shift manifest and projected ratio.</li>
+<li><strong>Items that did NOT shift:</strong> all plumbing (Trinsic Champagne Bronze LOCKED per §6 row), DR-CHANDELIER (dining brass-anchor hero), MB-CEILING + MB-SCONCES (master BR brass-anchor hero), LR-SCONCES + LR-MIRROR (LR brass anchors — paired with shifted LR-FLOOR-LAMP black for the room-level mix), FRONT-DOOR (entry brass hero), K-CAB-HARDWARE + MUDROOM-HOOKS (already explicit brass+black mix), INTERIOR-DOOR-HARDWARE (already decided matte black for all 10 doors).</li>
+<li><strong>Override allowance for ADD_BLACK_OPTION_NEEDED items:</strong> DR-PICTURE-LIGHT, HB-CAB-HARDWARE, MBA-SCONCES, OFFICE-LIGHTING — these currently had brass-only option arrays. A matte black variant has been added as an alt in the sourcing pass so the calibration rule is exercisable per room.</li>
+</ul>
+<p><strong>Implication for principle 3 (Section 4 "Durable materials that stay looking good"):</strong> lacquered brass + matte black are now equal-weight default candidates in finish-relevant decisions. The patina-maintenance contract in §16 still applies only to unlacquered brass on high-touch items.</p>
 <h3 id="construction-budget-state-2026-05-15">Construction budget state (2026-05-15)</h3>
 <p>Phase 1 cap revised to <strong>$342K</strong> (was $325K) after an 8-agent audit chain on 2026-05-15 surfaced $85,645 of honest cost the prior sheet was carrying implicitly. All-in projection now <strong>$341,768</strong> at 5.4% contingency with <strong>$232 cushion</strong>. Path 3 (TCW labor friend rate 20% → 30% off market, ~$60K labor absorption) still required for projection to hold; the TCW change-order email is the gating conversation. <strong>HARD RULE: revisions go UP only, never cut.</strong> See <code>scope/TIER_B_FINAL_LOCKED.md</code> for the full sheet and <code>audits/2026-05-15-full-sheet-vet/SYNTHESIS.md</code> for the audit chain.</p>
 <p>Design execution implication: <strong>do not value-engineer any locked spec downward</strong> to fit cap. If a chosen design item exceeds its budgeted allowance, the response is either (a) defer the item to Phase 2, or (b) revise the cap upward — never substitute a cheaper material than what's locked here.</p>
