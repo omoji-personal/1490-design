@@ -139,16 +139,18 @@ def parse_item(raw: Dict[str, Any]) -> Item:
     vintage = parse_vintage_brief(raw["vintage_brief"]) if raw.get("vintage_brief") else None
 
     # Variant validation: exactly one of (options) or (vintage_brief) or (canon-locked decided)
+    # Exception: stub rows are placeholders by definition (hidden from site) — allowed bare.
     canon_locked = (
         raw["decision_status"] == "decided"
         and raw.get("decided_sku") is not None
         and options is None
         and vintage is None
     )
-    if not canon_locked and options is None and vintage is None:
+    is_stub = raw["decision_status"] == "stub"
+    if not canon_locked and not is_stub and options is None and vintage is None:
         raise ValidationError(
             f"{raw.get('id', '?')}: must have either options, vintage_brief, "
-            f"or (decision_status=decided AND decided_sku set)"
+            f"or (decision_status=decided AND decided_sku set), or decision_status=stub"
         )
     if options is not None and vintage is not None:
         raise ValidationError(f"{raw.get('id', '?')}: cannot have both options and vintage_brief")
