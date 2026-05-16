@@ -40,6 +40,8 @@ class Option:
     image: str
     reasoning: str
     recommend: bool = False
+    details: Optional[str] = None          # NEW
+    product_url: Optional[str] = None      # NEW
 
 
 @dataclass
@@ -107,6 +109,8 @@ def parse_option(raw: Dict[str, Any]) -> Option:
         image=raw.get("image", ""),
         reasoning=raw["reasoning"],
         recommend=bool(raw.get("recommend", False)),
+        details=raw.get("details"),                 # NEW
+        product_url=raw.get("product_url"),         # NEW
     )
 
 

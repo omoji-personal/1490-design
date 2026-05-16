@@ -129,6 +129,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .option-img-supps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
 .option-img-supp { width: 80px; height: 80px; object-fit: cover; border-radius: 5px;
   border: 1px solid var(--border); background: #f3ede0; }
+.option-details { font-size: 11.5px; color: var(--muted); margin: 6px 0 8px; padding: 6px 8px; background: var(--note-tint); border-radius: 4px; line-height: 1.4; }
+.sku-link { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+.sku-link:hover { color: var(--accent); }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
@@ -163,12 +166,21 @@ def _render_option(opt) -> str:
             for p in supp_paths
         )
         supp_html = f'<div class="option-img-supps">{thumbs}</div>'
+    # Details block (new)
+    details_html = f'<div class="option-details">{escape(opt.details)}</div>' if opt.details else ""
+    # Product URL link (new)
+    sku_html = (
+        f'<a href="{escape(opt.product_url)}" target="_blank" rel="noopener" class="sku-link">{star}{escape(opt.sku)} →</a>'
+        if opt.product_url
+        else f'{star}{escape(opt.sku)}'
+    )
     return f"""<div class="option-card {'recommend' if opt.recommend else ''}">
       <div class="vendor">{escape(opt.vendor)}</div>
-      <div class="sku">{star}{escape(opt.sku)}</div>
+      <div class="sku">{sku_html}</div>
       <div class="price">${opt.price_usd:,.0f}</div>
       {img_html}
       {supp_html}
+      {details_html}
       <div class="reasoning">{escape(opt.reasoning)}</div>
     </div>"""
 
