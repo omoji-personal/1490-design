@@ -57,6 +57,10 @@ def main(manual_trigger_t3: bool = False) -> None:
         marker = {"error": "❌", "warning": "⚠️", "info": "ℹ️"}.get(f.severity, "·")
         print(f"  {marker} [{f.severity}] {f.message}")
 
+    if errors:
+        import sys
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     import sys

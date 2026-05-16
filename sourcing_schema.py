@@ -104,7 +104,7 @@ def parse_option(raw: Dict[str, Any]) -> Option:
         sku=raw["sku"],
         vendor=raw["vendor"],
         price_usd=float(raw["price_usd"]),
-        image=raw["image"],
+        image=raw.get("image", ""),
         reasoning=raw["reasoning"],
         recommend=bool(raw.get("recommend", False)),
     )
