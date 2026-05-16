@@ -451,9 +451,11 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 
 
 def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item], meta: Meta,
-                     schedule_lookup: Optional[ScheduleLookup] = None) -> str:
+                     schedule_lookup: Optional[ScheduleLookup] = None,
+                     design_hub_url: Optional[str] = None) -> str:
     """Render a single-room view. rooms_filter is a list of room IDs to include
-    (e.g., ['master_br','master_bath'] for master suite)."""
+    (e.g., ['master_br','master_bath'] for master suite).
+    design_hub_url: optional URL to the corresponding design hub page (e.g. '/kitchen')."""
     visible = [it for it in items if it.decision_status != "stub" and it.room in rooms_filter]
     banner_mode = _schedule_banner_mode(visible, schedule_lookup)
     schedule_banner_html = (
@@ -463,6 +465,17 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
     cards_html = "\n".join(_render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode) for it in visible)
 
     subtitle = f"{len(visible)} items in {room_label}. Updated {meta.last_updated}."
+
+    # Cross-link to design hub page if available
+    crosslink_html = ""
+    if design_hub_url:
+        crosslink_html = (
+            f'<div style="margin-top:8px;padding:8px 12px;background:var(--note-tint);border-radius:6px;'
+            f'font-size:13px;color:var(--muted);">'
+            f'Design vision, mood, and constraints: <a href="{escape(design_hub_url)}" '
+            f'style="color:var(--accent);">{escape(room_label)} design hub →</a>'
+            f'</div>'
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -476,9 +489,12 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
 <body>
 {TOPNAV_HTML}
 <header class="page-header">
+  <p style="font-size:13px;color:var(--muted);margin:0 0 4px;">
+    <a href="/sourcing" style="color:var(--accent);">Sourcing</a> › {escape(room_label)}
+  </p>
   <h1>Sourcing · {escape(room_label)}</h1>
   <p class="subtitle">{escape(subtitle)}</p>
-  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+  {crosslink_html}
 </header>
 <main>
 {schedule_banner_html}

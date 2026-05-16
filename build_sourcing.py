@@ -53,17 +53,18 @@ def main(manual_trigger_t3: bool = False) -> None:
     print(f"Wrote {OUT_ANNIKA.name} ({OUT_ANNIKA.stat().st_size:,} bytes)")
     print(f"Wrote {OUT_HTML.name} ({OUT_HTML.stat().st_size:,} bytes)")
     ROOM_VIEWS = [
-        ("Kitchen", ["kitchen"], "sourcing-kitchen.html"),
-        ("Master Suite", ["master_br", "master_bath"], "sourcing-master.html"),
-        ("Baths (Hall + Basement)", ["hall_bath", "basement_bath"], "sourcing-baths.html"),
-        ("Living + Dining", ["lr", "dining"], "sourcing-lr.html"),
-        ("Nursery", ["nursery"], "sourcing-nursery.html"),
-        ("Office", ["office"], "sourcing-office.html"),
+        ("Kitchen", ["kitchen"], "sourcing-kitchen.html", "/kitchen"),
+        ("Master Suite", ["master_br", "master_bath"], "sourcing-master.html", "/master"),
+        ("Baths (Hall + Basement)", ["hall_bath", "basement_bath"], "sourcing-baths.html", "/baths"),
+        ("Living + Dining", ["lr", "dining"], "sourcing-lr.html", "/lr"),
+        ("Nursery", ["nursery"], "sourcing-nursery.html", "/nursery"),
+        ("Office", ["office"], "sourcing-office.html", "/office"),
     ]
 
-    for label, rooms, fname in ROOM_VIEWS:
+    for label, rooms, fname, hub_url in ROOM_VIEWS:
         out = SITE / fname
-        out.write_text(render_room_page(label, rooms, data.items, data.meta, schedule_lookup=lookup))
+        out.write_text(render_room_page(label, rooms, data.items, data.meta,
+                                        schedule_lookup=lookup, design_hub_url=hub_url))
         print(f"Wrote {out.name} ({out.stat().st_size:,} bytes)")
 
     print(f"\nLint: {len(findings)} findings ({len(errors)} errors)")

@@ -238,6 +238,7 @@ def kitchen_page():
     body = """
 <div class="note-card warm">
 <strong>Locked anchor:</strong> Cathie Hong's <em>Campbell House</em> kitchen (loved_12). Light oak Shaker base, Carrara waterfall island, brass pendants, Cle Sea Salt zellige backsplash. This is the room with the most construction-locked specs — what's locked here, locked everywhere.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-kitchen" style="color:var(--accent);">Kitchen sourcing →</a></small>
 </div>
 
 <div class="dims">
@@ -349,6 +350,7 @@ def master_page():
     body = """
 <div class="note-card warm">
 <strong>Annika's domain.</strong> The "new master" is the current Study (8'-11" × 13'-11" = 124 sf). Sound insulation locked between master and future nursery wall. Aesthetic: Jenni Kayne Lake House meets SSS Mandy Moore project.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-master" style="color:var(--accent);">Master Suite sourcing →</a></small>
 </div>
 
 <div class="dims">
@@ -442,6 +444,7 @@ def baths_page():
     body = """
 <div class="note-card warm">
 <strong>Three bath gut.</strong> Master ($23,500 honest), Hall ($15,400), Basement ¾ ($11,800 → $17K honest). Cle Bejmat is master ONLY (kitchen pivoted to Carrara + Sea Salt zellige). Delta Trinsic Champagne Bronze plumbing is the non-negotiable contract callout across all three.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-baths" style="color:var(--accent);">Baths sourcing →</a></small>
 </div>
 
 <section class="section-header">
@@ -567,6 +570,7 @@ def lr_page():
     body = """
 <div class="note-card warm">
 <strong>The most-public room.</strong> Living Room is where guests land first — cocktail-hour, weekly drinks, monthly parties up to 20. Existing LR cabinetry refresh locked at $5,100. Music is huge here — Sony floor-standing speakers + amp + HUE around the couch.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-lr" style="color:var(--accent);">Living + Dining sourcing →</a></small>
 </div>
 
 <div class="dims">
@@ -658,6 +662,7 @@ def nursery_page():
     body = """
 <div class="note-card warm">
 <strong>Annika's domain.</strong> Kid 1 expected within ~1 year. The future nursery is currently the Guest Bedroom (~125 sf est — needs tape-measure verification). Sound insulation locked between master and nursery wall.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-nursery" style="color:var(--accent);">Nursery sourcing →</a></small>
 </div>
 
 <div class="dims">
@@ -725,6 +730,7 @@ def office_page():
     body = """
 <div class="note-card warm">
 <strong>Omid's WFH office.</strong> The new office is the current Master Bedroom + attached skylight (10'-1" × 13'-3" = 134 sf). Has the most natural light in the house. South-facing windows + skylight.
+<br><small style="color:var(--muted);">Vendor SKUs and decision status: <a href="/sourcing-office" style="color:var(--accent);">Office sourcing →</a></small>
 </div>
 
 <div class="dims">
