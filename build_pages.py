@@ -164,6 +164,7 @@ def topnav(current=""):
         ("/mood-board", "Mood"),
         ("/spectrum", "Spectrum"),
         ("/decisions", "Decisions"),
+        ("/budget", "Budget"),
         ("/spec", "Spec"),
     ]
     items_rooms = [
@@ -1427,6 +1428,111 @@ def rejected_page():
     return page("/rejected", "Rejected Anti-Patterns", "What we explicitly DID NOT pick. Norm/Daytrip/Athena Calderone/Heidi Caillier/Mahno/Reath/Justina Blakeney + modern farmhouse.", body)
 
 
+def budget_page():
+    body = """
+<div class="note-card warm">
+<strong>The honest reckoning.</strong> What the renovation costs at Atlanta 2026 market, after two rounds of multi-agent audit. The cap moved up $17K on 2026-05-15 — not because scope grew, but because deeper itemization surfaced costs the prior sheet was carrying implicitly.
+</div>
+
+<div class="dims">
+  <div class="dim"><div class="label">Cap</div><div class="value">$342K</div></div>
+  <div class="dim"><div class="label">All-in projection</div><div class="value">$341,768</div></div>
+  <div class="dim"><div class="label">Cushion</div><div class="value">$232</div></div>
+  <div class="dim"><div class="label">Contingency</div><div class="value">5.4%</div></div>
+</div>
+
+<section class="section-header"><h2>Where it stands today</h2></section>
+<table class="spec-table">
+<tr><th>Line</th><th>$</th></tr>
+<tr><td>Construction subtotal (honest, post-correction)</td><td>$312,398</td></tr>
+<tr><td>Contingency (5.4% held)</td><td>$16,870</td></tr>
+<tr><td>Alternate housing during reno</td><td>$12,500</td></tr>
+<tr><td><strong>All-in projection</strong></td><td><strong>$341,768</strong></td></tr>
+<tr><td>Cap (revised 2026-05-15)</td><td>$342,000</td></tr>
+<tr><td>Cushion</td><td>$232</td></tr>
+</table>
+
+<section class="section-header"><h2>How we got here — the audit chain</h2></section>
+
+<div class="note-card">
+<strong>2026-05-14 — the sheet looked done.</strong> Three-agent re-audit + TCW 2023 floor verification reconciled to <strong>$324,937 all-in</strong> at the $325K cap with $63 of cushion. Contingency was already reduced 11% → 5.4% as the lever to fit.
+</div>
+
+<div class="note-card">
+<strong>2026-05-15 morning — G1 deep-dive.</strong> A two-agent per-line itemization of Group 1 (Claude + Codex with citations) surfaced <strong>$48,150 of hidden cost in G1 alone</strong>. The single biggest surprise: hardwood refinish with Bleach + Rubio Pure (the locked non-negotiable spec) is a specialty premium process, not a standard refinish — honest cost $11,200, not $5,500. The sheet's "$63 under cap" was structural fiction.
+</div>
+
+<div class="note-card">
+<strong>2026-05-15 afternoon — full-sheet vet.</strong> Six agents (Codex + Gemini-3-pro + four specialized Claude subagents) extended the line-by-line method to G2 through G7. Total honest gap surfaced: <strong>$85,645 across the sheet</strong>, not just G1.
+</div>
+
+<table class="spec-table">
+<tr><th>Group</th><th>Sheet</th><th>Honest (UP-only)</th><th>Delta</th></tr>
+<tr><td>G1 Interior</td><td>$145,930</td><td>$200,800</td><td>+$54,870</td></tr>
+<tr><td>G2 Baths</td><td>$42,000</td><td>$55,900</td><td>+$13,900</td></tr>
+<tr><td>G3 Kitchen</td><td>$33,000</td><td>$40,800</td><td>+$7,800</td></tr>
+<tr><td>G4 Water</td><td>$4,000</td><td>$4,500</td><td>+$500</td></tr>
+<tr><td>G5 EV + smart</td><td>$5,500</td><td>$6,000</td><td>+$500</td></tr>
+<tr><td>G6 Outdoor</td><td>$47,000</td><td>$53,675</td><td>+$6,675</td></tr>
+<tr><td>G7 Soft</td><td>$31,500</td><td>$32,900</td><td>+$1,400</td></tr>
+<tr><td><strong>Total honest gap</strong></td><td></td><td></td><td><strong>+$85,645</strong></td></tr>
+</table>
+
+<div class="note-card">
+<strong>Then — audit-overestimate correction.</strong> A line-by-line review of the audit findings caught ~$10K of padding the agents had added: closets priced as four-rooms-all-premium when the real spec is one premium reach-in + three PAX hybrid; exterior doors priced as both-premium when only the front door is the walnut splurge; sheetrock / trim / exterior paint slightly above Atlanta 2026 market; G5 EV cluster overpriced. Real material-only delta to absorb: <strong>$15,968</strong>.
+</div>
+
+<section class="section-header"><h2>The HARD RULE that governed the revision</h2></section>
+
+<div class="note-card target">
+<strong>Revisions move UP, never DOWN.</strong> Once a line is at TCW 2023 × 1.10 floor or honest 2026 market, it cannot be value-engineered downward as a budget-fit lever. To fit a cap, only three moves are legal: <strong>(a)</strong> reduce contingency %, <strong>(b)</strong> defer entire scope items to Phase 2, <strong>(c)</strong> revise the cap upward. Trimming a line item's dollar figure to make math work is exactly the kind of self-deception the multi-agent process is designed to surface.
+</div>
+
+<section class="section-header"><h2>How the gap closes — Path 3 still required</h2></section>
+
+<p>The $85,645 surfaced gap minus $15,968 material-only corrections + $17K cap revision still leaves a labor delta that Path 3 must absorb:</p>
+
+<table class="spec-table">
+<tr><th>Lever</th><th>Honest ceiling</th></tr>
+<tr><td>TCW labor friend rate from 20% → 30% off market</td><td>$15-25K</td></tr>
+<tr><td>Owner-direct material trade discounts (Home Depot Pro Xtra, Lowe's Pro, manufacturer-direct on tile / lighting / hardware)</td><td>$5-10K</td></tr>
+<tr><td>G6.7 buffer line itemized + negotiated down (hidden 27.6% contingency on outdoor scope)</td><td>$2.5-3K</td></tr>
+<tr><td><strong>Path 3 realistic ceiling</strong></td><td><strong>$22.5-38K labor absorption</strong></td></tr>
+</table>
+
+<div class="kill-list">
+<strong>Risk R19 (High probability):</strong> if TCW does NOT absorb the labor delta via aggressive friend rate, all-in projection goes to <strong>$395-415K range</strong>. The TCW change-order email is the gating conversation that resolves Path 3 viability.
+</div>
+
+<section class="section-header"><h2>What the cap revision did NOT do</h2></section>
+
+<table class="spec-table">
+<tr><th>Tempting move</th><th>Why we said no</th></tr>
+<tr><td>Defer kitchen full reno to P2</td><td>Five years of patched-together cooking in a 1953 ranch kitchen — quality-of-life cost too high for the savings.</td></tr>
+<tr><td>Defer basement ¾ bath</td><td>Adding shower to under-stair half-bath unlocks the basement as a guest suite + future kid-2 zone — high option-value preserved.</td></tr>
+<tr><td>Drop hardwood spec back to standard refinish</td><td>Bleach + Rubio is one of two non-negotiable contract callouts — the aesthetic depends on it (avoids pinkish poly tone on red oak).</td></tr>
+<tr><td>Cut contingency to 0%</td><td>1953 ranch reno with no permits + waterproofing on contractor-allowance + structural-engineer-letter gap on 2020 kitchen wall. 5.4% is already thin.</td></tr>
+<tr><td>Trim 2 exterior doors to keep originals</td><td>Front door is the walnut splurge — the canon Campbell House move. Side door upgrade is the smaller adjacent decision; defer-able if Path 3 underperforms.</td></tr>
+</table>
+
+<section class="section-header"><h2>Files behind these numbers</h2></section>
+
+<table class="spec-table">
+<tr><th>Doc</th><th>What it is</th></tr>
+<tr><td>scope/TIER_B_FINAL_LOCKED.md</td><td>The canonical sheet — every line, every owner-locked decision, the risk register</td></tr>
+<tr><td>audits/2026-05-15-g1-itemization/</td><td>2-agent G1 deep-dive (Claude + Codex), SYNTHESIS.md, $48K surfaced</td></tr>
+<tr><td>audits/2026-05-15-full-sheet-vet/</td><td>6-agent full-sheet vet (Codex + Gemini-3-pro + 4 subagents), SYNTHESIS.md, $86K surfaced</td></tr>
+<tr><td>audits/2026-05-14-tier-b-recheck/</td><td>The prior 3-agent reckoning + TCW 2023 floor verification (what the new audits built on)</td></tr>
+<tr><td>audits/2026-05-14-roof-research/</td><td>Roof material decision (premium shingle vs metal vs stone-coated steel) — locked at $16K shingle</td></tr>
+</table>
+
+<div class="note-card warm">
+<strong>Next gate:</strong> the TCW change-order email. Ten line-itemized asks (G1-G7 full breakdown + G6.7 buffer itemization + Vent-A-Hood SKU verification with CDGA + kitchen backsplash spec reconciliation + Aura paint product-line confirmation + HVAC bundle truth-up + management fee concession). Rick's reply on those specifics is the only data point that resolves whether Path 3 holds at $22-38K or falls short and forces the next cap conversation.
+</div>
+"""
+    return page("/budget", "Budget", "The honest reckoning — $342K cap, $341,768 all-in projection, $232 cushion. How an 8-agent audit chain surfaced $86K of hidden cost and revised the cap up $17K.", body)
+
+
 # =====================================================================
 # MAIN
 # =====================================================================
@@ -1444,6 +1550,7 @@ PAGES = [
     ("sss.html", sss_page),
     ("jenni-kayne.html", jenni_kayne_page),
     ("rejected.html", rejected_page),
+    ("budget.html", budget_page),
 ]
 
 if __name__ == "__main__":

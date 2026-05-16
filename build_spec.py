@@ -170,7 +170,7 @@ html = f"""<!DOCTYPE html>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/spec" class="current">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/spec" class="current">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
