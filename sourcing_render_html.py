@@ -223,7 +223,8 @@ def _render_filter_bar() -> str:
                   "cabinetry_millwork", "appliance", "paint_finish", "window_treatment",
                   "furniture", "decor_softgoods"]
     statuses = ["options_drafted", "awaiting_sample", "sample_in_hand", "decided",
-                "ordered", "received", "installed", "deferred_p2", "watch_list"]
+                "ordered", "received", "installed", "deferred_p2", "cancelled",
+                "watch_list", "found_candidate"]
     return f"""<div class="filter-bar">
       <button data-filter="all" class="active">All</button>
       <button data-filter="decide-now">Decide this week</button>
