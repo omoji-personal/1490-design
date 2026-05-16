@@ -34,6 +34,7 @@ def test_brass_finish_all_same_family_no_warning():
 
 
 def test_brass_finish_drift_warns():
+    """Explicit non-allowed brass treatment (matte brass) should warn."""
     items = [
         _i("X1", tags=["lacquered_brass"], decided_sku="Rejuvenation Westmore lacquered brass"),
         _i("X2", tags=["lacquered_brass"], decided_sku="WE matte brass pull"),
@@ -42,6 +43,42 @@ def test_brass_finish_drift_warns():
     assert len(findings) == 1
     assert findings[0].severity == "warning"
     assert "X2" in findings[0].message
+
+
+def test_brass_finish_schoolhouse_no_warning():
+    """Schoolhouse lacquered brass is an allowed family — should not warn."""
+    items = [
+        _i("S1", tags=["lacquered_brass"], decided_sku="Schoolhouse Princeton Wall Sconce, lacquered brass, 4-inch milk glass"),
+    ]
+    findings = check_brass_finish(items, expected_family="Rejuvenation lacquered brass")
+    assert findings == []
+
+
+def test_brass_finish_cedar_moss_no_warning():
+    """Cedar & Moss items are always lacquered brass in canon — should not warn."""
+    items = [
+        _i("C1", tags=["lacquered_brass"], decided_sku="Cedar & Moss Globe Sconce, lacquered brass"),
+    ]
+    findings = check_brass_finish(items, expected_family="Rejuvenation lacquered brass")
+    assert findings == []
+
+
+def test_brass_finish_polished_brass_warns():
+    """Polished brass is a confirmed non-allowed treatment — should warn."""
+    items = [
+        _i("P1", tags=["lacquered_brass"], decided_sku="Newport Brass polished brass faucet"),
+    ]
+    findings = check_brass_finish(items, expected_family="Rejuvenation lacquered brass")
+    assert any(f.severity == "warning" and "P1" in f.message for f in findings)
+
+
+def test_brass_finish_no_brand_lacquered_no_warning():
+    """Manufacturer-agnostic 'lacquered brass' phrase should pass without brand qualifier."""
+    items = [
+        _i("N1", tags=["lacquered_brass"], decided_sku="wall sconce, lacquered brass finish"),
+    ]
+    findings = check_brass_finish(items, expected_family="Rejuvenation lacquered brass")
+    assert findings == []
 
 
 # --- Wood tone ---
@@ -126,6 +163,28 @@ def test_paint_line_non_aura_warns():
     assert any(f.severity == "warning" and "P1" in f.message for f in findings)
 
 
+def test_paint_line_cabinet_factory_finish_no_warning():
+    """Cabinet items categorized as paint_finish with factory-finish SKU (no paint brand) should not warn."""
+    items = [_i("CF1", category="paint_finish",
+                decided_sku="KraftMaid Vantage light oak Shaker — factory finish included in cabinet line")]
+    findings = check_paint_line(items, expected_line="aura")
+    assert findings == []
+
+
+def test_paint_line_bm_non_aura_sku_no_warning():
+    """Any BM Aura family variant in SKU text should pass even without the word 'aura'."""
+    items = [_i("P2", category="paint_finish", decided_sku="BM Saybrook Sage HC-114, Aura Bath & Spa matte")]
+    findings = check_paint_line(items, expected_line="aura")
+    assert findings == []
+
+
+def test_paint_line_behr_warns():
+    """Behr is a forbidden brand — should warn regardless of product line."""
+    items = [_i("P3", category="paint_finish", decided_sku="Behr Premium Plus Ultra pure white")]
+    findings = check_paint_line(items, expected_line="aura")
+    assert any(f.severity == "warning" and "P3" in f.message for f in findings)
+
+
 # --- Hardware mix ---
 
 def test_hardware_mix_balanced_room_no_warning():
@@ -141,12 +200,23 @@ def test_hardware_mix_balanced_room_no_warning():
 
 
 def test_hardware_mix_unbalanced_room_info():
+    """6-item room with 5 brass and 1 black → under the ≥2 threshold for black → info finding."""
     items = [
         _i(f"K{i}", room="kitchen", category="hardware", tags=["lacquered_brass"], decided_sku="brass")
-        for i in range(3)
+        for i in range(5)
     ] + [_i("K10", room="kitchen", category="hardware", tags=["matte_black"], decided_sku="matte black")]
     findings = check_hardware_mix(items)
     assert any(f.severity == "info" and "kitchen" in f.message.lower() for f in findings)
+
+
+def test_hardware_mix_small_room_skipped():
+    """Room with <6 hardware items should never fire even if only one finish."""
+    items = [
+        _i(f"K{i}", room="bath_tiny", category="hardware", tags=["lacquered_brass"], decided_sku="brass")
+        for i in range(3)
+    ] + [_i("K10", room="bath_tiny", category="hardware", tags=["matte_black"], decided_sku="matte black")]
+    findings = check_hardware_mix(items)
+    assert not any("bath_tiny" in (f.item_id or "") or "bath_tiny" in f.message for f in findings)
 
 
 # --- Budget rollup ---

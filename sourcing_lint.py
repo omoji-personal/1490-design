@@ -27,21 +27,70 @@ def _item_text(item: Item) -> str:
 
 
 def check_brass_finish(items: List[Item], expected_family: str) -> List[LintFinding]:
-    """Warn if any brass-tagged item references a brass treatment outside the expected family.
-    Expected family is e.g. 'Rejuvenation lacquered brass'."""
+    """Warn if any lacquered-brass-tagged item references a confirmed non-allowed brass treatment.
+
+    Allowed family (canonical lacquered brass brands):
+    - Rejuvenation + "lacquered brass", "lacq brass", or "antique brass"
+    - Schoolhouse + "lacquered" or "brass" (lacquered is Schoolhouse default)
+    - Cedar & Moss / Cedar and Moss (always lacquered brass in canon)
+    - Emtek + "brass" or "lacquered"
+    - Manufacturer-agnostic: "lacquered brass" or "antique brass" anywhere in text
+
+    Items tagged "unlacquered_brass" instead of "lacquered_brass" are treated as a
+    separate family (intentional patina choice, e.g. Schoolhouse Bishop front-door set)
+    and are not checked by this function.
+
+    Only warns when text mentions "brass" AND references a known non-allowed treatment
+    (e.g. "matte brass", "polished brass", "raw brass", "unlacquered brass" paired with
+    a non-Schoolhouse brand, or a clearly wrong brand like "WE matte brass").
+    """
     findings = []
-    expected_lower = expected_family.lower()
-    expected_keywords = [w for w in expected_lower.split() if len(w) > 3]
+
+    # Patterns that confirm an allowed lacquered-brass source
+    def _is_allowed(text: str) -> bool:
+        # Manufacturer-agnostic: literal "lacquered brass" or "antique brass" anywhere
+        if "lacquered brass" in text or "lacq brass" in text or "antique brass" in text:
+            return True
+        # Rejuvenation with any brass variant
+        if "rejuvenation" in text and "brass" in text:
+            return True
+        # Schoolhouse with lacquered or brass (Schoolhouse's default is lacquered)
+        if "schoolhouse" in text and ("lacquered" in text or "brass" in text):
+            return True
+        # Cedar & Moss (always lacquered brass in canon)
+        if "cedar & moss" in text or "cedar and moss" in text:
+            return True
+        # Emtek with brass or lacquered
+        if "emtek" in text and ("brass" in text or "lacquered" in text):
+            return True
+        return False
+
+    # Patterns that explicitly indicate a NON-allowed brass treatment
+    NON_ALLOWED = [
+        "matte brass",
+        "polished brass",
+        "raw brass",
+        "unlacquered brass",
+        "satin brass",
+    ]
+
     for item in items:
-        if "lacquered_brass" not in item.cross_room_consistency and "brass" not in item.cross_room_consistency:
+        # Only check items tagged for the lacquered brass family
+        if "lacquered_brass" not in item.cross_room_consistency:
             continue
         text = _item_text(item)
         if "brass" not in text:
-            continue  # tagged brass but text doesn't mention brass — nothing to lint against
-        if not all(kw in text for kw in expected_keywords):
+            continue  # tagged brass but no brass mention in text — nothing to lint against
+        if _is_allowed(text):
+            continue  # confirmed allowed family — no warning
+        # Check for explicit non-allowed brass treatments
+        if any(bad in text for bad in NON_ALLOWED):
             findings.append(LintFinding(
                 severity="warning",
-                message=f"{item.id}: brass-tagged but doesn't match expected family '{expected_family}'",
+                message=(
+                    f"{item.id}: brass-tagged item references a non-allowed brass treatment "
+                    f"(expected lacquered/antique brass from Rejuvenation, Schoolhouse, Cedar & Moss, or Emtek)"
+                ),
                 item_id=item.id,
             ))
     return findings
@@ -49,7 +98,14 @@ def check_brass_finish(items: List[Item], expected_family: str) -> List[LintFind
 
 def check_wood_tone(items: List[Item], expected_treatment: str) -> List[LintFinding]:
     """Warn if a wood-tone item references treatment outside the expected family.
-    Expected treatment is e.g. 'white_oak_bleach_rubio_pure' → looks for 'bleach' + 'rubio' or 'pure'."""
+    Expected treatment is e.g. 'white_oak_bleach_rubio_pure' → looks for 'rubio'.
+
+    Scope rules:
+    - cabinetry_millwork: always checked (inherently a wood product)
+    - paint_finish / furniture: only checked if item is explicitly tagged 'wood_tone'
+      in cross_room_consistency (avoids flagging exterior paint that mentions the word
+      'wood' in context notes, or furniture items not part of the wood-tone lock)
+    """
     findings = []
     keywords_needed = ["rubio"]  # the canonical signal
     forbidden = ["minwax", "stain", "espresso", "walnut stain", "poly", "polyurethane"]
@@ -58,9 +114,10 @@ def check_wood_tone(items: List[Item], expected_treatment: str) -> List[LintFind
             continue
         text = _item_text(item)
         # cabinetry_millwork is inherently wood — always lint it.
-        # For other categories only lint if the text mentions oak or wood.
-        if item.category != "cabinetry_millwork" and "oak" not in text and "wood" not in text:
-            continue
+        # For paint_finish and furniture: only lint if explicitly tagged wood_tone.
+        if item.category != "cabinetry_millwork":
+            if "wood_tone" not in item.cross_room_consistency:
+                continue
         if any(f in text for f in forbidden):
             findings.append(LintFinding(
                 severity="warning",
@@ -132,51 +189,129 @@ def check_tile_palette(items: List[Item], allowed: List[str]) -> List[LintFindin
     return findings
 
 
+def _paint_brand_text(item: Item) -> str:
+    """Narrow text for paint check: decided_sku + options[].sku only (not notes or reasoning).
+    This prevents 'paint' mentions in context notes from triggering the check."""
+    parts = [item.decided_sku or ""]
+    if item.options:
+        for o in item.options:
+            parts.append(o.sku)
+    return " ".join(parts).lower()
+
+
 def check_paint_line(items: List[Item], expected_line: str) -> List[LintFinding]:
-    """Warn if paint_finish item references a brand other than expected (e.g. 'aura' = BM Aura)."""
+    """Warn if a paint_finish item's decided_sku or option SKUs reference a forbidden paint brand.
+
+    Scope: only fires when the decided_sku or option SKUs actually name a paint brand.
+    Items whose SKUs don't mention any paint brand at all → no warning (avoids false positives
+    on cabinet/trim items that happen to appear in the paint_finish category without a brand ref).
+
+    Allowed brands (no warning):
+    - Benjamin Moore / BM (all Aura lines, Regal Select, Aura Bath & Spa, etc.)
+    - Bona (floor finishes — separate from wall paint)
+    - Rubio (wood finishes — separate from wall paint)
+
+    Forbidden brands (warn):
+    - Sherwin-Williams Cashmere or Duration (SW itself not forbidden, just those lines)
+    - Behr (any)
+    - Valspar (any)
+    - Farrow & Ball as primary (too expensive for whole-house)
+    """
     findings = []
+
+    ALLOWED_BRANDS = ["benjamin moore", "bm aura", "bm regal", "bm bath", "bm ", "bona", "rubio"]
+    FORBIDDEN = [
+        ("sherwin cashmere", "Sherwin-Williams Cashmere"),
+        ("sw cashmere", "Sherwin-Williams Cashmere"),
+        ("sherwin duration", "Sherwin-Williams Duration"),
+        ("sw duration", "Sherwin-Williams Duration"),
+        ("sherwin-williams cashmere", "Sherwin-Williams Cashmere"),
+        ("sherwin-williams duration", "Sherwin-Williams Duration"),
+        ("behr ", "Behr"),
+        ("valspar", "Valspar"),
+        ("farrow & ball", "Farrow & Ball"),
+        ("farrow and ball", "Farrow & Ball"),
+    ]
+
     for item in items:
         if item.category != "paint_finish":
             continue
-        text = _item_text(item)
-        if not text.strip():
-            continue
-        # Forbidden brands
-        forbidden = ["sherwin-williams", "sw cashmere", "sw duration", "behr ", "valspar", "farrow ball"]
-        if any(f in text for f in forbidden):
+        sku_text = _paint_brand_text(item)
+        if not sku_text.strip():
+            continue  # no SKU text at all — nothing to lint against
+
+        # Only proceed if the SKU text mentions at least one paint-brand signal.
+        # "finish" alone is too broad (factory finish, floor finish) — require more specific terms.
+        HAS_BRAND_SIGNAL = ["paint", "primer", "stain", "bm ", "benjamin moore", "bona", "rubio",
+                             "sherwin", "behr", "valspar", "farrow", "aura", "regal", "cashmere",
+                             "interior flat", "interior eggshell", "interior satin", "exterior satin",
+                             "bath & spa", "bath spa"]
+        if not any(sig in sku_text for sig in HAS_BRAND_SIGNAL):
+            continue  # SKU text names no paint brand — skip (e.g. cabinet factory-finish items)
+
+        # Check for explicitly forbidden brands first
+        hit_forbidden = None
+        for pattern, label in FORBIDDEN:
+            if pattern in sku_text:
+                hit_forbidden = label
+                break
+
+        if hit_forbidden:
             findings.append(LintFinding(
                 severity="warning",
-                message=f"{item.id}: paint references non-{expected_line} brand",
+                message=f"{item.id}: paint SKU references forbidden brand '{hit_forbidden}' (expected {expected_line})",
                 item_id=item.id,
             ))
             continue
-        # If text mentions paint but not expected line keyword
-        if "paint" in text or "aura" in text or "bm " in text:
-            if expected_line.lower() not in text and "benjamin moore" not in text:
-                findings.append(LintFinding(
-                    severity="warning",
-                    message=f"{item.id}: paint item missing '{expected_line}' reference",
-                    item_id=item.id,
-                ))
+
+        # Check if any allowed brand is present — if so, no further warning
+        if any(brand in sku_text for brand in ALLOWED_BRANDS):
+            continue
+
+        # SKU has brand signals but no allowed brand matched — warn
+        findings.append(LintFinding(
+            severity="warning",
+            message=f"{item.id}: paint SKU doesn't reference an approved brand (expected '{expected_line}' / Benjamin Moore family)",
+            item_id=item.id,
+        ))
     return findings
 
 
 def check_hardware_mix(items: List[Item]) -> List[LintFinding]:
-    """Info-level: in any room with ≥3 hardware items, both 'lacquered_brass' AND 'matte_black' tags should appear ≥3× each."""
+    """Info-level: check that large rooms don't end up single-finish.
+
+    Threshold scales with room hardware count:
+    - <6 items: skip (small room — single-finish is intentional)
+    - 6-9 items: warn if either finish < 2
+    - 10+ items: warn if either finish < 3
+
+    This prevents noise for small baths (1-2 hardware items) while still
+    catching rooms with a real hardware-count where a second finish is expected.
+    """
     findings = []
     by_room: dict = {}
     for item in items:
         if item.category in ("hardware", "lighting_fixture", "plumbing_fixture"):
             by_room.setdefault(item.room, []).append(item)
     for room, room_items in by_room.items():
-        if len(room_items) < 3:
-            continue
+        n = len(room_items)
+        if n < 6:
+            continue  # small room — single finish is fine
         brass = sum(1 for i in room_items if "lacquered_brass" in i.cross_room_consistency)
         black = sum(1 for i in room_items if "matte_black" in i.cross_room_consistency)
-        if brass < 3 or black < 3:
+        # Skip rooms where no item is tagged for either finish — these rooms either
+        # don't participate in the brass/black system (e.g. exterior, utility) or
+        # are simply not yet tagged, and we don't want to generate false positives.
+        if brass == 0 and black == 0:
+            continue
+        min_each = 3 if n >= 10 else 2
+        if brass < min_each or black < min_each:
             findings.append(LintFinding(
                 severity="info",
-                message=f"{room}: hardware mix unbalanced (brass={brass}, matte_black={black}; rule wants ≥3 each)",
+                message=(
+                    f"{room}: hardware mix unbalanced (brass={brass}, matte_black={black}; "
+                    f"rule wants ≥{min_each} each for {n}-item room)"
+                ),
                 item_id=None,
             ))
     return findings
