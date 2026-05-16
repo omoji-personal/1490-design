@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing · Master Suite · 1490 Lively Ridge</title>
+<meta name="description" content="Sourcing for Master Suite — 23 items.">
+<style>
+:root {
+  --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
+  --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); }
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+<header class="page-header">
+  <h1>Sourcing · Master Suite</h1>
+  <p class="subtitle">23 items in Master Suite. Updated 2026-05-16.</p>
+  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+</header>
+<main>
+<article class="item-card" data-id="MB-TILE-WALL"
+       data-urgency="T0" data-room="master_bath"
+       data-category="tile_stone" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-TILE-WALL</span>
+        <h3>Master bath wall tile (shower walls)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $2,400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div>
+      <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</div>
+      
+    </article>
+<article class="item-card" data-id="MB-TILE-FLOOR"
+       data-urgency="T0" data-room="master_bath"
+       data-category="tile_stone" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-TILE-FLOOR</span>
+        <h3>Master bath floor tile</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $900 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div>
+      <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-FAUCET"
+       data-urgency="T0" data-room="master_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-FAUCET</span>
+        <h3>Master bath sink faucet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $450 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div>
+      <div class="notes-line">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-SHOWER-SYSTEM"
+       data-urgency="T0" data-room="master_bath"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-SHOWER-SYSTEM</span>
+        <h3>Master bath shower trim + valve</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $800 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku"><span class="star">★</span> Delta Trinsic 17T-Series Thermostatic Trim T17T453-CZ + H2Okinetic 5-Setting Rainhead 52660-CZ + Handshower 54480-CZ</div>
+      <div class="price">$780</div>
+      <div class="reasoning">Full canon Trinsic CZ thermostatic package for the curbless 48×36 master: 17T valve trim, H2OKinetic rainhead (superior coverage pattern vs standard), and matching handshower — all in Champagne Bronze, assembled as a three-piece trim kit.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku">Delta Trinsic 17 Series Pressure-Balance Trim T17253-CZ + Rainhead 52660-CZ</div>
+      <div class="price">$520</div>
+      <div class="reasoning">Simplified pressure-balance (non-thermostatic) Trinsic CZ trim + rainhead — saves ~$260 vs thermostatic option, but pressure-balance scald protection is inferior for a curbless walk-in used daily.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Ferguson (special order)</div>
+      <div class="sku">Brizo Litze TempAssure 17T-Series Trim T60P498-GL + 88-Jet Rainhead 83385-GL</div>
+      <div class="price">$1,100</div>
+      <div class="reasoning">Premium Brizo Litze thermostatic system in Luxe Gold — superior spray engineering and higher design cache, but $300 over budget and diverges from Trinsic family finish.</div>
+    </div></div>
+      <div class="notes-line">Canon: Delta Trinsic Champagne Bronze thermostatic (17T-Series). Bundle pricing on Build.com often brings three-piece kits below individual list — confirm bundle availability. Valve body (R22000) must be ordered separately by TCW before trim ships.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-SHOWER-DRAIN"
+       data-urgency="T0" data-room="master_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-SHOWER-DRAIN</span>
+        <h3>Master bath linear shower drain (Schluter)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $300 (construction_allowance) ·
+        <strong>Actor:</strong> tcw
+      </div>
+      <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div>
+      <div class="notes-line">Curbless walk-in spec per G2. TCW orders with rough plumbing.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-TOILET"
+       data-urgency="T0" data-room="master_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-TOILET</span>
+        <h3>Master bath toilet + washlet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $1,400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div>
+      <div class="notes-line">Locked per G2 line. One-piece form for master.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-CEILING"
+       data-urgency="T0" data-room="master_br"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-CEILING</span>
+        <h3>Master BR ceiling fixture</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Vera Flush Mount, lacquered brass, 13-inch opal glass, E26</div>
+      <div class="price">$395</div>
+      <div class="reasoning">Canon recommendation from notes — Schoolhouse Vera is purpose-built for 8-ft ceiling flush-mount; brass ties into MBA-SCONCES family.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Burbank Large Flush Mount, lacquered brass, 16-inch opal glass, E26</div>
+      <div class="price">$495</div>
+      <div class="reasoning">Canon recommendation from notes — larger 16-inch shade provides more diffuse light over king bed; at budget ceiling.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Hartwell Medium Flush Mount, lacquered brass, 14-inch opal globe, E26</div>
+      <div class="price">$420</div>
+      <div class="reasoning">Mid-size option between Vera and Burbank if Burbank reads too large for master BR footprint.</div>
+    </div></div>
+      <div class="notes-line">Flush mount or low-profile — 8-ft ceiling. Schoolhouse Vera or Rejuvenation Burbank.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-SCONCES"
+       data-urgency="T1" data-room="master_br"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-SCONCES</span>
+        <h3>Master BR bedside sconces (pair)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $700 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Princeton Swing Arm Sconce, lacquered brass, 4-inch milk glass globe, hardwire — pair</div>
+      <div class="price">$690</div>
+      <div class="reasoning">Canon brand swing-arm with milk glass globe; matches MBA-SCONCES Princeton family for cross-room consistency.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku">Cedar &amp; Moss Cylinder Swing Arm Sconce, lacquered brass, linen shade, hardwire — pair</div>
+      <div class="price">$760</div>
+      <div class="reasoning">Linen shade softens reading light directionally; Cedar &amp; Moss canon brand for accent layer; $60 over budget.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Westmore Plug-In Swing Arm Sconce, lacquered brass, linen shade — pair</div>
+      <div class="price">$580</div>
+      <div class="reasoning">Plug-in version defers in-wall wiring cost if bedside outlet exists; easiest install path for T1 urgency.</div>
+    </div></div>
+      <div class="notes-line">Swing-arm reading sconces per §15. Schoolhouse Princeton or Cedar &amp; Moss.</div>
+      
+    </article>
+<article class="item-card" data-id="MBA-SCONCES"
+       data-urgency="T0" data-room="master_bath"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MBA-SCONCES</span>
+        <h3>Master bath sconces (Schoolhouse Princeton)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $600 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Princeton Wall Sconce, lacquered brass, 4-inch milk glass globe, single, hardwire — pair</div>
+      <div class="price">$590</div>
+      <div class="reasoning">4-inch globe is the right scale for flanking a 60-inch double vanity mirror; milk glass gives flattering face-level diffusion.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku">Schoolhouse Princeton Wall Sconce, lacquered brass, 3-inch milk glass globe, single, hardwire — pair</div>
+      <div class="price">$520</div>
+      <div class="reasoning">3-inch globe is better scaled for a tighter vanity or single-arm placement; $70 under budget.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku">Schoolhouse Mortise Wall Sconce, lacquered brass, 5-inch opal glass, single, hardwire — pair</div>
+      <div class="price">$680</div>
+      <div class="reasoning">Mortise series step-up within Schoolhouse family; 5-inch globe pushes more light for makeup/grooming; $80 over budget.</div>
+    </div></div>
+      <div class="notes-line">Canon family: Schoolhouse Princeton, lacquered brass. Specific size (3-inch vs 4-inch globe), shade variant, and exact SKU not picked. Step 2 draft Princeton CZ-adjacent options within Schoolhouse lineup.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-CAB-HARDWARE"
+       data-urgency="T1" data-room="master_bath"
+       data-category="hardware" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-CAB-HARDWARE</span>
+        <h3>Master bath vanity pulls</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $200 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Sutton Pull 5&quot; cc, Lacquered Brass × 4 (4 @ $32ea = $128)</div>
+      <div class="price">$128</div>
+      <div class="reasoning">Sutton&#x27;s warm gold reads closest to Champagne Bronze Trinsic faucet tone; understated bar pull doesn&#x27;t compete with Hutchinson&#x27;s clean wood grain.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Putman Pull 5&quot; cc, Lacquered Brass × 4 (4 @ $28ea = $112)</div>
+      <div class="price">$112</div>
+      <div class="reasoning">Putman is marginally thinner profile than Sutton — slightly more minimal; saves $16 vs Sutton option.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Hamilton Sinkler</div>
+      <div class="sku">Hamilton Sinkler No. 1 Bar Pull 128mm cc, Polished Unlacquered Brass × 4 (4 @ $58ea = $232)</div>
+      <div class="price">$232</div>
+      <div class="reasoning">Premium upgrade tier — solid brass with visible hand-finishing; slightly over budget but appropriate for master bath flagship moment.</div>
+    </div></div>
+      <div class="notes-line">Lacquered brass to match Trinsic Champagne Bronze tone family. Schoolhouse Sutton or Rejuvenation Vise.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-MEDICINE-CABINET"
+       data-urgency="T1" data-room="master_bath"
+       data-category="hardware" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-MEDICINE-CABINET</span>
+        <h3>Master bath medicine cabinet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $600 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div>
+      <div class="notes-line">Locked per G2 line.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-VANITY"
+       data-urgency="T0" data-room="master_bath"
+       data-category="cabinetry_millwork" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-VANITY</span>
+        <h3>Master bath vanity (WE Hutchinson 60-inch Double)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_bath ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $3,500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div>
+      <div class="notes-line">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</div>
+      
+    </article>
+<article class="item-card" data-id="MASTER-CLOSET"
+       data-urgency="T1" data-room="master_br"
+       data-category="cabinetry_millwork" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MASTER-CLOSET</span>
+        <h3>Master closet reach-in</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $3,500 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">California Closets (Sandy Springs showroom, 5901 Peachtree Dunwoody Rd)</div>
+      <div class="sku"><span class="star">★</span> California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured</div>
+      <div class="price">$3,800</div>
+      <div class="reasoning">★ Annika-domain canon choice per notes — designer session included, measured install, wood-tone available in natural oak that reads adjacent to bleached floor; 6-8 wk lead.</div>
+    </div><div class="option-card ">
+      <div class="vendor">The Container Store Elfa (Perimeter Mall)</div>
+      <div class="sku">The Container Store Elfa Décor — birch white panels, platinum rails, double hang + long hang + 2 drawers, 6-foot reach-in</div>
+      <div class="price">$1,900</div>
+      <div class="reasoning">Elfa is modular + reconfigurable (good for young family) and saves ~$1.6K within the $6,500 closets budget for HYBRID-CLOSETS allocation; birch finish is lighter than bleached oak but acceptable in a closet.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Atlanta Cabinet Co (local mill)</div>
+      <div class="sku">Atlanta Cabinet Co custom — white oak slab double-hang tower, integrated drawer stack, Rubio Pure, 8-foot interior width</div>
+      <div class="price">$4,500</div>
+      <div class="reasoning">Full slab-oak finish match is the most cohesive but consumes $4.5K of the $6.5K closets budget, leaving only $2K for 3 remaining hybrid closets — tight.</div>
+    </div></div>
+      <div class="notes-line">Per G1 closets line $6,500 includes master reach-in + hybrid for others. California Closets style.</div>
+      
+    </article>
+<article class="item-card" data-id="WT-MASTER"
+       data-urgency="T2" data-room="master_br"
+       data-category="window_treatment" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">WT-MASTER</span>
+        <h3>Master BR drapery + blackout</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> window_treatment ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $1,400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Hunter Douglas authorized dealer (blackout Roman) + Pottery Barn (sheer panels)</div>
+      <div class="sku"><span class="star">★</span> Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows</div>
+      <div class="price">$1,380</div>
+      <div class="reasoning">Layered system per §13 spec: Alustra blackout Roman ($500–600/window) provides sleep-grade blackout while PB Belgian Flax sheer panels ($240/pair) add the puddled softness Annika designated; separate sources but both in-stock or 4–6 week lead.</div>
+    </div><div class="option-card ">
+      <div class="vendor">The Shade Store (Buckhead showroom — single-vendor convenience)</div>
+      <div class="sku">The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows</div>
+      <div class="price">$1,200</div>
+      <div class="reasoning">One-vendor layered solution simplifies measurement and install scheduling; Shade Store blackout liner on their linen Roman is well-reviewed; sheer panel in Natural completes the cream canon without mixing brands.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Hunter Douglas authorized dealer</div>
+      <div class="sku">Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select)</div>
+      <div class="price">$1,250</div>
+      <div class="reasoning">Motorized blackout-only option for Annika&#x27;s sleep priority; Sonnette cellular adds insulation value in master; sheer drapery layer deferred so Annika can select independently without blocking blackout install.</div>
+    </div></div>
+      <div class="notes-line">Per §13: Sheer linen drapery puddled + blackout Roman behind. Sleep priority.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-BED"
+       data-urgency="T2" data-room="master_br"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-BED</span>
+        <h3>Master bed frame</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $2,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream</div>
+      <div class="price">$2,199</div>
+      <div class="reasoning">Cream upholstered platform bed per cali_25 canon; performance fabric is compatible with pet access; Andes family cohesion with LR-SOFA pick.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Crate &amp; Barrel</div>
+      <div class="sku">Crate &amp; Barrel Tate Upholstered Bed, King, Crypton Linen — Sand</div>
+      <div class="price">$2,499</div>
+      <div class="reasoning">Tate has a lower headboard profile that fights ceiling compression less; Crypton fabric spec matches performance pivot.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Berel Spindle Bed, King, Solid Oak — Natural</div>
+      <div class="price">$1,199</div>
+      <div class="reasoning">Walnut/oak spindle bed per loved_15 canon direction; if owner prefers wood frame over upholstered, Article Berel is the budget-friendly entry.</div>
+    </div></div>
+      <div class="notes-line">Cream upholstered (cali_25) OR walnut spindle (loved_15) — owner pick. WE Andes or Cathie Hong-style spindle.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-NIGHTSTANDS"
+       data-urgency="T2" data-room="master_br"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-NIGHTSTANDS</span>
+        <h3>Master BR nightstands (pair)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2</div>
+      <div class="price">$998</div>
+      <div class="reasoning">West Elm anchor brand; mid-century tapered leg matches bleached oak floor; 2-drawer provides enough storage without bulk in typical master footprint.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku">Room &amp; Board Linnea Nightstand, White Oak — quantity 2</div>
+      <div class="price">$1,198</div>
+      <div class="reasoning">Linnea is the canon reference; solid white oak drawer box (not veneer); matches if DR-SIDEBOARD goes R&amp;B Hudson for brand continuity.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Nera Nightstand, White Oak — quantity 2</div>
+      <div class="price">$598</div>
+      <div class="reasoning">Article at half the R&amp;B price; acceptable if nightstands are receding pieces vs. statement; frees envelope for MB-BED quality upgrade.</div>
+    </div></div>
+      <div class="notes-line">Light oak — WE Mid-Century or R&amp;B Linnea.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-DRESSER"
+       data-urgency="T2" data-room="master_br"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-DRESSER</span>
+        <h3>Master BR dresser</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Mid-Century 6-Drawer Dresser, White Oak</div>
+      <div class="price">$1,499</div>
+      <div class="reasoning">West Elm anchor brand; 6-drawer mid-century oak is the direct §7 spec; tapered legs keep it visually light in lower-ceiling master.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku">Room &amp; Board Linnea 6-Drawer Dresser, White Oak</div>
+      <div class="price">$1,899</div>
+      <div class="reasoning">R&amp;B Linnea has thicker solid-oak drawer fronts and soft-close hardware; premium choice if dresser sees heavy daily use.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Melos 6-Drawer Dresser, White Oak</div>
+      <div class="price">$999</div>
+      <div class="reasoning">Article entry-point; matched to MB-NIGHTSTANDS Article pick if going full Article master suite to maximize envelope elsewhere.</div>
+    </div></div>
+      <div class="notes-line">Light oak 6-drawer — WE Mid-Century or vintage Danish.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-BENCH"
+       data-urgency="T2" data-room="master_br"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-BENCH</span>
+        <h3>Master BR end-of-bed bench</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $600 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Tillary Bench, Boucle — Ivory, 52-inch</div>
+      <div class="price">$699</div>
+      <div class="reasoning">Boucle bench per spec note; Tillary&#x27;s compact 52-inch fits standard king end without extending into walking lane; low visual weight.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Oak Slab Bench, White Oak, 48-inch</div>
+      <div class="price">$599</div>
+      <div class="reasoning">Wood bench alternative if upholstered tone feels too matchy with MB-BED upholstery; Rejuvenation oak family cohesion.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Loa Bench, Performance Cream linen, solid oak legs, 54-inch</div>
+      <div class="price">$549</div>
+      <div class="reasoning">Performance fabric per pivot; Article price saves $150 vs WE Tillary with comparable proportions.</div>
+    </div></div>
+      <div class="notes-line">Boucle or performance linen — WE or vintage.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-RUG"
+       data-urgency="T2" data-room="master_br"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-RUG</span>
+        <h3>Master BR rug</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $800 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave</div>
+      <div class="price">$799</div>
+      <div class="reasoning">Flat-weave wool placeholder per spec note; Warm Sand is a step warmer than LR-RUG Oatmeal — reads distinct without clashing; washable spot-clean.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku">Room &amp; Board Linden Wool Rug, Natural / Oatmeal, 8x10 flat-weave</div>
+      <div class="price">$949</div>
+      <div class="reasoning">R&amp;B Linden has denser pile than WE Dhurrie — softer underfoot for bare morning feet; stays within flat-weave placeholder category.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Serena &amp; Lily</div>
+      <div class="sku">Serena &amp; Lily Piazza Handwoven Wool Rug, Cream, 8x10</div>
+      <div class="price">$1,098</div>
+      <div class="reasoning">S&amp;L accent-only brand but fits here; handwoven texture adds Japandi tactility; best choice if budget allows and owner wants master to feel elevated above LR placeholder.</div>
+    </div></div>
+      <div class="notes-line">Flat-weave wool placeholder until LR-RUG-VINTAGE moves over (year 4 swap).</div>
+      
+    </article>
+<article class="item-card" data-id="MB-BEDDING"
+       data-urgency="T2" data-room="master_br"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-BEDDING</span>
+        <h3>Master BR bedding (Belgian flax linen)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $600 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cultiver (cultiver.com)</div>
+      <div class="sku"><span class="star">★</span> Cultiver Washed Linen Sheet Set + Quilt — Oat/Bone</div>
+      <div class="price">$580</div>
+      <div class="reasoning">Pre-washed Belgian flax in bone/oat reads as warm cream, softens immediately, matches the spec&#x27;s &#x27;NOT white, NOT sage&#x27; bedding lock — and Cultiver&#x27;s laundering holds across 200+ cycles.</div>
+    </div><div class="option-card ">
+      <div class="vendor">MagicLinen (magiclinen.com)</div>
+      <div class="sku">MagicLinen Linen Bedding Set — Natural (Queen)</div>
+      <div class="price">$390</div>
+      <div class="reasoning">Lithuanian stonewashed linen at significantly lower price-per-set; natural colorway is warmer than white but lighter than oat — strong value if budget needs buffer for pillows.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Quince (onequince.com)</div>
+      <div class="sku">Quince European Linen Bedding Set — Oat Heather (Queen)</div>
+      <div class="price">$270</div>
+      <div class="reasoning">Comparable 100% European linen construction at roughly half Cultiver&#x27;s price; savings redirect to pillow and throw budget.</div>
+    </div></div>
+      <div class="notes-line">Per §7 [OWNER CONFIRM #3] — bedding is the one place pure linen survives (weekly laundered). Cultiver, MagicLinen, or Quince.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-PILLOWS"
+       data-urgency="T2" data-room="master_br"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-PILLOWS</span>
+        <h3>Master BR accent pillows</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $300 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm + Etsy</div>
+      <div class="sku"><span class="star">★</span> West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1</div>
+      <div class="price">$290</div>
+      <div class="reasoning">Two WE sage linen euros anchor the stack with commercial reliability; one Etsy hand-loomed lumbar in mustard adds the artisan layer without blowing the ONE-accent-color rule.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Anthropologie + Hawkins New York</div>
+      <div class="sku">Anthropologie Linen Slub Throw Pillow — Sage (set of 2, 20in) + Hawkins New York Stripe Linen Pillow — Natural/Oat</div>
+      <div class="price">$280</div>
+      <div class="reasoning">Anthropologie sage linen slub reads softer and more textural than the WE version; paired with a Hawkins ticking-stripe in neutral keeps density low.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Schoolhouse (schoolhouse.com)</div>
+      <div class="sku">Schoolhouse Muted Check Pillow Cover — Caramel/Oat × 2 + insert</div>
+      <div class="price">$250</div>
+      <div class="reasoning">Schoolhouse&#x27;s muted caramel-check shifts the accent color from sage to warm mustard territory — valid if sage is reserved for throws.</div>
+    </div></div>
+      <div class="notes-line">Sage + mustard accents per loved_15 canon. 3-5 pillow layered stack.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-ART"
+       data-urgency="T3" data-room="master_br"
+       data-category="decor_softgoods" data-status="watch_list"
+       data-annika="true"
+       data-schedule-locked="true">
+      <div class="item-card-header">
+        <span class="item-id">MB-ART</span>
+        <h3>Master BR art</h3>
+        <span class="status-badge watch-list">Vintage watch-list</span>
+        
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T3 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $700 (furniture_envelope) ·
+        <strong>Actor:</strong> vintage_hunt · 👩 Annika
+      </div>
+      <div class="vintage-brief">
+          <div><strong>Style:</strong> Calming abstract or landscape, 24-36 inch, sage/oat palette</div>
+          <div><strong>Avoid:</strong> no figurative portrait, no kids&#x27; art, no saturated abstract</div>
+          <div><strong>Target $:</strong> 400-800</div>
+          <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Minted, Etsy</div>
+        </div>
+      <div class="notes-line">Sleep-sanctuary calm. Over-bed placement.</div>
+      
+    </article>
+<article class="item-card" data-id="MB-MIRROR"
+       data-urgency="T2" data-room="master_br"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">MB-MIRROR</span>
+        <h3>Master BR mirror (full-length or wall)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> master_br ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Arched Full-Length Mirror — Natural Oak, 28×65in</div>
+      <div class="price">$349</div>
+      <div class="reasoning">Natural oak arch reads as light and airy in a sleep sanctuary; full-length is more functional than wall-hung in a bedroom without a walk-in; stays $50 under budget.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Pottery Barn</div>
+      <div class="sku">Pottery Barn Cayman Leaning Floor Mirror — Natural Oak, 26×72in</div>
+      <div class="price">$399</div>
+      <div class="reasoning">Leaning floor format avoids wall-mount in a room where art placement is still TBD; similar oak finish to WE option, slightly taller and slimmer profile.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Atlanta vintage (Westside Modern, Mid Mod Market)</div>
+      <div class="sku">Vintage mid-century oak floor mirror — Atlanta Westside Modern or Mid Mod Market</div>
+      <div class="price">$250</div>
+      <div class="reasoning">Patinated oak vintage mirror adds genuine provenance to a sleep-sanctuary space; budget savings of ~$150 vs WE can offset ceramics or art spend.</div>
+    </div></div>
+      <div class="notes-line">WE or vintage oak frame.</div>
+      
+    </article>
+</main>
+</body>
+</html>

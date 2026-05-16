@@ -286,6 +286,17 @@ FILTER_JS = """
 """
 
 
+ROOM_LINKS_HTML = """<div style="max-width:1200px;margin:8px auto 0;padding:0 28px;font-size:13px;color:var(--muted);">
+  <strong style="color:var(--ink);">Per-room views:</strong>
+  <a href="/sourcing-kitchen">Kitchen</a> ·
+  <a href="/sourcing-master">Master Suite</a> ·
+  <a href="/sourcing-baths">Baths</a> ·
+  <a href="/sourcing-lr">Living + Dining</a> ·
+  <a href="/sourcing-nursery">Nursery</a> ·
+  <a href="/sourcing-office">Office</a>
+</div>"""
+
+
 def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFinding],
                      schedule_lookup: Optional[ScheduleLookup] = None) -> str:
     visible = [it for it in items if it.decision_status != "stub"]
@@ -306,12 +317,46 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
   <h1>Sourcing</h1>
   <p class="subtitle">Every design-decision item the renovation will consume. {len(visible)} items tracked. Updated {escape(meta.last_updated)}.</p>
 </header>
+{ROOM_LINKS_HTML}
 <main>
 {lint_html}
 {_render_filter_bar()}
 {cards_html}
 </main>
 {FILTER_JS}
+</body>
+</html>
+"""
+
+
+def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item], meta: Meta,
+                     schedule_lookup: Optional[ScheduleLookup] = None) -> str:
+    """Render a single-room view. rooms_filter is a list of room IDs to include
+    (e.g., ['master_br','master_bath'] for master suite)."""
+    visible = [it for it in items if it.decision_status != "stub" and it.room in rooms_filter]
+    cards_html = "\n".join(_render_item_card(it, schedule_lookup) for it in visible)
+
+    subtitle = f"{len(visible)} items in {room_label}. Updated {meta.last_updated}."
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing · {escape(room_label)} · 1490 Lively Ridge</title>
+<meta name="description" content="Sourcing for {escape(room_label)} — {len(visible)} items.">
+<style>{SHARED_CSS}</style>
+</head>
+<body>
+{TOPNAV_HTML}
+<header class="page-header">
+  <h1>Sourcing · {escape(room_label)}</h1>
+  <p class="subtitle">{escape(subtitle)}</p>
+  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+</header>
+<main>
+{cards_html if visible else '<p style="color:var(--muted);">No items yet for this room.</p>'}
+</main>
 </body>
 </html>
 """

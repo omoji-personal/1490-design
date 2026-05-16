@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing · Living + Dining · 1490 Lively Ridge</title>
+<meta name="description" content="Sourcing for Living + Dining — 24 items.">
+<style>
+:root {
+  --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
+  --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); }
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+<header class="page-header">
+  <h1>Sourcing · Living + Dining</h1>
+  <p class="subtitle">24 items in Living + Dining. Updated 2026-05-16.</p>
+  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+</header>
+<main>
+<article class="item-card" data-id="DR-CHANDELIER"
+       data-urgency="T0" data-room="dining"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">DR-CHANDELIER</span>
+        <h3>Dining room chandelier (brass branch)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Edith Chandelier, lacquered brass, 5-arm, 30-inch diameter, E26 candelabra</div>
+      <div class="price">$1,095</div>
+      <div class="reasoning">Canon brand, lacquered brass, branching arm silhouette matches Campbell House Rue reference exactly; sits at budget ceiling.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Otis 8-Arm Brass Chandelier, lacquered brass, 36-inch, E12 candelabra</div>
+      <div class="price">$995</div>
+      <div class="reasoning">Wider spread suits dining table centerpiece framing; secondary brand canon, $100 under budget.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Visual Comfort</div>
+      <div class="sku">Visual Comfort Bryant Chandelier, Hand-Rubbed Antique Brass, 5-arm, 27-inch, E12</div>
+      <div class="price">$1,280</div>
+      <div class="reasoning">Premium upgrade tier — HARAB finish reads as lacquered brass in warm light; only $180 over budget if owner wants step-up.</div>
+    </div></div>
+      <div class="notes-line">Brass branching chandelier — canon move per loved_13 (Campbell House Rue). Schoolhouse Edith or Rejuvenation Otis candidate.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-OVERHEAD"
+       data-urgency="T0" data-room="lr"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-OVERHEAD</span>
+        <h3>LR primary overhead fixture</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $700 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Herman Miller / Design Within Reach</div>
+      <div class="sku"><span class="star">★</span> George Nelson Saucer Bubble Pendant 22-inch, white, short-cord semi-flush canopy adapter, E26</div>
+      <div class="price">$695</div>
+      <div class="reasoning">Iconic mid-century shape at 8-ft ceiling budget — cord trimmed to 6 inches keeps it from reading as pendant; blends with White Dove walls.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Design Within Reach / Lumens</div>
+      <div class="sku">&amp;tradition Formakami JH5 Pendant, black, 22-inch rice paper shade, short-cord semi-flush mount</div>
+      <div class="price">$680</div>
+      <div class="reasoning">Matte black provides the required black counterpoint in LR; warm paper diffusion at 8-ft ceiling; slightly softer than Nelson.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Hartwell Large Flush Mount, lacquered brass, 16-inch opal globe, E26</div>
+      <div class="price">$545</div>
+      <div class="reasoning">Safest 8-ft ceiling solution — true flush mount eliminates drop risk entirely; brass matches LR-SCONCES family.</div>
+    </div></div>
+      <div class="notes-line">Nelson Saucer Bubble OR Formakami JH5 — 8-ft ceiling constraint limits drop. Sconces carry load (LR-SCONCES).</div>
+      
+    </article>
+<article class="item-card" data-id="LR-SCONCES"
+       data-urgency="T0" data-room="lr"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-SCONCES</span>
+        <h3>LR wall sconces (pair)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $800 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Princeton Wall Sconce, lacquered brass, 4-inch milk glass globe, hardwire — pair</div>
+      <div class="price">$760</div>
+      <div class="reasoning">Canon brand primary pick; 4-inch globe reads well at 8-ft LR height; lacquered brass bridges kitchen and master bath families.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Putman Sconce, lacquered brass, 5-inch opal globe, hardwire — pair</div>
+      <div class="price">$730</div>
+      <div class="reasoning">Slightly larger 5-inch globe pushes more light into LR for primary sconce load; Rejuvenation canon family.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku">Cedar &amp; Moss Globe Sconce, lacquered brass, 5-inch smoke glass, hardwire — pair</div>
+      <div class="price">$820</div>
+      <div class="reasoning">Smoke glass adds depth contrast to LR without matte black; $20 over budget but brings accent-tier quality to primary living zone.</div>
+    </div></div>
+      <div class="notes-line">Schoolhouse or Rejuvenation lacquered brass disc/globe. Carry lighting load per §8a.</div>
+      
+    </article>
+<article class="item-card" data-id="DR-PICTURE-LIGHT"
+       data-urgency="T2" data-room="dining"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">DR-PICTURE-LIGHT</span>
+        <h3>Dining picture light (over sideboard, optional)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $300 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Picture Light, lacquered brass, 18-inch arm, LED integrated, hardwire</div>
+      <div class="price">$295</div>
+      <div class="reasoning">Canon brand lacquered brass; 18-inch arm covers standard sideboard art width; hardwire during electrical rough for clean install.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Chadwick Picture Light, lacquered brass, 24-inch arm, E12 candelabra, plug-in</div>
+      <div class="price">$275</div>
+      <div class="reasoning">Plug-in version defers electrical coordination — valid for T2 optional item; 24-inch arm handles wider art.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Visual Comfort</div>
+      <div class="sku">Visual Comfort Picture Light, hand-rubbed antique brass, 18-inch, LED, plug-in</div>
+      <div class="price">$345</div>
+      <div class="reasoning">Premium step-up for a dining feature art moment; HARAB finish reads warm like lacquered brass; $45 over budget.</div>
+    </div></div>
+      <div class="notes-line">Optional layer — depends on dining art/sideboard arrangement. Hardwire during electrical rough or plug-in post.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-FLOOR-LAMP"
+       data-urgency="T2" data-room="lr"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-FLOOR-LAMP</span>
+        <h3>LR floor lamp (vertical)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku"><span class="star">★</span> Cedar &amp; Moss Tall Column Floor Lamp, lacquered brass, 62-inch, linen shade, E26</div>
+      <div class="price">$395</div>
+      <div class="reasoning">Canon brand; tall thin column silhouette directly addresses §8b ceiling compression; lacquered brass ties to LR-SCONCES family.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Vibia / Lumens</div>
+      <div class="sku">Vibia Flamingo Floor Lamp, matte black, 70-inch, LED integrated, dimmer</div>
+      <div class="price">$620</div>
+      <div class="reasoning">Vibia listed in notes as premium option; matte black provides required LR black counterpoint; integrated LED; $220 over budget.</div>
+    </div><div class="option-card ">
+      <div class="vendor">City Issue / Westside Modern / Chairish</div>
+      <div class="sku">Vintage brass torchiere floor lamp, circa 1950s-70s lacquered brass, 64-inch — vintage hunt</div>
+      <div class="price">$250</div>
+      <div class="reasoning">One real vintage gesture per §4 principle 7 — a vintage brass torchiere at $150-300 is the most characterful budget option for LR.</div>
+    </div></div>
+      <div class="notes-line">Per §8b — tall thin floor lamp fights ceiling compression. Vibia, Cedar &amp; Moss, or vintage.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-BUILTIN"
+       data-urgency="T1" data-room="lr"
+       data-category="cabinetry_millwork" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-BUILTIN</span>
+        <h3>LR built-in TV cabinetry refresh</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $5,100 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Atlanta Cabinet Co (local mill, 1310 White St SW, Atlanta)</div>
+      <div class="sku"><span class="star">★</span> Atlanta Cabinet Co custom — white oak slab face, open TV bay (48W×16D), lower closed cabinets w/ AV venting, Rubio Monocoat Pure, 144W total run</div>
+      <div class="price">$5,800</div>
+      <div class="reasoning">★ Custom mill matches exact Cathie Hong slab proportion and integrates AV logic flush — finish matches bleached-oak floors perfectly; 8-10 wk lead.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Modern Custom Cabinets (Atlanta, Norcross shop)</div>
+      <div class="sku">Modern Custom Cabinets ATL — white oak slab, floating lower AV cabinet 72W×18D, raw upper open shelf run 72W, Rubio Smoke 5%</div>
+      <div class="price">$4,900</div>
+      <div class="reasoning">Split lower-float/upper-shelf avoids full-wall cost while preserving slab aesthetic; slightly shorter lead 8 wk.</div>
+    </div><div class="option-card ">
+      <div class="vendor">IKEA (Cobb County) + local mill cap</div>
+      <div class="sku">IKEA BESTA 120 frame × 3 + Kungsbacka oak-effect fronts, AV cable management kit, white oak solid-wood top cap custom-milled to match floor finish</div>
+      <div class="price">$2,200</div>
+      <div class="reasoning">Budget fallback preserves under-budget margin but front panels are oak-effect not real oak — finish match to bleached floor is approximate only.</div>
+    </div></div>
+      <div class="notes-line">Per G1 line. White oak slab face per §18 canon. Frame TV mount + AV cabinet logic per §12.</div>
+      
+    </article>
+<article class="item-card" data-id="WT-LR"
+       data-urgency="T2" data-room="lr"
+       data-category="window_treatment" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">WT-LR</span>
+        <h3>LR window treatment</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> window_treatment ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Hunter Douglas authorized dealer (Peachtree Blinds &amp; Shutters, Atlanta)</div>
+      <div class="sku"><span class="star">★</span> Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Stone) — custom 48–60&quot; w × 72–84&quot; h, 2-window set</div>
+      <div class="price">$1,100</div>
+      <div class="reasoning">Top-tier motorization-ready Roman with woven linen texture in Stone; pet-zone performance weave holds up better than loose-weave; priced at mid-range of $450–600/window for 2 standard LR windows.</div>
+    </div><div class="option-card ">
+      <div class="vendor">The Shade Store (Buckhead showroom)</div>
+      <div class="sku">The Shade Store Belgian Linen Roman Shade — Natural — flat-fold, blackout liner, custom 48–60&quot; w × 72–84&quot; h, 2-window set</div>
+      <div class="price">$820</div>
+      <div class="reasoning">Premium-mid Belgian linen in Natural hits the cream/natural palette without full Hunter Douglas cost; blackout liner available as add-on; Shade Store offers in-home measurement free.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Smith &amp; Noble (online + in-home consultation)</div>
+      <div class="sku">Smith &amp; Noble Essential Linen Roman Shade — Ivory — flat-fold, light-filtering + separate blackout shade, custom 2-window set</div>
+      <div class="price">$680</div>
+      <div class="reasoning">Cleanest online-order path with in-home measuring option; Essential Linen in Ivory is closest to cream canon; layered light-filter + blackout gives daytime flexibility without pet-zone compromise.</div>
+    </div></div>
+      <div class="notes-line">Per §13: Hunter Douglas Vignette Roman in Linen Weave (Stone) OR Smith &amp; Noble Belgian Linen Roman. Performance fabric required for pet zone.</div>
+      
+    </article>
+<article class="item-card" data-id="WT-DINING"
+       data-urgency="T2" data-room="dining"
+       data-category="window_treatment" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">WT-DINING</span>
+        <h3>Dining sheer linen drapery</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> window_treatment ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $800 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Pottery Barn (online or Phipps Plaza)</div>
+      <div class="sku"><span class="star">★</span> Pottery Barn Belgian Flax Linen Sheer Drapery Panel pair — Ivory/Natural — 100×108&quot; (floor-to-almost-puddle) — 1–2 pairs</div>
+      <div class="price">$620</div>
+      <div class="reasoning">Belgian Flax weave is the highest-quality ready-made sheer linen available at this budget; Ivory reads warm-cream in dining light; PB&#x27;s 108&quot; length accommodates 9–10 ft ceilings with a gentle break; lower pet traffic means pure linen acceptable per notes.</div>
+    </div><div class="option-card ">
+      <div class="vendor">The Shade Store (Buckhead)</div>
+      <div class="sku">The Shade Store Sheer Linen Drapery Panel — Natural — custom width + 108&quot; drop — 1–2 window sets</div>
+      <div class="price">$760</div>
+      <div class="reasoning">Custom-width sheer ensures edge-to-edge coverage for formal dining presentation; Natural linen in their catalog is a true warm-cream; single source with other Shade Store items reduces installation coordination.</div>
+    </div><div class="option-card ">
+      <div class="vendor">IKEA (Cobb County)</div>
+      <div class="sku">IKEA LILL Sheer Curtain pair — White/Off-White — 280×300 cm (110×118&quot;) — 1–2 pairs with hem adjustment</div>
+      <div class="price">$60</div>
+      <div class="reasoning">Budget fallback only — LILL provides sheer coverage for formal occasions at minimal cost if dining budget needs to be reallocated elsewhere; off-white reads cooler than cream canon and is a visual downgrade.</div>
+    </div></div>
+      <div class="notes-line">Per §13: sheer linen, formal occasion only. Lower pet traffic — pure linen OK.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-SOFA"
+       data-urgency="T2" data-room="lr"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-SOFA</span>
+        <h3>LR primary sofa</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 10 wk ·
+        <strong>Budget:</strong> $3,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Andes Sofa, 88-inch, Crypton Performance Slipcover — Twill Natural / Ivory</div>
+      <div class="price">$2,799</div>
+      <div class="reasoning">Anchor West Elm pick per DESIGN_SPEC §6; Crypton performance slipcover survives toddler + pet zone; warm ivory fits cream-linen aesthetic without pure linen durability risk.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Lyle Sofa, 88-inch, Perennials Performance Woven — Sand Beige</div>
+      <div class="price">$2,099</div>
+      <div class="reasoning">Article alt at ~25% savings vs Andes; Perennials fabric meets performance requirement; lower profile works well in compressed Atlanta ceilings.</div>
+    </div><div class="option-card ">
+      <div class="vendor">West Elm</div>
+      <div class="sku">West Elm Harmony Sofa, 86-inch, Crypton Performance Slipcover — Twill Natural / Ivory</div>
+      <div class="price">$3,299</div>
+      <div class="reasoning">Harmony&#x27;s deeper seat and softer silhouette vs Andes; premium tier pick if living-room use skews toward lounging over entertaining posture.</div>
+    </div></div>
+      <div class="notes-line">Per §6 + §7 [OWNER CONFIRM #3] performance fabric pivot. Anchor: West Elm Andes / Harmony or Article Lyle. Cream/oat/camel, NOT pure linen.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-ACCENT-CHAIR"
+       data-urgency="T2" data-room="lr"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-ACCENT-CHAIR</span>
+        <h3>LR accent chair (tan leather wing)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 10 wk ·
+        <strong>Budget:</strong> $1,400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Article</div>
+      <div class="sku"><span class="star">★</span> Article Sven Chair, Charme Tan full-grain leather, solid walnut legs</div>
+      <div class="price">$899</div>
+      <div class="reasoning">Direct canon reference (cali_08 tan leather wing); full-grain leather reads luxe without RH scale; Article price-point leaves room for other envelope items.</div>
+    </div><div class="option-card ">
+      <div class="vendor">West Elm</div>
+      <div class="sku">West Elm Relay Chair, Stetson Camel leather, solid oak legs</div>
+      <div class="price">$1,299</div>
+      <div class="reasoning">West Elm option keeps brand consolidation; Relay has slimmer arm profile that reads lighter in small LR footprint.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Crate &amp; Barrel</div>
+      <div class="sku">Crate &amp; Barrel Cavett Leather Chair, Mont Blanc Camel leather</div>
+      <div class="price">$1,699</div>
+      <div class="reasoning">Premium tier with tighter tailoring and thicker hide; best choice if chair sees heavy daily use as primary reading spot.</div>
+    </div></div>
+      <div class="notes-line">Per cali_08 canon — tan leather wing. Article Sven Charme Tan or Sundays Leather Reading Chair.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-COFFEE-TABLE"
+       data-urgency="T3" data-room="lr"
+       data-category="furniture" data-status="watch_list"
+       data-annika="false"
+       data-schedule-locked="true">
+      <div class="item-card-header">
+        <span class="item-id">LR-COFFEE-TABLE</span>
+        <h3>LR coffee table (vintage walnut oval)</h3>
+        <span class="status-badge watch-list">Vintage watch-list</span>
+        
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T3 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> vintage_hunt
+      </div>
+      <div class="vintage-brief">
+          <div><strong>Style:</strong> Mid-century walnut oval, 36-44 inch, low profile</div>
+          <div><strong>Avoid:</strong> no glass top, no chrome legs, no veneer, no espresso stain</div>
+          <div><strong>Target $:</strong> 800-1500</div>
+          <div><strong>Hunt at:</strong> Westside Modern, City Issue, Mid Mod Market, Chairish online</div>
+        </div>
+      <div class="notes-line">One real vintage gesture per major room per §4 principle 7.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-SIDE-TABLES"
+       data-urgency="T2" data-room="lr"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-SIDE-TABLES</span>
+        <h3>LR side tables (pair)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $600 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Article</div>
+      <div class="sku"><span class="star">★</span> Article Mara Side Table, White Oak, 22-inch round — quantity 2</div>
+      <div class="price">$490</div>
+      <div class="reasoning">Light oak round matches wood-tone lock; slim profile doesn&#x27;t fight compressed ceiling; pair under $500 preserves envelope for higher-impact pieces.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Crate &amp; Barrel</div>
+      <div class="sku">Crate &amp; Barrel Bowen Side Table, White Oak, 18-inch — quantity 2</div>
+      <div class="price">$598</div>
+      <div class="reasoning">Bowen&#x27;s rectangular footprint better suits tight sofa-flank placement; solid white oak vs veneer.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Slab Side Table, White Oak, 20-inch — quantity 2</div>
+      <div class="price">$720</div>
+      <div class="reasoning">Rejuvenation sits in anchor brand split; slab-edge silhouette reads Japandi; integrates with brand consistency in common areas.</div>
+    </div></div>
+      <div class="notes-line">Light oak or marble — Article Mara, Crate &amp; Barrel Bowen, or vintage oak stump (canon cali_25).</div>
+      
+    </article>
+<article class="item-card" data-id="LR-RUG"
+       data-urgency="T2" data-room="lr"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-RUG</span>
+        <h3>LR rug (flat-weave wool placeholder)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Dhurrie Wool Rug, Oatmeal / Ivory, 9x12 flat-weave</div>
+      <div class="price">$999</div>
+      <div class="reasoning">West Elm wool flat-weave is the explicit §7 placeholder spec for years 1-3; Oatmeal reads warm against bleached oak floor without competing with Beni Ourain when upgraded.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Farmhouse Flat-Weave Wool Rug, Natural / Ivory, 9x12</div>
+      <div class="price">$1,199</div>
+      <div class="reasoning">Slightly denser weave than WE; Rejuvenation brand alignment; slightly warmer natural wool tone.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku">Room &amp; Board Linden Wool Rug, Oatmeal, 9x12 flat-weave</div>
+      <div class="price">$1,099</div>
+      <div class="reasoning">R&amp;B carries the flattest texture profile — reads most neutral as a placeholder that won&#x27;t fight Beni swap in year 4.</div>
+    </div></div>
+      <div class="notes-line">Per §7 [OWNER CONFIRM #2]: DEFER Beni Ourain to year 4. Spec WE/Rejuvenation flat-weave wool for years 1-3.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-RUG-VINTAGE"
+       data-urgency="T3" data-room="lr"
+       data-category="furniture" data-status="watch_list"
+       data-annika="true"
+       data-schedule-locked="true">
+      <div class="item-card-header">
+        <span class="item-id">LR-RUG-VINTAGE</span>
+        <h3>LR Beni Ourain (year 4+)</h3>
+        <span class="status-badge watch-list">Vintage watch-list</span>
+        
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T3 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $4,000 (furniture_envelope) ·
+        <strong>Actor:</strong> vintage_hunt · 👩 Annika
+      </div>
+      <div class="vintage-brief">
+          <div><strong>Style:</strong> Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</div>
+          <div><strong>Avoid:</strong> no synthetic, no fringe-less, no high-contrast geometric, no kilim flat-weave</div>
+          <div><strong>Target $:</strong> 3000-5000</div>
+          <div><strong>Hunt at:</strong> Mellah, Berber Trading Company, Etsy vetted dealers, Atlanta vintage dealers</div>
+        </div>
+      <div class="notes-line">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</div>
+      
+    </article>
+<article class="item-card" data-id="DR-TABLE"
+       data-urgency="T2" data-room="dining"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">DR-TABLE</span>
+        <h3>Dining table (round oak)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 10 wk ·
+        <strong>Budget:</strong> $1,800 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku"><span class="star">★</span> Room &amp; Board Bayside Round Dining Table, White Oak, 54-inch</div>
+      <div class="price">$1,999</div>
+      <div class="reasoning">Bayside round oak is the explicit canon reference; 54-inch seats 6 comfortably for the Wishbone CH24 chair set; R&amp;B build quality holds through daily family use.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Madera Round Dining Table, White Oak, 51-inch</div>
+      <div class="price">$1,199</div>
+      <div class="reasoning">Article at 40% savings vs R&amp;B; 51-inch is the smaller footprint option that opens floor when chairs push in.</div>
+    </div><div class="option-card ">
+      <div class="vendor">West Elm</div>
+      <div class="sku">West Elm Mid-Century Round Dining Table, White Oak, 54-inch</div>
+      <div class="price">$1,699</div>
+      <div class="reasoning">West Elm keeps brand consolidation for large-order discount potential; tapered leg reads lighter than Bayside pedestal.</div>
+    </div></div>
+      <div class="notes-line">Per loved_13 + loved_11 canon — round oak. R&amp;B Bayside or Article Madera or vintage.</div>
+      
+    </article>
+<article class="item-card" data-id="DR-CHAIRS"
+       data-urgency="T2" data-room="dining"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">DR-CHAIRS</span>
+        <h3>Dining chairs (Wishbone CH24 set of 6)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,800 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card ">
+      <div class="vendor">Carl Hansen &amp; Søn (via Design Within Reach or dealer)</div>
+      <div class="sku">Carl Hansen &amp; Søn CH24 Wishbone Chair, White Oak / Natural Paper Cord — set of 6</div>
+      <div class="price">$5,400</div>
+      <div class="reasoning">Authentic Wishbone per §3a is the aspirational move; price is real at ~$900/chair but heirloom-grade with 7-year warranty and repair program.</div>
+    </div><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Chadwick Dining Chair, Light Oak / Natural Rope Seat — set of 6</div>
+      <div class="price">$1,794</div>
+      <div class="reasoning">West Elm Chadwick reads Wishbone silhouette at 1/3 the price; within furniture envelope; non-paper-cord seat survives daily kid use better than authentic.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Burrard Dining Chair, White Oak / Oatmeal fabric — set of 6</div>
+      <div class="price">$1,494</div>
+      <div class="reasoning">Article Burrard has upholstered seat pad option for comfort at longer dinners; light oak frame keeps wood-tone lock; softest per-chair price in canon brands.</div>
+    </div></div>
+      <div class="notes-line">Per §3a — Wishbone CH24 or paper-cord oak silhouette. Carl Hansen authentic ($800+/chair) OR licensed reissue. Set of 6.</div>
+      
+    </article>
+<article class="item-card" data-id="DR-SIDEBOARD"
+       data-urgency="T2" data-room="dining"
+       data-category="furniture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">DR-SIDEBOARD</span>
+        <h3>Dining sideboard / credenza</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> furniture ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Room &amp; Board</div>
+      <div class="sku"><span class="star">★</span> Room &amp; Board Hudson Credenza, White Oak, 72-inch</div>
+      <div class="price">$2,499</div>
+      <div class="reasoning">R&amp;B Hudson is the explicit canon reference for light oak credenza; clean-lined American mid-market with solid oak (not veneer on door fronts).</div>
+    </div><div class="option-card ">
+      <div class="vendor">West Elm</div>
+      <div class="sku">West Elm Mid-Century Sideboard, White Oak, 60-inch</div>
+      <div class="price">$1,499</div>
+      <div class="reasoning">60-inch fits tighter dining walls; tapered leg reads lighter; West Elm consolidation helps order-size discounts.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Article</div>
+      <div class="sku">Article Oscuro Sideboard, White Oak, 70-inch</div>
+      <div class="price">$1,299</div>
+      <div class="reasoning">Article best price in canon; angled hairpin-adjacent legs add visual interest without deviating from Japandi register.</div>
+    </div></div>
+      <div class="notes-line">Light oak credenza — R&amp;B Hudson or vintage Danish.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-PILLOWS"
+       data-urgency="T2" data-room="lr"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-PILLOWS</span>
+        <h3>LR throw pillows</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">West Elm</div>
+      <div class="sku"><span class="star">★</span> West Elm Textured Linen Pillow — Antique Brass/Rust × 2 (22in) + West Elm Oversized Pillow Cover — Ivory Linen × 1 (24in)</div>
+      <div class="price">$340</div>
+      <div class="reasoning">Rust as the single LR accent color plays warmly against a cream or dark sofa; the oversized ivory anchor prevents the rust from reading as too decorative-farmhouse.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Etsy + Anthropologie</div>
+      <div class="sku">Etsy hand-loomed wool pillow — olive/natural stripe × 2 (20in) + Anthropologie Fray-Edge Pillow — Ivory Linen × 1</div>
+      <div class="price">$380</div>
+      <div class="reasoning">Etsy hand-loomed wool adds genuine artisan texture; olive stripe reads Japandi-earthy rather than olive-drab when paired with an ivory Anthropologie fray-edge neutral.</div>
+    </div><div class="option-card ">
+      <div class="vendor">ferm LIVING (fermliving.com)</div>
+      <div class="sku">ferm LIVING Blend Pillow — Mustard Yellow + ferm LIVING Cushion — Off-White × 2</div>
+      <div class="price">$390</div>
+      <div class="reasoning">ferm LIVING&#x27;s Blend wool pillows are genuinely Japandi in weight and color saturation — mustard here is the most restrained, least &#x27;boho&#x27; of the three accent choices.</div>
+    </div></div>
+      <div class="notes-line">One bold accent per §4 principle 5. Olive/rust/mustard — pick ONE.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-THROW"
+       data-urgency="T2" data-room="lr"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-THROW</span>
+        <h3>LR throw blanket</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $200 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Hawkins New York (hawkinsnewyork.com)</div>
+      <div class="sku"><span class="star">★</span> Hawkins New York Simple Linen Throw — Natural</div>
+      <div class="price">$185</div>
+      <div class="reasoning">Stonewashed linen throw in natural reads as the same warm cream as the bedding system without duplicating it — drapes beautifully over sofa arm without looking &#x27;styled&#x27;.</div>
+    </div><div class="option-card ">
+      <div class="vendor">West Elm</div>
+      <div class="sku">West Elm Chunky Wool Throw — Ivory/Oat</div>
+      <div class="price">$149</div>
+      <div class="reasoning">Chunky wool adds tactile contrast against linen upholstery at a lower price point; ivory sits in the neutral zone without fighting accent pillow color.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Etsy (search: hand woven throw sage natural)</div>
+      <div class="sku">Etsy hand-woven cotton throw — sage striped, artisan studio</div>
+      <div class="price">$180</div>
+      <div class="reasoning">Brings the 8-12% vintage/artisan layer to the LR in throw form; sage here is the strongest case for sage-as-throw rather than sage-as-pillow accent.</div>
+    </div></div>
+      <div class="notes-line">Wool or cotton — Hawkins New York, MagicLinen, or vintage.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-ART"
+       data-urgency="T3" data-room="lr"
+       data-category="decor_softgoods" data-status="watch_list"
+       data-annika="false"
+       data-schedule-locked="true">
+      <div class="item-card-header">
+        <span class="item-id">LR-ART</span>
+        <h3>LR primary wall art</h3>
+        <span class="status-badge watch-list">Vintage watch-list</span>
+        
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T3 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $1,200 (furniture_envelope) ·
+        <strong>Actor:</strong> vintage_hunt
+      </div>
+      <div class="vintage-brief">
+          <div><strong>Style:</strong> Modern abstract or landscape painting, 36+ inch, muted palette aligned with §3a accent</div>
+          <div><strong>Avoid:</strong> no posters, no mass-print canvas, no jewel-tone saturation</div>
+          <div><strong>Target $:</strong> 800-1500</div>
+          <div><strong>Hunt at:</strong> Tappan Collective, Saatchi Art, Tew Galleries Atlanta, Atlanta Contemporary, Etsy original artists</div>
+        </div>
+      <div class="notes-line">Soul-layer piece — slow hunt.</div>
+      
+    </article>
+<article class="item-card" data-id="DR-ART"
+       data-urgency="T3" data-room="dining"
+       data-category="decor_softgoods" data-status="watch_list"
+       data-annika="false"
+       data-schedule-locked="true">
+      <div class="item-card-header">
+        <span class="item-id">DR-ART</span>
+        <h3>Dining art / wall moment</h3>
+        <span class="status-badge watch-list">Vintage watch-list</span>
+        
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T3 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $800 (furniture_envelope) ·
+        <strong>Actor:</strong> vintage_hunt
+      </div>
+      <div class="vintage-brief">
+          <div><strong>Style:</strong> Statement piece — large painting or vintage rug as wall hanging</div>
+          <div><strong>Avoid:</strong> no commercial print</div>
+          <div><strong>Target $:</strong> 500-1000</div>
+          <div><strong>Hunt at:</strong> Tew Galleries, Atlanta Contemporary, Mid Mod Market</div>
+        </div>
+      <div class="notes-line">Dining is canon-classic dinner moment — wall art carries weight.</div>
+      
+    </article>
+<article class="item-card" data-id="LR-MIRROR"
+       data-urgency="T2" data-room="lr"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">LR-MIRROR</span>
+        <h3>LR/entry mirror</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $500 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse (schoolhouse.com)</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Edith Mirror — Antique Brass, 24×36in</div>
+      <div class="price">$445</div>
+      <div class="reasoning">Edith&#x27;s beveled profile and antique brass frame match the lacquered-brass cross-room consistency lock and the Schoolhouse-for-mirrors spec directive precisely.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation (rejuvenation.com)</div>
+      <div class="sku">Rejuvenation Clover Arched Mirror — Brass, 24×40in</div>
+      <div class="price">$499</div>
+      <div class="reasoning">Rejuvenation&#x27;s arched silhouette adds vertical presence in an entry moment; brass finish stays on-spec; slightly taller than Edith if ceiling height warrants the gesture.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Atlanta vintage (Westside Modern, Mid Mod Market)</div>
+      <div class="sku">Vintage arc or simple frame mirror — Atlanta Westside Modern or Mid Mod Market hunt</div>
+      <div class="price">$200</div>
+      <div class="reasoning">Vintage mirror in warm metal or raw wood frame delivers the 8-12% artisan layer at half the cost of new; requires a live hunt visit — right option if entry framing and scale can be confirmed in-store.</div>
+    </div></div>
+      <div class="notes-line">Reflective for §8c bounce. Schoolhouse Edith mirror or Rejuvenation.</div>
+      
+    </article>
+<article class="item-card" data-id="TABLETOP-DINING"
+       data-urgency="T2" data-room="dining"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">TABLETOP-DINING</span>
+        <h3>Dining tabletop (vases, candleholders, runner)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> dining ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $300 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Etsy + Schoolhouse + Hawkins New York</div>
+      <div class="sku"><span class="star">★</span> Etsy hand-thrown stoneware bud vases (set of 2, matte clay glaze) + Schoolhouse Tapered Candlestick Holder brass × 3 + Hawkins New York Linen Table Runner — Natural</div>
+      <div class="price">$295</div>
+      <div class="reasoning">Etsy hand-thrown vases clear the &#x27;NOT commercial&#x27; bar for the dining centerpiece; Schoolhouse brass candleholders lock in the lacquered-brass thread from the LR mirror; Hawkins linen runner ties the surface to the bedding system.</div>
+    </div><div class="option-card ">
+      <div class="vendor">East Fork + West Elm</div>
+      <div class="sku">East Fork Pottery Bud Vase — Chalk × 2 + West Elm Fluted Brass Taper Candle Holder × 2 + West Elm Stonewashed Linen Runner — Natural</div>
+      <div class="price">$280</div>
+      <div class="reasoning">East Fork Chalk glaze is canon for the ceramics system; WE fluted brass candleholders are the most restrained brass accent in their range; WE stonewashed linen runner is a reliable neutral.</div>
+    </div><div class="option-card ">
+      <div class="vendor">ferm LIVING + HAY + Fog Linen (2Modern)</div>
+      <div class="sku">ferm LIVING Verso Vase — Off-White × 1 (large) + HAY Candle Holder Set Brass × 2 + Fog Linen Work Table Runner — Natural</div>
+      <div class="price">$310</div>
+      <div class="reasoning">ferm LIVING + HAY combination is the highest Japandi design-integrity option at a slight budget overrun; Fog Linen Work runner is linen-specialist quality that outposts all commercial options.</div>
+    </div></div>
+      <div class="notes-line">Hand-thrown vase + brass candleholders + linen runner.</div>
+      
+    </article>
+<article class="item-card" data-id="FRAME-TV"
+       data-urgency="T2" data-room="lr"
+       data-category="appliance" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">FRAME-TV</span>
+        <h3>Samsung Frame TV (LR)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> lr ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $1,500 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Best Buy / Samsung.com</div>
+      <div class="sku"><span class="star">★</span> Samsung QN65LS03HEFXZA (65&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI)</div>
+      <div class="price">$1,499</div>
+      <div class="reasoning">2026 model hits the $1,500 budget almost exactly, delivers the Art Mode + matte anti-glare panel spec&#x27;d in §12, and is the right size for above-mantel or articulating-arm placement without overwhelming the LR wall.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Best Buy / Samsung.com</div>
+      <div class="sku">Samsung QN65LS03HWFXZA (65&quot; The Frame Pro 2026, Neo QLED, wireless One Connect, 4K)</div>
+      <div class="price">$1,999</div>
+      <div class="reasoning">Wireless One Connect Box eliminates cable management headache at the mantel mount, but adds $500 over budget — worth considering if wire routing is constrained by the LR-BUILTIN millwork.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Best Buy / Samsung.com</div>
+      <div class="sku">Samsung QN75LS03HEFXZA (75&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI)</div>
+      <div class="price">$2,186</div>
+      <div class="reasoning">75&quot; upsizes the room statement but runs $686 over budget and may visually overpower the mantel surround — flag for owner decision if LR-BUILTIN final dimensions support it.</div>
+    </div></div>
+      <div class="notes-line">Per §12 — mounted above mantel or articulating arm. Art-mode disappears when off.</div>
+      
+    </article>
+</main>
+</body>
+</html>

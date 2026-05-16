@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing · Kitchen · 1490 Lively Ridge</title>
+<meta name="description" content="Sourcing for Kitchen — 19 items.">
+<style>
+:root {
+  --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
+  --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); }
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+<header class="page-header">
+  <h1>Sourcing · Kitchen</h1>
+  <p class="subtitle">19 items in Kitchen. Updated 2026-05-16.</p>
+  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+</header>
+<main>
+<article class="item-card" data-id="CABINET-FINISH-KITCHEN"
+       data-urgency="T0" data-room="kitchen"
+       data-category="paint_finish" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">CABINET-FINISH-KITCHEN</span>
+        <h3>Kitchen cabinet finish</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> paint_finish ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $0 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</div>
+      <div class="notes-line">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak floor required at sample stage.</div>
+      
+    </article>
+<article class="item-card" data-id="K-TILE-BACKSPLASH"
+       data-urgency="T0" data-room="kitchen"
+       data-category="tile_stone" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-TILE-BACKSPLASH</span>
+        <h3>Kitchen backsplash</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $2,500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div>
+      <div class="notes-line">Per DESIGN_SPEC §7 [OWNER CONFIRM #1]: PIVOT from Bejmat to Carrara+zellige (canon-consistent). Cle lead 4-6 wk.</div>
+      
+    </article>
+<article class="item-card" data-id="K-FLOOR-TILE"
+       data-urgency="T0" data-room="kitchen"
+       data-category="tile_stone" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-FLOOR-TILE</span>
+        <h3>Kitchen floor tile</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $1,800 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Daltile Choice Ivory porcelain</div>
+      <div class="notes-line">Locked per §6.</div>
+      
+    </article>
+<article class="item-card" data-id="K-COUNTERS"
+       data-urgency="T0" data-room="kitchen"
+       data-category="tile_stone" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-COUNTERS</span>
+        <h3>Kitchen counters + waterfall island</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 5 wk ·
+        <strong>Budget:</strong> $5,000 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div>
+      <div class="notes-line">Locked. Template after cab install. 5-week fab+install typical.</div>
+      
+    </article>
+<article class="item-card" data-id="K-FAUCET"
+       data-urgency="T0" data-room="kitchen"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-FAUCET</span>
+        <h3>Kitchen faucet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $550 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div>
+      <div class="notes-line">Locked per §6 — Delta Trinsic Champagne Bronze line. Pull-down for kitchen workflow.</div>
+      
+    </article>
+<article class="item-card" data-id="K-POT-FILLER"
+       data-urgency="T0" data-room="kitchen"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-POT-FILLER</span>
+        <h3>Kitchen pot filler (range wall)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku"><span class="star">★</span> Delta Trinsic 1953LF-CZ Wall-Mount Pot Filler Champagne Bronze</div>
+      <div class="price">$390</div>
+      <div class="reasoning">Canon lock: Trinsic Champagne Bronze articulated wall-mount pot filler, double-jointed arm, matches K-FAUCET family exactly — the default pick if plumbing rough is confirmed.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku">Kohler Sous K-7348-BV Wall-Mount Pot Filler Vibrant Brushed Bronze</div>
+      <div class="price">$420</div>
+      <div class="reasoning">Close warm-bronze alt in Kohler&#x27;s commercial-inspired Sous line; slightly more reach than Trinsic but diverges from locked finish family.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Ferguson (special order)</div>
+      <div class="sku">Brizo Litze RP100613GL Wall-Mount Pot Filler Luxe Gold</div>
+      <div class="price">$580</div>
+      <div class="reasoning">Premium splurge alt in Brizo Luxe Gold; richer tone, softer sheen — only worthwhile if owner wants distinctly elevated kitchen statement over Trinsic.</div>
+    </div></div>
+      <div class="notes-line">Confirm pot-filler is in plumbing rough scope before ordering — if TCW hasn&#x27;t roughed the wall stub, add to change order first. Delta Trinsic Champagne Bronze (1953LF-CZ) is the default once confirmed.</div>
+      
+    </article>
+<article class="item-card" data-id="K-SINK"
+       data-urgency="T0" data-room="kitchen"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-SINK</span>
+        <h3>Kitchen sink</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $600 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku"><span class="star">★</span> Kohler Strive K-5418-NA 30-inch Undermount Stainless (Quiet Shield)</div>
+      <div class="price">$590</div>
+      <div class="reasoning">Best all-around pick: Kohler Strive is a single-bowl 30-inch undermount with sound-dampening Quiet Shield coating, fits within budget, and pairs cleanly with the Trinsic faucet.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku">Elkay Crosstown EFRU281610 28-inch Undermount Stainless</div>
+      <div class="price">$520</div>
+      <div class="reasoning">Premium-brand undermount at a comfortable margin below cap; 18-gauge, tight reveal, clean profile — trade-off is shallower 10-inch depth vs Strive&#x27;s 9.5-inch.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / Amazon</div>
+      <div class="sku">Ruvati RVH7300 33-inch Undermount Stainless 16-Gauge</div>
+      <div class="price">$280</div>
+      <div class="reasoning">Budget-tier save option: heavy 16-gauge stainless, 33-inch wide single bowl — use only if budget pressure demands, as the brand tier is below the overall kitchen aesthetic.</div>
+    </div></div>
+      <div class="notes-line">Stainless undermount, 30-32 inch single bowl preferred. Kohler Strive at $590 hits the $600 cap cleanly and keeps brand tier consistent with the overall kitchen package.</div>
+      
+    </article>
+<article class="item-card" data-id="K-RO-FAUCET"
+       data-urgency="T0" data-room="kitchen"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-RO-FAUCET</span>
+        <h3>Kitchen RO faucet (under-sink filter)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $200 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Aquasana.com / Amazon</div>
+      <div class="sku"><span class="star">★</span> Aquasana AQ-4035.56 Dedicated RO Faucet Champagne Bronze</div>
+      <div class="price">$75</div>
+      <div class="reasoning">Canon companion: Aquasana&#x27;s own Champagne Bronze dedicated faucet ships with or alongside the Aquasana RO system (WATER-FILTRATION item) — finish match is exact, single-hole deck-mount.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku">Delta Faucet 1903LF-CZ Single-Hole Bar/Prep Faucet Champagne Bronze</div>
+      <div class="price">$195</div>
+      <div class="reasoning">Trinsic-family bar faucet in locked Champagne Bronze — design-family match is best in class, but overkill price for a secondary RO spout when Aquasana&#x27;s own works fine.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Amazon</div>
+      <div class="sku">WINGSOL Drinking Water Faucet Brushed Gold Single-Hole</div>
+      <div class="price">$45</div>
+      <div class="reasoning">No-name budget option only if Aquasana companion faucet is out of stock — brushed gold approximates champagne bronze at a distance but finish is not an exact match.</div>
+    </div></div>
+      <div class="notes-line">Aquasana companion faucet (AQ-4035.56) in Champagne Bronze is the default — confirm it ships with the WATER-FILTRATION Aquasana package before ordering separately.</div>
+      
+    </article>
+<article class="item-card" data-id="K-PENDANTS"
+       data-urgency="T0" data-room="kitchen"
+       data-category="lighting_fixture" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-PENDANTS</span>
+        <h3>Kitchen island pendants (3+1)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $800 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="decided-line">✅ Keep existing 3 white dome pendants + source matching 4th</div>
+      <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match.</div>
+      
+    </article>
+<article class="item-card" data-id="K-UNDERCAB-LIGHTING"
+       data-urgency="T0" data-room="kitchen"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-UNDERCAB-LIGHTING</span>
+        <h3>Kitchen under-cabinet LED</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 1 wk ·
+        <strong>Budget:</strong> $400 (construction_allowance) ·
+        <strong>Actor:</strong> tcw
+      </div>
+      <div class="options-grid"><div class="option-card ">
+      <div class="vendor">Waveform LED (Amazon/direct)</div>
+      <div class="sku">Waveform Centric Home LED Strip 2700K CRI 95, 16.4ft reel, warm white, linkable with controller</div>
+      <div class="price">$180</div>
+      <div class="reasoning">Best-in-class CRI 95 at 2700K — exceeds spec, easy TCW install, no driver complexity.</div>
+    </div><div class="option-card recommend">
+      <div class="vendor">WAC Lighting</div>
+      <div class="sku"><span class="star">★</span> WAC Lighting Undercabinet LED 2700K CRI 90 bar light, 24-inch sections, matte white</div>
+      <div class="price">$260</div>
+      <div class="reasoning">WAC canon brand; hardwire bar format integrates cleanly under 30-inch uppers with clean trim edge.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Kichler / Ferguson</div>
+      <div class="sku">Kichler Direct-Wire LED Under Cabinet 10W 2700K CRI 90, 18-inch bar, white</div>
+      <div class="price">$220</div>
+      <div class="reasoning">Reliable hardwire option available through most electrical supply houses TCW already uses.</div>
+    </div></div>
+      <div class="notes-line">LED strip or puck under upper cabs; 2700K CRI 90+. TCW spec.</div>
+      
+    </article>
+<article class="item-card" data-id="K-CAB-HARDWARE"
+       data-urgency="T1" data-room="kitchen"
+       data-category="hardware" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-CAB-HARDWARE</span>
+        <h3>Kitchen cabinet pulls/knobs (matte black + brass mix)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku"><span class="star">★</span> Rejuvenation Putman Pull 5\&quot; cc, Lacquered Brass × 14 + Rejuvenation Vise Knob 1.25\&quot;, Matte Black × 10
+(14 pulls @ $28ea = $392 + 10 knobs @ $18ea = $180 → $572 total; ~15% over budget, negotiate 10-pack discount)
+</div>
+      <div class="price">$572</div>
+      <div class="reasoning">Putman pull is the canon Rejuvenation kitchen move — slender bar brass on uppers; Vise knob in matte black on lowers achieves the mixed-finish rule without fighting the light-oak cabs.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku">Schoolhouse Sutton Pull 5\&quot; cc, Lacquered Brass × 14 + Schoolhouse Tab Knob, Matte Black × 10
+(14 @ $32ea = $448 + 10 @ $22ea = $220 → $668; single-vendor; note over budget)
+</div>
+      <div class="price">$668</div>
+      <div class="reasoning">All-Schoolhouse keeps procurement simple; Sutton pull is cleaner/more architectural than Putman — works if final cab profile is very flat-Shaker.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Forge Hardware Studio</div>
+      <div class="sku">Forge Hardware Studio Low Arch Pull 4\&quot; cc, Lacquered Brass × 14 + Matte Black × 10 (mixed finish same SKU)
+(14 @ $24ea = $336 + 10 @ $24ea = $240 → $576)
+</div>
+      <div class="price">$576</div>
+      <div class="reasoning">Arch pull adds subtle curve that reads well against Shaker door profile; Forge is slightly less premium than Rejuvenation but still avoids the avoided brands.</div>
+    </div></div>
+      <div class="notes-line">Canon family: Rejuvenation and/or Forge Hardware, matte black + lacquered brass mix. Per §5d: both finishes ≥3× in kitchen. Specific pull styles and knob shapes not picked. Step 2 draft options: 2 pull styles (one each finish) + optional knob variant.</div>
+      
+    </article>
+<article class="item-card" data-id="K-CABINETS"
+       data-urgency="T0" data-room="kitchen"
+       data-category="cabinetry_millwork" data-status="decided"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-CABINETS</span>
+        <h3>Kitchen cabinets (KraftMaid Vantage)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $9,500 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div>
+      <div class="notes-line">Per G3 line. Sample door required for finish match to floor.</div>
+      
+    </article>
+<article class="item-card" data-id="K-STORAGE-ADDER"
+       data-urgency="T0" data-room="kitchen"
+       data-category="cabinetry_millwork" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-STORAGE-ADDER</span>
+        <h3>Kitchen storage cabinet adder</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $2,000 (construction_allowance) ·
+        <strong>Actor:</strong> tcw
+      </div>
+      <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div>
+      <div class="notes-line">Per G3 line.</div>
+      
+    </article>
+<article class="item-card" data-id="K-PANTRY-BUILTIN"
+       data-urgency="T1" data-room="kitchen"
+       data-category="cabinetry_millwork" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-PANTRY-BUILTIN</span>
+        <h3>Kitchen pantry built-in (full-height oak)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $4,500 (construction_allowance) ·
+        <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">KraftMaid Vantage (via TCW dealer account)</div>
+      <div class="sku"><span class="star">★</span> KraftMaid Vantage tall pantry tower 24W×96H, light oak Shaker, integrated with kitchen cab order — factory finish match guaranteed</div>
+      <div class="price">$3,200</div>
+      <div class="reasoning">★ Same Vantage order = identical factory finish to K-CABINETS with zero reconciliation risk; pantry tower is a standard Vantage SKU, within budget, and ships with kitchen cabinet batch.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Atlanta Cabinet Co (local mill)</div>
+      <div class="sku">Atlanta Cabinet Co custom — floor-to-ceiling pantry cabinet 36W×96H, white oak slab, adjustable shelves, Rubio Pure, integrated pull-out drawers at base</div>
+      <div class="price">$4,800</div>
+      <div class="reasoning">Custom slab pantry is the canon §18 Hiroo cali_2i move but requires careful finish match to KraftMaid Vantage factory tone — sample both side-by-side before ordering.</div>
+    </div><div class="option-card ">
+      <div class="vendor">IKEA (Cobb) + carpenter trim day</div>
+      <div class="sku">IKEA PAX 2350H × 1 + 1 unit (24+24W) with Havstorp white-stained oak doors + Vantage cab finish painted edge-band trim by carpenter</div>
+      <div class="price">$1,600</div>
+      <div class="reasoning">Extreme-budget fallback with real Havstorp oak veneer door panels; requires edge-band carpentry to visually integrate with Vantage — noticeable seam is the risk.</div>
+    </div></div>
+      <div class="notes-line">Per §18 — canon Hiroo cali_2i floor-to-ceiling. MED-HIGH priority. Reconcile with KraftMaid Vantage match.</div>
+      
+    </article>
+<article class="item-card" data-id="K-RANGE"
+       data-urgency="T0" data-room="kitchen"
+       data-category="appliance" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-RANGE</span>
+        <h3>Kitchen range (LG ThinQ — owned)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $0 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div>
+      <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
+      
+    </article>
+<article class="item-card" data-id="K-DISHWASHER"
+       data-urgency="T0" data-room="kitchen"
+       data-category="appliance" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-DISHWASHER</span>
+        <h3>Dishwasher (Bosch — owned)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $0 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div>
+      <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
+      
+    </article>
+<article class="item-card" data-id="K-FRIDGE"
+       data-urgency="T0" data-room="kitchen"
+       data-category="appliance" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">K-FRIDGE</span>
+        <h3>Refrigerator (owned, stays)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 0 wk ·
+        <strong>Budget:</strong> $0 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div>
+      <div class="notes-line">Existing fridge stays — no change.</div>
+      
+    </article>
+<article class="item-card" data-id="G3-HOOD"
+       data-urgency="T0" data-room="kitchen"
+       data-category="appliance" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">G3-HOOD</span>
+        <h3>Kitchen range hood</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> appliance ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $3,400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">AJ Madison / CDGA</div>
+      <div class="sku"><span class="star">★</span> Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison)</div>
+      <div class="price">$3,800</div>
+      <div class="reasoning">Canon-family pick — PRH18342SS is the verified 42&quot;/900 CFM Professional Magic Lung wall mount; BK (matte black) is a factory custom-color upcharge (~10%) over the ~$3,433 SS base, fitting within the $3,400+$900 MAU envelope.</div>
+    </div><div class="option-card ">
+      <div class="vendor">AJ Madison / CDGA</div>
+      <div class="sku">Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black)</div>
+      <div class="price">$2,650</div>
+      <div class="reasoning">Lower-CFM contemporary alternative in black at $2,642 list — saves ~$1,150 vs. PRH18342SS-BK but drops to 600 CFM which may require MAU damper resizing for high-output gas range.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Best Buy / AJ Madison</div>
+      <div class="sku">Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless)</div>
+      <div class="price">$1,400</div>
+      <div class="reasoning">Non-canon backup if Vent-A-Hood lead time blocks kitchen TCO; black glass panel reads dark and modern but is not matte-black chimney style — design continuity risk with matte-black hardware scheme.</div>
+    </div></div>
+      <div class="notes-line">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Original SKU K2240SS does not exist in CDGA catalog — successor model (likely SLDH9-K42 or equivalent) must be confirmed before ordering. Step 2 draft confirmed Vent-A-Hood SKU options at 42-inch 900+ CFM matte black. $3.4K + $900 MAU budget.</div>
+      
+    </article>
+<article class="item-card" data-id="KITCHEN-OPEN-SHELF"
+       data-urgency="T2" data-room="kitchen"
+       data-category="decor_softgoods" data-status="options_drafted"
+       data-annika="true"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">KITCHEN-OPEN-SHELF</span>
+        <h3>Kitchen open shelf styling</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> kitchen ·
+        <strong>Category:</strong> decor_softgoods ·
+        <strong>Urgency:</strong> T2 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $400 (furniture_envelope) ·
+        <strong>Actor:</strong> owner_furniture · 👩 Annika
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">East Fork + Berard/Food52 + Bookshop.org</div>
+      <div class="sku"><span class="star">★</span> East Fork Everyday Bowl 4-pack — Chalk + East Fork Mug 4-pack — Fog + Olive wood cutting board (Berard or Food52) × 1 + 2-3 curated cookbooks (Ottolenghi, Nobu, or equivalent)</div>
+      <div class="price">$395</div>
+      <div class="reasoning">East Fork Chalk bowls and Fog mugs displayed on open shelves are the visual centerpiece of a Japandi kitchen — not perfectly matched, deliberately mixed-glaze; olive wood board and cookbooks add the organic + intellectual layer per §3a anti-signal.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Etsy + Fog Linen Work</div>
+      <div class="sku">Etsy hand-thrown stoneware bowl + mug set (4 of each, artisan studio) + Olive wood trivet × 2 + Fog Linen Work apron × 1</div>
+      <div class="price">$380</div>
+      <div class="reasoning">Full Etsy sourcing for the shelf ceramics maximizes artisan provenance and ensures no two pieces match exactly — strongest interpretation of the §3a anti-commercial-dishware directive.</div>
+    </div><div class="option-card ">
+      <div class="vendor">CB2 + Amazon</div>
+      <div class="sku">CB2 Matte Stoneware Mug × 4 + Bowl × 4 (Chalk) + Acacia wood board × 1 + 2 cookbooks</div>
+      <div class="price">$240</div>
+      <div class="reasoning">CB2 Chalk matte stoneware reads similar to East Fork at roughly half the price — visible cost savings if kitchen budget needs reallocating to higher-priority items.</div>
+    </div></div>
+      <div class="notes-line">Per §3a anti-signal — NOT matched commercial dishware. Hand-thrown + olive wood + cookbooks.</div>
+      
+    </article>
+</main>
+</body>
+</html>

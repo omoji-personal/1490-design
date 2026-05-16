@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourcing · Baths (Hall + Basement) · 1490 Lively Ridge</title>
+<meta name="description" content="Sourcing for Baths (Hall + Basement) — 17 items.">
+<style>
+:root {
+  --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
+  --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); }
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">← 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+<header class="page-header">
+  <h1>Sourcing · Baths (Hall + Basement)</h1>
+  <p class="subtitle">17 items in Baths (Hall + Basement). Updated 2026-05-16.</p>
+  <p style="margin-top:10px;font-size:13px;"><a href="/sourcing">← All sourcing</a></p>
+</header>
+<main>
+<article class="item-card" data-id="HB-TILE-WALL"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="tile_stone" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-TILE-WALL</span>
+        <h3>Hall bath wall tile</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $1,200 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cle Tile (cletile.com)</div>
+      <div class="sku"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed</div>
+      <div class="price">$1,595</div>
+      <div class="reasoning">Primary canon pick per DESIGN_SPEC §6 — Sea Salt zellige on hall bath wall is the intended palette lock, matching kitchen perimeter and basement bath.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Bedrosians (bedrosians.com / Atlanta showroom)</div>
+      <div class="sku">Bedrosians Cloé Zellige 3×12 — Blanc colorway, hand-pressed</div>
+      <div class="price">$1,265</div>
+      <div class="reasoning">Alt zellige line with comparable hand-made variation at $4–6/sf savings over Cle; the G2 design board reference — valid if owner prefers slightly larger format and tighter budget fit.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Daltile (available Daltile Atlanta showroom)</div>
+      <div class="sku">Daltile Marrakech Zellige 4×4 — Blanc de Blanc, matte</div>
+      <div class="price">$330</div>
+      <div class="reasoning">Budget-tier zellige look at $5–7/sf if cap tightens — mechanically consistent with palette but noticeably less hand-crafted variation than Cle or Bedrosians; reserve for basement bath if owner upgrades hall bath to Cle.</div>
+    </div></div>
+      <div class="notes-line">Canon family: Cle Sea Salt palette. Owner must reconcile G2 (Cloé) vs DESIGN_SPEC §6 (Cle Sea Salt) at sample stage. Step 2 drafted both options + budget tier below.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-TILE-FLOOR"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="tile_stone" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-TILE-FLOOR</span>
+        <h3>Hall bath floor tile</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $600 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed</div>
+      <div class="notes-line">Locked per §6.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-TILE-WALL"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="tile_stone" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-TILE-WALL</span>
+        <h3>Basement bath wall tile</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $1,100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · ⚠️ sample required
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cle Tile (cletile.com) — combine order with HB-TILE-WALL for single lead-time pull</div>
+      <div class="sku"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath)</div>
+      <div class="price">$1,305</div>
+      <div class="reasoning">Palette-locked match to hall bath Cle pick — single Cle order for both rooms reduces lead-time risk and may unlock volume pricing; slight budget overage absorbed by contingency.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Bedrosians (bedrosians.com / Atlanta showroom)</div>
+      <div class="sku">Bedrosians Cloé Zellige 3×12 — Blanc colorway, hand-pressed (match hall bath)</div>
+      <div class="price">$1,035</div>
+      <div class="reasoning">Mirrors Bedrosians alt option from hall bath at basement coverage — fits within $1,100 budget with waste factor; recommend if owner selects Cloé for HB-TILE-WALL.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Daltile (Atlanta showroom)</div>
+      <div class="sku">Daltile Marrakech Zellige 4×4 — Blanc de Blanc, matte (match hall bath)</div>
+      <div class="price">$270</div>
+      <div class="reasoning">Budget fallback if hall bath goes Daltile — maintains palette consistency at lowest material cost; frees budget for upgraded shower fixtures in basement bath.</div>
+    </div></div>
+      <div class="notes-line">Chains to HB-TILE-WALL final pick — match whatever is selected for hall bath. Options below are the same three products sized for ~45 sf basement coverage. Recommend flag mirrors HB-TILE-WALL selection at owner decision point.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-TILE-FLOOR"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="tile_stone" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-TILE-FLOOR</span>
+        <h3>Basement bath floor tile</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> tile_stone ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct · ⚠️ sample required
+      </div>
+      <div class="decided-line">✅ Daltile Portfolio White 12×24 honed (match hall bath)</div>
+      <div class="notes-line">Locked per §6.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-FAUCET"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-FAUCET</span>
+        <h3>Hall bath sink faucet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</div>
+      <div class="notes-line">Locked — Champagne Bronze family consistency.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-TUB-FILLER"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-TUB-FILLER</span>
+        <h3>Hall bath tub filler</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $500 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Delta Trinsic wall-mount tub filler + handshower, Champagne Bronze</div>
+      <div class="notes-line">Kohler Bellwether cast iron tub per G2; Trinsic trim.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-TUB"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-TUB</span>
+        <h3>Hall bath tub (Kohler Bellwether)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 4 wk ·
+        <strong>Budget:</strong> $700 (construction_allowance) ·
+        <strong>Actor:</strong> tcw
+      </div>
+      <div class="decided-line">✅ Kohler Bellwether 60-inch cast iron alcove tub, White</div>
+      <div class="notes-line">Locked per G2 line.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-FAUCET"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-FAUCET</span>
+        <h3>Basement bath sink faucet</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 2 wk ·
+        <strong>Budget:</strong> $350 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku"><span class="star">★</span> Delta Trinsic 559LF-CZMPU Single-Handle Bathroom Faucet Champagne Bronze (Deck-Mount)</div>
+      <div class="price">$315</div>
+      <div class="reasoning">Canon Trinsic CZ deck-mount lavatory faucet matching master and hall bath — use if Mason vanity countertop has a pre-drilled hole (verify with TCW before ordering wall-mount).</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku">Delta Trinsic 558LF-CZ Wall-Mount Bathroom Faucet Champagne Bronze</div>
+      <div class="price">$345</div>
+      <div class="reasoning">Wall-mount Trinsic CZ faucet — correct choice if Mason 24 PB vanity is a true wall-mount application with no countertop hole; confirm rough-in wall stub location with TCW first.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku">Kohler Purist K-14402-4-BV Single-Handle Deck-Mount Lavatory Faucet Vibrant Brushed Bronze</div>
+      <div class="price">$390</div>
+      <div class="reasoning">Purist Vibrant Brushed Bronze alt if the basement bath is treated as a distinct design zone — slightly richer bronze tone, $75 over budget, and departs from the Trinsic family consistency.</div>
+    </div></div>
+      <div class="notes-line">Deck-mount (559LF-CZMPU) is the recommended default pending TCW confirmation of vanity rough-in. If Mason vanity is confirmed wall-hung with no counter, switch to 558LF-CZ wall-mount. Both are within $350 budget.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-SHOWER-SYSTEM"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="plumbing_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-SHOWER-SYSTEM</span>
+        <h3>Basement bath shower trim + valve</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $600 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Build.com / eFaucets</div>
+      <div class="sku"><span class="star">★</span> Delta Trinsic 17 Series Pressure-Balance Trim T17253-CZ + Single-Setting Rainhead 52140-CZ</div>
+      <div class="price">$420</div>
+      <div class="reasoning">Canon Trinsic CZ single-function trim kit for the simpler 32×32 neo-angle basement shower — pressure-balance is appropriate here (not primary bath), under budget, and finish-family consistent.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com</div>
+      <div class="sku">Delta Trinsic Monitor 14 Series T14253-CZ + Showerhead 52140-CZ</div>
+      <div class="price">$350</div>
+      <div class="reasoning">Entry-level Monitor 14 Trinsic CZ trim — even simpler pressure-balance, lower price point, slightly less refined handle feel than 17-series but same family and finish.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Build.com / Ferguson</div>
+      <div class="sku">Symmons Ballina S-4700-CZ Pressure-Balance Shower Trim Champagne Bronze</div>
+      <div class="price">$390</div>
+      <div class="reasoning">Symmons Champagne Bronze alt: solid mid-tier alternative if Trinsic SKU is backordered — slightly more contemporary lever geometry, same warm bronze finish family.</div>
+    </div></div>
+      <div class="notes-line">17-Series (T17253-CZ) is preferred over Monitor 14 for the smoother valve feel. Valve body (R10000) ordered by TCW with rough plumbing. Neo-angle 32×32 doesn&#x27;t require a rainhead — standard 2.5 GPM showerhead (52140-CZ) is sufficient.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-TOILET"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-TOILET</span>
+        <h3>Hall bath toilet + washlet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $1,100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div>
+      <div class="notes-line">Locked per G2 line.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-TOILET"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="plumbing_fixture" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-TOILET</span>
+        <h3>Basement bath toilet + washlet</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> plumbing_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $1,100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div>
+      <div class="notes-line">Locked per G2 line.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-SCONCES"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-SCONCES</span>
+        <h3>Hall bath sconces (Cedar &amp; Moss)</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $400 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku"><span class="star">★</span> Cedar &amp; Moss Globe Sconce, lacquered brass, 4-inch clear glass globe, hardwire — pair</div>
+      <div class="price">$390</div>
+      <div class="reasoning">Clear globe provides task-grade vanity light; lacquered brass at $195/each hits the $180-220 price band target exactly.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku">Cedar &amp; Moss Cylinder Sconce, lacquered brass, linen shade, hardwire — pair</div>
+      <div class="price">$360</div>
+      <div class="reasoning">Cylinder linen shade softens hall bath for guest use; slightly more diffuse than globe; $180/each at the low end of band.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku">Cedar &amp; Moss Dome Sconce, matte black, 5-inch frosted dome, hardwire — pair</div>
+      <div class="price">$400</div>
+      <div class="reasoning">Matte black option satisfies the ≥3 black fixtures rule if hall bath needs the black counterpoint.</div>
+    </div></div>
+      <div class="notes-line">Canon family: Cedar &amp; Moss, lacquered brass. Specific product (Cylinder, Globe, Dome — which line?) and size not picked. Step 2 draft Cedar &amp; Moss sconce options at $180-220/each price band.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-SCONCES"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="lighting_fixture" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-SCONCES</span>
+        <h3>Basement bath sconces</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> lighting_fixture ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 6 wk ·
+        <strong>Budget:</strong> $300 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku"><span class="star">★</span> Cedar &amp; Moss Globe Sconce, lacquered brass, 3-inch clear glass globe, hardwire — pair</div>
+      <div class="price">$310</div>
+      <div class="reasoning">3-inch globe matches HB-SCONCES Cedar &amp; Moss family at smaller scale appropriate for 24-inch basement vanity; $155/each.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku">Schoolhouse Princeton Wall Sconce, lacquered brass, 3-inch milk glass globe, hardwire — pair</div>
+      <div class="price">$340</div>
+      <div class="reasoning">Schoolhouse Princeton at 3-inch scale matches Princeton family used in master; $40 over budget but canon brand.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Cedar &amp; Moss</div>
+      <div class="sku">Cedar &amp; Moss Cylinder Sconce, matte black, linen shade, hardwire — pair</div>
+      <div class="price">$280</div>
+      <div class="reasoning">Matte black budget pick under $300; provides black counterpoint in basement bath if HB chose lacquered brass globes.</div>
+    </div></div>
+      <div class="notes-line">Match hall bath family — Cedar &amp; Moss or Schoolhouse budget tier.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-CAB-HARDWARE"
+       data-urgency="T1" data-room="hall_bath"
+       data-category="hardware" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-CAB-HARDWARE</span>
+        <h3>Hall bath vanity pulls</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Sutton Pull 5&quot; cc, Lacquered Brass × 2 (2 @ $32ea = $64)</div>
+      <div class="price">$64</div>
+      <div class="reasoning">Exact-match to MB-CAB-HARDWARE recommended pick — family consistency across both bath vanities is the right design move.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Putman Pull 5&quot; cc, Lacquered Brass × 2 (2 @ $28ea = $56)</div>
+      <div class="price">$56</div>
+      <div class="reasoning">If MB-CAB-HARDWARE selects Putman, chain this to match; saves $8 vs Sutton.</div>
+    </div></div>
+      <div class="notes-line">Match master bath family.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-CAB-HARDWARE"
+       data-urgency="T1" data-room="basement_bath"
+       data-category="hardware" data-status="options_drafted"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-CAB-HARDWARE</span>
+        <h3>Basement bath vanity pulls</h3>
+        <span class="status-badge decide-now">Decide now</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> hardware ·
+        <strong>Urgency:</strong> T1 ·
+        <strong>Lead:</strong> 3 wk ·
+        <strong>Budget:</strong> $80 (construction_allowance) ·
+        <strong>Actor:</strong> owner_direct
+      </div>
+      <div class="options-grid"><div class="option-card recommend">
+      <div class="vendor">Schoolhouse</div>
+      <div class="sku"><span class="star">★</span> Schoolhouse Tab Knob 1.25&quot;, Matte Black × 2 (2 @ $22ea = $44)</div>
+      <div class="price">$44</div>
+      <div class="reasoning">Basement bath is utility-adjacent — matte black knob keeps it clean and lets the Mason vanity speak; contrast finish relative to upper baths is intentional hierarchy.</div>
+    </div><div class="option-card ">
+      <div class="vendor">Rejuvenation</div>
+      <div class="sku">Rejuvenation Westmore Knob 1.25&quot;, Lacquered Brass × 2 (2 @ $19ea = $38)</div>
+      <div class="price">$38</div>
+      <div class="reasoning">If owner prefers brass continuity all the way to basement, Westmore knob is the minimal/budget-correct pick at $38 total.</div>
+    </div></div>
+      <div class="notes-line">Minimal hardware for 24-inch wall-mount vanity.</div>
+      
+    </article>
+<article class="item-card" data-id="HB-VANITY"
+       data-urgency="T0" data-room="hall_bath"
+       data-category="cabinetry_millwork" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">HB-VANITY</span>
+        <h3>Hall bath vanity (WE Hutchinson 36-inch Single)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> hall_bath ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,800 (construction_allowance) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="decided-line">✅ West Elm Hutchinson Single Vanity 36-inch, Blonde</div>
+      <div class="notes-line">Locked per §6 + G2 line.</div>
+      
+    </article>
+<article class="item-card" data-id="BB-VANITY"
+       data-urgency="T0" data-room="basement_bath"
+       data-category="cabinetry_millwork" data-status="decided"
+       data-annika="false"
+       data-schedule-locked="false">
+      <div class="item-card-header">
+        <span class="item-id">BB-VANITY</span>
+        <h3>Basement bath vanity (Pottery Barn Mason 24)</h3>
+        <span class="status-badge decided">Decided</span>
+        <span class="schedule-not-locked">⚠️ schedule not locked</span>
+      </div>
+      <div class="item-meta">
+        <strong>Room:</strong> basement_bath ·
+        <strong>Category:</strong> cabinetry_millwork ·
+        <strong>Urgency:</strong> T0 ·
+        <strong>Lead:</strong> 8 wk ·
+        <strong>Budget:</strong> $1,100 (construction_allowance) ·
+        <strong>Actor:</strong> owner_furniture
+      </div>
+      <div class="decided-line">✅ Pottery Barn Mason 24-inch wall-mount vanity</div>
+      <div class="notes-line">Locked per G2 line.</div>
+      
+    </article>
+</main>
+</body>
+</html>
