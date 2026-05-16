@@ -1,12 +1,43 @@
 # sourcing_render_html.py
 """Render sourcing data to a static HTML page styled to match /budget and /decisions.
 Cards carry data-* attributes for client-side filtering (see filter UI in build_sourcing.py)."""
+import re
+from pathlib import Path
 from typing import List, Optional, Dict
 from html import escape
 
 from sourcing_schema import Item, Meta
 from sourcing_lint import LintFinding
 from sourcing_queue import ScheduleLookup, T0_PHASES
+
+SITE_DIR = Path(__file__).parent
+
+
+def _supplementary_paths(image_path: str) -> list:
+    """Given 'images/sourcing/k-faucet-1.jpg', return list of existing supplementary paths.
+
+    Checks two conventions agents used:
+    1. Option-level:  images/sourcing/k-faucet-1-b.jpg  (most items)
+    2. Item-level:    images/sourcing/k-faucet-b.jpg    (strip trailing -N digit block)
+    Returns only paths whose files exist on disk.
+    """
+    if not image_path:
+        return []
+    base = image_path[:-4]  # strip .jpg
+    results = []
+    for suffix in ["-b", "-c"]:
+        # Convention 1: option-level
+        candidate = f"{base}{suffix}.jpg"
+        if (SITE_DIR / candidate).exists():
+            results.append(candidate)
+            continue  # prefer this; skip item-level if option-level found
+        # Convention 2: item-level — strip trailing -<digits> block
+        item_base = re.sub(r"-\d+$", "", base)
+        if item_base != base:
+            candidate2 = f"{item_base}{suffix}.jpg"
+            if (SITE_DIR / candidate2).exists():
+                results.append(candidate2)
+    return results
 
 
 STATUS_BADGE = {
@@ -92,6 +123,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .option-card .price { color: var(--accent); font-weight: 600; }
 .option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
 .option-card .star { color: #d4a93a; font-size: 14px; }
+.option-img-main { width: 100%; max-width: 220px; height: 160px; object-fit: cover;
+  border-radius: 6px; border: 1px solid var(--border); background: #f3ede0;
+  display: block; margin: 8px 0 6px; }
+.option-img-supps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.option-img-supp { width: 80px; height: 80px; object-fit: cover; border-radius: 5px;
+  border: 1px solid var(--border); background: #f3ede0; }
 .vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
 .vintage-brief strong { display: inline-block; min-width: 80px; }
 .notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
@@ -113,10 +150,25 @@ TOPNAV_HTML = """<nav class="topnav">
 
 def _render_option(opt) -> str:
     star = '<span class="star">★</span> ' if opt.recommend else ""
+    # Main image
+    img_html = ""
+    if opt.image and (SITE_DIR / opt.image).exists():
+        img_html = f'<img class="option-img-main" src="/{opt.image}" alt="{escape(opt.sku)}" loading="lazy" onerror="this.style.opacity=0.3;">'
+    # Supplementary images (-b, -c)
+    supp_paths = _supplementary_paths(opt.image)
+    supp_html = ""
+    if supp_paths:
+        thumbs = "".join(
+            f'<img class="option-img-supp" src="/{p}" alt="{escape(opt.sku)} detail" loading="lazy" onerror="this.style.opacity=0.3;">'
+            for p in supp_paths
+        )
+        supp_html = f'<div class="option-img-supps">{thumbs}</div>'
     return f"""<div class="option-card {'recommend' if opt.recommend else ''}">
       <div class="vendor">{escape(opt.vendor)}</div>
       <div class="sku">{star}{escape(opt.sku)}</div>
       <div class="price">${opt.price_usd:,.0f}</div>
+      {img_html}
+      {supp_html}
       <div class="reasoning">{escape(opt.reasoning)}</div>
     </div>"""
 
