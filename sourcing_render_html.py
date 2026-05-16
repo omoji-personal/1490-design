@@ -2,6 +2,7 @@
 """Render sourcing data to a static HTML page styled to match /budget and /decisions.
 Cards carry data-* attributes for client-side filtering (see filter UI in build_sourcing.py)."""
 import re
+import yaml
 from pathlib import Path
 from typing import List, Optional, Dict
 from html import escape
@@ -500,6 +501,535 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
 {schedule_banner_html}
 {cards_html if visible else '<p style="color:var(--muted);">No items yet for this room.</p>'}
 </main>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------------------
+# for-annika page — auto-generated from sourcing.yaml + external data files
+# ---------------------------------------------------------------------------
+
+ANNIKA_CSS = """
+.cover { max-width: 760px; margin: 60px auto 30px; padding: 0 28px; }
+.cover h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.7px; margin: 0 0 6px; }
+.cover .draft-meta { color: var(--muted); font-size: 13px; margin: 0 0 30px; font-style: italic; }
+.cover p { font-size: 17px; line-height: 1.7; margin: 0 0 18px; color: #3a3530; }
+.cover p.callout { background: var(--warm-tint); border-left: 3px solid #c9b88a;
+  padding: 14px 18px; border-radius: 4px; font-size: 15.5px; }
+.cover a { color: var(--accent); }
+.cta-block { max-width: 760px; margin: 0 auto 40px; padding: 0 28px; }
+.cta-inner { background: #fff; border: 2px solid #c9b88a; border-radius: 12px;
+  padding: 20px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.cta-inner .cta-deadline { font-size: 18px; font-weight: 700; color: var(--ink); }
+.cta-inner .cta-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.toc { max-width: 760px; margin: 18px auto 50px; padding: 18px 28px;
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; }
+.toc h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--muted); font-weight: 700; }
+.toc ul { margin: 0; padding-left: 18px; }
+.toc li { margin: 4px 0; font-size: 15px; }
+.toc a { color: var(--ink); text-decoration: none; }
+.toc a:hover { color: var(--accent); }
+.toc .count { color: var(--muted); font-size: 13px; margin-left: 6px; }
+.section-divider { max-width: 900px; margin: 60px auto 30px; padding: 0 28px;
+  border-top: 1px solid #efe7d4; padding-top: 30px; }
+.section-divider h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px;
+  margin: 0 0 4px; color: var(--ink); }
+.section-divider .section-sub { color: var(--muted); font-size: 14px; }
+.section-note { max-width: 900px; margin: 0 auto 10px; padding: 0 28px;
+  font-size: 14px; color: var(--muted); font-style: italic; }
+main.annika-main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
+.annika-item { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 14px; padding: 26px 30px; margin: 22px 0; }
+.annika-item-header { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap;
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed #efe7d4; }
+.annika-item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+  color: var(--muted); background: var(--note-tint); padding: 2px 8px; border-radius: 4px; }
+.annika-item-title { margin: 0; font-size: 21px; font-weight: 600; flex: 1; letter-spacing: -0.2px; }
+.annika-tagline { margin: -10px 0 16px; color: var(--muted); font-size: 14.5px; font-style: italic; }
+.annika-status-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px;
+  color: white; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;
+  background: #c94d4d; }
+.annika-status-pill.decided { background: #5a8a5a; }
+.annika-status-pill.watch-list { background: #8a85a0; }
+.annika-item-body { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.annika-pick-image { width: 100%; aspect-ratio: 1/1; object-fit: cover;
+  border-radius: 10px; border: 1px solid var(--border); background: #f3ede0; }
+.annika-pick-image-wrap { text-align: center; }
+.annika-pick-image-caption { font-size: 11.5px; color: var(--muted); margin-top: 6px;
+  font-family: ui-monospace, Menlo, monospace; }
+.annika-brief-block { font-size: 15.5px; line-height: 1.7; }
+.annika-label { display: inline-block; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.7px; color: var(--accent); font-weight: 700; margin-top: 14px;
+  margin-bottom: 4px; }
+.annika-label:first-child { margin-top: 0; }
+.annika-pick { font-size: 15px; color: var(--ink); margin: 4px 0 0; font-weight: 500; }
+.annika-question { margin: 10px 0 0; padding: 12px 16px;
+  background: var(--warm-tint); border-radius: 8px; color: var(--ink);
+  border-left: 3px solid #c9b88a; font-style: italic; }
+.annika-decided { padding: 12px 16px; background: #e8efe2;
+  border-radius: 8px; color: #3a5a3a; font-weight: 500; }
+.annika-locked-note { margin-top: 10px; color: var(--muted); font-size: 14px; font-style: italic; }
+.annika-sku-flag { margin-top: 10px; padding: 8px 12px; background: #fef8ec;
+  border-left: 3px solid #d4a96b; border-radius: 6px;
+  font-size: 13px; color: #7a5a20; }
+details.annika-why { margin-top: 12px; border: 1px solid #efe7d4;
+  border-radius: 8px; overflow: hidden; }
+details.annika-why summary { padding: 9px 14px; cursor: pointer; font-size: 13px;
+  font-weight: 600; color: var(--accent); list-style: none; background: var(--note-tint);
+  user-select: none; }
+details.annika-why summary::-webkit-details-marker { display: none; }
+details.annika-why summary::before { content: "\\25B6  "; font-size: 10px; }
+details.annika-why[open] summary::before { content: "\\25BC  "; }
+details.annika-why .why-inner { padding: 12px 14px; font-size: 14.5px; color: #4a4540;
+  line-height: 1.6; }
+details.annika-why .why-inner p { margin: 0 0 8px; }
+details.annika-why .why-inner p:last-child { margin-bottom: 0; }
+.annika-img-placeholder { width: 100%; height: 200px; background: var(--note-tint);
+  border-radius: 10px; border: 1px dashed var(--border); display: flex; align-items: center;
+  justify-content: center; font-size: 12px; color: var(--muted); text-align: center; padding: 8px; }
+.annika-summary-cta { max-width: 760px; margin: 60px auto 80px; padding: 30px;
+  background: var(--card-bg); border: 2px solid #c9b88a; border-radius: 14px; }
+.annika-summary-cta h2 { margin: 0 0 14px; font-size: 22px; font-weight: 600; }
+.annika-summary-cta p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.65; }
+.annika-summary-cta .deadline-line { font-size: 18px; font-weight: 700; color: var(--ink);
+  margin: 16px 0 8px; }
+.annika-summary-cta .format-line { font-size: 14.5px; color: var(--muted); }
+.annika-summary-cta a { color: var(--accent); }
+@media (max-width: 720px) {
+  .annika-item-body { grid-template-columns: 1fr; }
+  .cover { margin-top: 30px; padding: 0 16px; }
+  .cover h1 { font-size: 26px; }
+  .cta-block { padding: 0 16px; }
+  main.annika-main { padding: 0 16px 80px; }
+  .section-divider { padding: 0 16px; padding-top: 24px; }
+  .section-note { padding: 0 16px; }
+}
+"""
+
+# ANNIKA topnav is identical to main but marks /for-annika as current
+ANNIKA_TOPNAV_HTML = """<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/for-annika" class="current">&#9829; Annika</a><a href="/spec">Spec</a>
+    <span class="group-label">Rooms</span>
+    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
+    <span class="group-label">Canon</span>
+    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>"""
+
+# Room groupings for the Annika page sections (display-label, [room ids], anchor, locked-note)
+ANNIKA_ROOM_SECTIONS = [
+    (
+        "Master suite",
+        ["master_br", "master_bath"],
+        "master-suite",
+        "Bedroom + bath",
+        "Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint.",
+    ),
+    (
+        "Nursery",
+        ["nursery"],
+        "nursery",
+        "Nursery",
+        None,
+    ),
+    (
+        "Kitchen + dining",
+        ["kitchen", "dining"],
+        "kitchen-dining",
+        "Kitchen + dining",
+        "Already locked (no input needed): counters, floor tile, backsplash, cabinets, kitchen faucet, cabinet finish.",
+    ),
+    (
+        "Living room",
+        ["lr"],
+        "living-room",
+        "Living room",
+        None,
+    ),
+    (
+        "Office",
+        ["office"],
+        "office",
+        "Office",
+        None,
+    ),
+    (
+        "Whole-house paint",
+        ["common"],
+        "finishes",
+        "Both locked — no input needed, just so you've seen them",
+        None,
+    ),
+    (
+        "Long-horizon watch list",
+        None,  # special: watch_list status across all rooms
+        "watch-list",
+        "Deferred — no decision needed now, just awareness",
+        None,
+    ),
+]
+
+ANNIKA_ACTIVE_STATUSES = {
+    "options_drafted", "awaiting_sample", "sample_in_hand", "decided", "watch_list"
+}
+
+
+def _load_annika_questions(questions_path: Optional[Path]) -> Dict[str, str]:
+    """Load per-item question overrides from YAML. Returns {} on any error."""
+    if questions_path is None or not questions_path.exists():
+        return {}
+    try:
+        raw = yaml.safe_load(questions_path.read_text())
+        return dict(raw.get("questions", {}))
+    except Exception:
+        return {}
+
+
+def _load_cover_note(cover_note_path: Optional[Path]) -> str:
+    """Load cover note markdown and return as plain text paragraphs. Returns '' on error."""
+    if cover_note_path is None or not cover_note_path.exists():
+        return ""
+    return cover_note_path.read_text()
+
+
+def _render_annika_cover(cover_md: str, meta: Meta, item_count: int) -> str:
+    """Render the cover block + CTA from the markdown file."""
+    # Parse version/date/deadline from frontmatter if present
+    version = "v3"
+    date_str = meta.last_updated
+    deadline = "May 23"
+    lines = cover_md.splitlines()
+    in_fm = False
+    body_lines = []
+    for line in lines:
+        if line.strip() == "---":
+            in_fm = not in_fm
+            continue
+        if in_fm:
+            if line.startswith("version:"):
+                version = line.split(":", 1)[1].strip()
+            elif line.startswith("date:"):
+                date_str = line.split(":", 1)[1].strip()
+            elif line.startswith("deadline:"):
+                deadline = line.split(":", 1)[1].strip()
+        else:
+            body_lines.append(line)
+
+    # Convert first h1 heading to title, bold/italic left as plain text
+    title = "Annika, your design review pass"
+    body_paragraphs = []
+    for line in body_lines:
+        stripped = line.strip()
+        if stripped.startswith("# "):
+            title = stripped[2:]
+        elif stripped.startswith("---"):
+            continue
+        elif stripped:
+            # Preserve **bold** as <strong> and *italic* as <em> inline
+            p = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", stripped)
+            p = re.sub(r"\*(.+?)\*", r"<em>\1</em>", p)
+            body_paragraphs.append(p)
+
+    # First paragraph with callout styling if it contains "What I'm asking"
+    paragraphs_html = ""
+    for para in body_paragraphs:
+        if "What I'm asking" in para or "Please react" in para or "Once you send" in para or "SKU verification" in para:
+            paragraphs_html += f'<p class="callout">{para}</p>\n  '
+        else:
+            paragraphs_html += f'<p>{para}</p>\n  '
+
+    deadline_display = f"Please react by {deadline}" if not deadline.startswith("Please") else deadline
+
+    return f"""<div class="cover">
+  <h1>{escape(title)}</h1>
+  <p class="draft-meta">{escape(date_str)} &middot; Omid + Claude &middot; {escape(version)}</p>
+  {paragraphs_html}
+</div>
+
+<div class="cta-block">
+  <div class="cta-inner">
+    <div>
+      <div class="cta-deadline">{escape(deadline_display)}</div>
+      <div class="cta-sub">Text or voicemail as you scroll &mdash; that&rsquo;s all I need.<br>That&rsquo;s when I lock the long-lead orders.</div>
+    </div>
+  </div>
+</div>"""
+
+
+def _pick_image_for_item(item: "Item") -> Optional[str]:
+    """Return the image path for the recommended option, or first option image, or None."""
+    if not item.options:
+        return None
+    for opt in item.options:
+        if opt.recommend and opt.image and (SITE_DIR / opt.image).exists():
+            return opt.image
+    for opt in item.options:
+        if opt.image and (SITE_DIR / opt.image).exists():
+            return opt.image
+    # Return the first image path regardless (may be a placeholder)
+    for opt in item.options:
+        if opt.image:
+            return opt.image
+    return None
+
+
+def _pick_option_for_item(item: "Item") -> Optional["Option"]:
+    """Return the recommended option, or first option."""
+    if not item.options:
+        return None
+    for opt in item.options:
+        if opt.recommend:
+            return opt
+    return item.options[0] if item.options else None
+
+
+def _alts_text_for_item(item: "Item") -> str:
+    """Build vs-alternates text from non-recommended options."""
+    if not item.options:
+        return ""
+    alts = [o for o in item.options if not o.recommend]
+    if not alts:
+        return ""
+    parts = []
+    for a in alts[:3]:
+        parts.append(f"{escape(a.vendor)} {escape(a.sku)} (${a.price_usd:,.0f})")
+    return "vs " + "; ".join(parts)
+
+
+def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
+    """Render a single item card in the Annika page style."""
+    # Status pill
+    if item.decision_status == "decided":
+        pill_class = "decided"
+        pill_text = "Locked"
+    elif item.decision_status == "watch_list":
+        pill_class = "watch-list"
+        pill_text = "Watch list"
+    else:
+        pill_class = ""
+        pill_text = "Your read"
+
+    # Image
+    img_path = _pick_image_for_item(item)
+    pick_opt = _pick_option_for_item(item)
+
+    if img_path and (SITE_DIR / img_path).exists():
+        img_caption = escape(pick_opt.sku) if pick_opt else escape(item.title)
+        img_html = f"""<div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/{img_path}" alt="{img_caption}" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">{img_caption}</div>
+        </div>"""
+    elif img_path:
+        # Referenced but not on disk — show placeholder
+        img_html = f'<div class="annika-pick-image-wrap"><div class="annika-img-placeholder">{escape(item.title)}<br><small>image pending</small></div></div>'
+    else:
+        img_html = f'<div class="annika-pick-image-wrap"><div class="annika-img-placeholder">{escape(item.title)}<br><small>no image on file</small></div></div>'
+
+    # Tagline from notes or a synthesized one-liner
+    tagline = item.notes if item.notes else ""
+
+    # Body: decided vs options vs vintage
+    if item.decision_status == "decided" and item.decided_sku:
+        body_html = f"""<div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">{escape(item.decided_sku)}</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
+        </div>"""
+        img_html = ""  # decided items: skip image column, full-width text
+        grid_style = ' style="grid-template-columns: 1fr;"'
+    elif item.vintage_brief:
+        v = item.vintage_brief
+        q = questions.get(item.id, "Does this approach feel right for this space?")
+        body_html = f"""<div class="annika-brief-block" style="grid-column: 1 / -1;">
+          <div class="annika-label">Hunting for</div>
+          <p class="annika-pick">{escape(v.style)}</p>
+          <div class="annika-label">Budget</div>
+          <p class="annika-pick">{escape(v.target_price_usd)}</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">{escape(q)}</p>
+        </div>"""
+        img_html = ""
+        grid_style = ' style="grid-template-columns: 1fr;"'
+    elif pick_opt:
+        q = questions.get(item.id, "Does this feel right?")
+        # Build why/alts detail block
+        alts_html = ""
+        alt_opts = [o for o in (item.options or []) if not o.recommend]
+        if alt_opts:
+            alt_parts = []
+            for a in alt_opts[:3]:
+                alt_parts.append(f"<strong>vs</strong> {escape(a.vendor)} {escape(a.sku)} (${a.price_usd:,.0f}) &mdash; {escape(a.reasoning[:120])}")
+            alts_html = "".join(f"<p>{p}</p>" for p in alt_parts)
+
+        why_html = ""
+        if pick_opt.reasoning or alts_html:
+            reasoning_html = f"<p>{escape(pick_opt.reasoning)}</p>" if pick_opt.reasoning else ""
+            why_html = f"""<details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              {reasoning_html}
+              {alts_html}
+            </div>
+          </details>"""
+
+        # SKU flag if sample_required or has sku-verify note
+        sku_flag_html = ""
+        if item.sample_required:
+            sku_flag_html = '<div class="annika-sku-flag">&#9733; Sample required before ordering.</div>'
+        elif pick_opt.details and ("SKU verify" in pick_opt.details or "verify" in pick_opt.details.lower()):
+            sku_flag_html = '<div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>'
+
+        # URL link for SKU
+        sku_display = escape(pick_opt.sku)
+        if pick_opt.product_url:
+            sku_display = f'<a href="{escape(pick_opt.product_url)}" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">{sku_display} &rarr;</a>'
+
+        body_html = f"""<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick">{sku_display} &mdash; ${pick_opt.price_usd:,.0f}</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">{escape(q)}</p>
+          {why_html}
+          {sku_flag_html}
+        </div>"""
+        grid_style = ""
+    else:
+        # No options — stub or incomplete
+        body_html = '<div class="annika-brief-block"><p style="color:var(--muted);">Details pending.</p></div>'
+        grid_style = ""
+
+    tagline_html = f'<p class="annika-tagline">{escape(tagline)}</p>' if tagline else ""
+
+    # For decided items, collapse image column
+    if item.decision_status == "decided" and item.decided_sku:
+        body_content = body_html
+        grid_start = f'<div class="annika-item-body"{grid_style}>'
+    else:
+        body_content = img_html + "\n" + body_html
+        grid_start = f'<div class="annika-item-body"{grid_style}>'
+
+    return f"""<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">{escape(item.id)}</span>
+        <h3 class="annika-item-title">{escape(item.title)}</h3>
+        <span class="annika-status-pill {pill_class}">{pill_text}</span>
+      </div>
+      {tagline_html}
+      {grid_start}
+        {body_content}
+      </div>
+    </article>"""
+
+
+def _build_toc(sections_with_counts: list) -> str:
+    """Build table of contents from (label, anchor, count_text) tuples."""
+    items_html = ""
+    for label, anchor, count_text in sections_with_counts:
+        items_html += f'<li><a href="#{anchor}">{escape(label)}</a><span class="count">&mdash; {escape(count_text)}</span></li>\n    '
+    return f"""<div class="toc">
+  <h3>Sections</h3>
+  <ul>
+    {items_html}
+  </ul>
+</div>"""
+
+
+def render_for_annika(
+    items: List[Item],
+    meta: Meta,
+    cover_note_path: Optional[Path] = None,
+    questions_path: Optional[Path] = None,
+) -> str:
+    """Generate /for-annika page. Filters to annika_loop items in actionable statuses.
+
+    Reads cover note from cover_note_path (markdown with optional YAML frontmatter).
+    Reads per-item questions from questions_path (YAML: questions: {ITEM-ID: "text"}).
+    Both files are optional — sensible fallbacks apply if absent.
+    """
+    questions = _load_annika_questions(questions_path)
+    cover_md = _load_cover_note(cover_note_path)
+
+    # Filter to annika-loop items in actionable statuses
+    annika_items = [
+        it for it in items
+        if it.annika_loop and it.decision_status in ANNIKA_ACTIVE_STATUSES
+    ]
+
+    cover_html = _render_annika_cover(cover_md, meta, len(annika_items))
+
+    # Build per-section content
+    sections_html = ""
+    toc_entries = []
+
+    for section_label, room_ids, anchor, section_sub, section_locked_note in ANNIKA_ROOM_SECTIONS:
+        if room_ids is None:
+            # Watch list: filter by watch_list status across all rooms
+            section_items = [it for it in annika_items if it.decision_status == "watch_list"]
+        else:
+            section_items = [it for it in annika_items if it.room in room_ids]
+
+        if not section_items:
+            continue
+
+        decided_count = sum(1 for it in section_items if it.decision_status == "decided")
+        active_count = len(section_items) - decided_count
+        if decided_count > 0:
+            count_text = f"{len(section_items)} items ({decided_count} already locked, {active_count} need your read)"
+        else:
+            count_text = f"{len(section_items)} items"
+
+        toc_entries.append((section_label, anchor, count_text))
+
+        locked_note_html = ""
+        if section_locked_note:
+            locked_note_html = f'<p class="section-note">{escape(section_locked_note)}</p>'
+
+        cards_html = "\n".join(_render_annika_item(it, questions) for it in section_items)
+
+        sections_html += f"""
+<div class="section-divider"><a id="{anchor}"></a>
+  <h2>{escape(section_label)}</h2>
+  <div class="section-sub">{escape(section_sub)}</div>
+</div>
+{locked_note_html}
+<main class="annika-main">
+{cards_html}
+</main>
+"""
+
+    toc_html = _build_toc(toc_entries)
+
+    # Summary CTA at bottom
+    summary_cta_html = f"""<div class="annika-summary-cta" style="margin: 60px auto 80px;">
+  <h2>What happens next</h2>
+  <p>Once you send reactions, I&rsquo;ll lock the long-lead orders &mdash; the items that need 4&ndash;8 weeks to arrive before the contractor is ready for them. You don&rsquo;t need to have an opinion on every item. &ldquo;Looks fine&rdquo; is a complete answer.</p>
+  <p>A few items are marked <strong>&#9733; SKU verification in progress</strong> &mdash; I&rsquo;m confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
+  <div class="deadline-line">Please react by Friday May 23.</div>
+  <div class="format-line">Text as you scroll, or a short voicemail. No need to reference item IDs unless you want to be precise.</div>
+  <p style="margin-top: 16px;"><a href="https://1490-design-site.vercel.app/for-annika">https://1490-design-site.vercel.app/for-annika</a> &mdash; forward this link to view later.</p>
+</div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Annika &middot; Design review &middot; 1490 Lively Ridge</title>
+<meta name="description" content="Design review for Annika &mdash; {len(annika_items)} items across master suite, nursery, kitchen, and more. Reactions needed.">
+<style>{SHARED_CSS}
+{ANNIKA_CSS}</style>
+</head>
+<body>
+{ANNIKA_TOPNAV_HTML}
+{cover_html}
+{toc_html}
+{sections_html}
+{summary_cta_html}
 </body>
 </html>
 """

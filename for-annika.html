@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Annika · Design review · 1490 Lively Ridge</title>
-<meta name="description" content="Design review for Annika — master suite, nursery, kitchen, softgoods. Reactions needed by May 23.">
+<title>For Annika &middot; Design review &middot; 1490 Lively Ridge</title>
+<meta name="description" content="Design review for Annika &mdash; 45 items across master suite, nursery, kitchen, and more. Reactions needed.">
 <style>
 :root {
   --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
   --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
-  --border: #e8e2d6; --soft-line: #efe7d4;
-  --pill-decided: #5a8a5a; --pill-decide: #c94d4d;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
-       background: var(--bg); color: var(--ink); line-height: 1.65;
-       -webkit-font-smoothing: antialiased; font-size: 16px; }
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
   border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
 .topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
@@ -29,6 +30,83 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
+  padding: 10px 16px; margin: 0 0 16px; font-size: 13px; color: #5c3a10; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.option-img-main { width: 100%; max-width: 220px; height: 160px; object-fit: cover;
+  border-radius: 6px; border: 1px solid var(--border); background: #f3ede0;
+  display: block; margin: 8px 0 6px; }
+.option-img-supps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.option-img-supp { width: 80px; height: 80px; object-fit: cover; border-radius: 5px;
+  border: 1px solid var(--border); background: #f3ede0; }
+.option-details { font-size: 11.5px; color: var(--muted); margin: 6px 0 8px; padding: 6px 8px; background: var(--note-tint); border-radius: 4px; line-height: 1.4; }
+.sku-link { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+.sku-link:hover { color: var(--accent); }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
+
 
 .cover { max-width: 760px; margin: 60px auto 30px; padding: 0 28px; }
 .cover h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.7px; margin: 0 0 6px; }
@@ -37,13 +115,11 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
 .cover p.callout { background: var(--warm-tint); border-left: 3px solid #c9b88a;
   padding: 14px 18px; border-radius: 4px; font-size: 15.5px; }
 .cover a { color: var(--accent); }
-
 .cta-block { max-width: 760px; margin: 0 auto 40px; padding: 0 28px; }
 .cta-inner { background: #fff; border: 2px solid #c9b88a; border-radius: 12px;
   padding: 20px 24px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
 .cta-inner .cta-deadline { font-size: 18px; font-weight: 700; color: var(--ink); }
 .cta-inner .cta-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
-
 .toc { max-width: 760px; margin: 18px auto 50px; padding: 18px 28px;
   background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; }
 .toc h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase;
@@ -53,1131 +129,1293 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
 .toc a { color: var(--ink); text-decoration: none; }
 .toc a:hover { color: var(--accent); }
 .toc .count { color: var(--muted); font-size: 13px; margin-left: 6px; }
-
 .section-divider { max-width: 900px; margin: 60px auto 30px; padding: 0 28px;
-  border-top: 1px solid var(--soft-line); padding-top: 30px; }
+  border-top: 1px solid #efe7d4; padding-top: 30px; }
 .section-divider h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px;
   margin: 0 0 4px; color: var(--ink); }
 .section-divider .section-sub { color: var(--muted); font-size: 14px; }
 .section-note { max-width: 900px; margin: 0 auto 10px; padding: 0 28px;
   font-size: 14px; color: var(--muted); font-style: italic; }
-
-main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
-
-.item { background: var(--card-bg); border: 1px solid var(--border);
+main.annika-main { max-width: 900px; margin: 0 auto; padding: 0 28px 100px; }
+.annika-item { background: var(--card-bg); border: 1px solid var(--border);
   border-radius: 14px; padding: 26px 30px; margin: 22px 0; }
-.item-header { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap;
-  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed var(--soft-line); }
-.item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+.annika-item-header { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap;
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed #efe7d4; }
+.annika-item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px;
   color: var(--muted); background: var(--note-tint); padding: 2px 8px; border-radius: 4px; }
-.item-title { margin: 0; font-size: 21px; font-weight: 600; flex: 1; letter-spacing: -0.2px; }
-.item-tagline { margin: -10px 0 16px; color: var(--muted); font-size: 14.5px; font-style: italic; }
-.status-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px;
-  color: white; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.status-pill.decided { background: var(--pill-decided); }
-.status-pill.options { background: var(--pill-decide); }
-
-.item-body { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.annika-item-title { margin: 0; font-size: 21px; font-weight: 600; flex: 1; letter-spacing: -0.2px; }
+.annika-tagline { margin: -10px 0 16px; color: var(--muted); font-size: 14.5px; font-style: italic; }
+.annika-status-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px;
+  color: white; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;
+  background: #c94d4d; }
+.annika-status-pill.decided { background: #5a8a5a; }
+.annika-status-pill.watch-list { background: #8a85a0; }
+.annika-item-body { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.annika-pick-image { width: 100%; aspect-ratio: 1/1; object-fit: cover;
+  border-radius: 10px; border: 1px solid var(--border); background: #f3ede0; }
+.annika-pick-image-wrap { text-align: center; }
+.annika-pick-image-caption { font-size: 11.5px; color: var(--muted); margin-top: 6px;
+  font-family: ui-monospace, Menlo, monospace; }
+.annika-brief-block { font-size: 15.5px; line-height: 1.7; }
+.annika-label { display: inline-block; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.7px; color: var(--accent); font-weight: 700; margin-top: 14px;
+  margin-bottom: 4px; }
+.annika-label:first-child { margin-top: 0; }
+.annika-pick { font-size: 15px; color: var(--ink); margin: 4px 0 0; font-weight: 500; }
+.annika-question { margin: 10px 0 0; padding: 12px 16px;
+  background: var(--warm-tint); border-radius: 8px; color: var(--ink);
+  border-left: 3px solid #c9b88a; font-style: italic; }
+.annika-decided { padding: 12px 16px; background: #e8efe2;
+  border-radius: 8px; color: #3a5a3a; font-weight: 500; }
+.annika-locked-note { margin-top: 10px; color: var(--muted); font-size: 14px; font-style: italic; }
+.annika-sku-flag { margin-top: 10px; padding: 8px 12px; background: #fef8ec;
+  border-left: 3px solid #d4a96b; border-radius: 6px;
+  font-size: 13px; color: #7a5a20; }
+details.annika-why { margin-top: 12px; border: 1px solid #efe7d4;
+  border-radius: 8px; overflow: hidden; }
+details.annika-why summary { padding: 9px 14px; cursor: pointer; font-size: 13px;
+  font-weight: 600; color: var(--accent); list-style: none; background: var(--note-tint);
+  user-select: none; }
+details.annika-why summary::-webkit-details-marker { display: none; }
+details.annika-why summary::before { content: "\25B6  "; font-size: 10px; }
+details.annika-why[open] summary::before { content: "\25BC  "; }
+details.annika-why .why-inner { padding: 12px 14px; font-size: 14.5px; color: #4a4540;
+  line-height: 1.6; }
+details.annika-why .why-inner p { margin: 0 0 8px; }
+details.annika-why .why-inner p:last-child { margin-bottom: 0; }
+.annika-img-placeholder { width: 100%; height: 200px; background: var(--note-tint);
+  border-radius: 10px; border: 1px dashed var(--border); display: flex; align-items: center;
+  justify-content: center; font-size: 12px; color: var(--muted); text-align: center; padding: 8px; }
+.annika-summary-cta { max-width: 760px; margin: 60px auto 80px; padding: 30px;
+  background: var(--card-bg); border: 2px solid #c9b88a; border-radius: 14px; }
+.annika-summary-cta h2 { margin: 0 0 14px; font-size: 22px; font-weight: 600; }
+.annika-summary-cta p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.65; }
+.annika-summary-cta .deadline-line { font-size: 18px; font-weight: 700; color: var(--ink);
+  margin: 16px 0 8px; }
+.annika-summary-cta .format-line { font-size: 14.5px; color: var(--muted); }
+.annika-summary-cta a { color: var(--accent); }
 @media (max-width: 720px) {
-  .item-body { grid-template-columns: 1fr; }
-  .topnav-inner { padding: 8px 14px; }
-  .topnav-inner .group-label { display: none; }
-  .topnav-inner a:not(.home) { padding: 3px 7px; font-size: 12px; }
+  .annika-item-body { grid-template-columns: 1fr; }
   .cover { margin-top: 30px; padding: 0 16px; }
   .cover h1 { font-size: 26px; }
   .cta-block { padding: 0 16px; }
-  main { padding: 0 16px 80px; }
+  main.annika-main { padding: 0 16px 80px; }
   .section-divider { padding: 0 16px; padding-top: 24px; }
   .section-note { padding: 0 16px; }
 }
-.pick-image { width: 100%; aspect-ratio: 1/1; object-fit: cover;
-  border-radius: 10px; border: 1px solid var(--border); background: #f3ede0; }
-.pick-image-wrap { text-align: center; }
-.pick-image-caption { font-size: 11.5px; color: var(--muted); margin-top: 6px;
-  font-family: ui-monospace, Menlo, monospace; }
-
-.brief-block { font-size: 15.5px; line-height: 1.7; }
-.brief-block .label { display: inline-block; font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.7px; color: var(--accent); font-weight: 700; margin-top: 14px;
-  margin-bottom: 4px; }
-.brief-block .label:first-child { margin-top: 0; }
-.brief-block .pick { font-size: 15px; color: var(--ink); margin: 4px 0 0; font-weight: 500; }
-.brief-block .why-text { margin: 4px 0 0; color: var(--ink); }
-.brief-block .alts-text { margin: 4px 0 0; color: #4a4540; font-size: 14.5px; }
-.brief-block .question-text { margin: 10px 0 0; padding: 12px 16px;
-  background: var(--warm-tint); border-radius: 8px; color: var(--ink);
-  border-left: 3px solid #c9b88a; font-style: italic; }
-.brief-block .decided-text { padding: 12px 16px; background: #e8efe2;
-  border-radius: 8px; color: #3a5a3a; font-weight: 500; }
-.sku-flag { margin-top: 10px; padding: 8px 12px; background: #fef8ec;
-  border-left: 3px solid #d4a96b; border-radius: 6px;
-  font-size: 13px; color: #7a5a20; }
-.locked-note { margin-top: 10px; color: var(--muted); font-size: 14px; font-style: italic; }
-
-/* Collapsible why-block */
-details.why-block { margin-top: 12px; border: 1px solid var(--soft-line);
-  border-radius: 8px; overflow: hidden; }
-details.why-block summary { padding: 9px 14px; cursor: pointer; font-size: 13px;
-  font-weight: 600; color: var(--accent); list-style: none; background: var(--note-tint);
-  user-select: none; }
-details.why-block summary::-webkit-details-marker { display: none; }
-details.why-block summary::before { content: "\25B6  "; font-size: 10px; }
-details.why-block[open] summary::before { content: "\25BC  "; }
-details.why-block .why-inner { padding: 12px 14px; font-size: 14.5px; color: #4a4540;
-  line-height: 1.6; }
-details.why-block .why-inner p { margin: 0 0 8px; }
-details.why-block .why-inner p:last-child { margin-bottom: 0; }
-
-.summary-cta { max-width: 760px; margin: 60px auto 0; padding: 30px;
-  background: var(--card-bg); border: 2px solid #c9b88a; border-radius: 14px; }
-.summary-cta h2 { margin: 0 0 14px; font-size: 22px; font-weight: 600; }
-.summary-cta p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.65; }
-.summary-cta .deadline-line { font-size: 18px; font-weight: 700; color: var(--ink);
-  margin: 16px 0 8px; }
-.summary-cta .format-line { font-size: 14.5px; color: var(--muted); }
-.summary-cta a { color: var(--accent); }
-
-.urgency-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px;
-  color: white; background: #9a9080; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 </style>
 </head>
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">&larr; 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/spec">Spec</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/for-annika" class="current">&#9829; Annika</a><a href="/spec">Spec</a>
     <span class="group-label">Rooms</span>
     <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
     <span class="group-label">Canon</span>
     <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
-    <a href="/for-annika" class="current">&#9829; Annika</a>
   </div>
 </nav>
-
 <div class="cover">
   <h1>Annika, your design review pass</h1>
   <p class="draft-meta">2026-05-16 &middot; Omid + Claude &middot; v3</p>
-  <p>Hi A &mdash; design direction is locked. I've got ~43 picks that need your eye before we order. Most are things that touch you every day (bedding, the glider, the nursery crib) or that shape the room visually.</p>
+  <p>Hi A — design direction is locked. I've got picks that need your eye before we order. Most are things that touch you every day (bedding, the glider, the nursery crib) or that shape the room visually.</p>
   <p class="callout"><strong>What I'm asking:</strong> scan, react, text or voicemail your gut response. "Keep it," "swap for X," or "show me the other options" is enough. <strong>Not asking:</strong> to approve every spec. That's my job. Just tell me if something feels off.</p>
+  <p class="callout">Once you send reactions, I'll lock the long-lead orders — the items that need 4–8 weeks to arrive before the contractor is ready for them. You don't need to have an opinion on every item. "Looks fine" is a complete answer.</p>
+  <p class="callout">A few items are marked ★ SKU verification in progress — I'm confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
+  <p class="callout"><strong>Please react by Friday May 23.</strong> Text as you scroll, or a short voicemail. No need to reference item IDs unless you want to be precise.</p>
+  
 </div>
 
 <div class="cta-block">
   <div class="cta-inner">
     <div>
-      <div class="cta-deadline">Please react by Friday May 23</div>
-      <div class="cta-sub">Text or voicemail as you scroll &mdash; that's all I need.<br>That's when I lock the long-lead orders.</div>
+      <div class="cta-deadline">Please react by 2026-05-23</div>
+      <div class="cta-sub">Text or voicemail as you scroll &mdash; that&rsquo;s all I need.<br>That&rsquo;s when I lock the long-lead orders.</div>
     </div>
   </div>
 </div>
-
 <div class="toc">
   <h3>Sections</h3>
   <ul>
-    <li><a href="#master-suite">Master suite</a><span class="count">&mdash; 15 items (6 already locked, 9 need your read)</span></li>
+    <li><a href="#master-suite">Master suite</a><span class="count">&mdash; 21 items (5 already locked, 16 need your read)</span></li>
     <li><a href="#nursery">Nursery</a><span class="count">&mdash; 7 items</span></li>
-    <li><a href="#kitchen-dining">Kitchen + dining</a><span class="count">&mdash; 8 items (6 already locked)</span></li>
-    <li><a href="#finishes">Whole-house paint</a><span class="count">&mdash; 2 locked, FYI only</span></li>
-    <li><a href="#watch-list">Long-horizon watch list</a><span class="count">&mdash; 2 deferred, no decision needed</span></li>
+    <li><a href="#kitchen-dining">Kitchen + dining</a><span class="count">&mdash; 14 items (6 already locked, 8 need your read)</span></li>
+    <li><a href="#living-room">Living room</a><span class="count">&mdash; 1 items</span></li>
+    <li><a href="#finishes">Whole-house paint</a><span class="count">&mdash; 2 items (2 already locked, 0 need your read)</span></li>
+    <li><a href="#watch-list">Long-horizon watch list</a><span class="count">&mdash; 2 items</span></li>
+    
   </ul>
 </div>
 
 <div class="section-divider"><a id="master-suite"></a>
   <h2>Master suite</h2>
-  <div class="section-sub">Bedroom + bath &mdash; 15 items need your read (6 already locked)</div>
+  <div class="section-sub">Bedroom + bath</div>
 </div>
 <p class="section-note">Already locked (no input needed): floor tile, wall tile, vanity, sink faucet, medicine cabinet, bath accent paint.</p>
-<main>
-
-    <!-- MB-SHOWER-SYSTEM -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-SHOWER-SYSTEM</span>
-        <h3 class="item-title">Shower controls + rain head</h3>
-        <span class="status-pill options">Your read</span>
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-TILE-WALL</span>
+        <h3 class="annika-item-title">Master bath wall tile (shower walls)</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">The system that controls water temp and delivers rain from above + a hand shower for rinsing.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-shower-system-1.jpg" alt="Delta Trinsic thermostatic shower system in champagne bronze" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Delta Trinsic thermostatic &mdash; champagne bronze</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Delta Trinsic thermostatic system, champagne bronze &mdash; temp stays locked even when someone flushes ($780)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">OK with champagne bronze family across the whole bath, or go richer with Brizo Luxe Gold (more jewelry-box, $300 more)?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Consistent temperature (no scald surprises), matches the faucet finish throughout the bath, includes both rain head and hand shower.</p>
-              <p><strong>vs</strong> Pressure-balance version saves ~$260 but temp can spike when someone flushes &mdash; not ideal for a curbless walk-in shower.</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact rainhead model being confirmed.</div>
+      <p class="annika-tagline">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Cle Weathered White 2×6 Bejmat</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- MB-CEILING -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-CEILING</span>
-        <h3 class="item-title">Master bedroom ceiling light</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-TILE-FLOOR</span>
+        <h3 class="annika-item-title">Master bath floor tile</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">The fixture you see lying in bed.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-ceiling-0.jpg" alt="Lacquered brass flush mount with opal glass shade" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Lacquered brass flush mount, opal glass, ~13 inch</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Lacquered-brass flush mount with opal glass, 13-inch &mdash; soft, diffuse, warm (~$395)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Small and quiet (my lean) or big enough to feel like a real fixture (16-inch)?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Same brass family running through the rest of the house. Opal glass means no harsh glare.</p>
-              <p><strong>vs</strong> Larger 16-inch version &mdash; more presence and light spread.</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse current equivalent being confirmed.</div>
+      <p class="annika-tagline">Locked per §6. Heated floor whole bath.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Daltile Choice Ivory 24×24 honed</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- MBA-SCONCES -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MBA-SCONCES</span>
-        <h3 class="item-title">Master bath vanity sconces</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-FAUCET</span>
+        <h3 class="annika-item-title">Master bath sink faucet</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Pair of wall lights flanking the mirror above the sink.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mba-sconces-0.jpg" alt="Lacquered brass wall sconces with milk glass globes" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Lacquered brass, 4-inch milk glass globes &mdash; hardwired pair</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Lacquered-brass wall sconces with 4-inch milk-glass globes, hardwired pair (~$590)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Comfortable with the 4-inch, or step up to 5-inch for more brightness at the vanity? Light here matters for mornings.</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Right scale for a 60-inch double vanity. Milk glass = even flattering light (vs bare bulb).</p>
-              <p><strong>vs</strong> Smaller 3-inch globes ($70 less, cleaner); larger 5-inch ($80 more, more output for makeup).</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse Princeton availability being confirmed.</div>
+      <p class="annika-tagline">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Delta Trinsic 559LF-CZMPU Champagne Bronze</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- MASTER-CLOSET -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MASTER-CLOSET</span>
-        <h3 class="item-title">Master closet built-out</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-SHOWER-SYSTEM</span>
+        <h3 class="annika-item-title">Master bath shower trim + valve</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">California Closets reach-in system: double hang + long hang + 4-drawer tower, natural white oak.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/master-closet-0.jpg" alt="California Closets natural white oak reach-in system" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">California Closets &mdash; natural white oak, custom-measured</div>
+      <p class="annika-tagline">Canon: Delta Trinsic Champagne Bronze thermostatic (17T-Series). Bundle pricing on Build.com often brings three-piece kits below individual list — confirm bundle availability. Valve body (R22000) must be ordered separately by TCW before trim ships. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,520. Thermostatic 17T-series is spec-correct for master bath; pressure-balance opt1 at $1,099 saves $420 if owner accepts downgrade. Audit C2: T17T453-CZ is Vero family not Trinsic — confirm lever silhouette matches adjacent Trinsic fixtures before ordering.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-shower-system-1.jpg" alt="Delta Trinsic TempAssure 17T H2Okinetic Shower Trim Champagne Bronze T17T259-CZH2O" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Delta Trinsic TempAssure 17T H2Okinetic Shower Trim Champagne Bronze T17T259-CZH2O</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">California Closets, Sandy Springs showroom &mdash; designer-measured, custom-built, professional install ($3,800)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">OK going California Closets, or would you rather spread the budget across all closets with Elfa?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.deltafaucet.com/bathroom/product/T17T259-CZH2O.html" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Delta Trinsic TempAssure 17T H2Okinetic Shower Trim Champagne Bronze T17T259-CZH2O &rarr;</a> &mdash; $956</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">OK with champagne bronze family across the whole bath, or go richer with Brizo Luxe Gold (more jewelry-box, $300 more)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Real oak finish, one-shot install, they take measurements so no guessing on sizing.</p>
-              <p><strong>vs</strong> Container Store Elfa (~$1.9K &mdash; wire-shelf utility look, less warm); custom local mill (~$4.8K &mdash; most beautiful, longest lead).</p>
+              <p>T17T453-CZ is Vero (NOT Trinsic) — series mismatch and §6 canon violation. T17T259-CZH2O is the confirmed Trinsic 17T thermostatic trim in CZ. Out of stock direct from Delta; check SupplyHouse/Build.com for availability before ordering. Price is ~$150 less than previous listed price ($1,517 was for a bundle including rainhead — price here is trim-only; add rainhead 52660-CZ or 52433-CZ separately if needed).</p>
+              <p><strong>vs</strong> Build.com / Ferguson Delta Trinsic Monitor 17 Pressure-Balance Trim Champagne Bronze T17259-CZ (verify current SKU) ($549) &mdash; T17253-CZ is Vero Monitor 17, not Trinsic. Need to confirm correct Trinsic PB trim SKU. T17259-CZ is the likely correct </p><p><strong>vs</strong> Ferguson (special order) Brizo Litze TempAssure 17T-Series Trim T60P498-GL + 88-Jet Rainhead 83385-GL ($685) &mdash; Owner-rejected finish tier. Brizo Litze Luxe Gold (T60P498-GL / 83385-GL — &quot;-GL&quot; suffix = Luxe Gold PVD) is a bright gol</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
-    <!-- MB-SCONCES -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-SCONCES</span>
-        <h3 class="item-title">Bedside reading sconces (pair)</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-CEILING</span>
+        <h3 class="annika-item-title">Master BR ceiling fixture</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Brass swing-arm sconces on either side of the bed, hard-wired.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-sconces-0.jpg" alt="Brass swing-arm sconces with milk glass globes" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Brass swing-arm with milk glass globe &mdash; hardwired pair</div>
+      <p class="annika-tagline">Flush mount or low-profile — 8-ft ceiling. Schoolhouse Vera or Rejuvenation Burbank.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-ceiling-0.jpg" alt="Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Brass swing-arm with milk-glass globe, hardwired pair (~$690)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Hard-wired (cleaner, commit to placement now) or plug-in (moveable)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.rejuvenation.com/products/crawford-14-flush-mount/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass &rarr;</a> &mdash; $495</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Small and quiet (my lean) or big enough to feel like a real fixture (16-inch)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Read without overhead. Hard-wired = no cord on the nightstand.</p>
-              <p><strong>vs</strong> Plug-in version &mdash; cheaper, but cord shows.</p>
+              <p>Schoolhouse Otto 6&quot; Flush Mount returns HTTP 404 across 4 catalog references (MB-CEILING, MUDROOM-LIGHTING, OFFICE-LIGHTING, this item). Rejuvenation Crawford 14&quot; is the §11-compliant secondary-brand replacement. Cascading fix: this same SKU fix applies to MUDROOM-LIGHTING opt 0 and OFFICE-LIGHTING opt 3 substitution note (Otto references there are also dead).</p>
+              <p><strong>vs</strong> Rejuvenation Rejuvenation Burbank Large Flush Mount, lacquered brass, 16-inch opal glass, E26 ($495) &mdash; Rejuvenation Burbank&#x27;s 16-inch shade provides more diffuse ambient light over a king bed — meaningful if the room has no</p><p><strong>vs</strong> Rejuvenation Rejuvenation Hartwell Medium Flush Mount, lacquered brass, 14-inch opal globe, E26 ($420) &mdash; Rejuvenation Hartwell Medium is the midpoint between Vera/Otto and Burbank if the 16-inch Burbank reads oversized for th</p>
             </div>
           </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; current swing-arm equivalent being confirmed.</div>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- MB-CAB-HARDWARE -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-CAB-HARDWARE</span>
-        <h3 class="item-title">Master bath vanity pulls</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-SCONCES</span>
+        <h3 class="annika-item-title">Master BR bedside sconces (pair)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Four drawer pulls on the double vanity.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-cab-hardware-0.jpg" alt="Lacquered brass 5-inch bar pulls" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Lacquered brass 5-inch bar pulls, &times;4</div>
+      <p class="annika-tagline">Swing-arm reading sconces per §15. Schoolhouse Princeton or Cedar &amp; Moss.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-sconces-0.jpg" alt="Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Lacquered brass 5-inch bar pulls, four total (~$128)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Lacquered (stays shiny as-is) vs unlacquered (develops a patina over time)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair &rarr;</a> &mdash; $398</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Hard-wired (cleaner, commit to placement now) or plug-in (moveable)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Architectural, clean, matches the whole brass family.</p>
-              <p><strong>vs</strong> Unlacquered brass ($232) &mdash; develops patina and more character over years. This is the right room to splurge on the patina version.</p>
+              <p>Schoolhouse Isaac Mid-Arm Sconce URL 404. Crawford Single is the Rejuvenation equivalent for bedside brass sconce. Note: Crawford is fixed-arm not swing-arm. If swing-arm reading function is essential, use Rejuvenation Eastmoreland Swing-Arm instead (already listed as opt 3). Owner should confirm fixed vs swing-arm preference before ordering.</p>
+              <p><strong>vs</strong> Cedar &amp; Moss Cedar &amp; Moss Cylinder Swing Arm Sconce, lacquered brass, linen shade, hardwire — pair ($319) &mdash; Cedar &amp; Moss is the accent-tier canon brand; linen shade softens and directs reading light more gently than milk glass, </p><p><strong>vs</strong> Rejuvenation Rejuvenation Westmore Plug-In Swing Arm Sconce, lacquered brass, linen shade — pair ($400) &mdash; Rejuvenation Westmore plug-in version defers in-wall wiring at a T1 urgency item, saving electrician cost if bedside out</p>
             </div>
           </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; current Schoolhouse equivalent being confirmed.</div>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- MB-MIRROR -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-MIRROR</span>
-        <h3 class="item-title">Master bedroom mirror</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MBA-SCONCES</span>
+        <h3 class="annika-item-title">Master bath sconces (Schoolhouse Princeton)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Full-length or wall-mounted &mdash; the get-dressed mirror.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-mirror-0.jpg" alt="Brass-framed arch mirror, full-length" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Brass-framed arch mirror &mdash; 24&times;72 inch</div>
+      <p class="annika-tagline">Canon family: Schoolhouse Princeton, lacquered brass. Specific size (3-inch vs 4-inch globe), shade variant, and exact SKU not picked. Step 2 draft Princeton CZ-adjacent options within Schoolhouse lineup.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mba-sconces-0.jpg" alt="Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Brass-framed arch mirror, 24&times;72-inch &mdash; wall-leaning or flush-mount (~$595)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Full-length leaner (flexible placement, no hardware) or flush wall-mount (cleaner, commits to one spot)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair &rarr;</a> &mdash; $398</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Comfortable with the 4-inch, or step up to 5-inch for more brightness at the vanity? Light here matters for mornings.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Arch shape softens the room against the rectangular bed and dresser lines. Brass frame continues the metal family.</p>
-              <p><strong>vs</strong> Frameless rectangle (cleaner, $200 less); round brass (decorative, not functional for dressing).</p>
+              <p>Princeton Mid Sconce FINAL SALE across all 4 MBA-SCONCES options that reference it. Crawford is the canonical §11 Rejuvenation replacement. Same fix for MBA-SCONCES opt 1 (3&quot; variant — select smallest available Crawford shade for scale match).</p>
+              <p><strong>vs</strong> Cedar &amp; Moss (cedarandmoss.com) Cedar &amp; Moss Moss 6&quot; Wall Sconce, Brass, hardwire — pair ($558) &mdash; Smaller-scale sconce option for vanity flanking when the mirror is narrower than 48&quot; or placement is offset. Cedar &amp; Mos</p><p><strong>vs</strong> Schoolhouse Schoolhouse Mortise Wall Sconce, lacquered brass, 5-inch opal glass, single, hardwire — pair ($279) &mdash; Schoolhouse Mortise is the step-up series within the same brand family; 5-inch opal globe delivers meaningfully more lig</p><p><strong>vs</strong> Rejuvenation Rejuvenation Carson 6&quot; Wall Sconce, Matte Black, hardwire — pair ($458) &mdash; Matte-black alt to provide finish mix per §6a brass+black rule; pick this if owner wants more weight away from brass in </p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- MB-BED -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-BED</span>
-        <h3 class="item-title">Master bed frame</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-CAB-HARDWARE</span>
+        <h3 class="annika-item-title">Master bath vanity pulls</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">King upholstered bed, low headboard.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-bed-0.jpg" alt="West Elm Andes King in cream performance linen" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Andes King &mdash; cream performance linen (Crypton)</div>
+      <p class="annika-tagline">Lacquered brass to match Trinsic Champagne Bronze tone family. Schoolhouse Sutton or Rejuvenation Vise.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-cab-hardware-0.jpg" alt="Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x4" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x4</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Andes King, cream performance linen &mdash; washable fabric ($2,199)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Cream upholstered linen (my lean) vs natural oak spindle bed ($1,199)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x4 &rarr;</a> &mdash; $136</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Lacquered (stays shiny as-is) vs unlacquered (develops a patina over time)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Soft, sanctuary-feeling, cream upholstered &mdash; lives in the Cathie Hong direction. Crypton fabric is actually washable.</p>
-              <p><strong>vs</strong> Natural oak spindle bed &mdash; more architectural, more rustic, wood frame instead of upholstered.</p>
+              <p>Somerset Pull FINAL SALE. Edgecliff is the direct Schoolhouse replacement in Natural Brass. 4 pulls at $136 within $200 budget. Verify stock.</p>
+              <p><strong>vs</strong> Rejuvenation Rejuvenation Putman Pull 5&quot; cc, Lacquered Brass × 4 (4 @ $28ea = $112) ($76) &mdash; Rejuvenation Putman pull at $112 for four is a marginally thinner profile — choose it if the Hutchinson&#x27;s door rails are</p><p><strong>vs</strong> Hamilton Sinkler Hamilton Sinkler No. 1 Bar Pull 128mm cc, Polished Unlacquered Brass × 4 (4 @ $58ea = $232) ($232) &mdash; Hamilton Sinkler No. 1 Bar in polished unlacquered brass is the premium upgrade — solid hand-finished brass with genuine</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- MB-BEDDING -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-BEDDING</span>
-        <h3 class="item-title">Master bedding</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-MEDICINE-CABINET</span>
+        <h3 class="annika-item-title">Master bath medicine cabinet</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Washed Belgian flax linen sheets + quilt.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-bedding-0.jpg" alt="Cultiver washed linen in Oat/Bone" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Cultiver washed linen &mdash; Oat/Bone</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Cultiver, Oat/Bone colorway &mdash; pre-washed soft from day one ($580)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">This is one where I genuinely want your read &mdash; you sleep in this every night. Cultiver (premium, long-lasting) or Quince European linen (half the price)?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Belgian flax linen wears better than cotton, pre-washed so it softens immediately. Warm cream palette &mdash; not white, not sage.</p>
-              <p><strong>vs</strong> Quince European linen ($270) &mdash; basically the same fabric, much cheaper, possibly thinner.</p>
-            </div>
-          </details>
+      <p class="annika-tagline">Locked per G2 line.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Pottery Barn Hutchinson medicine cabinet</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- MB-RUG -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-RUG</span>
-        <h3 class="item-title">Master bedroom rug</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-VANITY</span>
+        <h3 class="annika-item-title">Master bath vanity (WE Hutchinson 60-inch Double)</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Flat-weave wool, 8&times;10, Warm Sand / Ivory.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-rug-0.jpg" alt="West Elm Dhurrie Wool Rug in Warm Sand/Ivory" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Dhurrie Wool &mdash; Warm Sand/Ivory, 8&times;10</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Dhurrie Wool Rug, 8&times;10, Warm Sand/Ivory ($799)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Fine with the WE pick, or want denser/softer underfoot?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Flat-weave wool is easy underfoot in the morning. A step warmer than the living room rug so the master reads as its own room.</p>
-              <p><strong>vs</strong> Room &amp; Board Linden (denser pile, softer, $150 more); Serena &amp; Lily Piazza (more texture, $300 more).</p>
-            </div>
-          </details>
+      <p class="annika-tagline">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">West Elm Hutchinson Double Vanity 60-inch, Blonde</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- MB-BENCH -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-BENCH</span>
-        <h3 class="item-title">End-of-bed bench</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MASTER-CLOSET</span>
+        <h3 class="annika-item-title">Master closet reach-in</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">52-inch cream boucle bench at the foot of the bed.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-bench-0.jpg" alt="West Elm Tillary Bench in Ivory Boucle" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Tillary Bench &mdash; Ivory Boucle, 52 inch</div>
+      <p class="annika-tagline">Per G1 closets line $6,500 includes master reach-in + hybrid for others. California Closets style. | budget revised UP per HARD RULE 2026-05-16: from $3,500 to $3,800. California Closets is spec-appropriate reach-in system; Container Store Elfa opt1 at $1,900 is viable if owner accepts trade-off.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/master-closet-0.jpg" alt="California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Tillary Bench, Ivory Boucle, 52-inch ($699)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Cream upholstered (matches the bed) or wood slab (more interesting contrast)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.californiaclosets.com/reach-in-closets/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured &rarr;</a> &mdash; $3,800</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">OK going California Closets, or would you rather spread the budget across all closets with Elfa?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Soft, low, scaled to a king bed. Matches the upholstered bed.</p>
-              <p><strong>vs</strong> Rejuvenation oak slab bench &mdash; wood instead of upholstery, creates contrast to the cream bed.</p>
+              <p>California Closets is the Annika-domain canon choice for closets per DESIGN_SPEC. Designer-measured install, natural white oak finish option reads adjacent to bleached floors, soft-close hardware, 6-8 wk lead, and dedicated account rep. Slightly over budget at $3,800 vs $3,500 target but within the $6,500 combined closets envelope. The only catalog option with a real-wood-tone finish that satisfies the house discipline.</p>
+              <p><strong>vs</strong> The Container Store Elfa (Perimeter Mall) The Container Store Elfa Décor — birch white panels, platinum rails, double hang + long hang + 2 drawers, 6-foot reach-in ($1,900) &mdash; Container Store Elfa Décor in birch-white panels is modular and reconfigurable — a practical advantage for a young famil</p><p><strong>vs</strong> Atlanta Cabinet Co (local mill) Atlanta Cabinet Co custom — white oak slab double-hang tower, integrated drawer stack, Rubio Pure, 8-foot interior width ($4,500) &mdash; Atlanta Cabinet Co custom slab-oak closet tower delivers the purest white-oak finish match but at $4,500 consumes 69% of</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
-    <!-- MB-DRESSER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-DRESSER</span>
-        <h3 class="item-title">Master dresser</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">WT-MASTER</span>
+        <h3 class="annika-item-title">Master BR drapery + blackout</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">6-drawer in white oak &mdash; matches the nightstand family.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-dresser-0.jpg" alt="West Elm Mid-Century 6-Drawer Dresser in White Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Mid-Century 6-Drawer &mdash; White Oak</div>
+      <p class="annika-tagline">Per §13: Sheer linen drapery puddled + blackout Roman behind. Sleep priority.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/wt-master-0.jpg" alt="Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Mid-Century 6-Drawer Dresser, White Oak (~$1,499)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Anything you'd push back on here, or fine for this to recede into the room?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/alustra-woven-textures-roman" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows &rarr;</a> &mdash; $1,380</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Lock this now, or do you want to pick the sheer layer yourself later? Blackout must happen during construction; sheers can wait.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Matches the nightstand family, keeps the room from looking over-designed.</p>
-              <p><strong>vs</strong> Room &amp; Board Linnea ($400 more &mdash; thicker drawer fronts, better hardware, longer-lasting).</p>
+              <p>§13 layered system executed at the recommended tier: Hunter Douglas Alustra blackout Roman delivers sleep-grade light elimination (ANNIKA-LOOP blackout required), while Pottery Barn Belgian Flax sheer panels add the puddled softness the design spec calls for. Two-vendor split is accepted given both are in-stock or ≤6-week lead; combined $1,380 sits inside the $1,400 envelope.</p>
+              <p><strong>vs</strong> The Shade Store (Buckhead showroom — single-vendor convenience) The Shade Store Linen Roman Shade — blackout liner — Natural/Cream — custom 36–54&quot; w × 84–96&quot; h + The Shade Store Sheer Linen Drapery Panel (single or pair) in Natural, 2 windows ($1,200) &mdash; Single-vendor convenience from The Shade Store Buckhead simplifies measure, fabrication, and install scheduling. Blackou</p><p><strong>vs</strong> Hunter Douglas authorized dealer Hunter Douglas Sonnette Cellular Roman Shade — blackout, motorized — custom 36–54&quot; w × 84–96&quot; h, 2 windows (drapery deferred to owner select) ($1,250) &mdash; Motorized-only option for Annika&#x27;s sleep priority: Sonnette cellular blackout handles the ANNIKA-LOOP requirement and ad</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
         </div>
       </div>
     </article>
-
-    <!-- MB-NIGHTSTANDS -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-NIGHTSTANDS</span>
-        <h3 class="item-title">Nightstands (pair)</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-BED</span>
+        <h3 class="annika-item-title">Master bed frame</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">2-drawer nightstands in white oak, tapered legs &mdash; pair.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-nightstands-0.jpg" alt="West Elm Mid-Century Nightstands in White Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Mid-Century Nightstands &mdash; White Oak &times;2</div>
+      <p class="annika-tagline">Cream upholstered (cali_25) OR walnut spindle (loved_15) — owner pick. WE Andes or Cathie Hong-style spindle.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-bed-0.jpg" alt="West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Mid-Century Nightstands &times;2, White Oak ($998)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">West Elm fine here, or worth the upgrade to Room &amp; Board Linnea ($200 more)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/products/andes-bed-wood-legs-h8478/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream &rarr;</a> &mdash; $2,199</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Cream upholstered linen (my lean) vs natural oak spindle bed ($1,199)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Tapered legs keep them visually light against the bleached floor.</p>
-              <p><strong>vs</strong> Room &amp; Board Linnea &mdash; solid oak, soft-close drawers.</p>
+              <p>West Elm anchor brand (~40-45%). Andes is the spec-named master bed (DESIGN_SPEC §11); Crypton linen is the locked performance-fabric pivot for the pet-access master. Cream upholstered platform per cali_25 canon. Andes family cohesion with LR-SOFA creates cross-room visual language. At $2,199, hits the $2,200 budget ceiling. ★ spec-named, performance fabric, at-budget.</p>
+              <p><strong>vs</strong> Crate &amp; Barrel Crate &amp; Barrel Tate Upholstered Bed, King, Crypton Linen — Sand ($2,499) &mdash; Crate &amp; Barrel holds part of the ~20% combined share. Tate&#x27;s lower headboard profile is a genuine advantage under 8-ft c</p><p><strong>vs</strong> Article Article Berel Spindle Bed, King, Solid Oak — Natural ($879) &mdash; Article holds ~20% of split. Berel spindle solid oak is the loved_15 canon direction (walnut/oak spindle alternate). At </p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
         </div>
       </div>
     </article>
-
-    <!-- WT-MASTER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">WT-MASTER</span>
-        <h3 class="item-title">Master bedroom window treatments</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-NIGHTSTANDS</span>
+        <h3 class="annika-item-title">Master BR nightstands (pair)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Layered: blackout shade behind sheer linen drape panels &mdash; 2 windows.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/wt-master-0.jpg" alt="Hunter Douglas blackout Roman shade with Pottery Barn linen sheer panels" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Hunter Douglas blackout Roman + PB Belgian flax linen sheer</div>
+      <p class="annika-tagline">Light oak — WE Mid-Century or R&amp;B Linnea.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-nightstands-0.jpg" alt="West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Hunter Douglas blackout Roman shade + Pottery Barn Belgian flax linen sheer panels in Ivory, 2 windows ($1,380)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Lock this now, or do you want to pick the sheer layer yourself later? Blackout must happen during construction; sheers can wait.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/products/mid-century-nightstand-acorn-g968/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2 &rarr;</a> &mdash; $998</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">West Elm fine here, or worth the upgrade to Room &amp; Board Linnea ($200 more)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Sleep-grade blackout installed during construction; sheer panels add softness for daytime.</p>
-              <p><strong>vs</strong> Shade Store single-vendor system ($180 less, simpler scheduling).</p>
+              <p>West Elm anchor brand (~40-45%). Mid-Century Nightstand is the spec primary direction for master BR case goods — tapered leg, white oak, 2-drawer. Two drawers provide storage without bulk in a typical master footprint. At $998/pair, $202 under the $1,200 budget. ★ canonical brand, correct wood tone, functional, under budget.</p>
+              <p><strong>vs</strong> Room &amp; Board Room &amp; Board Linnea Nightstand, White Oak — quantity 2 ($1,198) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea is the explicit canon reference. Solid white oak drawer box (</p><p><strong>vs</strong> Article Article Nera Nightstand, White Oak — quantity 2 ($898) &mdash; Article holds ~20% of split. Nera at $598/pair saves $400 vs. WE — correct as a receding nightstand when the MB-BED is t</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
-    <!-- MB-PILLOWS -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-PILLOWS</span>
-        <h3 class="item-title">Accent pillows</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-DRESSER</span>
+        <h3 class="annika-item-title">Master BR dresser</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Two sage linen covers + one hand-loomed mudcloth lumbar &mdash; keeps the bed from reading all-cream.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/mb-pillows-0.jpg" alt="West Elm sage linen pillow covers plus Etsy mudcloth lumbar" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm sage linen pair + Etsy mudcloth lumbar</div>
+      <p class="annika-tagline">Light oak 6-drawer — WE Mid-Century or vintage Danish.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-dresser-2.jpg" alt="Article Lenia 6-Drawer Double Dresser, White Oak" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Article Lenia 6-Drawer Double Dresser, White Oak</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm sage linen pair + Etsy mudcloth lumbar in mustard/cream ($290)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Sage accent (my lean) or warm mustard?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.article.com/product/22368/lenia-6-drawer-double-dresser-white-oak" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Article Lenia 6-Drawer Double Dresser, White Oak &rarr;</a> &mdash; $1,299</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Anything you&#x27;d push back on here, or fine for this to recede into the room?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Keeps the bed from reading all-cream-on-cream. Sage echoes the bath accent wall color.</p>
-              <p><strong>vs</strong> Caramel/mustard pair &mdash; shifts the accent warmer, more interesting but breaks the sage echo.</p>
+              <p>★ switched to Article Lenia 6-Drawer White Oak to honor $1,400 budget — original WE Mid-Century ($1,499) demoted to alt; Lenia at $1,299 is $101 under budget and white-oak confirmed. Also reduces WE master-BR mono-brand concentration. CORRECTION: SKU was labeled &quot;Melos&quot; (fictional) — now corrected to Lenia which is the confirmed Article product at this URL.</p>
+              <p><strong>vs</strong> West Elm West Elm Mid-Century 6-Drawer Dresser, White Oak ($1,499) &mdash; West Elm anchor brand (~40-45%). Mid-Century 6-drawer is the explicit §7 spec. Tapered legs keep it visually light under</p><p><strong>vs</strong> Room &amp; Board Room &amp; Board Linnea 6-Drawer Dresser, White Oak ($1,899) &mdash; Room &amp; Board holds part of the ~20% combined share. Linnea 6-drawer has thicker solid-oak drawer fronts and soft-close h</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-BENCH</span>
+        <h3 class="annika-item-title">Master BR end-of-bed bench</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Boucle or performance linen — WE or vintage.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-bench-2.jpg" alt="Article Cassie 56&quot; Bench, Natural Oak and Ivory Chenille" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Article Cassie 56&quot; Bench, Natural Oak and Ivory Chenille</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.article.com/product/23388/cassie-56-bench-oak-and-ivory-chenille" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Article Cassie 56&quot; Bench, Natural Oak and Ivory Chenille &rarr;</a> &mdash; $449</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Cream upholstered (matches the bed) or wood slab (more interesting contrast)?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>★ switched to Article Cassie Bench to honor $600 budget — WE Tillary Boucle ($699) demoted to alt. Cassie at $449 is well under budget; natural oak legs + ivory chenille upholstery matches spec direction (boucle/performance linen, cream). CORRECTION: prior ★ was labeled &quot;Loa&quot; (fictional Article product name) — Cassie is the real product at the URL.</p>
+              <p><strong>vs</strong> West Elm West Elm Tillary Bench, Boucle — Ivory, 52-inch ($699) &mdash; West Elm anchor brand (~40-45%). Tillary Boucle Ivory is the spec-named direction (notes: &quot;boucle or performance linen —</p><p><strong>vs</strong> Rejuvenation Rejuvenation Oak Slab Bench, White Oak, 48-inch ($599) &mdash; Rejuvenation holds ~15% of the accent-furniture split. Oak slab bench provides material contrast if MB-BED goes upholste</p>
+            </div>
+          </details>
+          
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-RUG</span>
+        <h3 class="annika-item-title">Master BR rug</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Flat-weave wool placeholder until LR-RUG-VINTAGE moves over (year 4 swap).</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-rug-0.jpg" alt="West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/products/tweed-flatweave-dhurrie-rug-t3472/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave &rarr;</a> &mdash; $799</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Fine with the WE pick, or want denser/softer underfoot?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>West Elm anchor brand (~40-45%). WE Dhurrie Wool flat-weave is the correct placeholder category per spec. Warm Sand is deliberately one step warmer than LR-RUG Oatmeal — creating room distinction without clashing. At $799, hits the $800 budget exactly. ★ correct brand, correct material category, thoughtfully differentiated colorway from the LR rug.</p>
+              <p><strong>vs</strong> Room &amp; Board Room &amp; Board Linden Wool Rug, Natural / Oatmeal, 8x10 flat-weave ($949) &mdash; Room &amp; Board holds part of the ~20% combined share. Linden has a denser pile than WE Dhurrie — measurably softer for bar</p><p><strong>vs</strong> Serena &amp; Lily Serena &amp; Lily Piazza Handwoven Wool Rug, Cream, 8x10 ($1,098) &mdash; Serena &amp; Lily holds part of the ~10% PB + Anthropologie + S&amp;L accents tier. Piazza handwoven wool adds tactile Japandi q</p>
+            </div>
+          </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-BEDDING</span>
+        <h3 class="annika-item-title">Master BR bedding (Belgian flax linen)</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Per §7 [OWNER CONFIRM #3] — bedding is the one place pure linen survives (weekly laundered). Cultiver, MagicLinen, or Quince.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-bedding-3.jpg" alt="West Elm Belgian Linen Sheet Set + Quilt + Pillow Shams — Natural Flax (Queen sheet $279 + duvet $399 + sham 2-pack $99)" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Belgian Linen Sheet Set + Quilt + Pillow Shams — Natural Flax (Queen sheet $279 + duvet $399 + sham 2-pack $99)</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick">West Elm Belgian Linen Sheet Set + Quilt + Pillow Shams — Natural Flax (Queen sheet $279 + duvet $399 + sham 2-pack $99) &mdash; $580</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">This is one where I genuinely want your read — you sleep in this every night. Cultiver (premium, long-lasting) or Quince European linen (half the price)?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Other tier swap to WE per §11 brand-split target (R3-R2-C4). WE Belgian Flax is OEKO-TEX certified, pre-washed, king 4-pc — canon brand match for §7 bedding lock. Natural Flax colorway is identical-tier to Cultiver Oat/Bone but lower trade-up cost and matches WE anchor brand. WE Belgian Linen Sheet Set + Quilt + Pillow Shams Natural Flax at $580 is within $600 budget. Cultiver remains non-star fallback for owner who prioritizes depth of hand vs canon brand consolidation.</p>
+              <p><strong>vs</strong> Cultiver (cultiver.com) Cultiver Washed Linen Sheet Set + Quilt — Oat/Bone ($445) &mdash; Cultiver pre-washed Belgian flax in Bone/Oat is the strongest match for the §7 bedding lock: warm cream, never white or </p><p><strong>vs</strong> MagicLinen (magiclinen.com) MagicLinen Linen Bedding Set — Natural (Queen) ($314) &mdash; Lithuanian stonewashed linen in Natural lands slightly lighter and cooler than Cultiver&#x27;s Oat, hovering near the edge of</p><p><strong>vs</strong> Quince (onequince.com) Quince European Linen Bedding Set — Oat Heather (Queen) ($144) &mdash; Quince&#x27;s 100% European linen in Oat Heather matches the canon colorway at $270 — less than half of Cultiver. The tradeof</p>
+            </div>
+          </details>
+          
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-PILLOWS</span>
+        <h3 class="annika-item-title">Master BR accent pillows</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Sage + mustard accents per loved_15 canon. 3-5 pillow layered stack.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-pillows-0.jpg" alt="West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/shop/pillows-comforters/throw-pillows/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1 &rarr;</a> &mdash; $290</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Sage accent (my lean) or warm mustard?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Two West Elm sage linen euro covers anchor the stack with commercial reliability in the correct §11 accent color (sage for MB, per one-accent-per-room rule). The Etsy hand-loomed mustard lumbar adds the 8–12% artisan layer without violating the single-accent discipline — mustard reads as warmth against the sage, not a second accent color. Closest to spec intent.</p>
+              <p><strong>vs</strong> Anthropologie + Hawkins New York Anthropologie Linen Slub Throw Pillow — Sage (set of 2, 20in) + Hawkins New York Stripe Linen Pillow — Natural/Oat ($65) &mdash; Anthropologie sage linen slub introduces more surface texture than the flat WE weave, which reads richer in a sleep sanc</p><p><strong>vs</strong> Schoolhouse (schoolhouse.com) Schoolhouse Muted Check Pillow Cover — Caramel/Oat × 2 + insert ($250) &mdash; Schoolhouse&#x27;s muted caramel-check shifts the room&#x27;s single accent from sage to warm mustard territory — valid only if LR</p>
+            </div>
+          </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-ART</span>
+        <h3 class="annika-item-title">Master BR art</h3>
+        <span class="annika-status-pill watch-list">Watch list</span>
+      </div>
+      <p class="annika-tagline">Sleep-sanctuary calm. Over-bed placement. | WE option: West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) @ $449.0 — Soft fabric-mounted minimalist piece reads quieter than gallery print — fits the sleep-sanctuary calm brief; over-bed sc...</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        
+<div class="annika-brief-block" style="grid-column: 1 / -1;">
+          <div class="annika-label">Hunting for</div>
+          <p class="annika-pick">Calming abstract or landscape, 24-36 inch, sage/oat palette</p>
+          <div class="annika-label">Budget</div>
+          <p class="annika-pick">400-800</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Does this approach feel right for this space?</p>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-MIRROR</span>
+        <h3 class="annika-item-title">Master BR mirror (full-length or wall)</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">WE or vintage oak frame.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/mb-mirror-2.jpg" alt="Vintage mid-century oak floor mirror — Atlanta Westside Modern or Mid Mod Market" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Vintage mid-century oak floor mirror — Atlanta Westside Modern or Mid Mod Market</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.google.com/search?q=Westside+Modern+Atlanta+vintage+floor+mirror" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Vintage mid-century oak floor mirror — Atlanta Westside Modern or Mid Mod Market &rarr;</a> &mdash; $250</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Full-length leaner (flexible placement, no hardware) or flush wall-mount (cleaner, commits to one spot)?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>★ switched to vintage oak floor mirror per R3 vintage-redistribution (R2-C5). Master BR had 0 vintage ★ picks (target 1-2 per §4 principle 7 + §5d). Vintage mid-century oak floor mirror (Westside Modern / Mid Mod Market, ~$250) is $150 under $400 budget and delivers patinated provenance in the sleep sanctuary that Rejuvenation production piece cannot match. Item notes say &#x27;WE or vintage oak frame&#x27; — vintage is the canon-stronger path when hunt timing allows. Fallback to Rejuvenation Oak Wood Wall Mirror (opt0, ~$549) if hunt stalls; note budget revision required for Rejuvenation.</p>
+              <p><strong>vs</strong> Rejuvenation (rejuvenation.com) Rejuvenation Oak Wood Wall Mirror Natural — wall-hung, ~24×36in or nearest available size ($549) &mdash; Prior ★ (West Elm Arched Full-Length Mirror) resolves to the West Elm Streamline which is an ALUMINUM frame — the SKU, r</p><p><strong>vs</strong> Pottery Barn Pottery Barn Cayman Leaning Floor Mirror — Natural Oak, 26×72in ($399) &mdash; Pottery Barn Cayman leaning mirror in Natural Oak is taller and slimmer (26×72) than the WE arched option — better propo</p>
+            </div>
+          </details>
+          
+        </div>
+      </div>
+    </article>
 </main>
 
 <div class="section-divider"><a id="nursery"></a>
   <h2>Nursery</h2>
-  <div class="section-sub">7 items for your read</div>
+  <div class="section-sub">Nursery</div>
 </div>
-<main>
 
-    <!-- NURSERY-CRIB -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-CRIB</span>
-        <h3 class="item-title">Crib</h3>
-        <span class="status-pill options">Your call</span>
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-PENDANT</span>
+        <h3 class="annika-item-title">Nursery Akari paper pendant</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Convertible crib in pale natural finish &mdash; converts to toddler bed and daybed.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-crib-0.jpg" alt="Babyletto Hudson 3-in-1 in Washed Natural" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Babyletto Hudson 3-in-1 &mdash; Washed Natural finish</div>
+      <p class="annika-tagline">Per §10 framework + §5b paper-lantern rule: nursery is the single house Akari moment. Isamu Noguchi UF series.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-pendant-0.jpg" alt="Isamu Noguchi Akari UF4-L1 Paper Pendant, natural mulberry, 17-inch diameter, E26 medium base" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Isamu Noguchi Akari UF4-L1 Paper Pendant, natural mulberry, 17-inch diameter, E26 medium base</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Babyletto Hudson 3-in-1, Washed Natural finish &mdash; non-toxic certified ($499)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">This is 100% your call. Babyletto Hudson is the sane default &mdash; but if you've seen the Nestig Cloud and it felt better, say so. The rounded corners are noticeably different in person.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://shop.noguchi.org/products/akari-1a" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Isamu Noguchi Akari UF4-L1 Paper Pendant, natural mulberry, 17-inch diameter, E26 medium base &rarr;</a> &mdash; $195</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Quiet ambient glow (small 13-inch) or real piece-of-art feeling (large 21-inch)? I&#x27;m leaning middle.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Converts to toddler bed + daybed so you don't buy again at age 2. Non-toxic finishes. Reads clean and calm at nursery scale.</p>
-              <p><strong>vs</strong> Nestig Cloud ($200 more, rounded corners, softer silhouette); West Elm &times; PBK Boho spindle crib ($799, most premium).</p>
+              <p>Noguchi Akari UF4-L1 at 17-inch diameter is the correct nursery scale per DESIGN_SPEC §10 paper-lantern framework — flattened saucer silhouette reads as the house&#x27;s singular Akari moment without overpowering a nursery footprint. Beats the 1A sphere on visual authority and diameter for a standard 10×11 room; beats the 10A on staying within the $350 budget and avoiding an oversized statement in a child&#x27;s room.</p>
+              <p><strong>vs</strong> Noguchi Store / Design Within Reach Isamu Noguchi Akari 1A Paper Lantern, natural mulberry, 13-inch sphere, E26 medium base ($195) &mdash; Noguchi Akari 1A at 13-inch sphere is the softer, lower-scale alternative appropriate for an infant room where visual ca</p><p><strong>vs</strong> Noguchi Store / Design Within Reach Isamu Noguchi Akari 10A Paper Pendant, natural mulberry, 21-inch sphere, E26 medium base ($700) &mdash; Noguchi Akari 10A at 21-inch sphere makes the strongest design statement for the nursery as the singular paper-lantern m</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
-    <!-- NURSERY-GLIDER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-GLIDER</span>
-        <h3 class="item-title">Glider</h3>
-        <span class="status-pill options">Your call</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">WT-NURSERY</span>
+        <h3 class="annika-item-title">Nursery blackout + sheer overlay</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">The chair you'll feed from, potentially hundreds of times in year one.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-glider-0.jpg" alt="West Elm Organic Glider in Ivory Boucle" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Organic Glider &mdash; Ivory performance boucle</div>
+      <p class="annika-tagline">Per §13: blackout roller + sheer linen overlay. Nap discipline.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/wt-nursery-0.jpg" alt="The Shade Store Blackout Roller Shade — Cream/White — custom 36–48&quot; w × 72–84&quot; h + IKEA LILL Sheer Curtain pair (as overlay) — 1 window" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">The Shade Store Blackout Roller Shade — Cream/White — custom 36–48&quot; w × 72–84&quot; h + IKEA LILL Sheer Curtain pair (as overlay) — 1 window</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Organic Glider, Ivory performance boucle &mdash; washable fabric ($1,099)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Hard to pick without sitting in them. Want swivel (PBK), max seat depth (Article), or the WE cream-boucle look?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.theshadestore.com/shades/roller-shades/custom-roller-shades" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">The Shade Store Blackout Roller Shade — Cream/White — custom 36–48&quot; w × 72–84&quot; h + IKEA LILL Sheer Curtain pair (as overlay) — 1 window &rarr;</a> &mdash; $460</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Lock the sheer layer now or pick it yourself later? Blackout must happen during construction.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>You live in this chair for the first year. Performance boucle is actually washable.</p>
-              <p><strong>vs</strong> Article Ceni (~$300 less, deeper seat); PBK Comfort Swivel (adds 360&deg; swivel &mdash; reach the bassinet without standing up).</p>
+              <p>Layered system per §13: Shade Store blackout roller provides true nap-grade blackout (ANNIKA-LOOP blackout required) while the IKEA LILL sheer overlay adds a soft diffuse layer for awake time without a second roller header. Two-vendor split keeps total well under the $500 budget. The Shade Store blackout is independently tested to true-blackout standard, not light-filtering marketed as blackout.</p>
+              <p><strong>vs</strong> Hunter Douglas authorized dealer (blackout) + Pottery Barn Kids (sheer) Hunter Douglas Duette Blackout Shade — Warm White — custom 36–48&quot; w × 72–84&quot; h + Pottery Barn Kids Linen Sheer Panel (50×96&quot;) in Ivory — 1 window ($590) &mdash; Premium nursery spec: Hunter Douglas Duette blackout is child-safe cordless — no lift cords, no bead chains — and rated </p><p><strong>vs</strong> Lowe&#x27;s / Levolor.com Levolor Blackout Roller Shade — Alabaster — cordless, 36–48&quot; w × 72–84&quot; h + Levolor Sheer Roller Shade in same size — 1 window dual-shade system ($280) &mdash; Levolor dual-roller system mounts blackout and sheer on a single bracket with one header — the most compact install and </p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
         </div>
       </div>
     </article>
-
-    <!-- NURSERY-PENDANT -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-PENDANT</span>
-        <h3 class="item-title">Nursery ceiling light</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-CRIB</span>
+        <h3 class="annika-item-title">Nursery crib (light oak)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Paper lantern pendant &mdash; warm ambient glow of the room.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-pendant-0.jpg" alt="Isamu Noguchi Akari UF4-L1 paper pendant" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Noguchi Akari UF4-L1 &mdash; natural mulberry paper, 17 inch</div>
+      <p class="annika-tagline">Per §10: Babyletto Hudson, Nestig Cloud, or similar light-oak slat.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-crib-0.jpg" alt="Babyletto Hudson 3-in-1 Convertible Crib, Natural Oak" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Babyletto Hudson 3-in-1 Convertible Crib, Natural Oak</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Isamu Noguchi Akari UF4-L1, 17-inch natural mulberry paper pendant ($310)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Quiet ambient glow (small 13-inch) or real piece-of-art feeling (large 21-inch)? I'm leaning middle.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://babyletto.com/products/hudson-3-in-1-convertible-crib-with-toddler-bed-conversion-kit" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Babyletto Hudson 3-in-1 Convertible Crib, Natural Oak &rarr;</a> &mdash; $499</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">This is 100% your call. Babyletto Hudson is the sane default — but if you&#x27;ve seen the Nestig Cloud and it felt better, say so. The rounded corners are noticeably different in person.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>The Akari is the only paper-lantern moment in the house. Warm, beautiful, quiet presence in the nursery.</p>
-              <p><strong>vs</strong> Smaller 13-inch sphere (softer, more lullaby-scaled); larger 21-inch (design statement, $45 more).</p>
+              <p>Babyletto is the §10 designated nursery-specialist brand. Hudson 3-in-1 is the explicit §10 canon reference: converts to toddler bed + daybed, survives 4-5 years. Light oak slat reads Japandi at nursery scale. GREENGUARD Gold for infant room. At $499, $101 under $600 budget. ★ spec-named, correct wood tone, correct price, right certification.</p>
+              <p><strong>vs</strong> Nestig Nestig Cloud Convertible Crib, Natural Oak ($849) &mdash; Nestig Cloud is the §10 co-reference alongside Hudson — both are legitimate canon. Cloud&#x27;s rounded corners read slightly</p><p><strong>vs</strong> West Elm / Pottery Barn Kids West Elm x Pottery Barn Kids Boho Crib, Natural Oak slat ($799) &mdash; West Elm / PBK is in the ~10% PB + S&amp;L accents tier. Spindle silhouette matches the loved_15 bedroom canon, tying nurser</p>
             </div>
           </details>
+          
         </div>
       </div>
     </article>
-
-    <!-- NURSERY-DRESSER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-DRESSER</span>
-        <h3 class="item-title">Nursery dresser (doubles as changing station)</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-GLIDER</span>
+        <h3 class="annika-item-title">Nursery glider</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">6-drawer dresser + changing tray on top &mdash; no separate changing table needed.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-dresser-0.jpg" alt="Babyletto Palma 6-Drawer in Light Oak" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Babyletto Palma 6-Drawer + changing tray &mdash; Light Oak</div>
+      <p class="annika-tagline">Per §10: boucle cream OR performance fabric. R4 fix: Article Ceni is a sofa line (not a glider — confirmed in R3 audit); swapped to Babyletto Toco as primary pick. Canon-coordinated with Babyletto Hudson crib. GREENGUARD Gold meets §10 nursery air-quality standard.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-glider-1.jpg" alt="Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Babyletto Palma 6-Drawer, Light Oak + matching changing tray ($649)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">6 drawers (our pick), 4 drawers (prettier but tight on storage), or 8 drawers (max storage, IKEA Hemnes $299)?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.babyletto.com/collections/gliders" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural &rarr;</a> &mdash; $499</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Hard to pick without sitting in them. Want swivel (PBK), max seat depth (Article), or the WE cream-boucle look?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Doubles as changing station + diaper storage &mdash; no separate changing table taking floor space.</p>
-              <p><strong>vs</strong> West Elm 4-drawer (prettier, fewer drawers); IKEA Hemnes 8-drawer ($299, max storage, less pretty).</p>
+              <p>R4 ★ — replaces Article Ceni which is a sofa collection (not a glider; R3 CRITICAL NR-11/N-16). Babyletto Toco Glider is an actual nursery glider: 360-degree swivel + glide, GREENGUARD Gold, Eco-Weave performance fabric meets §10 performance-fabric requirement. Canon-coordinated with Babyletto Hudson crib (NURSERY-CRIB ★). At ~$499 (R5 price correction from $799 yaml error — actual price verified R4 WebFetch), well within $900 budget. Eco-Weave cream/natural colorway matches cream palette. Article does not make a glider.</p>
+              <p><strong>vs</strong> West Elm West Elm Organic Glider, Crypton Performance Boucle — Ivory ($1,099) &mdash; West Elm anchor brand (~40-45%). Organic Glider in Crypton Performance Boucle Ivory meets both §10 requirements simultan</p><p><strong>vs</strong> Pottery Barn Kids Pottery Barn Kids Comfort Swivel Glider, Performance Linen Blend — Natural ($1,199) &mdash; Pottery Barn Kids holds part of the ~10% PB + S&amp;L accents tier. The 360-degree swivel adds real nursing functionality — </p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
         </div>
       </div>
     </article>
-
-    <!-- NURSERY-RUG -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-RUG</span>
-        <h3 class="item-title">Nursery rug</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-DRESSER</span>
+        <h3 class="annika-item-title">Nursery dresser (oak, doubles as changing top)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Washable cotton dhurrie, 5&times;8 &mdash; machine washable is non-negotiable.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-rug-0.jpg" alt="West Elm Cotton Dhurrie in Ivory/Natural stripe" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">West Elm Cotton Dhurrie &mdash; Ivory/Natural stripe, 5&times;8, washable</div>
+      <p class="annika-tagline">Per §10: light oak dresser (WE / IKEA-hacked PAX). R4 budget revised UP $700 → $1,799 per revisions-UP-only HARD RULE — WE Mid-Century white oak ★ is $1,799; no §3a-compliant white-oak dresser exists under $700. approved_overshoot: true — WE white oak is the only option meeting §3a wood-tone lock (genuine white oak, GREENGUARD Gold, Rubio-finishable). Babyletto Palma opt1 is acacia veneer (§3a violation) — valid only if brand-matching with crib overrides material canon.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-dresser-0.jpg" alt="West Elm Mid-Century 6-Drawer Dresser in White Oak (or nearest current WE nursery/bedroom dresser in white oak finish) — with WE or Babyletto changing tray topper" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Mid-Century 6-Drawer Dresser in White Oak (or nearest current WE nursery/bedroom dresser in white oak finish) — with WE or Babyletto changing tray topper</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">West Elm Cotton Dhurrie, Ivory/Natural stripe, 5&times;8 &mdash; machine washable ($299)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">WE dhurrie for the look, or Lorena Canals specifically engineered for tummy time + crawling?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/products/mid-century-6-drawer-dresser-g815/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Mid-Century 6-Drawer Dresser in White Oak (or nearest current WE nursery/bedroom dresser in white oak finish) — with WE or Babyletto changing tray topper &rarr;</a> &mdash; $1,799</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">6 drawers (our pick), 4 drawers (prettier but tight on storage), or 8 drawers (max storage, IKEA Hemnes $299)?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>You will need to wash this rug. Machine-washable is not optional in a nursery.</p>
-              <p><strong>vs</strong> Lorena Canals washable cotton ($50 less, thicker weave &mdash; designed for tummy time and crawling).</p>
+              <p>§3a wood-tone spec: &quot;light oak primary — Bleach + Rubio Pure finish.&quot; Babyletto Palma (prior ★) is acacia veneer over New Zealand pine — not white oak and cannot be Rubio-finished; lint on /sourcing already flags this. West Elm Mid-Century Dresser in white oak is genuine engineered/solid white oak that matches the house-wide wood-tone lock. GREENGUARD Gold certification meets nursery air-quality standard same as Babyletto. Changing tray topper available separately from WE or compatible third-party. At ~$1,799 it is $1,099 over the $700 budget — flag for budget target revision per revisions-UP-only rule; or absorb from furniture envelope if nursery priority is confirmed.</p>
+              <p><strong>vs</strong> Babyletto (via buybuyBaby or Amazon) Babyletto Palma 7-Drawer Dresser, Light Oak — with Babyletto changing tray topper ($649) &mdash; Babyletto Palma pairs with the Hudson crib for brand-set continuity and includes changing tray topper at $649 under orig</p><p><strong>vs</strong> IKEA IKEA Hemnes 8-Drawer Dresser, White Stain Oak effect — IKEA-hack with oak pulls ($299) &mdash; IKEA is the only non-primary context where IKEA is explicitly noted as an allowed §10 exception. Hemnes 8-drawer maximiz</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- WT-NURSERY -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">WT-NURSERY</span>
-        <h3 class="item-title">Nursery window treatments</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-RUG</span>
+        <h3 class="annika-item-title">Nursery rug (cotton dhurrie, washable)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Blackout cellular shade + sheer linen overlay &mdash; sleep-grade for naps.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/wt-nursery-0.jpg" alt="Hunter Douglas blackout cellular shade with sheer panel" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Hunter Douglas blackout cellular + sheer linen panel, Natural</div>
+      <p class="annika-tagline">Per §10: machine-washable cotton dhurrie, NOT vintage wool.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-rug-0.jpg" alt="West Elm Cotton Dhurrie Rug, Ivory / Natural stripe, 5x8 — machine washable" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">West Elm Cotton Dhurrie Rug, Ivory / Natural stripe, 5x8 — machine washable</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Hunter Douglas blackout cellular shade + sheer linen panel in Natural, 1 window (~$680)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Lock the sheer layer now or pick it yourself later? Blackout must happen during construction.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.westelm.com/shop/kids-furniture/nursery+rugs/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">West Elm Cotton Dhurrie Rug, Ivory / Natural stripe, 5x8 — machine washable &rarr;</a> &mdash; $299</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">WE dhurrie for the look, or Lorena Canals specifically engineered for tummy time + crawling?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Sleep-grade blackout for naps. Cellular shade insulates &mdash; room stays cooler in Atlanta summers.</p>
-              <p><strong>vs</strong> Blackout roller only (simpler, ~$200 less, no softness layer).</p>
+              <p>West Elm anchor brand (~40-45%). Cotton Dhurrie machine-washable is the explicit §10 spec — cotton dhurrie, NOT vintage wool. Ivory/Natural stripe is within the cream palette. Note: verify current ivory machine-washable cotton rug SKU (not wool Souk) at WE before ordering. At $299, $101 under budget. ★ spec-compliant material, anchor brand, under budget.</p>
+              <p><strong>vs</strong> Lorena Canals (via Amazon or specialty) Lorena Canals Washable Cotton Rug, Natural, 5x8 ($123) &mdash; Lorena Canals is the best-in-class machine-washable nursery rug specialist — not in primary canon split but universally </p><p><strong>vs</strong> Pottery Barn Kids Pottery Barn Kids Cushy Solid Nursery Rug, Ivory, 5x8 — machine washable ($399) &mdash; Pottery Barn Kids holds part of the ~10% accents tier. Higher pile height is the best option for infant crawling comfort</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- NURSERY-ART -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">NURSERY-ART</span>
-        <h3 class="item-title">Nursery art</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">NURSERY-ART</span>
+        <h3 class="annika-item-title">Nursery art</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Soft abstract or botanical &mdash; the quiet visual anchor in the room.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/nursery-art-0.jpg" alt="Minted botanical watercolor print in thin oak frame" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Minted botanical watercolor, 11&times;14, thin oak frame</div>
+      <p class="annika-tagline">Per §10: modern abstract over crib at safe height.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/nursery-art-0.jpg" alt="Minted &#x27;Abstract Terrain&#x27; archival print — Oat/Sage, 24×30in framed" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Minted &#x27;Abstract Terrain&#x27; archival print — Oat/Sage, 24×30in framed</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Minted botanical watercolor print, 11&times;14, thin oak frame (~$120)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Want to pick this together? Happy to defer. Or if you have something in mind already &mdash; that wins automatically.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.minted.com/nursery-wall-art" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Minted &#x27;Abstract Terrain&#x27; archival print — Oat/Sage, 24×30in framed &rarr;</a> &mdash; $260</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Want to pick this together? Happy to defer. Or if you have something in mind already — that wins automatically.</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Soft, non-character art that grows with the room past infancy. Minted has strong botanical/abstract options in the sage/oat palette.</p>
-              <p><strong>vs</strong> Etsy hand-lettered print (more personal); framed fabric art (tactile, interesting texture).</p>
+              <p>Minted&#x27;s independent-artist archival prints clear the §11 &#x27;NOT commercial poster&#x27; bar while remaining immediately available and professionally framed. The oat/sage palette is calm and non-stimulating per §10 modern-abstract-over-crib directive. Compared to the Etsy original, Minted offers curated selection without commission lead time; compared to HAY, it has genuine independent-artist provenance rather than design-brand poster.</p>
+              <p><strong>vs</strong> Etsy + IKEA Etsy original watercolor — botanicals or soft abstract, unframed + IKEA HOVSTA oak frame ($190) &mdash; Etsy original watercolor — botanical or soft abstract — is the truest interpretation of §11 art canon (hand-created, non</p><p><strong>vs</strong> HAY (hay.dk / 2Modern) HAY Colour Plinth Poster Set — Sand/Sage, A2 × 2 with gallery frame ($220) &mdash; HAY Colour Plinth posters straddle design object and art — sand/sage A2 format is restrained and Japandi-compatible. The</p><p><strong>vs</strong> West Elm West Elm Come Ashore Framed Wall Art by Minted (30W × 40H, natural wood frame, abstract neutral landscape) ($299) &mdash; Minted-for-WE collab is the direct WE answer to the Minted ★ pick at $40 more — same artist pool, brand consolidation, n</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
 </main>
 
 <div class="section-divider"><a id="kitchen-dining"></a>
   <h2>Kitchen + dining</h2>
-  <div class="section-sub">8 items for your read (6 already locked)</div>
+  <div class="section-sub">Kitchen + dining</div>
 </div>
 <p class="section-note">Already locked (no input needed): counters, floor tile, backsplash, cabinets, kitchen faucet, cabinet finish.</p>
-<main>
-
-    <!-- K-PENDANTS -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">K-PENDANTS</span>
-        <h3 class="item-title">Kitchen island pendants</h3>
-        <span class="status-pill options">Your read</span>
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">CABINET-FINISH-KITCHEN</span>
+        <h3 class="annika-item-title">Kitchen cabinet finish</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Three pendants over the island &mdash; the everyday light you cook and eat under.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <div class="img-placeholder">Kitchen island pendants<br><small>Schoolhouse Hyatt Natural Brass &times;3 &mdash; image pending</small></div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Schoolhouse Hyatt Pendant, Natural Brass, 8-inch, &times;3 + matched 4th (~$1,260 set)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Happy with classic opal glass, or want to see a more industrial exposed-bulb option?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Ties the brass family from the dining chandelier over the island. Opal glass = diffuse, warm light for food prep.</p>
-              <p><strong>vs</strong> Exposed-bulb cage pendants (more industrial, clashes with cream palette); ceramic pendants (interesting, less tied to the metal family).</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming current Schoolhouse Hyatt 8-inch availability and 4th-pendant sourcing.</div>
+      <p class="annika-tagline">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak floor required at sample stage.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- K-CAB-HARDWARE -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">K-CAB-HARDWARE</span>
-        <h3 class="item-title">Kitchen cabinet pulls</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-TILE-BACKSPLASH</span>
+        <h3 class="annika-item-title">Kitchen backsplash</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Matte black pulls on uppers + lowers &mdash; the kitchen's hardware moment.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-cab-hardware-0.jpg" alt="Amerock 5-inch matte black bar pulls" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Amerock 5-inch bar pull &mdash; matte black, qty ~24</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Amerock 5-inch bar pull, matte black, qty ~24 (~$285)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Matte black only, or mix in a few brass knobs on the upper cabinet doors?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Matte black hardware anchors the hood (also matte black) into the whole kitchen. Bar pulls are easiest to grab with wet hands.</p>
-              <p><strong>vs</strong> All-brass pulls (warmer, matches the rest of the house but competes with the black hood); mixed black + brass (intentional designer look, more complex to spec).</p>
-            </div>
-          </details>
+      <p class="annika-tagline">Per DESIGN_SPEC §7 [OWNER CONFIRM #1]: PIVOT from Bejmat to Carrara+zellige (canon-consistent). Cle lead 4-6 wk.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- K-PANTRY-BUILTIN -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">K-PANTRY-BUILTIN</span>
-        <h3 class="item-title">Kitchen pantry built-in</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-FLOOR-TILE</span>
+        <h3 class="annika-item-title">Kitchen floor tile</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Full-height oak cabinet run beside the refrigerator &mdash; the kitchen's largest storage piece.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-pantry-builtin-0.jpg" alt="TCW custom full-height pantry cabinet in white oak veneer" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">TCW custom full-height pantry &mdash; white oak veneer, pull-out shelves</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">TCW custom full-height pantry cabinet, white oak veneer, pull-out shelves (~$3,200 labor + material)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Fine locking this as part of the contractor scope, or want to see a freestanding furniture alternative?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Built-in ties into the cabinet run &mdash; reads as one kitchen. Pull-outs are more functional than fixed shelves.</p>
-              <p><strong>vs</strong> IKEA SEKTION column (~$600, built-in look with custom fronts); freestanding hutch (furniture feel, moveable, less integrated).</p>
-            </div>
-          </details>
+      <p class="annika-tagline">Locked per §6.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Daltile Choice Ivory porcelain</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- K-POT-FILLER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">K-POT-FILLER</span>
-        <h3 class="item-title">Pot filler (behind the range)</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-COUNTERS</span>
+        <h3 class="annika-item-title">Kitchen counters + waterfall island</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">Wall-mounted faucet arm above the cooktop &mdash; fill a pot without carrying water across the kitchen.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-pot-filler-1.jpg" alt="Delta Trinsic wall-mount pot filler in champagne bronze" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Delta Trinsic wall-mount pot filler &mdash; champagne bronze</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Delta Trinsic wall-mount pot filler, champagne bronze &mdash; articulated arm (~$390)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Stay Trinsic cohesive, or step up to Brizo Luxe Gold for this one moment?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Same family as the kitchen faucet. Articulated arm so you can fill from the back burner.</p>
-              <p><strong>vs</strong> Brizo Litze in Luxe Gold (richer gold tone, more of a statement, $190 more).</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming correct model number.</div>
+      <p class="annika-tagline">Locked. Template after cab install. 5-week fab+install typical.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Caesarstone Statuario waterfall island + perimeter</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- K-SINK -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">K-SINK</span>
-        <h3 class="item-title">Kitchen sink</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-FAUCET</span>
+        <h3 class="annika-item-title">Kitchen faucet</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="item-tagline">30-inch undermount stainless, sound-insulated &mdash; doesn't ring loudly at 6am.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/k-sink-1.jpg" alt="Kohler 30-inch undermount stainless sink" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Kohler 30-inch undermount stainless &mdash; sound-insulated</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Kohler 30-inch undermount stainless, sound-insulated ($590)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Comfortable with 30-inch Kohler, or want the wider 33-inch basin?</p>
-          <details class="why-block">
-            <summary>Why this pick / vs alternates</summary>
-            <div class="why-inner">
-              <p>Single bowl fits the 30-inch base cabinet. Insulation matters at 6am with the baby asleep nearby.</p>
-              <p><strong>vs</strong> Ruvati 33-inch (bigger basin, lower-tier brand, $280).</p>
-            </div>
-          </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; confirming exact Kohler model.</div>
+      <p class="annika-tagline">Locked per §6 — Delta Trinsic Champagne Bronze line. Pull-down for kitchen workflow.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- G3-HOOD -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">G3-HOOD</span>
-        <h3 class="item-title">Range hood</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-POT-FILLER</span>
+        <h3 class="annika-item-title">Kitchen pot filler (range wall)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">42-inch matte black chimney hood over the range &mdash; the one bold moment in the kitchen.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/g3-hood-0.jpg" alt="Vent-A-Hood 42-inch matte black chimney hood" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">Vent-A-Hood 42-inch &mdash; matte black, high-output ventilation</div>
+      <p class="annika-tagline">Confirm pot-filler is in plumbing rough scope before ordering — if TCW has not roughed the wall stub, add to change order first. Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler (Champagne Bronze) is the correct default — NOT 1953LF-CZ which is a bar/prep faucet. | budget revised UP per HARD RULE 2026-05-16: from $400 to $685. Audit C2: 1953LF-CZ is a bar/prep faucet NOT a pot filler — correct SKU is 1165LF-CZ (Contemporary, ~$756 at QualityBath) or 1177LF-CZ (Traditional, ~$1,128). Delta does not make a Trinsic pot filler. Fallback: Delta 1165LF-CZ Contemporary Pot Filler.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/k-pot-filler-1.jpg" alt="Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler Champagne Bronze" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler Champagne Bronze</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">Vent-A-Hood 42-inch matte black chimney hood, high-output ventilation ($3,800)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Comfortable committing to the Vent-A-Hood, or want to see other matte-black chimney hoods first?</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.deltafaucet.com/kitchen/product/1165LF-CZ.html" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler Champagne Bronze &rarr;</a> &mdash; $756</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Stay Trinsic cohesive, or step up to Brizo Luxe Gold for this one moment?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Real ventilation for a gas range. Matte black grounds the kitchen against all the cream and oak &mdash; the one bold moment.</p>
-              <p><strong>vs</strong> Same brand at lower output (saves ~$1,150 but may not keep up with a high-BTU range).</p>
+              <p>1953LF-CZ is a bar/prep faucet, not a pot filler. Delta does not make a Trinsic pot filler. 1165LF-CZ (Contemporary, ~$756) is the closest champagne-bronze pot filler in Delta&#x27;s current catalog with similar geometric restraint to Trinsic. 1177LF-CZ (Traditional, ~$1,128 list) is more ornate. Budget needs revision from $400 to ~$756 minimum.</p>
+              <p><strong>vs</strong> Build.com / Ferguson Kohler Sous K-7348-BV Wall-Mount Pot Filler Vibrant Brushed Bronze ($707) &mdash; Right pick if owner wants a commercial-arm silhouette over the Trinsic&#x27;s residential geometry. Sous&#x27;s wider throw reads </p><p><strong>vs</strong> Ferguson (special order) Brizo Litze RP100613GL Wall-Mount Pot Filler Luxe Gold ($1,797) &mdash; Owner-rejected finish tier. Brizo Litze &quot;Luxe Gold&quot; (-GL suffix) is a bright PVD gold finish — explicitly excluded from </p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
-
-    <!-- DR-CHANDELIER -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">DR-CHANDELIER</span>
-        <h3 class="item-title">Dining room chandelier</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-SINK</span>
+        <h3 class="annika-item-title">Kitchen sink</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">Brass branch chandelier over the dining table &mdash; visual centerpiece of the open dining area.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/dr-chandelier-0.jpg" alt="5-arm brass branching chandelier, 30-inch" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">5-arm brass chandelier, ~30 inch diameter</div>
+      <p class="annika-tagline">Stainless undermount, 30-32 inch single bowl preferred. Kohler Strive at $590 hits the $600 cap cleanly and keeps brand tier consistent with the overall kitchen package. | budget revised UP per HARD RULE 2026-05-16: from $600 to $765. Audit C2: correct Kohler SKU is K-5409-NA not K-5418-NA — verify with Ferguson before ordering. Ruvati opt2 at $359 is cheaper alt if owner wants to recover $400.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/k-sink-1.jpg" alt="Kohler Strive K-5409-NA 29&quot; Undermount Single Bowl Kitchen Sink with SilentShield + Rack" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Kohler Strive K-5409-NA 29&quot; Undermount Single Bowl Kitchen Sink with SilentShield + Rack</div>
         </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">5-arm brass branching chandelier, 30-inch diameter (~$1,095)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">Calm 5-arm, wider 8-arm (better table framing, $100 less), or splurge on Visual Comfort Bryant (hand-rubbed antique brass, $180 more)? This is the room where splurging makes sense.</p>
-          <details class="why-block">
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.homedepot.com/p/KOHLER-Strive-Undermount-Stainless-Steel-29-in-Single-Bowl-Kitchen-Sink-Kit-with-Sink-Rack-K-5409-NA/205208983" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Kohler Strive K-5409-NA 29&quot; Undermount Single Bowl Kitchen Sink with SilentShield + Rack &rarr;</a> &mdash; $489</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Comfortable with 30-inch Kohler, or want the wider 33-inch basin?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Warm, sculptural, matches the brass family throughout. The dining room deserves a real moment.</p>
-              <p><strong>vs</strong> Wider 8-arm Rejuvenation (better table framing, $100 less); Visual Comfort Bryant (premium, hand-rubbed antique brass).</p>
+              <p>K-5418-NA does not exist. K-5409-NA is the correct Kohler Strive 29&quot; sink. Update item title to &quot;29-inch&quot; not &quot;30-inch&quot; and notify cabinet shop of actual sink opening width before cabinet order.</p>
+              <p><strong>vs</strong> Build.com / eFaucets Elkay Crosstown EFRU281610 28-inch Undermount Stainless ($805) &mdash; Right pick if budget forces a $70 save at the sink. Elkay is reputable, 18-gauge, clean profile — the 28&quot; bowl works in </p><p><strong>vs</strong> Build.com / Amazon Ruvati RVH7300 33-inch Undermount Stainless 16-Gauge ($359) &mdash; Right pick only under hard budget constraint where the sink allowance is being raided for an overrun elsewhere. Ruvati&#x27;s</p>
             </div>
           </details>
-          <div class="sku-flag">&#9733; SKU verification in progress &mdash; Schoolhouse Edith discontinued, confirming current equivalent.</div>
+          
         </div>
       </div>
     </article>
-
-    <!-- KITCHEN-OPEN-SHELF -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">KITCHEN-OPEN-SHELF</span>
-        <h3 class="item-title">Open shelf styling</h3>
-        <span class="status-pill options">Your read</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-PENDANTS</span>
+        <h3 class="annika-item-title">Kitchen island pendants (3+1)</h3>
+        <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="item-tagline">The visible everyday ceramics on the kitchen open shelves.</p>
-      <div class="item-body">
-        <div class="pick-image-wrap">
-          <img class="pick-image" src="/images/sourcing/kitchen-open-shelf-0.jpg" alt="East Fork ceramics, olive wood cutting board, cookbooks" loading="lazy" onerror="this.style.opacity=0.3;">
-          <div class="pick-image-caption">East Fork bowls + mugs, olive-wood board, cookbooks</div>
-        </div>
-        <div class="brief-block">
-          <div class="label">Pick</div>
-          <p class="pick">East Fork bowls + mugs (chalk/fog), one olive-wood cutting board, 2&ndash;3 cookbooks ($395)</p>
-          <div class="label">Question for you</div>
-          <p class="question-text">East Fork (designed, consistent), Etsy hunt together (most personal), or CB2 (safe save)?</p>
-          <details class="why-block">
+      <p class="annika-tagline">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Schoolhouse Hyatt ★ at $1,260 for 3 is 57% over original $800 budget; no §6a-compliant brass pendant set at this quality tier exists under $800 for 3 units. approved_overshoot: true.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap"><div class="annika-img-placeholder">Kitchen island pendants (3+1)<br><small>no image on file</small></div></div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://schoolhouse.com/collections/pendants" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Schoolhouse Hyatt 8-inch Pendant in Natural Brass × 3 (island) + sourced matching 4th from same line &rarr;</a> &mdash; $1,260</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Happy with classic opal glass, or want to see a more industrial exposed-bulb option?</p>
+          <details class="annika-why">
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
-              <p>Hand-thrown ceramics, deliberately unmatched &mdash; the visual centerpiece of a Japandi kitchen.</p>
-              <p><strong>vs</strong> Full Etsy hunt (most personal, same price range, more time); CB2 matte stoneware ($240, looks similar, feels mass-produced).</p>
+              <p>§6a explicitly names kitchen pendants as a brass-anchor hero item: &quot;Brass remains the ANCHOR finish for hero items — kitchen pendants (when active), dining chandelier…&quot; §3a element 5 specifies brass hardware + at least one brass light fixture per public room. §17 SOURCEABLE anchors (cali_02 brass branching, cali_21 brass globe pendants) both show brass over kitchen island. Schoolhouse Hyatt 8-inch in Natural Brass is the tightest geometric-globe form in the canon brand bracket — restrained silhouette, lacquered brass, schoolhouse pedigree. This is the on-canon pick.</p>
+              <p><strong>vs</strong> Rejuvenation (rejuvenation.com) Rejuvenation Pinnock Cone Pendant in Aged Brass × 3 (island) ($1,035) &mdash; Rejuvenation is the other canon brand for lighting hardware per §11 brand split. Pinnock Cone pendant in Aged Brass deli</p><p><strong>vs</strong> Existing / Cedar &amp; Moss or Schoolhouse white-globe match for 4th Keep existing 3 white dome pendants + source matching 4th ($0) &mdash; Budget-preservation option only. Keeping existing white dome pendants saves $1,035-$1,680 vs brass alternatives but expl</p>
             </div>
           </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
         </div>
       </div>
     </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">DR-CHANDELIER</span>
+        <h3 class="annika-item-title">Dining room chandelier (brass branch)</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Brass branching chandelier — canon move per loved_13 (Campbell House Rue). Schoolhouse Edith or Rejuvenation Otis candidate.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/dr-chandelier-0.jpg" alt="Rejuvenation Eastham 8-Arm Single Tier Chandelier — Lacquered Brass" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Rejuvenation Eastham 8-Arm Single Tier Chandelier — Lacquered Brass</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.rejuvenation.com/catalog/products/eastham-8-arm-chandelier" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Rejuvenation Eastham 8-Arm Single Tier Chandelier — Lacquered Brass &rarr;</a> &mdash; $995</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Calm 5-arm, wider 8-arm (better table framing, $100 less), or splurge on Visual Comfort Bryant (hand-rubbed antique brass, $180 more)? This is the room where splurging makes sense.</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Schoolhouse Isaac 5 Chandelier returns HTTP 404. Rejuvenation Eastham 8-arm is the §11-compliant secondary-brand brass branching chandelier available in catalog. Price verify required at rejuvenation.com (403 block during research). Budget is $1,100; Eastham is typically priced $895–$1,100 at Rejuvenation&#x27;s mid-tier chandelier range. Confirm lacquered brass finish and exact price before ordering.</p>
+              <p><strong>vs</strong> Rejuvenation Rejuvenation Otis 8-Arm Brass Chandelier, lacquered brass, 36-inch, E12 candelabra ($995) &mdash; Rejuvenation is the secondary canon brand; the Otis 36-inch spread better frames a large round dining table as a centerp</p><p><strong>vs</strong> Visual Comfort Visual Comfort Bryant Chandelier, Hand-Rubbed Antique Brass, 5-arm, 27-inch, E12 ($1,299) &mdash; Visual Comfort is the premium-upgrade tier per design canon; HARAB finish reads visually identical to lacquered brass in</p>
+            </div>
+          </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-CAB-HARDWARE</span>
+        <h3 class="annika-item-title">Kitchen cabinet pulls/knobs (matte black + brass mix)</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Canon family: Rejuvenation and/or Forge Hardware, matte black + lacquered brass mix. Per §5d: both finishes ≥3× in kitchen. Specific pull styles and knob shapes not picked. Step 2 draft options: 2 pull styles (one each finish) + optional knob variant. | budget revised UP per HARD RULE 2026-05-16: from $500 to $560. Mixed brass+black full-run hardware requires more than single-finish budget; no cheaper viable mix within $500.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/k-cab-hardware-0.jpg" alt="Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x14 + True Black x10" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x14 + True Black x10</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x14 + True Black x10 &rarr;</a> &mdash; $816</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Matte black only, or mix in a few brass knobs on the upper cabinet doors?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Somerset Pull FINAL SALE. Edgecliff is the Schoolhouse successor pull — same brand, same finish family, handcrafted USA. Budget gap: $816 vs $500 budgeted. Owner must approve ~$316 overage or accept fewer pulls (reduce qty) or switch to Rejuvenation bar pull (~$28/ea at Rejuvenation, $672 for 24 units). Verify Edgecliff 4&quot; Natural Brass and True Black in stock before ordering.</p>
+              <p><strong>vs</strong> Schoolhouse Schoolhouse Sutton Pull 5\&quot; cc, Lacquered Brass × 14 + Schoolhouse Tab Knob, Matte Black × 10
+(14 @ $32ea = $448 + 10 @ $22ea = $220 → $668; single-vendor; note over budget)
+ ($556) &mdash; All-Schoolhouse Somerset pull (Sutton successor) plus Mid Century Knob (Tab successor) in matte black is the single-vend</p><p><strong>vs</strong> Forge Hardware Studio Forge Hardware Studio Low Arch Pull 4\&quot; cc, Lacquered Brass × 14 + Matte Black × 10 (mixed finish same SKU)
+(14 @ $24ea = $336 + 10 @ $24ea = $240 → $576)
+ ($816) &mdash; Forge Hardware Studio Low Arch pull in both finishes satisfies the mix rule with a subtle arch geometry that flatters Sh</p>
+            </div>
+          </details>
+          <div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-CABINETS</span>
+        <h3 class="annika-item-title">Kitchen cabinets (KraftMaid Vantage)</h3>
+        <span class="annika-status-pill decided">Locked</span>
+      </div>
+      <p class="annika-tagline">Per G3 line. Sample door required for finish match to floor.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">K-PANTRY-BUILTIN</span>
+        <h3 class="annika-item-title">Kitchen pantry built-in (full-height oak)</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Per §18 — canon Hiroo cali_2i floor-to-ceiling. MED-HIGH priority. Reconcile with KraftMaid Vantage match.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/k-pantry-builtin-0.jpg" alt="KraftMaid Vantage tall pantry tower 24W×96H, light oak Shaker, integrated with kitchen cab order — factory finish match guaranteed" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">KraftMaid Vantage tall pantry tower 24W×96H, light oak Shaker, integrated with kitchen cab order — factory finish match guaranteed</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.kraftmaid.com/pantry-zone/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">KraftMaid Vantage tall pantry tower 24W×96H, light oak Shaker, integrated with kitchen cab order — factory finish match guaranteed &rarr;</a> &mdash; $3,200</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Fine locking this as part of the contractor scope, or want to see a freestanding furniture alternative?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>KraftMaid Vantage pantry tower is the lowest-risk option: factory finish is guaranteed to match K-CABINETS (same dye lot, same Shaker profile, same Vantage line), ships in the same order batch, and costs $1,300 under budget. Canon §18 flags finish-match risk as the key pantry reconciliation issue — this option eliminates it entirely. DESIGN_SPEC shaker is listed alongside slab as acceptable for kitchen.</p>
+              <p><strong>vs</strong> Atlanta Cabinet Co (local mill) Atlanta Cabinet Co custom — floor-to-ceiling pantry cabinet 36W×96H, white oak slab, adjustable shelves, Rubio Pure, integrated pull-out drawers at base ($4,800) &mdash; Atlanta Cabinet Co custom slab pantry is the §18 Hiroo cali_2i canon move — floor-to-ceiling white oak slab with pull-ou</p><p><strong>vs</strong> IKEA (Cobb) + carpenter trim day IKEA PAX 2350H × 1 + 1 unit (24+24W) with Havstorp white-stained oak doors + Vantage cab finish painted edge-band trim by carpenter ($1,600) &mdash; IKEA PAX with Havstorp white-stained oak veneer doors is an extreme-budget fallback at $1,600 — saves $1,600 vs recommen</p>
+            </div>
+          </details>
+          <div class="annika-sku-flag">&#9733; Sample required before ordering.</div>
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">G3-HOOD</span>
+        <h3 class="annika-item-title">Kitchen range hood</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Original SKU K2240SS does not exist in CDGA catalog — successor model (likely SLDH9-K42 or equivalent) must be confirmed before ordering. Step 2 draft confirmed Vent-A-Hood SKU options at 42-inch 900+ CFM matte black. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. Vent-A-Hood PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/g3-hood-0.jpg" alt="Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison)" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison)</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.ajmadison.com/cgi-bin/ajmadison/PRH18342SS.html" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison) &rarr;</a> &mdash; $3,433</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Comfortable committing to the Vent-A-Hood, or want to see other matte-black chimney hoods first?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>Canon-primary pick. PRH18342SS is the verified 42&quot;/900 CFM Professional Magic Lung wall mount; BK custom-color is a factory order via CDGA at ~10% upcharge over the ~$3,433 SS base, 6–8 wk lead. Fits within the $3,400 + $900 MAU envelope. High-BTU steak/smoke kitchen demands 900+ CFM — Magic Lung centrifugal technology meets that without makeup-air over-engineering.</p>
+              <p><strong>vs</strong> AJ Madison / CDGA Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) ($2,650) &mdash; Saves ~$1,150 vs. canon PRH18342SS-BK but drops to 600 CFM — below the 900 CFM minimum for a high-BTU range that does sm</p><p><strong>vs</strong> Best Buy / AJ Madison Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) ($1,400) &mdash; Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be </p>
+            </div>
+          </details>
+          
+        </div>
+      </div>
+    </article>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">KITCHEN-OPEN-SHELF</span>
+        <h3 class="annika-item-title">Kitchen open shelf styling</h3>
+        <span class="annika-status-pill ">Your read</span>
+      </div>
+      <p class="annika-tagline">Per §3a anti-signal — NOT matched commercial dishware. Hand-thrown + olive wood + cookbooks.</p>
+      <div class="annika-item-body">
+        <div class="annika-pick-image-wrap">
+          <img class="annika-pick-image" src="/images/sourcing/kitchen-open-shelf-0.jpg" alt="4 East Fork Everyday Bowls in DIFFERENT colorways (Panna Cotta + Heron + Eggshell + one additional from current catalog — pick 4 individual pieces, NOT a 4-pack) + 3 East Fork Mugs in different colorways (Panna Cotta + Heron + one additional) + 2 hand-thrown ceramic vases from local Atlanta makers (Etsy or Westside Modern) + olive wood cutting board (Berard or Food52) × 1 + 2 cookbook stacks — TARGET: 11-13 pieces total, no two identical colorways" loading="lazy" onerror="this.style.opacity=0.3;">
+          <div class="annika-pick-image-caption">4 East Fork Everyday Bowls in DIFFERENT colorways (Panna Cotta + Heron + Eggshell + one additional from current catalog — pick 4 individual pieces, NOT a 4-pack) + 3 East Fork Mugs in different colorways (Panna Cotta + Heron + one additional) + 2 hand-thrown ceramic vases from local Atlanta makers (Etsy or Westside Modern) + olive wood cutting board (Berard or Food52) × 1 + 2 cookbook stacks — TARGET: 11-13 pieces total, no two identical colorways</div>
+        </div>
+<div class="annika-brief-block">
+          <div class="annika-label">Pick</div>
+          <p class="annika-pick"><a href="https://www.eastfork.com/collections/pottery" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">4 East Fork Everyday Bowls in DIFFERENT colorways (Panna Cotta + Heron + Eggshell + one additional from current catalog — pick 4 individual pieces, NOT a 4-pack) + 3 East Fork Mugs in different colorways (Panna Cotta + Heron + one additional) + 2 hand-thrown ceramic vases from local Atlanta makers (Etsy or Westside Modern) + olive wood cutting board (Berard or Food52) × 1 + 2 cookbook stacks — TARGET: 11-13 pieces total, no two identical colorways &rarr;</a> &mdash; $395</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">East Fork (designed, consistent), Etsy hunt together (most personal), or CB2 (safe save)?</p>
+          <details class="annika-why">
+            <summary>Why this pick / vs alternates</summary>
+            <div class="why-inner">
+              <p>§3a anti-signal: &quot;Open shelves carrying matched-set commercial dishware.&quot; §3a element 9: &quot;Hand-thrown ceramics in restrained groupings, matte-clay or muted-glaze, never matched commercial dinnerware.&quot; East Fork 4-packs in a single colorway are matched commercial dishware — the anti-signal. Fix: order East Fork bowls and mugs as individual pieces across 3-4 different colorways so no two pieces match. Supplement with 2 Atlanta-maker hand-thrown vases (Etsy search &quot;Atlanta pottery&quot; or Westside Modern) for genuine hand-thrown provenance layer. Olive wood board and cookbook stacks complete the surface. §3a compliant: hand-thrown variation, no matched-set commercial dishware.</p>
+              <p><strong>vs</strong> Etsy + Fog Linen Work Etsy hand-thrown stoneware bowl + mug set (4 of each, artisan studio) + Olive wood trivet × 2 + Fog Linen Work apron × 1 ($380) &mdash; Full Etsy sourcing is the strongest §3a interpretation: no two pieces match, artisan variation is visible, Atlanta-studi</p><p><strong>vs</strong> CB2 + Amazon CB2 Matte Stoneware Mug × 4 + Bowl × 4 (Chalk) + Acacia wood board × 1 + 2 cookbooks ($240) &mdash; CB2 Chalk matte stoneware reads similar to East Fork at roughly half the per-piece cost, saving ~$155. At $240 it frees </p><p><strong>vs</strong> West Elm West Elm Gharyan Stoneware Olive Wood Bread Slicing Board + Artisan Olive Wood Cutting Board (large 21.5W) + Pure White Stoneware Bowl 4-pack + Pure White Mug 4-pack + 2 cookbooks (Bookshop.org) ($320) &mdash; Gharyan x WE collab is artisan Tunisian stoneware + olive wood — matches the §3a anti-signal exactly (NOT matched commer</p>
+            </div>
+          </details>
+          
+        </div>
+      </div>
+    </article>
+</main>
 
+<div class="section-divider"><a id="living-room"></a>
+  <h2>Living room</h2>
+  <div class="section-sub">Living room</div>
+</div>
+
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">LR-RUG-VINTAGE</span>
+        <h3 class="annika-item-title">LR Beni Ourain (year 4+)</h3>
+        <span class="annika-status-pill watch-list">Watch list</span>
+      </div>
+      <p class="annika-tagline">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        
+<div class="annika-brief-block" style="grid-column: 1 / -1;">
+          <div class="annika-label">Hunting for</div>
+          <p class="annika-pick">Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</p>
+          <div class="annika-label">Budget</div>
+          <p class="annika-pick">3000-5000</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Does this approach feel right for this space?</p>
+        </div>
+      </div>
+    </article>
 </main>
 
 <div class="section-divider"><a id="finishes"></a>
   <h2>Whole-house paint</h2>
-  <div class="section-sub">Both locked &mdash; no input needed, just so you've seen them</div>
+  <div class="section-sub">Both locked — no input needed, just so you&#x27;ve seen them</div>
 </div>
-<main>
 
-    <!-- PAINT-BATH-ACCENT -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">PAINT-BATH-ACCENT</span>
-        <h3 class="item-title">Bath accent wall &mdash; Saybrook Sage</h3>
-        <span class="status-pill decided">Locked</span>
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">PAINT-BEDROOM-ALT</span>
+        <h3 class="annika-item-title">Bedroom alt wall color (Accessible Beige)</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <div class="item-body" style="grid-template-columns: 1fr;">
-        <div class="brief-block">
-          <div class="label">Locked</div>
-          <p class="decided-text">Benjamin Moore Saybrook Sage (HC-114) &mdash; a warm sage that reads green-gray, not bright green. Wet-room paint formula so it holds up in the bath.</p>
-          <p class="locked-note">No input needed &mdash; just FYI on the color direction.</p>
+      <p class="annika-tagline">Per DESIGN_SPEC §6. Master BR alt option.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">SW Accessible Beige (SW 7036), matte — color matched in BM Aura base</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
-    <!-- PAINT-BEDROOM-ALT -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">PAINT-BEDROOM-ALT</span>
-        <h3 class="item-title">Master bedroom alt wall &mdash; Accessible Beige</h3>
-        <span class="status-pill decided">Locked</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">PAINT-BATH-ACCENT</span>
+        <h3 class="annika-item-title">Bath accent wall paint (Saybrook Sage)</h3>
+        <span class="annika-status-pill decided">Locked</span>
       </div>
-      <div class="item-body" style="grid-template-columns: 1fr;">
-        <div class="brief-block">
-          <div class="label">Locked</div>
-          <p class="decided-text">Sherwin-Williams Accessible Beige (SW 7036) &mdash; a warm greige, not yellow, not pink. Reads very differently depending on light; sample required before painting.</p>
-          <p class="locked-note">No input needed &mdash; just FYI on the color direction.</p>
+      <p class="annika-tagline">Wet-room formulation per §6. Sample required, color reads different in compressed Atlanta ceilings.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        <div class="annika-brief-block">
+          <div class="annika-label">Locked</div>
+          <p class="annika-decided">BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte</p>
+          <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
     </article>
-
 </main>
 
 <div class="section-divider"><a id="watch-list"></a>
   <h2>Long-horizon watch list</h2>
-  <div class="section-sub">Deferred &mdash; no decision needed now, just awareness</div>
+  <div class="section-sub">Deferred — no decision needed now, just awareness</div>
 </div>
-<main>
 
-    <!-- LR-RUG-VINTAGE -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">LR-RUG-VINTAGE</span>
-        <h3 class="item-title">LR Beni Ourain &mdash; vintage hunt (year 4+)</h3>
-        <span class="urgency-pill">T3 &middot; deferred</span>
-        <span class="status-pill" style="background:#8a85a0;">Watch list</span>
+<main class="annika-main">
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">LR-RUG-VINTAGE</span>
+        <h3 class="annika-item-title">LR Beni Ourain (year 4+)</h3>
+        <span class="annika-status-pill watch-list">Watch list</span>
       </div>
-      <div class="item-body" style="grid-template-columns: 1fr;">
-        <div class="brief-block">
-          <div class="label">Why deferred</div>
-          <p class="why-text">Deferred to year 4+ post-potty-train and post-pet-maturity. No white rug in the house until the kids and dog are reliably clean.</p>
-          <div class="label">What we're hunting for</div>
-          <p class="why-text">Authentic Beni Ourain, neutral cream + sumi black diamond, 8&times;10 or 9&times;12. Budget $3,000&ndash;5,000. Mellah, Berber Trading Company, Etsy vetted dealers.</p>
+      <p class="annika-tagline">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        
+<div class="annika-brief-block" style="grid-column: 1 / -1;">
+          <div class="annika-label">Hunting for</div>
+          <p class="annika-pick">Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</p>
+          <div class="annika-label">Budget</div>
+          <p class="annika-pick">3000-5000</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Does this approach feel right for this space?</p>
         </div>
       </div>
     </article>
-
-    <!-- MB-ART -->
-    <article class="item">
-      <div class="item-header">
-        <span class="item-id">MB-ART</span>
-        <h3 class="item-title">Master BR art &mdash; over-bed placement</h3>
-        <span class="urgency-pill">T3 &middot; deferred</span>
-        <span class="status-pill" style="background:#8a85a0;">Watch list</span>
+<article class="annika-item">
+      <div class="annika-item-header">
+        <span class="annika-item-id">MB-ART</span>
+        <h3 class="annika-item-title">Master BR art</h3>
+        <span class="annika-status-pill watch-list">Watch list</span>
       </div>
-      <div class="item-body" style="grid-template-columns: 1fr;">
-        <div class="brief-block">
-          <div class="label">Brief</div>
-          <p class="why-text">Sleep-sanctuary calm. Over-bed placement. Calming abstract or landscape, 24&ndash;36 inch, sage/oat palette. Budget $400&ndash;800.</p>
-          <div class="label">Placeholder option</div>
-          <p class="alts-text">West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract) ~$449 &mdash; reads quieter than a gallery print.</p>
+      <p class="annika-tagline">Sleep-sanctuary calm. Over-bed placement. | WE option: West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) @ $449.0 — Soft fabric-mounted minimalist piece reads quieter than gallery print — fits the sleep-sanctuary calm brief; over-bed sc...</p>
+      <div class="annika-item-body" style="grid-template-columns: 1fr;">
+        
+<div class="annika-brief-block" style="grid-column: 1 / -1;">
+          <div class="annika-label">Hunting for</div>
+          <p class="annika-pick">Calming abstract or landscape, 24-36 inch, sage/oat palette</p>
+          <div class="annika-label">Budget</div>
+          <p class="annika-pick">400-800</p>
+          <div class="annika-label">Question for you</div>
+          <p class="annika-question">Does this approach feel right for this space?</p>
         </div>
       </div>
     </article>
-
 </main>
 
-<div class="summary-cta" style="margin: 60px auto 80px;">
+<div class="annika-summary-cta" style="margin: 60px auto 80px;">
   <h2>What happens next</h2>
-  <p>Once you send reactions, I'll lock the long-lead orders &mdash; the items that need 4&ndash;8 weeks to arrive before the contractor is ready for them. You don't need to have an opinion on every item. "Looks fine" is a complete answer.</p>
-  <p>A few items are marked <strong>&#9733; SKU verification in progress</strong> &mdash; I'm confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
+  <p>Once you send reactions, I&rsquo;ll lock the long-lead orders &mdash; the items that need 4&ndash;8 weeks to arrive before the contractor is ready for them. You don&rsquo;t need to have an opinion on every item. &ldquo;Looks fine&rdquo; is a complete answer.</p>
+  <p>A few items are marked <strong>&#9733; SKU verification in progress</strong> &mdash; I&rsquo;m confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
   <div class="deadline-line">Please react by Friday May 23.</div>
   <div class="format-line">Text as you scroll, or a short voicemail. No need to reference item IDs unless you want to be precise.</div>
   <p style="margin-top: 16px;"><a href="https://1490-design-site.vercel.app/for-annika">https://1490-design-site.vercel.app/for-annika</a> &mdash; forward this link to view later.</p>
 </div>
-
 </body>
 </html>
