@@ -170,6 +170,43 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 """
 
 
+# R9 declutter: CSS only injected into /sourcing (not per-room pages, to keep per-room
+# HTML line counts unchanged ±5%). Covers the 2-up grid for drafted items and the
+# collapsed <details> "locked decisions" block.
+SOURCING_MAIN_CSS = """
+.sourcing-grid-2up { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sourcing-grid-2up .item-card { margin-bottom: 0; }
+.locked-decisions-banner { background: var(--warm-tint); border: 1px solid #c9b88a;
+  border-radius: 10px; padding: 0; margin: 16px 0 22px; overflow: hidden; }
+.locked-decisions-banner > summary { padding: 12px 16px; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: #5a4a20; list-style: none; user-select: none;
+  display: flex; align-items: center; gap: 10px; }
+.locked-decisions-banner > summary::-webkit-details-marker { display: none; }
+.locked-decisions-banner > summary::before { content: "\\25B6"; font-size: 10px; color: var(--accent); }
+.locked-decisions-banner[open] > summary::before { content: "\\25BC"; }
+.locked-decisions-banner > summary .locked-count { color: var(--accent); font-weight: 700; }
+.locked-decisions-banner > summary .locked-hint { color: var(--muted); font-weight: 400;
+  font-size: 12.5px; margin-left: auto; }
+.locked-decisions-inner { padding: 4px 16px 14px; border-top: 1px dashed #d8c89a;
+  background: #fdf8ec; }
+.locked-row { display: grid; grid-template-columns: 180px 1fr auto; gap: 14px;
+  align-items: baseline; padding: 6px 0; border-bottom: 1px dashed #efe2c2;
+  font-size: 13px; }
+.locked-row:last-child { border-bottom: none; }
+.locked-row.hidden { display: none; }
+.locked-row-id { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px;
+  color: var(--muted); }
+.locked-row-title { font-weight: 600; color: var(--ink); }
+.locked-row-sku { color: #3a5a3a; font-size: 12.5px; }
+.locked-row-meta { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+@media (max-width: 720px) {
+  .sourcing-grid-2up { grid-template-columns: 1fr; gap: 12px; }
+  .locked-decisions-banner > summary .locked-hint { display: none; }
+  .locked-row { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+}
+"""
+
+
 TOPNAV_HTML = """<nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
@@ -254,14 +291,22 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
 
     if item.decided_sku:
         body = f'<div class="decided-line">✅ {escape(item.decided_sku)}</div>'
-        # Show placeholder if no option images exist for decided items
-        has_img = any(
-            (SITE_DIR / o.image).exists()
-            for o in (item.options or [])
-            if o.image
-        )
-        if not has_img and not item.options:
-            body += f'<div class="img-placeholder">{escape(item.title)}<br><small>locked · no image on file</small></div>'
+        # Top-level image takes precedence for canon-decided items without options.
+        if item.image and (SITE_DIR / item.image.lstrip("/")).exists():
+            body += (
+                f'<img class="option-img-main item-img-main" '
+                f'src="/{item.image.lstrip("/")}" alt="{escape(item.title)}" '
+                f'loading="lazy" onerror="this.style.opacity=0.3;">'
+            )
+        else:
+            # Show placeholder if no option images exist for decided items
+            has_img = any(
+                (SITE_DIR / o.image).exists()
+                for o in (item.options or [])
+                if o.image
+            )
+            if not has_img and not item.options:
+                body += f'<div class="img-placeholder">{escape(item.title)}<br><small>locked · no image on file</small></div>'
     elif item.vintage_brief:
         v = item.vintage_brief
         body = f'''<div class="vintage-brief">
@@ -270,8 +315,15 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
           <div><strong>Target $:</strong> {escape(v.target_price_usd)}</div>
           <div><strong>Hunt at:</strong> {escape(', '.join(v.hunt_venues))}</div>
         </div>'''
-        # Placeholder if watch_list item has no option images
-        if not item.options:
+        # Top-level image (representative) for vintage_brief items.
+        if item.image and (SITE_DIR / item.image.lstrip("/")).exists():
+            body += (
+                f'<img class="option-img-main item-img-main" '
+                f'src="/{item.image.lstrip("/")}" alt="{escape(item.title)} (representative)" '
+                f'loading="lazy" onerror="this.style.opacity=0.3;">'
+            )
+        # Placeholder if watch_list item has no image at all
+        elif not item.options:
             body += f'<div class="img-placeholder">{escape(item.title)}<br><small>vintage hunt · no image yet</small></div>'
     elif item.options:
         body = '<div class="options-grid">' + "".join(_render_option(o) for o in item.options) + '</div>'
@@ -419,7 +471,9 @@ def _render_filter_bar() -> str:
 FILTER_JS = """
 <script>
 (function() {
-  const cards = Array.from(document.querySelectorAll('.item-card'));
+  // R9 declutter: also pick up compact .locked-row rows inside the collapsed details
+  // block so room/category/status filters still work when the user expands it.
+  const cards = Array.from(document.querySelectorAll('.item-card, .locked-row'));
   const buttons = Array.from(document.querySelectorAll('.filter-bar button'));
   const roomSel = document.getElementById('room-filter');
   const catSel = document.getElementById('category-filter');
@@ -485,6 +539,45 @@ def _schedule_banner_mode(items: List[Item], schedule_lookup: Optional[ScheduleL
     return unlocked_count > len(urgency_sensitive) * 0.5
 
 
+def _is_locked_decision(item: Item) -> bool:
+    """R9 declutter: an item is 'locked' (canon-decided) when there is no options array
+    OR the decision_status is 'decided' (covers canon-locks set in DESIGN_SPEC).
+
+    Vintage watch_list / found_candidate items have a vintage_brief instead of options —
+    those are NOT locked decisions; they remain inline in the drafted grid so the hunt
+    stays visible. Stub items are filtered upstream by visibility, not here.
+    """
+    if item.decision_status == "decided":
+        return True
+    # No options AND no vintage_brief => canon-locked text card (paint/finish-only spec items).
+    if item.options is None and item.vintage_brief is None:
+        return True
+    return False
+
+
+def _render_locked_row(item: Item) -> str:
+    """R9 declutter: compact one-line representation of a canon-decided item used inside the
+    collapsed <details> block on /sourcing. Carries the data-* attributes the filter JS
+    expects so room/category/status filters still work when the block is expanded.
+
+    Shows: id · title · decided_sku (or 'see card') · room · category. The full item card
+    is still available on the per-room page for in-room decision context.
+    """
+    decided_sku = item.decided_sku or "see per-room page for detail"
+    return (
+        f'<div class="locked-row" data-id="{escape(item.id)}" '
+        f'data-urgency="{escape(item.urgency)}" data-room="{escape(item.room)}" '
+        f'data-category="{escape(item.category)}" data-status="{escape(item.decision_status)}" '
+        f'data-annika="{str(item.annika_loop).lower()}" '
+        f'data-schedule-locked="true">'
+        f'<span class="locked-row-id">{escape(item.id)}</span>'
+        f'<span class="locked-row-title">{escape(item.title)}</span>'
+        f'<span class="locked-row-sku">{escape(decided_sku)}</span>'
+        f'<span class="locked-row-meta">{escape(item.room)} · {escape(item.category)}</span>'
+        f'</div>'
+    )
+
+
 def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFinding],
                      schedule_lookup: Optional[ScheduleLookup] = None) -> str:
     visible = [it for it in items if it.decision_status != "stub"]
@@ -495,7 +588,40 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
         '<div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>'
         if banner_mode else ""
     )
-    cards_html = "\n".join(_render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode) for it in visible)
+
+    # R9 declutter: split items into drafted (active decisions, render in 2-up grid) and
+    # locked (canon-decided, hidden behind a collapsed <details> block). Per-room pages
+    # use the separate render_room_page() and are unaffected.
+    drafted_items = [it for it in visible if not _is_locked_decision(it)]
+    locked_items = [it for it in visible if _is_locked_decision(it)]
+
+    drafted_cards_html = "\n".join(
+        _render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode)
+        for it in drafted_items
+    )
+    drafted_grid_html = (
+        f'<div class="sourcing-grid-2up">\n{drafted_cards_html}\n</div>'
+        if drafted_items else ""
+    )
+
+    if locked_items:
+        # R9: compact one-line rows inside the collapsed details block. Cuts ~20 lines per
+        # locked item out of the rendered HTML while preserving filter data-attrs.
+        locked_rows_html = "\n".join(_render_locked_row(it) for it in locked_items)
+        locked_block_html = (
+            f'<details class="locked-decisions-banner">'
+            f'<summary>'
+            f'<span class="locked-count">{len(locked_items)} decisions locked</span>'
+            f'<span>(paint, hardwood, tile, plumbing, appliances)</span>'
+            f'<span class="locked-hint">Tap to show all locked decisions</span>'
+            f'</summary>'
+            f'<div class="locked-decisions-inner">\n{locked_rows_html}\n</div>'
+            f'</details>'
+        )
+    else:
+        locked_block_html = ""
+
+    cards_html = f"{drafted_grid_html}\n{locked_block_html}"
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -503,7 +629,8 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sourcing · 1490 Lively Ridge</title>
 <meta name="description" content="Sourcing tracker for every design-decision item — vendor, SKU, lead time, status. {len(visible)} items.">
-<style>{SHARED_CSS}</style>
+<style>{SHARED_CSS}
+{SOURCING_MAIN_CSS}</style>
 </head>
 <body>
 {TOPNAV_HTML}

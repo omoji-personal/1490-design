@@ -385,3 +385,113 @@ def test_for_annika_no_double_vendor_in_alts():
     assert "West Elm West Elm" not in html
     # But "West Elm" should still appear (the SKU text itself)
     assert "West Elm" in html
+
+
+# ---------------------------------------------------------------------------
+# R9 Track A: declutter /sourcing — collapse locked decisions + 2-up grid
+# ---------------------------------------------------------------------------
+
+def test_render_site_page_locked_decisions_collapsed_behind_details():
+    """R9 Track A: /sourcing main page must collapse canon-decided items (no options
+    array OR decision_status='decided') into a single <details> block with a <summary>
+    so decision-makers can scan drafted items first. Per-room pages are unaffected."""
+    from sourcing_render_html import render_site_page, render_room_page
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    # Fixture has: G3-HOOD (options_drafted, drafted) + MB-FAUCET (decided, locked)
+    html = render_site_page(data.items, data.meta, lint_findings=[])
+
+    # The locked-decisions <details> block must be present with a <summary>.
+    assert '<details class="locked-decisions-banner">' in html
+    assert '<summary>' in html
+    # Summary copy includes the count + scannable categories hint.
+    assert 'decisions locked' in html
+    # The decided item (MB-FAUCET) must live inside the locked details block.
+    # Use the literal opening <details> tag (not the class name, which also lives in CSS).
+    locked_idx = html.find('<details class="locked-decisions-banner">')
+    mb_idx = html.find('MB-FAUCET')
+    g3_idx = html.find('G3-HOOD')
+    assert locked_idx != -1 and mb_idx != -1 and g3_idx != -1
+    # G3-HOOD (drafted) is rendered BEFORE the locked-decisions block.
+    assert g3_idx < locked_idx, "drafted items must render before the locked-decisions block"
+    # MB-FAUCET (decided) is rendered AFTER the locked-decisions opening tag.
+    assert mb_idx > locked_idx, "decided items must render inside the locked-decisions block"
+
+    # Drafted items render inside the 2-up grid wrapper.
+    assert 'class="sourcing-grid-2up"' in html
+    grid_idx = html.find('<div class="sourcing-grid-2up">')
+    assert grid_idx != -1
+    assert grid_idx < g3_idx < locked_idx
+
+    # Per-room page MUST NOT use either the details block or the 2-up grid — it stays
+    # 1-col with locked items inline for in-room decision context.
+    room_html = render_room_page(
+        "Master Suite", ["master_br", "master_bath"], data.items, data.meta,
+    )
+    assert '<details class="locked-decisions-banner">' not in room_html, \
+        "per-room pages must not collapse locked items behind a toggle"
+    assert '<div class="sourcing-grid-2up">' not in room_html, \
+        "per-room pages must not use the 2-up grid layout"
+    # MB-FAUCET is still rendered inline on the per-room page.
+    assert 'MB-FAUCET' in room_html
+
+
+def test_render_site_page_no_locked_block_when_all_drafted():
+    """When every visible item is drafted (no canon-decisions), the locked-decisions
+    <details> block must not appear at all (avoids an empty banner)."""
+    from sourcing_render_html import render_site_page
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    # Drop the canon-locked item so every remaining item is options_drafted.
+    data.items = [it for it in data.items if it.decision_status != "decided"]
+    html = render_site_page(data.items, data.meta, lint_findings=[])
+    # No <details> tag emitted (CSS class for the rule still lives in the <style> block).
+    assert '<details class="locked-decisions-banner">' not in html
+    # Drafted grid is still present.
+    assert '<div class="sourcing-grid-2up">' in html
+
+
+def test_render_site_page_locked_count_matches_decided_items():
+    """The summary count must match the number of canon-decided items rendered inside."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_site_page
+    # Build three locked items + one drafted.
+    locked_items = []
+    for i, (sku, room) in enumerate([
+        ("Paint OC-17", "common"),
+        ("Hardwood white-oak rift", "lr"),
+        ("Cle Sea Salt zellige", "master_bath"),
+    ]):
+        locked_items.append(Item(
+            id=f"L{i}", title=sku, category="paint_finish", room=room,
+            urgency="T1", lead_time_weeks=2,
+            budget_source="construction_allowance", budget_target_usd=500.0,
+            sourcing_actor="tcw", decision_status="decided",
+            annika_loop=False, decided_sku=sku, options=None,
+        ))
+    drafted = Item(
+        id="D1", title="Drafted item", category="appliance", room="kitchen",
+        urgency="T0", lead_time_weeks=4,
+        budget_source="construction_allowance", budget_target_usd=1500.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=False, options=[Option(
+            sku="X", vendor="V", price_usd=1400.0, image="",
+            reasoning="r", recommend=True,
+        )],
+    )
+    meta = Meta(
+        last_updated="2026-05-17",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_site_page(locked_items + [drafted], meta, lint_findings=[])
+    # Count text in summary should be "3 decisions locked".
+    assert "3 decisions locked" in html
+    # All three locked ids present.
+    for lid in ["L0", "L1", "L2"]:
+        assert lid in html
+    # Drafted item present too.
+    assert "D1" in html
