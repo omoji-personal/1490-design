@@ -77,6 +77,9 @@ class Item:
     installed_date: Optional[str] = None
     notes: str = ""
     revision_history: List[Dict[str, str]] = field(default_factory=list)
+    # Top-level image — used for canon-decided items (no options/vintage_brief)
+    # so locked-in selections can show their representative product photo.
+    image: Optional[str] = None
 
 
 @dataclass
@@ -182,6 +185,7 @@ def parse_item(raw: Dict[str, Any]) -> Item:
         installed_date=raw.get("installed_date"),
         notes=raw.get("notes", ""),
         revision_history=list(raw.get("revision_history", [])),
+        image=raw.get("image"),
     )
 
 
