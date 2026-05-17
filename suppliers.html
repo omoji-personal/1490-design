@@ -1,0 +1,2422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers &middot; 1490 Lively Ridge</title>
+<meta name="description" content="Browse-style supplier directory for 1490 Lively Ridge. 132 suppliers across 15 categories matched to California Modern Japandi canon.">
+<style>
+:root {
+  --bg: #faf8f4; --ink: #2a2622; --muted: #6b6660; --accent: #8a7a5a;
+  --card-bg: #fff; --warm-tint: #f7eedc; --note-tint: #f0e8d8;
+  --reject-tint: #f8e6df; --target-tint: #e8efe2; --border: #e8e2d6;
+  --status-decide-now: #c94d4d; --status-decided: #5a8a5a;
+  --status-awaiting: #c9893a; --status-installed: #6b6660;
+  --status-deferred: #8a85a0;
+  --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+       background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+  gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
+.topnav-inner .home:hover { color: var(--accent); }
+.topnav-inner .group-label { color: #6b6660; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin: 0 4px 0 12px; font-weight: 600; }
+.topnav-inner a:not(.home) { color: var(--ink); text-decoration: none; padding: 4px 10px;
+  border-radius: 999px; border: 1px solid var(--border); }
+.topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
+.page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
+.page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
+.page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
+main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
+.lint-alert { background: #fff4d6; border: 1px solid #e9c97f; border-radius: 8px;
+  padding: 12px 16px; margin: 16px 0; }
+.lint-alert.lint-error { background: #fde8e6; border-color: #d99080; }
+.lint-alert.lint-warning { background: #fef3e2; border-color: #d4943a; }
+.lint-alert h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+.lint-alert ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.approved-overshoots-block { background: var(--approved-overshoot-bg); border: 1px solid var(--approved-overshoot-border);
+  border-radius: 8px; padding: 12px 16px; margin: 16px 0; color: #3a4060; }
+.approved-overshoots-block h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.6px; color: #4a5280; }
+.approved-overshoots-block ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.schedule-not-locked { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #fef0d6;
+  border: 1px solid #e9c97f; color: #6e4f1a; }
+.schedule-banner { background: #fef3e2; border: 1px solid #d4943a; border-radius: 8px;
+  padding: 10px 16px; margin: 0 0 16px; font-size: 13px; color: #5c3a10; }
+.revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
+  font-size: 11.5px; color: var(--muted); }
+.revision-history strong { color: var(--ink); margin-right: 6px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
+.item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-bottom: 14px; }
+.item-card.hidden { display: none; }
+.item-card-header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.item-card-header .item-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.item-card-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex: 1; }
+.status-badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600; }
+.status-badge.decide-now { background: var(--status-decide-now); color: white; }
+.status-badge.decided { background: var(--status-decided); color: white; }
+.status-badge.awaiting-sample, .status-badge.sample-in-hand { background: var(--status-awaiting); color: white; }
+.status-badge.installed, .status-badge.ordered, .status-badge.received { background: var(--status-installed); color: white; }
+.status-badge.deferred-p2, .status-badge.cancelled, .status-badge.watch-list, .status-badge.found-candidate { background: var(--status-deferred); color: white; }
+.item-meta { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.item-meta strong { color: var(--ink); }
+.decided-line { padding: 8px 12px; background: #e8efe2; border-radius: 6px; margin: 8px 0;
+  font-weight: 500; color: #3a5a3a; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+.option-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fdfbf7; }
+.option-card.recommend { border-color: #c9b88a; background: #fefaf0; }
+.option-card .vendor { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.option-card .sku { font-weight: 600; margin: 4px 0; }
+.option-card .price { color: var(--accent); font-weight: 600; }
+.option-card .reasoning { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+.option-card .star { color: #d4a93a; font-size: 14px; }
+.option-img-main { width: 100%; max-width: 220px; height: 160px; object-fit: cover;
+  border-radius: 6px; border: 1px solid var(--border); background: #f3ede0;
+  display: block; margin: 8px 0 6px; }
+.option-img-supps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.option-img-supp { width: 80px; height: 80px; object-fit: cover; border-radius: 5px;
+  border: 1px solid var(--border); background: #f3ede0; }
+.option-details { font-size: 11.5px; color: var(--muted); margin: 6px 0 8px; padding: 6px 8px; background: var(--note-tint); border-radius: 4px; line-height: 1.4; }
+.sku-link { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+.sku-link:hover { color: var(--accent); }
+.vintage-brief { background: #f3eedd; border-radius: 8px; padding: 12px; font-size: 13.5px; }
+.vintage-brief strong { display: inline-block; min-width: 80px; }
+.notes-line { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
+  border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
+
+@media (max-width: 720px) {
+  .page-header h1 { font-size: 24px; }
+  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  .topnav-inner .home { margin-right: 8px; }
+  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
+  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
+  .item-card { padding: 12px; }
+  main { padding: 0 14px 60px; }
+  .page-header { padding: 0 14px; }
+}
+
+
+.suppliers-page main { max-width: 1200px; }
+.suppliers-anchor-block { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px; margin: 0 0 20px; }
+.suppliers-anchor-block h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.suppliers-anchor-block p { margin: 4px 0; font-size: 13.5px; color: var(--ink);
+  line-height: 1.55; }
+.suppliers-anchor-block strong { color: var(--ink); }
+.suppliers-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 12px 0;
+  margin: 0 0 18px; border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 44px; background: var(--bg); z-index: 40; align-items: center; }
+.suppliers-filter-bar label { font-size: 11.5px; color: var(--muted); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+.suppliers-filter-bar input[type=search] { background: var(--card-bg);
+  border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px;
+  font-size: 13px; color: var(--ink); min-width: 220px; }
+.suppliers-filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; color: var(--ink); }
+.suppliers-filter-bar button { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 14px; font-size: 13px; cursor: pointer;
+  color: var(--ink); }
+.suppliers-filter-bar button:hover { background: var(--warm-tint); border-color: #c9b88a; }
+.suppliers-filter-bar .filter-stats { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+.suppliers-page-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px;
+  align-items: flex-start; }
+.category-side-nav { position: sticky; top: 100px; align-self: flex-start;
+  font-size: 12.5px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 6px; }
+.category-side-nav h4 { margin: 0 0 8px; padding: 0 8px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+.category-side-nav a { display: block; padding: 5px 8px; border-radius: 4px;
+  color: var(--ink); text-decoration: none; line-height: 1.35; margin-bottom: 1px; }
+.category-side-nav a:hover { background: var(--warm-tint); color: var(--accent); }
+.category-side-nav a .count { color: var(--muted); font-size: 10.5px; margin-left: 4px; }
+@media (max-width: 900px) {
+  .suppliers-page-layout { grid-template-columns: 1fr; }
+  .category-side-nav { position: static; }
+}
+
+.category-section { margin: 0 0 36px; scroll-margin-top: 110px; }
+.category-section-header { display: flex; align-items: baseline; gap: 14px;
+  padding: 0 0 8px; border-bottom: 1px solid var(--border); margin: 0 0 16px; }
+.category-section-header h2 { margin: 0; font-size: 22px; font-weight: 600;
+  letter-spacing: -0.2px; flex: 1; }
+.category-section-header .cat-count { font-size: 12px; color: var(--muted);
+  font-variant-numeric: tabular-nums; }
+
+.supplier-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px; }
+.supplier-card { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column;
+  gap: 8px; transition: border-color .15s, box-shadow .15s; }
+.supplier-card.hidden { display: none; }
+.supplier-card:hover { border-color: #c9b88a;
+  box-shadow: 0 2px 8px rgba(42, 38, 34, 0.06); }
+.supplier-card-header { display: flex; align-items: baseline; gap: 8px;
+  flex-wrap: wrap; }
+.supplier-card-header h3 { margin: 0; font-size: 16px; font-weight: 600; flex: 1;
+  letter-spacing: -0.1px; }
+.supplier-pill { display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;
+  font-weight: 700; white-space: nowrap; }
+.supplier-pill.tier-entry { background: #e8efe2; color: #3a5a3a; }
+.supplier-pill.tier-mid { background: #dde6f0; color: #2f4870; }
+.supplier-pill.tier-premium { background: #f7e6cb; color: #8a5a10; }
+.supplier-pill.tier-aspirational { background: #f8e6df; color: #973a1c; }
+.supplier-pill.fit-strong { background: #d9ead2; color: #2a5a2a; }
+.supplier-pill.fit-good { background: #e8efe2; color: #3a5a3a; }
+.supplier-pill.fit-mixed { background: #fef0d6; color: #6e4f1a; }
+.supplier-pill.fit-canon-adjacent { background: #ece8f4; color: #4a4566; }
+.supplier-card .fingerprint { font-size: 13px; color: var(--ink); line-height: 1.5;
+  margin: 0; }
+.supplier-card .fit-line { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.supplier-card .fit-line strong { color: var(--ink); }
+.supplier-card .warning-line { font-size: 12px; color: #973a1c;
+  background: #fbe9df; border-radius: 5px; padding: 5px 8px; line-height: 1.45; }
+.supplier-card .collections { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0; }
+.supplier-card .collection-chip { font-size: 11.5px; padding: 3px 9px;
+  border-radius: 999px; background: var(--warm-tint); color: var(--ink);
+  text-decoration: none; border: 1px solid #e9d4a2; }
+.supplier-card .collection-chip:hover { background: #f1dba0; }
+.supplier-card .footer-line { font-size: 11px; color: var(--muted);
+  border-top: 1px dashed var(--border); padding-top: 7px; margin-top: 4px;
+  line-height: 1.5; }
+.supplier-card .footer-line strong { color: var(--ink); text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10px; margin-right: 3px; }
+.supplier-card .explore-btn { display: inline-block; align-self: flex-start;
+  background: var(--accent); color: white; text-decoration: none;
+  padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  margin-top: 2px; }
+.supplier-card .explore-btn:hover { background: #6e6346; }
+.suppliers-empty { background: var(--note-tint); border-radius: 8px; padding: 24px;
+  text-align: center; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body class="suppliers-page">
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/suppliers" class="current">Suppliers</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
+    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  </div>
+</nav>
+<header class="page-header">
+  <h1>Suppliers</h1>
+  <p class="subtitle">132 suppliers across 15 categories. A map of where to look &mdash; not a tracker (that&rsquo;s /sourcing) and not a vendor rollup (that&rsquo;s /vendors). Generated 2026-05-17.</p>
+</header>
+<main>
+<div class="suppliers-anchor-block"><h3>Browse map</h3><p><strong>Aesthetic anchor:</strong> California Modern Japandi (warm neutrals, brass, oak, linen, ceramic, vintage textiles)</p><p><strong>Price tier:</strong> mid-market with selective premium spots against $342,000 construction cap.</p><p><strong>Canon brand mix</strong> (DESIGN_SPEC &sect;5d): West Elm 35-40%, Article / C&amp;B / R&amp;B 20-25%, Schoolhouse + Rejuvenation 15%, Pottery Barn / Anthropologie / S&amp;L 8%, ferm LIVING / HAY / Muuto 3%, Vintage 8-12%.</p><p><strong>Fit legend:</strong> <span class="supplier-pill fit-strong">STRONG</span> explicit canon &middot; <span class="supplier-pill fit-good">GOOD</span> canon-aligned &middot; <span class="supplier-pill fit-mixed">MIXED</span> curate carefully &middot; <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span> aspirational reference.</p></div>
+<div class="suppliers-filter-bar">
+  <label>Search</label>
+  <input id="supplier-search" type="search" placeholder="Brand, style, finish..." autocomplete="off">
+  <label>Category</label>
+  <select id="cat-filter">
+    <option value="">All categories</option>
+    <option value="furniture-seating">Sofas / Chairs / Sectionals</option><option value="furniture-tables">Dining / Coffee / Side Tables</option><option value="furniture-bedroom">Beds / Dressers / Nightstands</option><option value="lighting">Pendants / Sconces / Lamps / Floor</option><option value="tile">Floor / Wall / Backsplash</option><option value="plumbing">Faucets / Tubs / Toilets / Drains</option><option value="hardware">Cabinet Pulls / Door Hardware / Knobs</option><option value="paint">Interior Paint / Specialty Finishes</option><option value="cabinetry">Cabinets / Built-ins / Vanities</option><option value="counters">Quartz / Stone / Solid Surface</option><option value="appliances">Range / Fridge / Dishwasher / Vent</option><option value="rugs">Vintage / Flatweave / Pile</option><option value="decor-art">Art / Vintage Decor / Ceramics</option><option value="window-treatments">Shades / Drapery / Hardware</option><option value="outdoor">Patio Furniture / Outdoor Lighting / Planters</option>
+  </select>
+  <label>Tier</label>
+  <select id="tier-filter">
+    <option value="">All tiers</option>
+    <option value="entry">Entry</option>
+    <option value="mid">Mid</option>
+    <option value="premium">Premium</option>
+    <option value="aspirational">Aspirational</option>
+  </select>
+  <label>Fit</label>
+  <select id="fit-filter">
+    <option value="">All fits</option>
+    <option value="STRONG">Strong</option>
+    <option value="GOOD">Good</option>
+    <option value="MIXED">Mixed</option>
+    <option value="CANON-ADJACENT">Canon-adjacent</option>
+  </select>
+  <button id="reset-filters" type="button">Reset</button>
+  <button id="random-pick" type="button" title="Pick a random visible supplier">&#127922; Random</button>
+  <span class="filter-stats" id="filter-stats"></span>
+</div>
+<div class="suppliers-page-layout">
+  <aside class="category-side-nav"><h4>Categories</h4>
+<a href="#cat-furniture-seating">Sofas / Chairs / Sectionals <span class="count">(10)</span></a>
+<a href="#cat-furniture-tables">Dining / Coffee / Side Tables <span class="count">(9)</span></a>
+<a href="#cat-furniture-bedroom">Beds / Dressers / Nightstands <span class="count">(7)</span></a>
+<a href="#cat-lighting">Pendants / Sconces / Lamps / Floor <span class="count">(12)</span></a>
+<a href="#cat-tile">Floor / Wall / Backsplash <span class="count">(10)</span></a>
+<a href="#cat-plumbing">Faucets / Tubs / Toilets / Drains <span class="count">(9)</span></a>
+<a href="#cat-hardware">Cabinet Pulls / Door Hardware / Knobs <span class="count">(9)</span></a>
+<a href="#cat-paint">Interior Paint / Specialty Finishes <span class="count">(7)</span></a>
+<a href="#cat-cabinetry">Cabinets / Built-ins / Vanities <span class="count">(6)</span></a>
+<a href="#cat-counters">Quartz / Stone / Solid Surface <span class="count">(7)</span></a>
+<a href="#cat-appliances">Range / Fridge / Dishwasher / Vent <span class="count">(10)</span></a>
+<a href="#cat-rugs">Vintage / Flatweave / Pile <span class="count">(9)</span></a>
+<a href="#cat-decor-art">Art / Vintage Decor / Ceramics <span class="count">(13)</span></a>
+<a href="#cat-window-treatments">Shades / Drapery / Hardware <span class="count">(5)</span></a>
+<a href="#cat-outdoor">Patio Furniture / Outdoor Lighting / Planters <span class="count">(9)</span></a></aside>
+  <div class="suppliers-content">
+    <section class="category-section" id="cat-furniture-seating"><div class="category-section-header"><h2>Sofas / Chairs / Sectionals</h2><span class="cat-count">10 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="STRONG" data-search="west elm california modern hybrid — warm woods, channel-tufted seating, brass + bronze metals, mid-century silhouettes. strong linen + bouclé. strong — anchor brand per design_spec §5d (35-40% canon target). andes/harmony sectionals + hutchinson vanity are locked-canon references. avoid the &quot;luxe curated&quot; sub-brand which leans glam-modern. we blocks webfetch — use real browser. pb and we share parent so cross-shop quietly. performance fabric upgrade per design_spec §7 [owner confirm andes sectional harmony modular hamilton leather mid-century">
+  <div class="supplier-card-header">
+    <h3>West Elm</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">California modern hybrid — warm woods, channel-tufted seating, brass + bronze metals, mid-century silhouettes. Strong linen + bouclé.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — anchor brand per DESIGN_SPEC §5d (35-40% canon target). Andes/Harmony sectionals + Hutchinson vanity are locked-canon references.</p>
+  <div class="warning-line">&#9888; Avoid the &quot;Luxe Curated&quot; sub-brand which leans glam-modern.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.westelm.com/shop/furniture/sectional-sofas/?cm_type=lnav" target="_blank" rel="noopener">Andes Sectional</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/sectional-sofas/?cm_type=lnav" target="_blank" rel="noopener">Harmony Modular</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/all-leather-furniture/" target="_blank" rel="noopener">Hamilton Leather</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/mid-century-furniture/" target="_blank" rel="noopener">Mid-Century</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1500-3500 · sectional: $2500-6000 · accent chair: $700-1800</div>
+  <div class="footer-line"><strong>Lead</strong>4-10 weeks · <strong>Samples</strong>Free fabric swatches mailed; ~$5 shipped</div>
+  <div class="footer-line"><strong>Notes</strong>WE blocks WebFetch — use real browser. PB and WE share parent so cross-shop quietly. Performance fabric upgrade per DESIGN_SPEC §7 [OWNER CONFIRM</div>
+  <a class="explore-btn" href="https://www.westelm.com" target="_blank" rel="noopener">Explore West Elm &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="STRONG" data-search="article direct-to-consumer mid-century modern. sven sofa is the brand-defining piece. walnut/oak frames, leather + bouclé, restrained scandinavian lines. strong — explicit in design_spec §5d brand mix (20-25% bracket with c&amp;b/r&amp;b). burrard, ceni, abisko collections are canon-adjacent.  lower price-per-inch than we for comparable look; weaker performance-fabric program. sven sofa burrard ceni / abisko (mid-century) embla / larsen lounge chairs">
+  <div class="supplier-card-header">
+    <h3>Article</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Direct-to-consumer mid-century modern. Sven sofa is the brand-defining piece. Walnut/oak frames, leather + bouclé, restrained Scandinavian lines.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — explicit in DESIGN_SPEC §5d brand mix (20-25% bracket with C&amp;B/R&amp;B). Burrard, Ceni, Abisko collections are canon-adjacent.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.article.com/category/sofas" target="_blank" rel="noopener">Sven Sofa</a><a class="collection-chip" href="https://www.article.com/category/sofas" target="_blank" rel="noopener">Burrard</a><a class="collection-chip" href="https://www.article.com/category/chairs" target="_blank" rel="noopener">Ceni / Abisko (mid-century)</a><a class="collection-chip" href="https://www.article.com/category/chairs" target="_blank" rel="noopener">Embla / Larsen lounge chairs</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1300-2800 · sectional: $1800-4500 · accent chair: $500-1200</div>
+  <div class="footer-line"><strong>Lead</strong>2-6 weeks (in-stock); 8-14 weeks otherwise · <strong>Samples</strong>Mail-order swatches (free, limited per order)</div>
+  <div class="footer-line"><strong>Notes</strong>Lower price-per-inch than WE for comparable look; weaker performance-fabric program.</div>
+  <a class="explore-btn" href="https://www.article.com" target="_blank" rel="noopener">Explore Article &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="STRONG" data-search="crate &amp; barrel mid-market american modern. cleaner lines than pb, broader fabric library than we. lounge ii and axis sectionals are canon-aligned defaults. strong — design_spec §5d (20-25% bracket).  stronger custom-fabric program than we; performance options native to most ranges. lounge ii sectional axis lounge ii petite">
+  <div class="supplier-card-header">
+    <h3>Crate &amp; Barrel</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Mid-market American modern. Cleaner lines than PB, broader fabric library than WE. Lounge II and Axis sectionals are canon-aligned defaults.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (20-25% bracket).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.crateandbarrel.com/sofas-loveseats/sofas/1" target="_blank" rel="noopener">Lounge II Sectional</a><a class="collection-chip" href="https://www.crateandbarrel.com/sofas-loveseats/sectional-sofas/1" target="_blank" rel="noopener">Axis</a><a class="collection-chip" href="https://www.crateandbarrel.com/sofas-loveseats/sofas/1" target="_blank" rel="noopener">Lounge II Petite</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1800-4500 · sectional: $3500-7500 · accent chair: $800-2200</div>
+  <div class="footer-line"><strong>Lead</strong>4-12 weeks · <strong>Samples</strong>Free fabric swatches at store or shipped</div>
+  <div class="footer-line"><strong>Notes</strong>Stronger custom-fabric program than WE; performance options native to most ranges.</div>
+  <a class="explore-btn" href="https://www.crateandbarrel.com" target="_blank" rel="noopener">Explore Crate &amp; Barrel &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="premium" data-fit="STRONG" data-search="room &amp; board american-made modern. higher craft, broader hardwood options (white oak / walnut / cherry). jasper, hess, york sofas are canon-aligned. strong — explicit canon mix slot; spend selectively (one anchor piece, not the whole room).  lifetime guarantee on frame; performance fabrics including crypton native. premium pricing — use as 1-2 anchor pieces. jasper sofa hess sofa york modular hutton sectional">
+  <div class="supplier-card-header">
+    <h3>Room &amp; Board</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">American-made modern. Higher craft, broader hardwood options (white oak / walnut / cherry). Jasper, Hess, York sofas are canon-aligned.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — explicit canon mix slot; spend selectively (one anchor piece, not the whole room).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.roomandboard.com/catalog/living/sofas" target="_blank" rel="noopener">Jasper Sofa</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/living/sofas" target="_blank" rel="noopener">Hess Sofa</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/living/sofas" target="_blank" rel="noopener">York Modular</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/living/sectionals" target="_blank" rel="noopener">Hutton sectional</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $2500-5500 · sectional: $4500-9500 · accent chair: $1200-3500</div>
+  <div class="footer-line"><strong>Lead</strong>4-8 weeks (built to order; US-made) · <strong>Samples</strong>Free fabric + wood swatches by mail or store</div>
+  <div class="footer-line"><strong>Notes</strong>Lifetime guarantee on frame; performance fabrics including Crypton native. Premium pricing — use as 1-2 anchor pieces.</div>
+  <a class="explore-btn" href="https://www.roomandboard.com" target="_blank" rel="noopener">Explore Room &amp; Board &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="MIXED" data-search="pottery barn casual-american with strong slipcovered seating program. performance fabrics native. leans traditional/farmhouse in some ranges. mixed — design_spec §5d allots 8% (anthropologie + s&amp;l). browse big sur and york lines (slipcovered + clean) — avoid farmhouse/wicker. avoid &quot;modern farmhouse&quot; collection, distressed wood, anything with shiplap styling. strong performance fabric program; great for pet-zone seating per §7. big sur (slipcovered) york pb comfort (performance)">
+  <div class="supplier-card-header">
+    <h3>Pottery Barn</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Casual-American with strong slipcovered seating program. Performance fabrics native. Leans traditional/farmhouse in some ranges.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — DESIGN_SPEC §5d allots 8% (Anthropologie + S&amp;L). Browse Big Sur and York lines (slipcovered + clean) — avoid farmhouse/wicker.</p>
+  <div class="warning-line">&#9888; Avoid &quot;Modern Farmhouse&quot; collection, distressed wood, anything with shiplap styling.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.potterybarn.com/shop/furniture/sofas-sectionals/" target="_blank" rel="noopener">Big Sur (slipcovered)</a><a class="collection-chip" href="https://www.potterybarn.com/shop/furniture/sofas-sectionals/" target="_blank" rel="noopener">York</a><a class="collection-chip" href="https://www.potterybarn.com/shop/furniture/performance-fabric-furniture/" target="_blank" rel="noopener">PB Comfort (performance)</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1800-4500 · sectional: $2800-7000 · accent chair: $800-2200</div>
+  <div class="footer-line"><strong>Lead</strong>4-10 weeks · <strong>Samples</strong>Free fabric swatches by mail</div>
+  <div class="footer-line"><strong>Notes</strong>Strong performance fabric program; great for pet-zone seating per §7.</div>
+  <a class="explore-btn" href="https://www.potterybarn.com" target="_blank" rel="noopener">Explore Pottery Barn &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="GOOD" data-search="industry west architect-leaning modern with scandinavian + japandi dna. strong on lounge + dining chairs (calvin, sloan, atlas). solid wood + leather emphasis. good — fills the &quot;modern-japandi-adjacent&quot; gap that we/article don&#x27;t always hit. esp. strong for dining chairs.  smaller catalog than we; commercial-grade construction on many pieces. calvin lounge sloan atlas">
+  <div class="supplier-card-header">
+    <h3>Industry West</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Architect-leaning modern with Scandinavian + Japandi DNA. Strong on lounge + dining chairs (Calvin, Sloan, Atlas). Solid wood + leather emphasis.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — fills the &quot;modern-Japandi-adjacent&quot; gap that WE/Article don&#x27;t always hit. Esp. strong for dining chairs.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.industrywest.com/category/lounge-chairs" target="_blank" rel="noopener">Calvin Lounge</a><a class="collection-chip" href="https://www.industrywest.com/category/dining-chairs" target="_blank" rel="noopener">Sloan</a><a class="collection-chip" href="https://www.industrywest.com/category/dining-chairs" target="_blank" rel="noopener">Atlas</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1500-3500 · accent chair: $400-1200 · dining chair: $250-650</div>
+  <div class="footer-line"><strong>Lead</strong>2-6 weeks · <strong>Samples</strong>Limited swatch program</div>
+  <div class="footer-line"><strong>Notes</strong>Smaller catalog than WE; commercial-grade construction on many pieces.</div>
+  <a class="explore-btn" href="https://www.industrywest.com" target="_blank" rel="noopener">Explore Industry West &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="GOOD" data-search="sundays canadian dtc. soft-modern, deep seats, performance bouclé and linen-blend, pale wood feet. aesthetic is &quot;california in vancouver.&quot; good — sits between we and article in price, aesthetic is very canon-adjacent. performance fabrics standard.  canadian shipping to atl adds modest fee; quality reports strong. couch / modular sofa armchair">
+  <div class="supplier-card-header">
+    <h3>Sundays</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Canadian DTC. Soft-modern, deep seats, performance bouclé and linen-blend, pale wood feet. Aesthetic is &quot;California in Vancouver.&quot;</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — sits between WE and Article in price, aesthetic is very canon-adjacent. Performance fabrics standard.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.sundayscompany.com/collections/couches" target="_blank" rel="noopener">Couch / Modular sofa</a><a class="collection-chip" href="https://www.sundayscompany.com/collections/armchairs" target="_blank" rel="noopener">Armchair</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1800-3500 · accent chair: $700-1500</div>
+  <div class="footer-line"><strong>Lead</strong>3-8 weeks · <strong>Samples</strong>Free swatches shipped</div>
+  <div class="footer-line"><strong>Notes</strong>Canadian shipping to ATL adds modest fee; quality reports strong.</div>
+  <a class="explore-btn" href="https://www.sundayscompany.com" target="_blank" rel="noopener">Explore Sundays &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="MIXED" data-search="burrow modular dtc. boxy modern silhouettes, performance fabrics, tool-free assembly. sleeper-modular friendly. mixed — silhouettes are flat/blocky; works in office or basement but not as canon lr anchor. performance fabrics are strong selling point.  best fit for secondary rooms (office, basement, kid&#x27;s lounge). not a hero-lr brand. nomad (flagship) range / field">
+  <div class="supplier-card-header">
+    <h3>Burrow</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Modular DTC. Boxy modern silhouettes, performance fabrics, tool-free assembly. Sleeper-modular friendly.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — silhouettes are flat/blocky; works in office or basement but not as canon LR anchor. Performance fabrics are strong selling point.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://burrow.com/sofas" target="_blank" rel="noopener">Nomad (flagship)</a><a class="collection-chip" href="https://burrow.com/sectionals" target="_blank" rel="noopener">Range / Field</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $1500-3500 · sectional: $2500-5500</div>
+  <div class="footer-line"><strong>Lead</strong>1-3 weeks (in stock) · <strong>Samples</strong>Free fabric swatches</div>
+  <div class="footer-line"><strong>Notes</strong>Best fit for secondary rooms (office, basement, kid&#x27;s lounge). Not a hero-LR brand.</div>
+  <a class="explore-btn" href="https://burrow.com" target="_blank" rel="noopener">Explore Burrow &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="rh (restoration hardware) maximalist luxury — belgian linen, distressed leather, heavy proportions. cloud sofa is a canon-adjacent silhouette at $7-12k. canon-adjacent — over budget. use for visual reference only (cloud sofa shape, belgian linen weight).  aspirational only. cloud-shape clones from sundays/article/albany park hit budget. cloud modular belgian track arm">
+  <div class="supplier-card-header">
+    <h3>RH (Restoration Hardware)</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Maximalist luxury — Belgian linen, distressed leather, heavy proportions. Cloud sofa is a canon-adjacent silhouette at $7-12K.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget. Use for visual reference only (Cloud sofa shape, Belgian linen weight).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.rh.com/catalog/category/products.jsp?categoryId=cat15300003" target="_blank" rel="noopener">Cloud Modular</a><a class="collection-chip" href="https://www.rh.com/catalog/category/products.jsp?categoryId=cat10970043" target="_blank" rel="noopener">Belgian Track Arm</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $4500-12000 · sectional: $8500-25000</div>
+  <div class="footer-line"><strong>Lead</strong>8-16 weeks · <strong>Samples</strong>Membership program required for samples</div>
+  <div class="footer-line"><strong>Notes</strong>Aspirational only. Cloud-shape clones from Sundays/Article/Albany Park hit budget.</div>
+  <a class="explore-btn" href="https://www.rh.com" target="_blank" rel="noopener">Explore RH (Restoration Hardware) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-seating" data-tier="mid" data-fit="GOOD" data-search="interior define custom-configurable modern. wide fabric library (incl. performance), multiple depth/seat options per silhouette. caitlin and owens are canon-aligned. good — strong custom path if we/article silhouettes don&#x27;t fit room dimensions.  made-to-order; longer leads than we/article in-stock pieces. caitlin owens maxwell">
+  <div class="supplier-card-header">
+    <h3>Interior Define</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Custom-configurable modern. Wide fabric library (incl. performance), multiple depth/seat options per silhouette. Caitlin and Owens are canon-aligned.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — strong custom path if WE/Article silhouettes don&#x27;t fit room dimensions.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.interiordefine.com/sofas/" target="_blank" rel="noopener">Caitlin</a><a class="collection-chip" href="https://www.interiordefine.com/sofas/" target="_blank" rel="noopener">Owens</a><a class="collection-chip" href="https://www.interiordefine.com/sofas/" target="_blank" rel="noopener">Maxwell</a></div>
+  <div class="footer-line"><strong>Price</strong>sofa: $2200-4500 · sectional: $3500-7000</div>
+  <div class="footer-line"><strong>Lead</strong>8-12 weeks · <strong>Samples</strong>Free swatches</div>
+  <div class="footer-line"><strong>Notes</strong>Made-to-order; longer leads than WE/Article in-stock pieces.</div>
+  <a class="explore-btn" href="https://www.interiordefine.com" target="_blank" rel="noopener">Explore Interior Define &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-furniture-tables"><div class="category-section-header"><h2>Dining / Coffee / Side Tables</h2><span class="cat-count">9 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="furniture-tables" data-tier="mid" data-fit="STRONG" data-search="west elm (tables) honey/cerused oak dining + coffee, mid-century silhouettes, marble + brass accent tables. strong — anchor canon. anton, anton concrete, hicks, and hannes collections.   anton dining hicks coffee hannes side">
+  <div class="supplier-card-header">
+    <h3>West Elm (Tables)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Honey/cerused oak dining + coffee, mid-century silhouettes, marble + brass accent tables.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — anchor canon. Anton, Anton Concrete, Hicks, and Hannes collections.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.westelm.com/shop/furniture/dining-tables/" target="_blank" rel="noopener">Anton dining</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/coffee-tables/" target="_blank" rel="noopener">Hicks coffee</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/side-tables-c-tables/" target="_blank" rel="noopener">Hannes side</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $600-2200 · coffee table: $400-1500 · side table: $200-700</div>
+  <div class="footer-line"><strong>Lead</strong>4-10 weeks · <strong>Samples</strong>Wood finish samples ~$5</div>
+  
+  <a class="explore-btn" href="https://www.westelm.com/shop/furniture/dining-furniture/" target="_blank" rel="noopener">Explore West Elm (Tables) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="mid" data-fit="STRONG" data-search="article (tables) solid hardwood dining + coffee — madera, plumas, seno. strong oak presence. strong — design_spec canon. madera oak round dining is a cathie-hong-campbell-adjacent silhouette.   madera oak dining plumas coffee seno side">
+  <div class="supplier-card-header">
+    <h3>Article (Tables)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Solid hardwood dining + coffee — Madera, Plumas, Seno. Strong oak presence.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC canon. Madera oak round dining is a Cathie-Hong-Campbell-adjacent silhouette.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.article.com/category/dining-tables" target="_blank" rel="noopener">Madera Oak dining</a><a class="collection-chip" href="https://www.article.com/category/coffee-tables" target="_blank" rel="noopener">Plumas coffee</a><a class="collection-chip" href="https://www.article.com/category/side-tables" target="_blank" rel="noopener">Seno side</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $600-1800 · coffee table: $350-1100 · side table: $150-500</div>
+  <div class="footer-line"><strong>Lead</strong>2-8 weeks</div>
+  
+  <a class="explore-btn" href="https://www.article.com/category/tables" target="_blank" rel="noopener">Explore Article (Tables) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="mid" data-fit="STRONG" data-search="crate &amp; barrel (tables) solid wood + stone tops. big sur, basque, avalon dining series. strong — canon-aligned.   big sur dining avalon">
+  <div class="supplier-card-header">
+    <h3>Crate &amp; Barrel (Tables)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Solid wood + stone tops. Big Sur, Basque, Avalon dining series.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — canon-aligned.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.crateandbarrel.com/dining-furniture/dining-tables/1" target="_blank" rel="noopener">Big Sur Dining</a><a class="collection-chip" href="https://www.crateandbarrel.com/dining-furniture/dining-tables/1" target="_blank" rel="noopener">Avalon</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $800-3500 · coffee table: $500-1800</div>
+  <div class="footer-line"><strong>Lead</strong>4-12 weeks</div>
+  
+  <a class="explore-btn" href="https://www.crateandbarrel.com/furniture/dining-furniture" target="_blank" rel="noopener">Explore Crate &amp; Barrel (Tables) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="premium" data-fit="STRONG" data-search="room &amp; board (tables) us-made solid wood; multi-finish (natural maple, white oak, walnut, cherry). linnea, walsh, brigham dining. strong — premium tier, use for hero dining piece.   linnea dining walsh hudson coffee">
+  <div class="supplier-card-header">
+    <h3>Room &amp; Board (Tables)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">US-made solid wood; multi-finish (natural maple, white oak, walnut, cherry). Linnea, Walsh, Brigham dining.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — premium tier, use for hero dining piece.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.roomandboard.com/catalog/dining-and-kitchen/dining-tables" target="_blank" rel="noopener">Linnea dining</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/dining-and-kitchen/dining-tables" target="_blank" rel="noopener">Walsh</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/living/coffee-tables" target="_blank" rel="noopener">Hudson coffee</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $1800-4500 · coffee table: $1200-3000</div>
+  <div class="footer-line"><strong>Lead</strong>4-8 weeks</div>
+  
+  <a class="explore-btn" href="https://www.roomandboard.com/catalog/dining-and-kitchen" target="_blank" rel="noopener">Explore Room &amp; Board (Tables) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="mid" data-fit="GOOD" data-search="industry west (tables) architect-leaning oak + steel. coleman, sloan tables. good — fills gaps when we silhouettes are too soft.   coleman dining">
+  <div class="supplier-card-header">
+    <h3>Industry West (Tables)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Architect-leaning oak + steel. Coleman, Sloan tables.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — fills gaps when WE silhouettes are too soft.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.industrywest.com/category/dining-tables" target="_blank" rel="noopener">Coleman Dining</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $1100-2500 · coffee table: $500-1400</div>
+  
+  
+  <a class="explore-btn" href="https://www.industrywest.com/category/tables" target="_blank" rel="noopener">Explore Industry West (Tables) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="mid" data-fit="MIXED" data-search="cb2 crate &amp; barrel&#x27;s modern sibling. sharper, more graphic; ranges from canon-adjacent (stilt, brace) to too-trend (acrylic, chrome). mixed — browse carefully. avoid chrome, lucite, mirror-finish. avoid the &quot;modern glam&quot; sub-curation.  stilt oak dining brace">
+  <div class="supplier-card-header">
+    <h3>CB2</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Crate &amp; Barrel&#x27;s modern sibling. Sharper, more graphic; ranges from canon-adjacent (Stilt, Brace) to too-trend (acrylic, chrome).</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — browse carefully. Avoid chrome, lucite, mirror-finish.</p>
+  <div class="warning-line">&#9888; Avoid the &quot;Modern Glam&quot; sub-curation.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.cb2.com/dining-tables/1" target="_blank" rel="noopener">Stilt oak dining</a><a class="collection-chip" href="https://www.cb2.com/dining-tables/1" target="_blank" rel="noopener">Brace</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $700-2500 · coffee table: $400-1500</div>
+  <div class="footer-line"><strong>Lead</strong>2-6 weeks</div>
+  
+  <a class="explore-btn" href="https://www.cb2.com/furniture/dining-furniture/1" target="_blank" rel="noopener">Explore CB2 &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="premium" data-fit="GOOD" data-search="design within reach authorized authentic-modernist catalog. saarinen tulip, nelson platform, risom, eames wire — the real ones at msrp. good — premium tier. use for one heritage piece (saarinen tulip side table is a canon-cliché-but-right move).   saarinen tulip nelson platform bench">
+  <div class="supplier-card-header">
+    <h3>Design Within Reach</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Authorized authentic-modernist catalog. Saarinen Tulip, Nelson Platform, Risom, Eames Wire — the real ones at MSRP.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — premium tier. Use for one heritage piece (Saarinen Tulip side table is a canon-cliché-but-right move).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.dwr.com/living-coffee-side-tables/saarinen-side-table/8113.html?lang=en_US" target="_blank" rel="noopener">Saarinen Tulip</a><a class="collection-chip" href="https://www.dwr.com/dining-dining-tables" target="_blank" rel="noopener">Nelson Platform Bench</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $2500-7500 · coffee table: $1200-3500</div>
+  
+  
+  <a class="explore-btn" href="https://www.dwr.com/category-tables.html" target="_blank" rel="noopener">Explore Design Within Reach &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="premium" data-fit="STRONG" data-search="hay danish contemporary. pastel + light wood + matte. mads k. sofa, slit table, bouquet vase. strong — design_spec §5d (3% ferm/hay/muuto specialist bracket).   cph dining series slit table t12">
+  <div class="supplier-card-header">
+    <h3>HAY</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Danish contemporary. Pastel + light wood + matte. Mads K. Sofa, Slit table, Bouquet vase.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (3% ferm/HAY/Muuto specialist bracket).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://us.hay.com/categories/tables/dining-tables" target="_blank" rel="noopener">CPH dining series</a><a class="collection-chip" href="https://us.hay.com/categories/tables/side-tables" target="_blank" rel="noopener">Slit Table</a><a class="collection-chip" href="https://us.hay.com/categories/tables/dining-tables" target="_blank" rel="noopener">T12</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $1800-4500 · side table: $400-1200</div>
+  
+  
+  <a class="explore-btn" href="https://us.hay.com/categories/tables" target="_blank" rel="noopener">Explore HAY &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-tables" data-tier="premium" data-fit="STRONG" data-search="ferm living danish brand. travertine, oak, paper-pulp ceramic. mineral, post, eddy tables are signature. strong — design_spec §5d explicit (3% bracket).   mineral post">
+  <div class="supplier-card-header">
+    <h3>ferm LIVING</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Danish brand. Travertine, oak, paper-pulp ceramic. Mineral, Post, Eddy tables are signature.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d explicit (3% bracket).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://fermliving.com/categories/furniture/tables" target="_blank" rel="noopener">Mineral</a><a class="collection-chip" href="https://fermliving.com/categories/furniture/tables" target="_blank" rel="noopener">Post</a></div>
+  <div class="footer-line"><strong>Price</strong>dining table: $2500-6000 · coffee table: $1500-3500</div>
+  
+  
+  <a class="explore-btn" href="https://fermliving.com/categories/furniture/tables" target="_blank" rel="noopener">Explore ferm LIVING &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-furniture-bedroom"><div class="category-section-header"><h2>Beds / Dressers / Nightstands</h2><span class="cat-count">7 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="furniture-bedroom" data-tier="mid" data-fit="STRONG" data-search="west elm (bedroom) mid-century + hutchinson lines, channel-tufted upholstered beds, oak/walnut case goods. strong — hutchinson vanity already locked canon (§6). mid-century bed + dresser are canon-aligned.   mid-century bedroom hutchinson dresser andes bed">
+  <div class="supplier-card-header">
+    <h3>West Elm (Bedroom)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Mid-century + Hutchinson lines, channel-tufted upholstered beds, oak/walnut case goods.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — Hutchinson vanity already locked canon (§6). Mid-century bed + dresser are canon-aligned.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.westelm.com/shop/furniture/mid-century-bedroom/" target="_blank" rel="noopener">Mid-Century Bedroom</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/dressers/" target="_blank" rel="noopener">Hutchinson dresser</a><a class="collection-chip" href="https://www.westelm.com/shop/furniture/upholstered-beds/" target="_blank" rel="noopener">Andes Bed</a></div>
+  <div class="footer-line"><strong>Price</strong>bed frame: $900-2800 · dresser: $1200-2500 · nightstand: $500-1100</div>
+  <div class="footer-line"><strong>Lead</strong>4-10 weeks</div>
+  
+  <a class="explore-btn" href="https://www.westelm.com/shop/furniture/bedroom-furniture/" target="_blank" rel="noopener">Explore West Elm (Bedroom) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="mid" data-fit="STRONG" data-search="article (bedroom) mid-century slat beds (culla, lenia), oak/walnut dressers (lenia, madera). strong — culla slat bed is a canon-campbell-spindle-adjacent silhouette at we-comparable price.   culla bed lenia bed + dresser madera dresser">
+  <div class="supplier-card-header">
+    <h3>Article (Bedroom)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Mid-century slat beds (Culla, Lenia), oak/walnut dressers (Lenia, Madera).</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — Culla slat bed is a canon-Campbell-spindle-adjacent silhouette at WE-comparable price.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.article.com/category/beds" target="_blank" rel="noopener">Culla bed</a><a class="collection-chip" href="https://www.article.com/category/beds" target="_blank" rel="noopener">Lenia bed + dresser</a><a class="collection-chip" href="https://www.article.com/category/dressers" target="_blank" rel="noopener">Madera dresser</a></div>
+  <div class="footer-line"><strong>Price</strong>bed frame: $700-2200 · dresser: $900-2200 · nightstand: $250-700</div>
+  <div class="footer-line"><strong>Lead</strong>2-8 weeks</div>
+  
+  <a class="explore-btn" href="https://www.article.com/category/bedroom" target="_blank" rel="noopener">Explore Article (Bedroom) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="mid" data-fit="MIXED" data-search="pottery barn (bedroom) slipcovered + spindle beds. strong nursery + kids tie-in (pbk). mixed — spindle bed range is canon (campbell br reference). avoid distressed/farmhouse case goods.   farmhouse spindle bed pb comfort bed (slipcovered)">
+  <div class="supplier-card-header">
+    <h3>Pottery Barn (Bedroom)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Slipcovered + spindle beds. Strong nursery + kids tie-in (PBK).</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — spindle bed range is canon (Campbell BR reference). Avoid distressed/farmhouse case goods.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.potterybarn.com/shop/furniture/beds/" target="_blank" rel="noopener">Farmhouse Spindle Bed</a><a class="collection-chip" href="https://www.potterybarn.com/shop/furniture/beds/" target="_blank" rel="noopener">PB Comfort Bed (slipcovered)</a></div>
+  <div class="footer-line"><strong>Price</strong>bed frame: $1200-3500 · dresser: $1500-3500</div>
+  
+  
+  <a class="explore-btn" href="https://www.potterybarn.com/shop/furniture/bedroom-furniture/" target="_blank" rel="noopener">Explore Pottery Barn (Bedroom) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="premium" data-fit="STRONG" data-search="room &amp; board (bedroom) us-made hardwood beds + dressers in white oak/walnut/maple. hudson, copenhagen, linear lines. strong — premium tier; appropriate for master suite hero.   hudson bed/dresser copenhagen">
+  <div class="supplier-card-header">
+    <h3>Room &amp; Board (Bedroom)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">US-made hardwood beds + dressers in white oak/walnut/maple. Hudson, Copenhagen, Linear lines.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — premium tier; appropriate for master suite hero.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.roomandboard.com/catalog/bedroom/beds" target="_blank" rel="noopener">Hudson bed/dresser</a><a class="collection-chip" href="https://www.roomandboard.com/catalog/bedroom/beds" target="_blank" rel="noopener">Copenhagen</a></div>
+  <div class="footer-line"><strong>Price</strong>bed frame: $1800-4500 · dresser: $2200-4500</div>
+  
+  
+  <a class="explore-btn" href="https://www.roomandboard.com/catalog/bedroom" target="_blank" rel="noopener">Explore Room &amp; Board (Bedroom) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="premium" data-fit="STRONG" data-search="parachute belgian flax linen + premium percale bedding. restrained palette (ivory, oat, fog, sage, blush). strong — design_spec §7 [owner confirm #3] keeps pure belgian linen for master bed only. parachute is canon for that.   belgian linen percale">
+  <div class="supplier-card-header">
+    <h3>Parachute</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Belgian flax linen + premium percale bedding. Restrained palette (ivory, oat, fog, sage, blush).</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §7 [OWNER CONFIRM #3] keeps pure Belgian linen for master bed only. Parachute is canon for that.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.parachutehome.com/products/linen-sheet-set" target="_blank" rel="noopener">Belgian Linen</a><a class="collection-chip" href="https://www.parachutehome.com/products/percale-sheet-set" target="_blank" rel="noopener">Percale</a></div>
+  <div class="footer-line"><strong>Price</strong>sheets: $200-450 · duvet: $250-500 · pillows: $60-150</div>
+  <div class="footer-line"><strong>Lead</strong>1-2 weeks · <strong>Samples</strong>Free swatches by mail</div>
+  
+  <a class="explore-btn" href="https://www.parachutehome.com" target="_blank" rel="noopener">Explore Parachute &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="mid" data-fit="GOOD" data-search="nestig nursery-focused. cloud crib in oak is the canonical light-oak slat crib. restrained, japandi-adjacent. good — design_spec §10 nursery framework explicitly cites nestig cloud crib.   cloud crib wave crib">
+  <div class="supplier-card-header">
+    <h3>Nestig</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Nursery-focused. Cloud Crib in oak is the canonical light-oak slat crib. Restrained, Japandi-adjacent.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — DESIGN_SPEC §10 nursery framework explicitly cites Nestig Cloud Crib.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.nestig.com/products/cloud-crib" target="_blank" rel="noopener">Cloud Crib</a><a class="collection-chip" href="https://www.nestig.com/products/wave-crib" target="_blank" rel="noopener">Wave Crib</a></div>
+  <div class="footer-line"><strong>Price</strong>crib: $800-1400 · dresser: $1100-2200</div>
+  
+  
+  <a class="explore-btn" href="https://www.nestig.com" target="_blank" rel="noopener">Explore Nestig &rarr;</a>
+</article>
+<article class="supplier-card" data-category="furniture-bedroom" data-tier="entry" data-fit="GOOD" data-search="babyletto mid-mod nursery (hudson 3-in-1 is canonical light-oak slat). good — design_spec §10 lists babyletto hudson as a framework reference.   hudson 3-in-1">
+  <div class="supplier-card-header">
+    <h3>Babyletto</h3>
+    <span class="supplier-pill tier-entry">entry</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Mid-mod nursery (Hudson 3-in-1 is canonical light-oak slat).</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — DESIGN_SPEC §10 lists Babyletto Hudson as a framework reference.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.babyletto.com/collections/cribs/products/hudson-3-in-1-convertible-crib" target="_blank" rel="noopener">Hudson 3-in-1</a></div>
+  <div class="footer-line"><strong>Price</strong>crib: $400-700 · dresser: $500-900</div>
+  
+  
+  <a class="explore-btn" href="https://www.babyletto.com" target="_blank" rel="noopener">Explore Babyletto &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-lighting"><div class="category-section-header"><h2>Pendants / Sconces / Lamps / Floor</h2><span class="cat-count">12 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="schoolhouse portland heritage brand. lacquered brass, opal glass, milk glass, mid-century industrial. pinnock/hyatt/otto pendant lines. strong — design_spec §5d (15% schoolhouse + rejuvenation bracket). locked canon for k-pendants. hyatt 8&quot; discontinued (catalog gap noted in sourcing.yaml). current canon-compliant picks = otto 8&quot; or ray 8&quot;.  pinnock cone otto ray sconces">
+  <div class="supplier-card-header">
+    <h3>Schoolhouse</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Portland heritage brand. Lacquered brass, opal glass, milk glass, mid-century industrial. Pinnock/Hyatt/Otto pendant lines.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (15% Schoolhouse + Rejuvenation bracket). Locked canon for K-PENDANTS.</p>
+  <div class="warning-line">&#9888; Hyatt 8&quot; discontinued (catalog gap noted in sourcing.yaml). Current canon-compliant picks = Otto 8&quot; or Ray 8&quot;.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.schoolhouse.com/collections/lighting-pendants" target="_blank" rel="noopener">Pinnock Cone</a><a class="collection-chip" href="https://www.schoolhouse.com/collections/lighting-pendants" target="_blank" rel="noopener">Otto</a><a class="collection-chip" href="https://www.schoolhouse.com/collections/lighting-pendants" target="_blank" rel="noopener">Ray</a><a class="collection-chip" href="https://www.schoolhouse.com/collections/lighting-sconces" target="_blank" rel="noopener">Sconces</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $350-900 · sconce: $250-700 · floor lamp: $500-1400</div>
+  <div class="footer-line"><strong>Lead</strong>1-6 weeks (in-stock); custom 6-10 · <strong>Samples</strong>Finish samples for hardware; no light-fixture samples</div>
+  
+  <a class="explore-btn" href="https://www.schoolhouse.com" target="_blank" rel="noopener">Explore Schoolhouse &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="rejuvenation portland heritage sibling brand (we family). lacquered brass, school-house globe + cone forms. pinnock, carson, cedar &amp; moss collabs. strong — design_spec §5d (15% bracket). pinnock cone is the k-pendants canon fallback after hyatt discontinued.   pinnock carson wall sconces">
+  <div class="supplier-card-header">
+    <h3>Rejuvenation</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Portland heritage sibling brand (WE family). Lacquered brass, school-house globe + cone forms. Pinnock, Carson, Cedar &amp; Moss collabs.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (15% bracket). Pinnock Cone is the K-PENDANTS canon fallback after Hyatt discontinued.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.rejuvenation.com/c/lighting/pendants/" target="_blank" rel="noopener">Pinnock</a><a class="collection-chip" href="https://www.rejuvenation.com/c/lighting/pendants/" target="_blank" rel="noopener">Carson</a><a class="collection-chip" href="https://www.rejuvenation.com/c/lighting/sconces/" target="_blank" rel="noopener">Wall Sconces</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $300-800 · sconce: $200-700 · floor lamp: $400-1200</div>
+  <div class="footer-line"><strong>Lead</strong>1-4 weeks · <strong>Samples</strong>Finish samples for hardware</div>
+  
+  <a class="explore-btn" href="https://www.rejuvenation.com" target="_blank" rel="noopener">Explore Rejuvenation &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="cedar &amp; moss portland indie. brass + opal glass; very canon-aligned mid-mod profile. now sold both direct and via rejuvenation collab. strong — explicit in design_spec §5e brass examples.   alto pendant sconces">
+  <div class="supplier-card-header">
+    <h3>Cedar &amp; Moss</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Portland indie. Brass + opal glass; very canon-aligned mid-mod profile. Now sold both direct and via Rejuvenation collab.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — explicit in DESIGN_SPEC §5e brass examples.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.cedarandmoss.com" target="_blank" rel="noopener">Alto Pendant</a><a class="collection-chip" href="https://www.cedarandmoss.com" target="_blank" rel="noopener">Sconces</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $250-700 · sconce: $200-600 · floor lamp: $450-1200</div>
+  
+  
+  <a class="explore-btn" href="https://www.cedarandmoss.com" target="_blank" rel="noopener">Explore Cedar &amp; Moss &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="allied maker long island studio. hand-blown glass + brass + wood. the most canon-aligned high-end lighting brand in the country. canon-adjacent — over budget for $342k cap. use as visual reference for canon cathie hong / owiu fixtures. one showcase piece possible if cap allows.   dome pendant sconces">
+  <div class="supplier-card-header">
+    <h3>Allied Maker</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Long Island studio. Hand-blown glass + brass + wood. The most canon-aligned high-end lighting brand in the country.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget for $342K cap. Use as visual reference for canon Cathie Hong / OWIU fixtures. One showcase piece possible if cap allows.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.alliedmaker.com/products" target="_blank" rel="noopener">Dome Pendant</a><a class="collection-chip" href="https://www.alliedmaker.com/products" target="_blank" rel="noopener">Sconces</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $1500-6000 · sconce: $1100-3500</div>
+  
+  
+  <a class="explore-btn" href="https://www.alliedmaker.com" target="_blank" rel="noopener">Explore Allied Maker &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="workstead brooklyn studio. articulating brass + matte black + linen drum. the signature chandelier is in every shelter-mag canon dining room. canon-adjacent — over budget but reference-grade. mid-market interpretation: schoolhouse + rejuvenation branch chandelier picks.  ">
+  <div class="supplier-card-header">
+    <h3>Workstead</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Brooklyn studio. Articulating brass + matte black + linen drum. The Signature Chandelier is in every shelter-mag canon dining room.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget but reference-grade. Mid-market interpretation: Schoolhouse + Rejuvenation branch chandelier picks.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>pendant: $1500-5000 · chandelier: $4500-12000</div>
+  
+  
+  <a class="explore-btn" href="https://www.workstead.com" target="_blank" rel="noopener">Explore Workstead &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="ferm living (lighting) danish-restrained pendants — mirra, vuelta, rest, disc globe. paper-stack and globe forms. strong — design_spec §5d (3% specialist bracket).   vuelta mirra">
+  <div class="supplier-card-header">
+    <h3>ferm LIVING (Lighting)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Danish-restrained pendants — Mirra, Vuelta, Rest, Disc Globe. Paper-stack and globe forms.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (3% specialist bracket).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://fermliving.com/categories/lighting/pendants" target="_blank" rel="noopener">Vuelta</a><a class="collection-chip" href="https://fermliving.com/categories/lighting/pendants" target="_blank" rel="noopener">Mirra</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $200-800 · sconce: $200-600</div>
+  
+  
+  <a class="explore-btn" href="https://fermliving.com/categories/lighting" target="_blank" rel="noopener">Explore ferm LIVING (Lighting) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="muuto danish contemporary. unfold, grain, ambit pendants in muted colors + spun aluminum. strong — design_spec §5d (3% bracket). unfold pendant pairs cleanly with andes sofa setups.   unfold ambit">
+  <div class="supplier-card-header">
+    <h3>Muuto</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Danish contemporary. Unfold, Grain, Ambit pendants in muted colors + spun aluminum.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (3% bracket). Unfold pendant pairs cleanly with Andes sofa setups.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.muuto.com/category/lighting/pendant-lamps/" target="_blank" rel="noopener">Unfold</a><a class="collection-chip" href="https://www.muuto.com/category/lighting/pendant-lamps/" target="_blank" rel="noopener">Ambit</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $350-1200 · sconce: $300-700</div>
+  
+  
+  <a class="explore-btn" href="https://www.muuto.com/category/lighting/" target="_blank" rel="noopener">Explore Muuto &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="STRONG" data-search="hay (lighting) danish playful-modern. pc, sinker, pao, matin lamps. strong — design_spec §5d (3% bracket). matin table lamp is a canon-cathie-hong-side-table prop.   matin lamp pc portable">
+  <div class="supplier-card-header">
+    <h3>HAY (Lighting)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Danish playful-modern. PC, Sinker, Pao, Matin lamps.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (3% bracket). Matin table lamp is a canon-Cathie-Hong-side-table prop.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://us.hay.com/categories/lighting/table-lamps" target="_blank" rel="noopener">Matin Lamp</a><a class="collection-chip" href="https://us.hay.com/categories/lighting/table-lamps" target="_blank" rel="noopener">PC Portable</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $250-1000 · sconce: $200-600 · table lamp: $250-700</div>
+  
+  
+  <a class="explore-btn" href="https://us.hay.com/categories/lighting" target="_blank" rel="noopener">Explore HAY (Lighting) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="flos italian designer-modernist canon. ic, snoopy, arco, bilboquet, glo-ball. canon-adjacent — premium. ic lights are a heritage canon (one piece can anchor a room).  ">
+  <div class="supplier-card-header">
+    <h3>FLOS</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Italian designer-modernist canon. IC, Snoopy, Arco, Bilboquet, Glo-Ball.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — premium. IC Lights are a heritage canon (one piece can anchor a room).</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>pendant: $700-4000 · table lamp: $400-2500</div>
+  
+  
+  <a class="explore-btn" href="https://flos.com/en/us" target="_blank" rel="noopener">Explore FLOS &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="GOOD" data-search="visual comfort trade-distribution flagship. aerin, thomas o&#x27;brien, kelly wearstler collabs. vast catalog ranging across all styles. good — browse only thomas o&#x27;brien hicks family and aerin modern-classic ranges. harab (hand-rubbed antique brass) finish is canon-aligned. avoid crystorama-style chandeliers, wearstler glam ranges.  thomas o&#x27;brien hicks pendant aerin hackney">
+  <div class="supplier-card-header">
+    <h3>Visual Comfort</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Trade-distribution flagship. AERIN, Thomas O&#x27;Brien, Kelly Wearstler collabs. Vast catalog ranging across all styles.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — browse only Thomas O&#x27;Brien Hicks family and AERIN modern-classic ranges. HARAB (Hand-Rubbed Antique Brass) finish is canon-aligned.</p>
+  <div class="warning-line">&#9888; Avoid Crystorama-style chandeliers, Wearstler glam ranges.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.visualcomfort.com" target="_blank" rel="noopener">Thomas O&#x27;Brien Hicks Pendant</a><a class="collection-chip" href="https://www.visualcomfort.com" target="_blank" rel="noopener">AERIN Hackney</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $400-2500 · sconce: $300-1200</div>
+  
+  
+  <a class="explore-btn" href="https://www.visualcomfort.com" target="_blank" rel="noopener">Explore Visual Comfort &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="GOOD" data-search="lumens multi-brand modern lighting retailer (hay, muuto, tom dixon, flos, etc.). strong filter ux. good — best multi-brand shopping path; better filtering than individual brand sites.   pendant lighting wall sconces">
+  <div class="supplier-card-header">
+    <h3>Lumens</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Multi-brand modern lighting retailer (HAY, Muuto, Tom Dixon, FLOS, etc.). Strong filter UX.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — best multi-brand shopping path; better filtering than individual brand sites.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.lumens.com/pendant-lighting/" target="_blank" rel="noopener">Pendant lighting</a><a class="collection-chip" href="https://www.lumens.com/wall-lights/" target="_blank" rel="noopener">Wall sconces</a></div>
+  <div class="footer-line"><strong>Price</strong>pendant: $300-2500 · sconce: $200-1200</div>
+  
+  
+  <a class="explore-btn" href="https://www.lumens.com" target="_blank" rel="noopener">Explore Lumens &rarr;</a>
+</article>
+<article class="supplier-card" data-category="lighting" data-tier="premium" data-fit="GOOD" data-search="ylighting / ydesign lumens sibling, more designer-modern focused. authorized flos, foscarini, tech lighting. good — cross-shop with lumens.  ">
+  <div class="supplier-card-header">
+    <h3>YLighting / YDesign</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Lumens sibling, more designer-modern focused. Authorized FLOS, Foscarini, Tech Lighting.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — cross-shop with Lumens.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>pendant: $300-2500</div>
+  
+  
+  <a class="explore-btn" href="https://www.ylighting.com" target="_blank" rel="noopener">Explore YLighting / YDesign &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-tile"><div class="category-section-header"><h2>Floor / Wall / Backsplash</h2><span class="cat-count">10 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="tile" data-tier="premium" data-fit="STRONG" data-search="cle tile hand-glazed moroccan zellige + bejmat. weathered white, sea salt, unglazed natural are the canon palette. strong — locked in design_spec §6 for both master bath (bejmat) and hall bath (sea salt petite). optional pivot for kitchen.   weathered white bejmat 2x6 sea salt petite 4x4 unglazed natural bejmat">
+  <div class="supplier-card-header">
+    <h3>Cle Tile</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Hand-glazed Moroccan zellige + bejmat. Weathered White, Sea Salt, Unglazed Natural are the canon palette.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — locked in DESIGN_SPEC §6 for both master bath (Bejmat) and hall bath (Sea Salt Petite). Optional pivot for kitchen.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.cletile.com/products/zellige-terracotta-weathered-white-2x6" target="_blank" rel="noopener">Weathered White Bejmat 2x6</a><a class="collection-chip" href="https://www.cletile.com/collections/zellige" target="_blank" rel="noopener">Sea Salt Petite 4x4</a><a class="collection-chip" href="https://www.cletile.com/collections/bejmat" target="_blank" rel="noopener">Unglazed Natural Bejmat</a></div>
+  <div class="footer-line"><strong>Price</strong>zellige: $22-35 · bejmat: $18-28 · cement: $15-30</div>
+  <div class="footer-line"><strong>Lead</strong>10 business days (in stock) · <strong>Samples</strong>Paid samples ($5-10 each, refunded on order)</div>
+  
+  <a class="explore-btn" href="https://www.cletile.com" target="_blank" rel="noopener">Explore Cle Tile &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="premium" data-fit="STRONG" data-search="fireclay tile california handmade. earthstone, glazed thin brick, stripes pattern. customizable color palette. canon-aligned warm-neutral palette. strong — direct canon equivalent of cle at slightly lower price point. useful alternative for backsplash if bejmat is shelved.   handpainted glazed thin brick">
+  <div class="supplier-card-header">
+    <h3>Fireclay Tile</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">California handmade. Earthstone, Glazed Thin Brick, Stripes Pattern. Customizable color palette. Canon-aligned warm-neutral palette.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — direct canon equivalent of Cle at slightly lower price point. Useful alternative for backsplash if Bejmat is shelved.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.fireclaytile.com/tile" target="_blank" rel="noopener">Handpainted</a><a class="collection-chip" href="https://www.fireclaytile.com/tile/glazed-thin-brick" target="_blank" rel="noopener">Glazed Thin Brick</a></div>
+  <div class="footer-line"><strong>Price</strong>handmade field: $18-30 · mosaic: $30-60</div>
+  <div class="footer-line"><strong>Lead</strong>4-8 weeks (made to order) · <strong>Samples</strong>Free sample kit (limit), paid bigger orders</div>
+  
+  <a class="explore-btn" href="https://www.fireclaytile.com" target="_blank" rel="noopener">Explore Fireclay Tile &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="aspirational" data-fit="STRONG" data-search="heath ceramics california legacy ceramics. hand-glazed muted palette. most canon-aligned high-end tile in the us. strong — over budget for whole-house but use for one accent moment (lr fireplace surround?).   classic field dwell series">
+  <div class="supplier-card-header">
+    <h3>Heath Ceramics</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">California legacy ceramics. Hand-glazed muted palette. Most canon-aligned high-end tile in the US.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — over budget for whole-house but use for one accent moment (LR fireplace surround?).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.heathceramics.com/collections/classic-field-tile" target="_blank" rel="noopener">Classic Field</a><a class="collection-chip" href="https://www.heathceramics.com/collections/dwell-tile" target="_blank" rel="noopener">Dwell Series</a></div>
+  <div class="footer-line"><strong>Price</strong>handmade field: $40-80</div>
+  
+  
+  <a class="explore-btn" href="https://www.heathceramics.com/collections/tile" target="_blank" rel="noopener">Explore Heath Ceramics &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="mid" data-fit="GOOD" data-search="clay imports austin-based; encaustic cement + zellige + terracotta direct from artisans. more budget-friendly than cle. good — mid-tier alternative to cle for non-flagship rooms.   zellige cement">
+  <div class="supplier-card-header">
+    <h3>Clay Imports</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Austin-based; encaustic cement + zellige + terracotta direct from artisans. More budget-friendly than Cle.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — mid-tier alternative to Cle for non-flagship rooms.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.clayimports.com/collections/zellige" target="_blank" rel="noopener">Zellige</a><a class="collection-chip" href="https://www.clayimports.com/collections/cement-tile" target="_blank" rel="noopener">Cement</a></div>
+  <div class="footer-line"><strong>Price</strong>cement: $12-22 · zellige: $18-30</div>
+  
+  
+  <a class="explore-btn" href="https://www.clayimports.com" target="_blank" rel="noopener">Explore Clay Imports &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="mid" data-fit="GOOD" data-search="zia tile la-based; moroccan zellige + cement. stocked color palette is canon-aligned (neutrals, soft sage, ivory). good — cle alternative.   zellige">
+  <div class="supplier-card-header">
+    <h3>Zia Tile</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">LA-based; Moroccan zellige + cement. Stocked color palette is canon-aligned (neutrals, soft sage, ivory).</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — Cle alternative.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.ziatile.com/collections/zellige-tile" target="_blank" rel="noopener">Zellige</a></div>
+  <div class="footer-line"><strong>Price</strong>zellige: $18-28 · cement: $15-25</div>
+  
+  
+  <a class="explore-btn" href="https://www.ziatile.com" target="_blank" rel="noopener">Explore Zia Tile &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="mid" data-fit="GOOD" data-search="riad tile direct-from-morocco zellige. hundreds of color variants; small-batch. good — canon-aligned palette for bejmat / zellige if cle stock is short.  ">
+  <div class="supplier-card-header">
+    <h3>Riad Tile</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Direct-from-Morocco zellige. Hundreds of color variants; small-batch.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — canon-aligned palette for Bejmat / zellige if Cle stock is short.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>zellige: $16-25</div>
+  
+  
+  <a class="explore-btn" href="https://www.riadtile.com" target="_blank" rel="noopener">Explore Riad Tile &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="mid" data-fit="MIXED" data-search="bedrosians big-box tile distributor. cloe, marin, le cafe lines mimic canon hand-glaze look at half the price. mixed — cloe is a cle sea salt look-alike at 50% cost. use for budget-constrained zones (laundry, basement bath).   cloe marin">
+  <div class="supplier-card-header">
+    <h3>Bedrosians</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Big-box tile distributor. Cloe, Marin, Le Cafe lines mimic canon hand-glaze look at half the price.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — Cloe is a Cle Sea Salt look-alike at 50% cost. Use for budget-constrained zones (laundry, basement bath).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.bedrosians.com/en/products/tile/cloe/" target="_blank" rel="noopener">Cloe</a><a class="collection-chip" href="https://www.bedrosians.com/en/products/tile/marin/" target="_blank" rel="noopener">Marin</a></div>
+  <div class="footer-line"><strong>Price</strong>porcelain field: $5-15 · mosaic: $15-30</div>
+  
+  
+  <a class="explore-btn" href="https://www.bedrosians.com" target="_blank" rel="noopener">Explore Bedrosians &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="mid" data-fit="GOOD" data-search="daltile national tile manufacturer. choice, portfolio, bee hive lines. good — design_spec §6 locks daltile choice ivory for master bath + kitchen floor. norcross ga showroom is local. catalog gap on choice ivory 24x24 honed porcelain (see sourcing.yaml mb-tile-floor + k-floor-tile) — owner reselect needed.  choice / portfolio / bee hive">
+  <div class="supplier-card-header">
+    <h3>Daltile</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">National tile manufacturer. Choice, Portfolio, Bee Hive lines.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — DESIGN_SPEC §6 locks Daltile Choice Ivory for master bath + kitchen floor. Norcross GA showroom is local.</p>
+  <div class="warning-line">&#9888; Catalog gap on Choice Ivory 24x24 honed porcelain (see sourcing.yaml MB-TILE-FLOOR + K-FLOOR-TILE) — owner reselect needed.</div>
+  <div class="collections"><a class="collection-chip" href="https://www.daltile.com/products/stone-look/" target="_blank" rel="noopener">Choice / Portfolio / Bee Hive</a></div>
+  <div class="footer-line"><strong>Price</strong>porcelain field: $4-12 · mosaic: $10-25</div>
+  
+  
+  <a class="explore-btn" href="https://www.daltile.com" target="_blank" rel="noopener">Explore Daltile &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="entry" data-fit="MIXED" data-search="floor &amp; decor warehouse-tier tile. vast inventory, mixed quality. atlanta-based chain. mixed — use only for utility zones (laundry mudroom, basement utility). brand has gotten better on neutrals but glaze quality is variable. avoid &quot;wood look&quot; planks (always read as fake); avoid faux-marble that&#x27;s actually printed. ">
+  <div class="supplier-card-header">
+    <h3>Floor &amp; Decor</h3>
+    <span class="supplier-pill tier-entry">entry</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Warehouse-tier tile. Vast inventory, mixed quality. Atlanta-based chain.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — use ONLY for utility zones (laundry mudroom, basement utility). Brand has gotten better on neutrals but glaze quality is variable.</p>
+  <div class="warning-line">&#9888; Avoid &quot;Wood Look&quot; planks (always read as fake); avoid faux-marble that&#x27;s actually printed.</div>
+  
+  <div class="footer-line"><strong>Price</strong>porcelain field: $2-8 · handmade look: $6-12</div>
+  
+  
+  <a class="explore-btn" href="https://www.flooranddecor.com" target="_blank" rel="noopener">Explore Floor &amp; Decor &rarr;</a>
+</article>
+<article class="supplier-card" data-category="tile" data-tier="aspirational" data-fit="STRONG" data-search="pratt &amp; larson portland handmade. hundreds of glaze variants, brick + handpainted + relief. the pacific-northwest counterpart to heath. strong — over budget for whole-house; use for one accent moment.  ">
+  <div class="supplier-card-header">
+    <h3>Pratt &amp; Larson</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Portland handmade. Hundreds of glaze variants, brick + handpainted + relief. The pacific-northwest counterpart to Heath.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — over budget for whole-house; use for one accent moment.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>handmade field: $35-70</div>
+  
+  
+  <a class="explore-btn" href="https://www.prattandlarson.com" target="_blank" rel="noopener">Explore Pratt &amp; Larson &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-plumbing"><div class="category-section-header"><h2>Faucets / Tubs / Toilets / Drains</h2><span class="cat-count">9 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="plumbing" data-tier="mid" data-fit="STRONG" data-search="delta faucet trinsic family is the canon-locked plumbing line. champagne bronze (cz) finish is the §6 locked finish. strong — locked in design_spec §6 for all plumbing fixtures throughout.   trinsic trinsic pull-down kitchen">
+  <div class="supplier-card-header">
+    <h3>Delta Faucet</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Trinsic family is the canon-locked plumbing line. Champagne Bronze (CZ) finish is the §6 LOCKED finish.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — LOCKED in DESIGN_SPEC §6 for all plumbing fixtures throughout.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.deltafaucet.com/bathroom/all/collection/trinsic" target="_blank" rel="noopener">Trinsic</a><a class="collection-chip" href="https://www.deltafaucet.com/kitchen/collection/trinsic-kitchen" target="_blank" rel="noopener">Trinsic Pull-Down Kitchen</a></div>
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $250-700 · kitchen faucet: $350-900 · shower trim: $400-1200</div>
+  
+  
+  <a class="explore-btn" href="https://www.deltafaucet.com" target="_blank" rel="noopener">Explore Delta Faucet &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="premium" data-fit="GOOD" data-search="brizo delta&#x27;s design-forward sibling. litze, levoir, frank lloyd wright collab. good — premium upgrade path from trinsic. litze in luxe nickel or brilliance black aligns canon. avoid luxe gold (-gl sku suffix) and &quot;brushed gold&quot; finishes per design_spec §5e bright-gold exclusion. ">
+  <div class="supplier-card-header">
+    <h3>Brizo</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Delta&#x27;s design-forward sibling. Litze, Levoir, Frank Lloyd Wright collab.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — premium upgrade path from Trinsic. Litze in Luxe Nickel or Brilliance Black aligns canon.</p>
+  <div class="warning-line">&#9888; AVOID Luxe Gold (-GL SKU suffix) and &quot;Brushed Gold&quot; finishes per DESIGN_SPEC §5e bright-gold exclusion.</div>
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $600-1500 · kitchen faucet: $800-2200</div>
+  
+  
+  <a class="explore-btn" href="https://www.brizo.com" target="_blank" rel="noopener">Explore Brizo &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="mid" data-fit="GOOD" data-search="kohler broadest catalog in the category. purist family is the canon-aligned modernist line. vibrant brushed bronze (bv) finish is acceptable per §5e. good — useful for tubs (trinsic tub trim only) and purist sinks.   purist iron works tub">
+  <div class="supplier-card-header">
+    <h3>Kohler</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Broadest catalog in the category. Purist family is the canon-aligned modernist line. Vibrant Brushed Bronze (BV) finish is acceptable per §5e.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — useful for tubs (Trinsic tub trim only) and Purist sinks.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.us.kohler.com/us/Purist/style/2179358_2.htm" target="_blank" rel="noopener">Purist</a><a class="collection-chip" href="https://www.us.kohler.com" target="_blank" rel="noopener">Iron Works tub</a></div>
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $250-700 · kitchen faucet: $400-1100 · tub: $1500-5500</div>
+  
+  
+  <a class="explore-btn" href="https://www.us.kohler.com" target="_blank" rel="noopener">Explore Kohler &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="mid" data-fit="STRONG" data-search="toto japanese flagship. drake ii + carlyle ii are canon defaults; washlet bidet seats integrate canon japandi function. strong — best-in-class toilets. locked-style for all 3 baths.   drake ii carlyle ii washlet s550e">
+  <div class="supplier-card-header">
+    <h3>TOTO</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Japanese flagship. Drake II + Carlyle II are canon defaults; Washlet bidet seats integrate canon Japandi function.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — best-in-class toilets. Locked-style for all 3 baths.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.totousa.com/drake-ii-collection" target="_blank" rel="noopener">Drake II</a><a class="collection-chip" href="https://www.totousa.com/carlyle-ii-collection" target="_blank" rel="noopener">Carlyle II</a><a class="collection-chip" href="https://www.totousa.com/washlet-s550e" target="_blank" rel="noopener">Washlet S550e</a></div>
+  <div class="footer-line"><strong>Price</strong>toilet: $400-1800 · bidet seat: $600-2500</div>
+  
+  
+  <a class="explore-btn" href="https://www.totousa.com" target="_blank" rel="noopener">Explore TOTO &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="premium" data-fit="GOOD" data-search="hansgrohe german-engineered modern. talis, metris, axor lines. brushed bronze finish family. good — premium alternative to trinsic when a more architectural silhouette is needed.  ">
+  <div class="supplier-card-header">
+    <h3>Hansgrohe</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">German-engineered modern. Talis, Metris, Axor lines. Brushed Bronze finish family.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — premium alternative to Trinsic when a more architectural silhouette is needed.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $400-1100 · kitchen faucet: $700-1800 · shower system: $800-3000</div>
+  
+  
+  <a class="explore-btn" href="https://www.hansgrohe-usa.com" target="_blank" rel="noopener">Explore Hansgrohe &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="perrin &amp; rowe (house of rohl) english-traditional + modern crossover. bridge faucets in unlacquered brass. canon-cathie-hong-campbell-adjacent. canon-adjacent — over budget but visually right. use for spec inspiration.  ">
+  <div class="supplier-card-header">
+    <h3>Perrin &amp; Rowe (House of Rohl)</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">English-traditional + modern crossover. Bridge faucets in unlacquered brass. Canon-Cathie-Hong-Campbell-adjacent.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget but visually right. Use for spec inspiration.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $1500-3500 · kitchen faucet: $2200-5000</div>
+  
+  
+  <a class="explore-btn" href="https://www.houseofrohl.com/en-us/brands/perrin-and-rowe" target="_blank" rel="noopener">Explore Perrin &amp; Rowe (House of Rohl) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="phylrich california (costa mesa) brand. architectural brass family is canon-aligned. canon-adjacent — premium plumbing reference. architectural brass family aligns design_spec §5e warm-brass canon.  ">
+  <div class="supplier-card-header">
+    <h3>Phylrich</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">California (Costa Mesa) brand. Architectural Brass family is canon-aligned.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — premium plumbing reference. Architectural Brass family aligns DESIGN_SPEC §5e warm-brass canon.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $800-2500</div>
+  
+  
+  <a class="explore-btn" href="https://www.phylrich.com" target="_blank" rel="noopener">Explore Phylrich &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="watermark designs brooklyn made-to-order. architectural modern; broad finish library. canon-adjacent — premium made-to-order plumbing reference; aspirational only.  ">
+  <div class="supplier-card-header">
+    <h3>Watermark Designs</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Brooklyn made-to-order. Architectural modern; broad finish library.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — premium made-to-order plumbing reference; aspirational only.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $1000-3000</div>
+  
+  
+  <a class="explore-btn" href="https://www.watermark-designs.com" target="_blank" rel="noopener">Explore Watermark Designs &rarr;</a>
+</article>
+<article class="supplier-card" data-category="plumbing" data-tier="mid" data-fit="GOOD" data-search="signature hardware direct-import value brand. vintage-style tubs (clawfoot, double-slipper) at half the kohler price. good — useful for non-canon utility (laundry sink, basement bath tub) at sane price.  ">
+  <div class="supplier-card-header">
+    <h3>Signature Hardware</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Direct-import value brand. Vintage-style tubs (clawfoot, double-slipper) at half the Kohler price.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — useful for non-canon utility (laundry sink, basement bath tub) at sane price.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lavatory faucet: $200-600 · tub: $800-3000 · kitchen faucet: $300-700</div>
+  
+  
+  <a class="explore-btn" href="https://www.signaturehardware.com" target="_blank" rel="noopener">Explore Signature Hardware &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-hardware"><div class="category-section-header"><h2>Cabinet Pulls / Door Hardware / Knobs</h2><span class="cat-count">9 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="hardware" data-tier="premium" data-fit="STRONG" data-search="rejuvenation (hardware) antique brass + matte black + polished nickel. lacquered and unlacquered options. canon-aligned cabinet pulls (massey, yates, wallace). strong — design_spec §5d (15% bracket).   cabinet pulls — massey/yates door hardware">
+  <div class="supplier-card-header">
+    <h3>Rejuvenation (Hardware)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Antique brass + matte black + polished nickel. Lacquered and unlacquered options. Canon-aligned cabinet pulls (Massey, Yates, Wallace).</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §5d (15% bracket).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.rejuvenation.com/c/hardware/cabinet-pulls/" target="_blank" rel="noopener">Cabinet Pulls — Massey/Yates</a><a class="collection-chip" href="https://www.rejuvenation.com/c/hardware/door-hardware/" target="_blank" rel="noopener">Door Hardware</a></div>
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $18-45 · door knob set: $250-450</div>
+  
+  
+  <a class="explore-btn" href="https://www.rejuvenation.com/c/hardware/" target="_blank" rel="noopener">Explore Rejuvenation (Hardware) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="premium" data-fit="STRONG" data-search="schoolhouse (hardware) lacquered brass + matte black + opal accent. mid-century industrial. pulls + knobs are canon canon. strong — mid century / modern flat black is the §9 utility-tier default per design_spec.  ">
+  <div class="supplier-card-header">
+    <h3>Schoolhouse (Hardware)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Lacquered brass + matte black + opal accent. Mid-century industrial. Pulls + knobs are canon canon.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — Mid Century / Modern flat black is the §9 utility-tier default per DESIGN_SPEC.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $25-65 · door knob set: $200-500</div>
+  
+  
+  <a class="explore-btn" href="https://www.schoolhouse.com/collections/hardware" target="_blank" rel="noopener">Explore Schoolhouse (Hardware) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="premium" data-fit="STRONG" data-search="emtek trade staple. vast finish library including unlacquered brass (ul), oil-rubbed bronze, matte black. strong — interior door hardware locked matte black per §6a; emtek modern flat black is the canon spec.   modern hardware">
+  <div class="supplier-card-header">
+    <h3>Emtek</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Trade staple. Vast finish library including unlacquered brass (UL), oil-rubbed bronze, matte black.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — interior door hardware locked matte black per §6a; Emtek Modern flat black is the canon spec.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://emtek.com/collections/modern" target="_blank" rel="noopener">Modern Hardware</a></div>
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $15-50 · door set: $200-450</div>
+  
+  
+  <a class="explore-btn" href="https://emtek.com" target="_blank" rel="noopener">Explore Emtek &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="mid" data-fit="GOOD" data-search="top knobs trade-distributed cabinet hardware. lake series in honey bronze, brushed satin brass. good — mid-tier alternative to rejuvenation/schoolhouse pulls at lower price.  ">
+  <div class="supplier-card-header">
+    <h3>Top Knobs</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Trade-distributed cabinet hardware. Lake series in honey bronze, brushed satin brass.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — mid-tier alternative to Rejuvenation/Schoolhouse pulls at lower price.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $15-35</div>
+  
+  
+  <a class="explore-btn" href="https://www.topknobs.com" target="_blank" rel="noopener">Explore Top Knobs &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="mid" data-fit="GOOD" data-search="hapny home mid-century-leaning pulls in polished nickel, satin brass, matte black. lounge + sunburst signatures. good — affordable canon-adjacent pull at $15-25/pc.  ">
+  <div class="supplier-card-header">
+    <h3>Hapny Home</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Mid-century-leaning pulls in polished nickel, satin brass, matte black. Lounge + Sunburst signatures.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — affordable canon-adjacent pull at $15-25/pc.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $14-32</div>
+  
+  
+  <a class="explore-btn" href="https://www.hapnyhome.com" target="_blank" rel="noopener">Explore Hapny Home &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="premium" data-fit="GOOD" data-search="baldwin hardware american traditional + modern transitional. lifetime-warrantied finishes. good — door hardware. modern series (severin, soho) is canon-adjacent.  ">
+  <div class="supplier-card-header">
+    <h3>Baldwin Hardware</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">American traditional + modern transitional. Lifetime-warrantied finishes.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — door hardware. Modern series (Severin, Soho) is canon-adjacent.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>door set: $250-700 · cabinet pull: $25-65</div>
+  
+  
+  <a class="explore-btn" href="https://www.baldwinhardware.com" target="_blank" rel="noopener">Explore Baldwin Hardware &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="premium" data-fit="GOOD" data-search="lewis dolin architect-leaning brass + bronze cabinet pulls. bar pull and tab pull are signature modernist forms. good — bar pull and tab pull are canon-aligned modernist forms; premium pricing relative to rejuvenation/schoolhouse.  ">
+  <div class="supplier-card-header">
+    <h3>Lewis Dolin</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Architect-leaning brass + bronze cabinet pulls. Bar Pull and Tab Pull are signature modernist forms.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — Bar Pull and Tab Pull are canon-aligned modernist forms; premium pricing relative to Rejuvenation/Schoolhouse.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>cabinet pull: $30-90</div>
+  
+  
+  <a class="explore-btn" href="https://lewisdolin.com" target="_blank" rel="noopener">Explore Lewis Dolin &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="mid" data-fit="GOOD" data-search="house of antique hardware vintage-reproduction hardware. unlacquered brass + bronze + crystal knobs. good — useful for vintage-feel front door + interior period accents.  ">
+  <div class="supplier-card-header">
+    <h3>House of Antique Hardware</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Vintage-reproduction hardware. Unlacquered brass + bronze + crystal knobs.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — useful for vintage-feel front door + interior period accents.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>door set: $80-300 · cabinet pull: $12-30</div>
+  
+  
+  <a class="explore-btn" href="https://www.houseofantiquehardware.com" target="_blank" rel="noopener">Explore House of Antique Hardware &rarr;</a>
+</article>
+<article class="supplier-card" data-category="hardware" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="hamilton sinkler unlacquered brass made-to-order. architect canon (cited in design_spec §5e). canon-adjacent — over budget except for one moment (front door hardware?).  ">
+  <div class="supplier-card-header">
+    <h3>Hamilton Sinkler</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Unlacquered brass made-to-order. Architect canon (cited in DESIGN_SPEC §5e).</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget except for one moment (front door hardware?).</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>door set: $800-2500 · cabinet pull: $80-250</div>
+  
+  
+  <a class="explore-btn" href="https://www.hamiltonsinkler.com" target="_blank" rel="noopener">Explore Hamilton Sinkler &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-paint"><div class="category-section-header"><h2>Interior Paint / Specialty Finishes</h2><span class="cat-count">7 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="paint" data-tier="premium" data-fit="STRONG" data-search="benjamin moore american premium paint. aura line is the §6 locked interior paint. white dove, simply white, saybrook sage are canon palette. strong — locked in design_spec §6 (aura interior; aura bath &amp; spa for wet; aura exterior).   aura interior aura bath &amp; spa white dove oc-17">
+  <div class="supplier-card-header">
+    <h3>Benjamin Moore</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">American premium paint. Aura line is the §6 LOCKED interior paint. White Dove, Simply White, Saybrook Sage are canon palette.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — LOCKED in DESIGN_SPEC §6 (Aura interior; Aura Bath &amp; Spa for wet; Aura Exterior).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.benjaminmoore.com/en-us/paint-products/aura-interior" target="_blank" rel="noopener">Aura Interior</a><a class="collection-chip" href="https://www.benjaminmoore.com/en-us/paint-products/aura-bath-and-spa" target="_blank" rel="noopener">Aura Bath &amp; Spa</a><a class="collection-chip" href="https://www.benjaminmoore.com/en-us/color-overview/find-your-color/color/oc-17/white-dove" target="_blank" rel="noopener">White Dove OC-17</a></div>
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $60-100</div>
+  <div class="footer-line"><strong>Samples</strong>$9 pint samples or peel-and-stick (free, limited)</div>
+  
+  <a class="explore-btn" href="https://www.benjaminmoore.com" target="_blank" rel="noopener">Explore Benjamin Moore &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="premium" data-fit="STRONG" data-search="sherwin-williams american premium paint. emerald and duration lines. accessible beige (sw 7036) is canon bedroom alt. strong — design_spec §6 lists sw accessible beige as bedroom alt.   emerald accessible beige sw 7036">
+  <div class="supplier-card-header">
+    <h3>Sherwin-Williams</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">American premium paint. Emerald and Duration lines. Accessible Beige (SW 7036) is canon bedroom alt.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §6 lists SW Accessible Beige as bedroom alt.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.sherwin-williams.com/en-us/paint-color/SW7036" target="_blank" rel="noopener">Emerald</a><a class="collection-chip" href="https://www.sherwin-williams.com/en-us/paint-color/SW7036" target="_blank" rel="noopener">Accessible Beige SW 7036</a></div>
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $50-90</div>
+  
+  
+  <a class="explore-btn" href="https://www.sherwin-williams.com" target="_blank" rel="noopener">Explore Sherwin-Williams &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="farrow &amp; ball english heritage. pigment-rich; very flat finish. pavilion grey, skimming stone, slipper satin are canon-adjacent. canon-adjacent — design_spec locks bm aura. f&amp;b reference only for color matching pre-aura.  ">
+  <div class="supplier-card-header">
+    <h3>Farrow &amp; Ball</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">English heritage. Pigment-rich; very flat finish. Pavilion Grey, Skimming Stone, Slipper Satin are canon-adjacent.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — DESIGN_SPEC locks BM Aura. F&amp;B reference only for color matching pre-Aura.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $110-130</div>
+  
+  
+  <a class="explore-btn" href="https://www.farrow-ball.com" target="_blank" rel="noopener">Explore Farrow &amp; Ball &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="portola paints la-based specialty finishes. roman clay + lime wash + mineral paint. cathie-hong-loved. canon-adjacent — specialty plaster moment (lr fireplace surround?). use sparingly.  ">
+  <div class="supplier-card-header">
+    <h3>Portola Paints</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">LA-based specialty finishes. Roman Clay + Lime Wash + Mineral Paint. Cathie-Hong-loved.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — specialty plaster moment (LR fireplace surround?). Use sparingly.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>lime wash per gallon: $75-150</div>
+  
+  
+  <a class="explore-btn" href="https://www.portolapaints.com" target="_blank" rel="noopener">Explore Portola Paints &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="premium" data-fit="GOOD" data-search="backdrop curated color palette (~50 colors). restrained, designer-friendly. good — alternative if bm aura humidity-spec gets waived. palette is canon-aligned.  ">
+  <div class="supplier-card-header">
+    <h3>Backdrop</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Curated color palette (~50 colors). Restrained, designer-friendly.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — alternative if BM Aura humidity-spec gets waived. Palette is canon-aligned.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $50-65</div>
+  
+  
+  <a class="explore-btn" href="https://backdrophome.com" target="_blank" rel="noopener">Explore Backdrop &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="mid" data-fit="GOOD" data-search="clare curated 60-color palette. zero-voc, designer-curated. good — non-spec alternative; reference for color matching.  ">
+  <div class="supplier-card-header">
+    <h3>Clare</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Curated 60-color palette. Zero-VOC, designer-curated.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — non-spec alternative; reference for color matching.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $45-60</div>
+  
+  
+  <a class="explore-btn" href="https://www.clare.com" target="_blank" rel="noopener">Explore Clare &rarr;</a>
+</article>
+<article class="supplier-card" data-category="paint" data-tier="mid" data-fit="GOOD" data-search="dunn-edwards west coast premium paint. whisper, swiss coffee, cool december are canon-adjacent whites. good — west coast paint reference; canon-adjacent whites (whisper, swiss coffee). bm aura is the §6 lock.  ">
+  <div class="supplier-card-header">
+    <h3>Dunn-Edwards</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">West Coast premium paint. Whisper, Swiss Coffee, Cool December are canon-adjacent whites.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — West Coast paint reference; canon-adjacent whites (Whisper, Swiss Coffee). BM Aura is the §6 lock.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>paint per gallon: $50-80</div>
+  
+  
+  <a class="explore-btn" href="https://www.dunnedwards.com" target="_blank" rel="noopener">Explore Dunn-Edwards &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-cabinetry"><div class="category-section-header"><h2>Cabinets / Built-ins / Vanities</h2><span class="cat-count">6 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="cabinetry" data-tier="mid" data-fit="STRONG" data-search="kraftmaid mass-market semi-custom. lyndale full-overlay shaker is the §6 canon kitchen cabinet spec. strong — verified in sourcing.yaml (k-cabinets canon).   lyndale full-overlay">
+  <div class="supplier-card-header">
+    <h3>KraftMaid</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Mass-market semi-custom. Lyndale Full-Overlay Shaker is the §6 canon kitchen cabinet spec.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — VERIFIED in sourcing.yaml (K-CABINETS canon).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.kraftmaid.com/lyndale-full/" target="_blank" rel="noopener">Lyndale Full-Overlay</a></div>
+  <div class="footer-line"><strong>Price</strong>kitchen full: $18000-45000 · vanity: $2200-5500</div>
+  
+  
+  <a class="explore-btn" href="https://www.kraftmaid.com" target="_blank" rel="noopener">Explore KraftMaid &rarr;</a>
+</article>
+<article class="supplier-card" data-category="cabinetry" data-tier="premium" data-fit="STRONG" data-search="semihandmade custom ikea sektion cabinet fronts in white oak, walnut, painted mdf. the &quot;reform-in-the-usa&quot; play. strong — strong cost-saving path for canon-reform-look at half the price. useful for office built-ins, mudroom.   quarter sawn white oak shaker painted">
+  <div class="supplier-card-header">
+    <h3>Semihandmade</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Custom IKEA Sektion cabinet fronts in white oak, walnut, painted MDF. The &quot;Reform-in-the-USA&quot; play.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — strong cost-saving path for canon-Reform-look at half the price. Useful for office built-ins, mudroom.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://semihandmade.com/products/quartersawn" target="_blank" rel="noopener">Quarter Sawn White Oak</a><a class="collection-chip" href="https://semihandmade.com/products/shaker" target="_blank" rel="noopener">Shaker Painted</a></div>
+  <div class="footer-line"><strong>Price</strong>ikea front set: $5000-15000</div>
+  
+  
+  <a class="explore-btn" href="https://semihandmade.com" target="_blank" rel="noopener">Explore Semihandmade &rarr;</a>
+</article>
+<article class="supplier-card" data-category="cabinetry" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="reform copenhagen kitchen-front dtc. henning larsen, cecilie manz, big collabs. the reference for canon cathie hong / owiu kitchen aesthetic. canon-adjacent — direct ref for k-cabinets look at 2x price. use as visual baseline; semihandmade hits same look.  ">
+  <div class="supplier-card-header">
+    <h3>Reform</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Copenhagen kitchen-front DTC. Henning Larsen, Cecilie Manz, BIG collabs. The reference for canon Cathie Hong / OWIU kitchen aesthetic.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — direct ref for K-CABINETS look at 2x price. Use as visual baseline; Semihandmade hits same look.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>ikea front set: $12000-35000</div>
+  
+  
+  <a class="explore-btn" href="https://www.reformcph.com/us" target="_blank" rel="noopener">Explore Reform &rarr;</a>
+</article>
+<article class="supplier-card" data-category="cabinetry" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="plain english english handmade kitchen. premium reference; not budget-feasible. lower-case lettering says it all. canon-adjacent — aspirational only.  ">
+  <div class="supplier-card-header">
+    <h3>Plain English</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">English handmade kitchen. Premium reference; not budget-feasible. Lower-case lettering says it all.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — aspirational only.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.plainenglishdesign.co.uk" target="_blank" rel="noopener">Explore Plain English &rarr;</a>
+</article>
+<article class="supplier-card" data-category="cabinetry" data-tier="entry" data-fit="GOOD" data-search="ikea sektion modular kitchen carcase. standard cabinet base for semihandmade fronts. good — pair with semihandmade fronts to hit canon-reform look on budget.  ">
+  <div class="supplier-card-header">
+    <h3>IKEA SEKTION</h3>
+    <span class="supplier-pill tier-entry">entry</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Modular kitchen carcase. Standard cabinet base for Semihandmade fronts.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — pair with Semihandmade fronts to hit canon-Reform look on budget.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>kitchen full carcase: $3500-9000</div>
+  
+  
+  <a class="explore-btn" href="https://www.ikea.com/us/en/cat/kitchen-cabinets-sektion-system-25884" target="_blank" rel="noopener">Explore IKEA SEKTION &rarr;</a>
+</article>
+<article class="supplier-card" data-category="cabinetry" data-tier="mid" data-fit="GOOD" data-search="cabinet joint / custom source online configurator for full-overlay shaker custom cabinets. direct-from-factory. good — backup if kraftmaid lead-time slips.  ">
+  <div class="supplier-card-header">
+    <h3>Cabinet Joint / Custom Source</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Online configurator for full-overlay shaker custom cabinets. Direct-from-factory.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — backup if KraftMaid lead-time slips.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.cabinetjoint.com" target="_blank" rel="noopener">Explore Cabinet Joint / Custom Source &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-counters"><div class="category-section-header"><h2>Quartz / Stone / Solid Surface</h2><span class="cat-count">7 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="counters" data-tier="premium" data-fit="STRONG" data-search="caesarstone quartz pioneer. london grey, cloudburst concrete, frozen terra. canon-aligned for kitchen island. strong — design_spec anchor image loved_12 (campbell kitchen) cites caesarstone counter.  ">
+  <div class="supplier-card-header">
+    <h3>Caesarstone</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Quartz pioneer. London Grey, Cloudburst Concrete, Frozen Terra. Canon-aligned for kitchen island.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC anchor image loved_12 (Campbell Kitchen) cites Caesarstone counter.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>quartz slab per sqft installed: $80-130</div>
+  
+  
+  <a class="explore-btn" href="https://www.caesarstoneus.com" target="_blank" rel="noopener">Explore Caesarstone &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="premium" data-fit="GOOD" data-search="silestone (cosentino) spanish quartz. calacatta + carrara-look in n-boost finishes. good — caesarstone alternative.  ">
+  <div class="supplier-card-header">
+    <h3>Silestone (Cosentino)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Spanish quartz. Calacatta + Carrara-look in N-Boost finishes.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — Caesarstone alternative.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>quartz slab per sqft installed: $70-120</div>
+  
+  
+  <a class="explore-btn" href="https://www.silestone.com" target="_blank" rel="noopener">Explore Silestone (Cosentino) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="premium" data-fit="GOOD" data-search="cambria us-made quartz. brittanicca, ella, torquay marble-look ranges. good — alternative quartz brand if caesarstone supply slips.  ">
+  <div class="supplier-card-header">
+    <h3>Cambria</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">US-made quartz. Brittanicca, Ella, Torquay marble-look ranges.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — alternative quartz brand if Caesarstone supply slips.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>quartz slab per sqft installed: $80-130</div>
+  
+  
+  <a class="explore-btn" href="https://www.cambriausa.com" target="_blank" rel="noopener">Explore Cambria &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="premium" data-fit="GOOD" data-search="dekton (cosentino) ultracompact sintered surface. more heat + scratch resistant than quartz. good for outdoor kitchen. good — ultracompact for outdoor kitchen or high-wear surfaces; alternative to quartz for specific zones.  ">
+  <div class="supplier-card-header">
+    <h3>Dekton (Cosentino)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Ultracompact sintered surface. More heat + scratch resistant than quartz. Good for outdoor kitchen.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — ultracompact for outdoor kitchen or high-wear surfaces; alternative to quartz for specific zones.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>ultracompact slab per sqft installed: $100-180</div>
+  
+  
+  <a class="explore-btn" href="https://www.dekton.com" target="_blank" rel="noopener">Explore Dekton (Cosentino) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="mid" data-fit="MIXED" data-search="msi surfaces big-box quartz + porcelain slabs. q premium natural quartz line. mixed — use for utility (laundry counter, basement bar) not hero kitchen.  ">
+  <div class="supplier-card-header">
+    <h3>MSI Surfaces</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Big-box quartz + porcelain slabs. Q Premium Natural Quartz line.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — use for utility (laundry counter, basement bar) not hero kitchen.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>quartz slab per sqft installed: $50-90</div>
+  
+  
+  <a class="explore-btn" href="https://www.msisurfaces.com" target="_blank" rel="noopener">Explore MSI Surfaces &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="concreteworks california concrete fabricator. custom seamless concrete counters. canon-adjacent — over budget.  ">
+  <div class="supplier-card-header">
+    <h3>Concreteworks</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">California concrete fabricator. Custom seamless concrete counters.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — over budget.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.concreteworks.com" target="_blank" rel="noopener">Explore Concreteworks &rarr;</a>
+</article>
+<article class="supplier-card" data-category="counters" data-tier="premium" data-fit="GOOD" data-search="levantina / stone source (atlanta natural stone) natural marble/quartzite slabs. carrara + calacatta direct-from-fabricator. good — for k-tile-backsplash carrara slab pivot (design_spec §7).  ">
+  <div class="supplier-card-header">
+    <h3>Levantina / Stone Source (Atlanta natural stone)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Natural marble/quartzite slabs. Carrara + Calacatta direct-from-fabricator.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — for K-TILE-BACKSPLASH Carrara slab pivot (DESIGN_SPEC §7).</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>marble slab per sqft installed: $100-220</div>
+  
+  
+  <a class="explore-btn" href="https://www.levantina.com/en" target="_blank" rel="noopener">Explore Levantina / Stone Source (Atlanta natural stone) &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-appliances"><div class="category-section-header"><h2>Range / Fridge / Dishwasher / Vent</h2><span class="cat-count">10 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="appliances" data-tier="premium" data-fit="STRONG" data-search="bosch german engineering. 800 series + benchmark dishwashers + induction cooktops. quiet + reliable. strong — dishwasher anchor.  ">
+  <div class="supplier-card-header">
+    <h3>Bosch</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">German engineering. 800 Series + Benchmark dishwashers + induction cooktops. Quiet + reliable.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — dishwasher anchor.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>dishwasher: $800-1800 · wall oven: $2500-4500 · range: $2200-4500</div>
+  
+  
+  <a class="explore-btn" href="https://www.bosch-home.com/us" target="_blank" rel="noopener">Explore Bosch &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="aspirational" data-fit="STRONG" data-search="miele german premium. cleanest minimalist controls in the category. generation 7000 line. strong — over base budget but if upgrade path opens, this is the canon target.  ">
+  <div class="supplier-card-header">
+    <h3>Miele</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">German premium. Cleanest minimalist controls in the category. Generation 7000 line.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — over base budget but if upgrade path opens, this is the canon target.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>dishwasher: $1500-3500 · wall oven: $4500-9000 · range: $7000-14000</div>
+  
+  
+  <a class="explore-btn" href="https://www.mieleusa.com" target="_blank" rel="noopener">Explore Miele &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="aspirational" data-fit="GOOD" data-search="wolf (sub-zero group) pro-range red-knob signature. american restaurant-grade. good — aspirational pro range; over base budget but signature canon for range silhouette.  ">
+  <div class="supplier-card-header">
+    <h3>Wolf (Sub-Zero Group)</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Pro-range red-knob signature. American restaurant-grade.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — aspirational pro range; over base budget but signature canon for range silhouette.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>range: $8000-18000 · cooktop: $2500-6500</div>
+  
+  
+  <a class="explore-btn" href="https://www.subzero-wolf.com/wolf" target="_blank" rel="noopener">Explore Wolf (Sub-Zero Group) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="aspirational" data-fit="GOOD" data-search="sub-zero built-in refrigeration. panel-ready for canon-flush integration. good — aspirational built-in refrigeration; over base budget but the canon panel-ready integration target.  ">
+  <div class="supplier-card-header">
+    <h3>Sub-Zero</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Built-in refrigeration. Panel-ready for canon-flush integration.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — aspirational built-in refrigeration; over base budget but the canon panel-ready integration target.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>fridge built in: $12000-22000</div>
+  
+  
+  <a class="explore-btn" href="https://www.subzero-wolf.com/sub-zero" target="_blank" rel="noopener">Explore Sub-Zero &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="premium" data-fit="STRONG" data-search="ge café customizable hardware finishes (brushed bronze, brushed black, brushed copper). matte white and matte black colorways. canon-aligned mid-tier path. strong — best mid-tier match for champagne bronze finish family. range + fridge spec point.  ">
+  <div class="supplier-card-header">
+    <h3>GE Café</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Customizable hardware finishes (Brushed Bronze, Brushed Black, Brushed Copper). Matte White and Matte Black colorways. Canon-aligned mid-tier path.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — best mid-tier match for Champagne Bronze finish family. Range + fridge spec point.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>range: $2500-4500 · fridge: $3500-7500</div>
+  
+  
+  <a class="explore-btn" href="https://www.cafeappliances.com" target="_blank" rel="noopener">Explore GE Café &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="mid" data-fit="GOOD" data-search="kitchenaid (major appliances) whirlpool-family premium. architect series. solid mid-tier appliance suite. good — solid mid-tier appliance suite; useful alternate to ge café or bosch if budget tightens.  ">
+  <div class="supplier-card-header">
+    <h3>KitchenAid (Major Appliances)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Whirlpool-family premium. Architect Series. Solid mid-tier appliance suite.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — solid mid-tier appliance suite; useful alternate to GE Café or Bosch if budget tightens.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>range: $1800-3500 · dishwasher: $900-1800</div>
+  
+  
+  <a class="explore-btn" href="https://www.kitchenaid.com" target="_blank" rel="noopener">Explore KitchenAid (Major Appliances) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="mid" data-fit="MIXED" data-search="lg korean. studio line is canon-adjacent stainless. standard line reads commercial. mixed — studio line ok; avoid black-stainless and &quot;instaview&quot; gimmicks.  ">
+  <div class="supplier-card-header">
+    <h3>LG</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Korean. Studio line is canon-adjacent stainless. Standard line reads commercial.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — Studio line OK; avoid black-stainless and &quot;InstaView&quot; gimmicks.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>fridge: $1800-4500 · range: $1200-3000</div>
+  
+  
+  <a class="explore-btn" href="https://www.lg.com/us/appliances" target="_blank" rel="noopener">Explore LG &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="mid" data-fit="MIXED" data-search="samsung bespoke line offers panel-ready custom-color fronts. mixed reliability reports. mixed — bespoke panel-ready can hit canon flush look at sub-sub-zero price.  ">
+  <div class="supplier-card-header">
+    <h3>Samsung</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Bespoke line offers panel-ready custom-color fronts. Mixed reliability reports.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — Bespoke panel-ready can hit canon flush look at sub-Sub-Zero price.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>fridge: $1800-4500</div>
+  
+  
+  <a class="explore-btn" href="https://www.samsung.com/us/home-appliances/" target="_blank" rel="noopener">Explore Samsung &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="premium" data-fit="STRONG" data-search="vent-a-hood k2240ss magic lung in matte black is the §6 locked canon hood. strong — locked in design_spec §6 (g3-hood).  ">
+  <div class="supplier-card-header">
+    <h3>Vent-A-Hood</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">K2240SS Magic Lung in matte black is the §6 LOCKED canon hood.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — LOCKED in DESIGN_SPEC §6 (G3-HOOD).</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>hood: $1800-4500</div>
+  
+  
+  <a class="explore-btn" href="https://www.ventahood.com" target="_blank" rel="noopener">Explore Vent-A-Hood &rarr;</a>
+</article>
+<article class="supplier-card" data-category="appliances" data-tier="premium" data-fit="GOOD" data-search="best range hoods (broan) range-hood specialist. alternative if vent-a-hood lead-time slips. good — vent-a-hood k2240ss is the §6 lock; best is the fallback only if lead-time slips.  ">
+  <div class="supplier-card-header">
+    <h3>Best Range Hoods (Broan)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Range-hood specialist. Alternative if Vent-A-Hood lead-time slips.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — Vent-A-Hood K2240SS is the §6 lock; Best is the fallback only if lead-time slips.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>hood: $800-3000</div>
+  
+  
+  <a class="explore-btn" href="https://www.bestrangehoods.com" target="_blank" rel="noopener">Explore Best Range Hoods (Broan) &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-rugs"><div class="category-section-header"><h2>Vintage / Flatweave / Pile</h2><span class="cat-count">9 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="rugs" data-tier="mid" data-fit="STRONG" data-search="lulu and georgia curated mid-market rugs + decor. cleo, honeycomb, brentwood lines mimic beni ourain at fraction price. strong — design_spec §7 year 1-3 flat-weave wool placeholder lives here.   moroccan-inspired wool flatweave">
+  <div class="supplier-card-header">
+    <h3>Lulu and Georgia</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Curated mid-market rugs + decor. Cleo, Honeycomb, Brentwood lines mimic Beni Ourain at fraction price.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §7 Year 1-3 flat-weave wool placeholder lives here.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.luluandgeorgia.com/category/rugs" target="_blank" rel="noopener">Moroccan-Inspired</a><a class="collection-chip" href="https://www.luluandgeorgia.com/category/rugs" target="_blank" rel="noopener">Wool Flatweave</a></div>
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $800-2500</div>
+  
+  
+  <a class="explore-btn" href="https://www.luluandgeorgia.com/rugs" target="_blank" rel="noopener">Explore Lulu and Georgia &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="mid" data-fit="GOOD" data-search="loloi rugs distributed wool + jute. magnolia (joanna gaines) line; amber lewis collab. canon-adjacent neutrals. good — flatweave + jute options. magnolia leans farmhouse — pick amber lewis curation.  ">
+  <div class="supplier-card-header">
+    <h3>Loloi Rugs</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Distributed wool + jute. Magnolia (Joanna Gaines) line; Amber Lewis collab. Canon-adjacent neutrals.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — flatweave + jute options. Magnolia leans farmhouse — pick Amber Lewis curation.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $600-2200</div>
+  
+  
+  <a class="explore-btn" href="https://loloirugs.com" target="_blank" rel="noopener">Explore Loloi Rugs &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="premium" data-fit="STRONG" data-search="armadillo australian hand-woven wool + jute. canon-aligned natural palette. crosshatch, petra, sandbar lines. strong — premium-tier hero rug option for lr if beni ourain stays deferred.  ">
+  <div class="supplier-card-header">
+    <h3>Armadillo</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Australian hand-woven wool + jute. Canon-aligned natural palette. Crosshatch, Petra, Sandbar lines.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — premium-tier hero rug option for LR if Beni Ourain stays deferred.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $1800-4500</div>
+  
+  
+  <a class="explore-btn" href="https://armadillo-co.com/us" target="_blank" rel="noopener">Explore Armadillo &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="mid" data-fit="STRONG" data-search="revival dtc vintage + new moroccan, turkish, persian rugs. direct-source pricing. beni ourain + boujad direct from atlas mountains. strong — best dtc path to actual vintage beni ourain at mid-market price.  ">
+  <div class="supplier-card-header">
+    <h3>Revival</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">DTC vintage + new Moroccan, Turkish, Persian rugs. Direct-source pricing. Beni Ourain + Boujad direct from atlas mountains.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — best DTC path to actual vintage Beni Ourain at mid-market price.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $600-2500</div>
+  
+  
+  <a class="explore-btn" href="https://revivalrugs.com" target="_blank" rel="noopener">Explore Revival &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="premium" data-fit="STRONG" data-search="beni rugs direct from marrakech ateliers. custom commission program. the most canon source for beni ourain. strong — design_spec §7 [owner confirm #2] year-4 beni ourain target lives here.   beni ourain boujad">
+  <div class="supplier-card-header">
+    <h3>Beni Rugs</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Direct from Marrakech ateliers. Custom commission program. The most canon source for Beni Ourain.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §7 [OWNER CONFIRM #2] year-4 Beni Ourain target lives here.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://benirugs.com/collections/beni-ourain" target="_blank" rel="noopener">Beni Ourain</a><a class="collection-chip" href="https://benirugs.com/collections/boujad" target="_blank" rel="noopener">Boujad</a></div>
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $2500-7500</div>
+  
+  
+  <a class="explore-btn" href="https://benirugs.com" target="_blank" rel="noopener">Explore Beni Rugs &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="aspirational" data-fit="STRONG" data-search="tigmi trading byron bay-based; sourced from morocco. each rug is one-of-one. heavy designer + magazine canon. strong — over budget but worth tracking for year-4+ vintage rug.  ">
+  <div class="supplier-card-header">
+    <h3>Tigmi Trading</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Byron Bay-based; sourced from Morocco. Each rug is one-of-one. Heavy designer + magazine canon.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — over budget but worth tracking for year-4+ vintage rug.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>area rug 9x12: $4500-12000</div>
+  
+  
+  <a class="explore-btn" href="https://tigmitrading.com" target="_blank" rel="noopener">Explore Tigmi Trading &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="aspirational" data-fit="STRONG" data-search="lawrence of labrea la showroom + online. hand-curated vintage turkish, persian, moroccan. designer-canon source. strong — top end vintage rug source.  ">
+  <div class="supplier-card-header">
+    <h3>Lawrence of LaBrea</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">LA showroom + online. Hand-curated vintage Turkish, Persian, Moroccan. Designer-canon source.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — top end vintage rug source.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>vintage rug 8x10: $2500-15000</div>
+  
+  
+  <a class="explore-btn" href="https://www.lawrenceoflabrea.com" target="_blank" rel="noopener">Explore Lawrence of LaBrea &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="aspirational" data-fit="STRONG" data-search="abc carpet &amp; home nyc. massive vintage + new rug inventory. designer staple. strong — nyc vintage + new rug authority; designer staple at premium-to-aspirational tier.  ">
+  <div class="supplier-card-header">
+    <h3>ABC Carpet &amp; Home</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">NYC. Massive vintage + new rug inventory. Designer staple.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — NYC vintage + new rug authority; designer staple at premium-to-aspirational tier.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.abchome.com" target="_blank" rel="noopener">Explore ABC Carpet &amp; Home &rarr;</a>
+</article>
+<article class="supplier-card" data-category="rugs" data-tier="premium" data-fit="STRONG" data-search="vintage floor studio online vintage rug curator. strong beni ourain + anatolian inventory. strong — strong online vintage curator; useful watch-list source for year-4+ beni ourain hunt.  ">
+  <div class="supplier-card-header">
+    <h3>Vintage Floor Studio</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Online vintage rug curator. Strong Beni Ourain + Anatolian inventory.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — strong online vintage curator; useful watch-list source for year-4+ Beni Ourain hunt.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>vintage rug 8x10: $1500-6000</div>
+  
+  
+  <a class="explore-btn" href="https://www.vintagefloorstudio.com" target="_blank" rel="noopener">Explore Vintage Floor Studio &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-decor-art"><div class="category-section-header"><h2>Art / Vintage Decor / Ceramics</h2><span class="cat-count">13 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="STRONG" data-search="chairish curated vintage marketplace. strong filter (price, era, style). mid-century, danish modern, italian modernism well represented. strong — design_spec §4 principle 7 (vintage layer). best mid-market vintage source.  ">
+  <div class="supplier-card-header">
+    <h3>Chairish</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Curated vintage marketplace. Strong filter (price, era, style). Mid-century, Danish modern, Italian modernism well represented.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §4 principle 7 (vintage layer). Best mid-market vintage source.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.chairish.com" target="_blank" rel="noopener">Explore Chairish &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="aspirational" data-fit="STRONG" data-search="1stdibs high-end vintage + design marketplace. heritage modernist canon. strong — over base budget but watch for single-piece vintage moments.  ">
+  <div class="supplier-card-header">
+    <h3>1stdibs</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">High-end vintage + design marketplace. Heritage modernist canon.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — over base budget but watch for single-piece vintage moments.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.1stdibs.com" target="_blank" rel="noopener">Explore 1stdibs &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="MIXED" data-search="etsy (curated artisan shops) search pattern, not single supplier. strong for hand-thrown ceramics, vintage textiles, brass small-batch hardware. mixed — high signal-to-noise but rich when filtered. use search patterns (&quot;hand-thrown ceramic vase oat&quot;, &quot;vintage turkish kilim&quot;, &quot;brass cabinet pull batch&quot;)  recommended etsy search patterns —
+ - &quot;hand-thrown ceramic stoneware vase matte&quot;
+ - &quot;vintage beni ourain runner&quot;
+ - &quot;vintage anatolian kilim pillow&quot;
+ - &quot;unlacquered brass cabinet pull&quot;
+ - &quot;linen roman shade custom&quot;
+">
+  <div class="supplier-card-header">
+    <h3>Etsy (curated artisan shops)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Search pattern, not single supplier. Strong for hand-thrown ceramics, vintage textiles, brass small-batch hardware.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — high signal-to-noise but rich when filtered. Use search patterns (&quot;hand-thrown ceramic vase oat&quot;, &quot;vintage Turkish kilim&quot;, &quot;brass cabinet pull batch&quot;)</p>
+  
+  
+  
+  
+  <div class="footer-line"><strong>Notes</strong>Recommended Etsy search patterns —
+ - &quot;hand-thrown ceramic stoneware vase matte&quot;
+ - &quot;vintage Beni Ourain runner&quot;
+ - &quot;vintage Anatolian kilim pillow&quot;
+ - &quot;unlacquered brass cabinet pull&quot;
+ - &quot;linen Roman shade custom&quot;
+</div>
+  <a class="explore-btn" href="https://www.etsy.com" target="_blank" rel="noopener">Explore Etsy (curated artisan shops) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="GOOD" data-search="saatchi art direct-from-artist marketplace. original art + curated prints. good — original abstract art for lr + nursery.  ">
+  <div class="supplier-card-header">
+    <h3>Saatchi Art</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Direct-from-artist marketplace. Original art + curated prints.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — original abstract art for LR + nursery.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.saatchiart.com" target="_blank" rel="noopener">Explore Saatchi Art &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="GOOD" data-search="artfully walls curated art prints. designer-friendly framing options. good — affordable art-gallery wall path.  ">
+  <div class="supplier-card-header">
+    <h3>Artfully Walls</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Curated art prints. Designer-friendly framing options.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — affordable art-gallery wall path.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.artfullywalls.com" target="_blank" rel="noopener">Explore Artfully Walls &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="GOOD" data-search="minted art prints + frames + stationery. strong neutrals. good — art prints + frames at affordable tier; restrained-neutrals curation works for the nursery + secondary walls.  ">
+  <div class="supplier-card-header">
+    <h3>Minted</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Art prints + frames + stationery. Strong neutrals.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — art prints + frames at affordable tier; restrained-neutrals curation works for the nursery + secondary walls.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.minted.com/wall-art" target="_blank" rel="noopener">Explore Minted &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="premium" data-fit="GOOD" data-search="tappan collective curated contemporary art platform. original + edition prints. good — premium contemporary art curation; one piece for the lr statement wall.  ">
+  <div class="supplier-card-header">
+    <h3>Tappan Collective</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Curated contemporary art platform. Original + edition prints.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — premium contemporary art curation; one piece for the LR statement wall.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.tappancollective.com" target="_blank" rel="noopener">Explore Tappan Collective &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="MIXED" data-search="cb2 (decor) graphic-modern decor. brass vases, marble objects. mixed — useful for small brass/marble objects; skip the chrome/lucite curation.  ">
+  <div class="supplier-card-header">
+    <h3>CB2 (Decor)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Graphic-modern decor. Brass vases, marble objects.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — useful for small brass/marble objects; skip the chrome/lucite curation.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.cb2.com/accessories/1" target="_blank" rel="noopener">Explore CB2 (Decor) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="MIXED" data-search="anthropologie home eclectic-bohemian decor. ceramics, textiles, mirrors. mixed with canon. mixed — design_spec §5d 8% bracket. browse ceramics + selected mirrors; avoid maximalist textiles.  ">
+  <div class="supplier-card-header">
+    <h3>Anthropologie Home</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-mixed">MIXED</span>
+  </div>
+  <p class="fingerprint">Eclectic-bohemian decor. Ceramics, textiles, mirrors. Mixed with canon.</p>
+  <p class="fit-line"><strong>Fit:</strong> MIXED — DESIGN_SPEC §5d 8% bracket. Browse ceramics + selected mirrors; avoid maximalist textiles.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.anthropologie.com/home" target="_blank" rel="noopener">Explore Anthropologie Home &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="premium" data-fit="STRONG" data-search="westside modern (atlanta) atlanta vintage scandinavian + american mid-century dealer. hans wegner, børge mogensen, florence knoll inventory. strong — local vintage anchor for atl pickup.  ">
+  <div class="supplier-card-header">
+    <h3>Westside Modern (Atlanta)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Atlanta vintage Scandinavian + American mid-century dealer. Hans Wegner, Børge Mogensen, Florence Knoll inventory.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — local vintage anchor for ATL pickup.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.westsidemodern.com" target="_blank" rel="noopener">Explore Westside Modern (Atlanta) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="premium" data-fit="STRONG" data-search="city issue (atlanta) atlanta mid-century vintage. strong italian + american modernism. strong — local vintage source.  ">
+  <div class="supplier-card-header">
+    <h3>City Issue (Atlanta)</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Atlanta mid-century vintage. Strong Italian + American modernism.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — local vintage source.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.cityissue.com" target="_blank" rel="noopener">Explore City Issue (Atlanta) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="GOOD" data-search="paris on ponce (atlanta) atlanta antique mall (multi-dealer). range from vintage modern to decorator gilt. good — local hunt. filter heavily.  ">
+  <div class="supplier-card-header">
+    <h3>Paris on Ponce (Atlanta)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Atlanta antique mall (multi-dealer). Range from vintage modern to decorator gilt.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — local hunt. Filter heavily.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.parisonponce.com" target="_blank" rel="noopener">Explore Paris on Ponce (Atlanta) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="decor-art" data-tier="mid" data-fit="STRONG" data-search="mid mod market (atlanta) atlanta mid-century focused dealer. strong danish-modern inventory. strong — local atlanta danish-modern vintage source; useful for one mid-century gesture per room.  ">
+  <div class="supplier-card-header">
+    <h3>Mid Mod Market (Atlanta)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Atlanta mid-century focused dealer. Strong Danish-modern inventory.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — local Atlanta Danish-modern vintage source; useful for one mid-century gesture per room.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://midmodmkt.com" target="_blank" rel="noopener">Explore Mid Mod Market (Atlanta) &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-window-treatments"><div class="category-section-header"><h2>Shades / Drapery / Hardware</h2><span class="cat-count">5 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="window-treatments" data-tier="premium" data-fit="STRONG" data-search="the shade store designer-trade made-to-measure. strong belgian-linen roman + cellular + sheer drapery library. strong — design_spec §13 explicitly cites belgian linen roman as lr + master treatment.   belgian linen roman linen drapery">
+  <div class="supplier-card-header">
+    <h3>The Shade Store</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Designer-trade made-to-measure. Strong Belgian-linen Roman + cellular + sheer drapery library.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §13 explicitly cites Belgian Linen Roman as LR + Master treatment.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.theshadestore.com/roman-shades" target="_blank" rel="noopener">Belgian Linen Roman</a><a class="collection-chip" href="https://www.theshadestore.com/drapery" target="_blank" rel="noopener">Linen Drapery</a></div>
+  <div class="footer-line"><strong>Price</strong>roller shade per window: $200-700 · roman shade per window: $500-1500 · drapery per panel: $300-900</div>
+  <div class="footer-line"><strong>Lead</strong>2-4 weeks · <strong>Samples</strong>Free swatches</div>
+  
+  <a class="explore-btn" href="https://www.theshadestore.com" target="_blank" rel="noopener">Explore The Shade Store &rarr;</a>
+</article>
+<article class="supplier-card" data-category="window-treatments" data-tier="premium" data-fit="STRONG" data-search="smith &amp; noble made-to-measure romans, cellular, drapery. strong belgian linen + linen-blend program. strong — design_spec §13 cites as roman alternative.  ">
+  <div class="supplier-card-header">
+    <h3>Smith &amp; Noble</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Made-to-measure Romans, cellular, drapery. Strong Belgian linen + linen-blend program.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §13 cites as Roman alternative.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>roman shade per window: $400-1300 · drapery per panel: $250-800</div>
+  
+  
+  <a class="explore-btn" href="https://www.smithandnoble.com" target="_blank" rel="noopener">Explore Smith &amp; Noble &rarr;</a>
+</article>
+<article class="supplier-card" data-category="window-treatments" data-tier="premium" data-fit="STRONG" data-search="hunter douglas vignette roman (cordless flat-fold) + duette cellular + pirouette signatures. strong — design_spec §13 lr spec is vignette roman in linen weave (stone).   vignette modern roman">
+  <div class="supplier-card-header">
+    <h3>Hunter Douglas</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Vignette Roman (cordless flat-fold) + Duette cellular + Pirouette signatures.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — DESIGN_SPEC §13 LR spec is Vignette Roman in Linen Weave (Stone).</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.hunterdouglas.com/products/window-treatments/roman-shades/vignette-modern-roman-shades" target="_blank" rel="noopener">Vignette Modern Roman</a></div>
+  
+  
+  
+  <a class="explore-btn" href="https://www.hunterdouglas.com" target="_blank" rel="noopener">Explore Hunter Douglas &rarr;</a>
+</article>
+<article class="supplier-card" data-category="window-treatments" data-tier="premium" data-fit="GOOD" data-search="tonic living canadian dtc custom drapery + pillows. good — canadian custom-drapery alternative to the shade store + smith &amp; noble.  ">
+  <div class="supplier-card-header">
+    <h3>Tonic Living</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Canadian DTC custom drapery + pillows.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — Canadian custom-drapery alternative to The Shade Store + Smith &amp; Noble.</p>
+  
+  
+  <div class="footer-line"><strong>Price</strong>drapery per panel: $200-700</div>
+  
+  
+  <a class="explore-btn" href="https://www.tonicliving.com" target="_blank" rel="noopener">Explore Tonic Living &rarr;</a>
+</article>
+<article class="supplier-card" data-category="window-treatments" data-tier="entry" data-fit="GOOD" data-search="ikea (curtains/shades) entry-tier shades + linen drapery. lenda linen panels. good — budget tier for utility zones (office, basement).  ">
+  <div class="supplier-card-header">
+    <h3>IKEA (Curtains/Shades)</h3>
+    <span class="supplier-pill tier-entry">entry</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Entry-tier shades + linen drapery. LENDA linen panels.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — budget tier for utility zones (office, basement).</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.ikea.com/us/en/cat/curtains-blinds-fc-22656/" target="_blank" rel="noopener">Explore IKEA (Curtains/Shades) &rarr;</a>
+</article></div></section>
+<section class="category-section" id="cat-outdoor"><div class="category-section-header"><h2>Patio Furniture / Outdoor Lighting / Planters</h2><span class="cat-count">9 suppliers</span></div><div class="supplier-card-grid"><article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="STRONG" data-search="crate &amp; barrel outdoor andorra, mendocino, cayman lines. teak + powder-coated steel + sunbrella. strong — outdoor canon.   andorra teak">
+  <div class="supplier-card-header">
+    <h3>Crate &amp; Barrel Outdoor</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Andorra, Mendocino, Cayman lines. Teak + powder-coated steel + Sunbrella.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — outdoor canon.</p>
+  
+  <div class="collections"><a class="collection-chip" href="https://www.crateandbarrel.com/andorra-collection" target="_blank" rel="noopener">Andorra Teak</a></div>
+  <div class="footer-line"><strong>Price</strong>outdoor sofa: $1800-4500 · dining set: $2500-6500</div>
+  
+  
+  <a class="explore-btn" href="https://www.crateandbarrel.com/outdoor-furniture" target="_blank" rel="noopener">Explore Crate &amp; Barrel Outdoor &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="STRONG" data-search="article (outdoor) teaka, pala, acula teak lines. mid-mod outdoor. strong.  ">
+  <div class="supplier-card-header">
+    <h3>Article (Outdoor)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">Teaka, Pala, Acula teak lines. Mid-mod outdoor.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.article.com/category/outdoor" target="_blank" rel="noopener">Explore Article (Outdoor) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="GOOD" data-search="sundays (outdoor) canadian dtc outdoor — modular sectionals + dining. good — modular canadian outdoor; canon-adjacent at mid tier.  ">
+  <div class="supplier-card-header">
+    <h3>Sundays (Outdoor)</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Canadian DTC outdoor — modular sectionals + dining.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — modular Canadian outdoor; canon-adjacent at mid tier.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.sundayscompany.com/collections/outdoor" target="_blank" rel="noopener">Explore Sundays (Outdoor) &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="aspirational" data-fit="GOOD" data-search="gloster premium teak outdoor. lifetime-grade. good — premium teak outdoor; over base outdoor budget but lifetime-grade.  ">
+  <div class="supplier-card-header">
+    <h3>Gloster</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Premium teak outdoor. Lifetime-grade.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — premium teak outdoor; over base outdoor budget but lifetime-grade.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://gloster.com/us/" target="_blank" rel="noopener">Explore Gloster &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="premium" data-fit="GOOD" data-search="tropitone aluminum + sling outdoor furniture. contract-grade. good — aluminum + sling outdoor; useful for poolside / deck dining where teak is overkill.  ">
+  <div class="supplier-card-header">
+    <h3>Tropitone</h3>
+    <span class="supplier-pill tier-premium">premium</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Aluminum + sling outdoor furniture. Contract-grade.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — aluminum + sling outdoor; useful for poolside / deck dining where teak is overkill.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.tropitone.com" target="_blank" rel="noopener">Explore Tropitone &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="aspirational" data-fit="CANON-ADJACENT" data-search="rh outdoor belgian-shaped outdoor sofas + teak dining. cloud outdoor. canon-adjacent — rh cloud outdoor + belgian-shape teak; over budget but reference-grade.  ">
+  <div class="supplier-card-header">
+    <h3>RH Outdoor</h3>
+    <span class="supplier-pill tier-aspirational">aspirational</span>
+    <span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span>
+  </div>
+  <p class="fingerprint">Belgian-shaped outdoor sofas + teak dining. Cloud Outdoor.</p>
+  <p class="fit-line"><strong>Fit:</strong> CANON-ADJACENT — RH Cloud Outdoor + Belgian-shape teak; over budget but reference-grade.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.rh.com/catalog/category/products.jsp?categoryId=cat15080001" target="_blank" rel="noopener">Explore RH Outdoor &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="GOOD" data-search="terrain anthropologie&#x27;s garden + outdoor brand. planters, garden tools, outdoor accent. good — strong for planters + outdoor accent decor.  ">
+  <div class="supplier-card-header">
+    <h3>Terrain</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Anthropologie&#x27;s garden + outdoor brand. Planters, garden tools, outdoor accent.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — strong for planters + outdoor accent decor.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.shopterrain.com" target="_blank" rel="noopener">Explore Terrain &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="STRONG" data-search="bauer pottery la legacy ceramic planters. restrained mid-century glaze palette. strong — la legacy ceramic planters; canon-aligned mid-century glaze palette for indoor + outdoor plant placement.  ">
+  <div class="supplier-card-header">
+    <h3>Bauer Pottery</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-strong">STRONG</span>
+  </div>
+  <p class="fingerprint">LA legacy ceramic planters. Restrained mid-century glaze palette.</p>
+  <p class="fit-line"><strong>Fit:</strong> STRONG — LA legacy ceramic planters; canon-aligned mid-century glaze palette for indoor + outdoor plant placement.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.bauerpottery.com" target="_blank" rel="noopener">Explore Bauer Pottery &rarr;</a>
+</article>
+<article class="supplier-card" data-category="outdoor" data-tier="mid" data-fit="GOOD" data-search="campania international cast stone + terracotta planters. classic + modern range. good — cast stone + terracotta planters; useful for front yard + outdoor placement.  ">
+  <div class="supplier-card-header">
+    <h3>Campania International</h3>
+    <span class="supplier-pill tier-mid">mid</span>
+    <span class="supplier-pill fit-good">GOOD</span>
+  </div>
+  <p class="fingerprint">Cast stone + terracotta planters. Classic + modern range.</p>
+  <p class="fit-line"><strong>Fit:</strong> GOOD — cast stone + terracotta planters; useful for front yard + outdoor placement.</p>
+  
+  
+  
+  
+  
+  <a class="explore-btn" href="https://www.campaniainternational.com" target="_blank" rel="noopener">Explore Campania International &rarr;</a>
+</article></div></section>
+  </div>
+</div>
+</main>
+
+<script>
+(function() {
+  const cards = Array.from(document.querySelectorAll('.supplier-card'));
+  const sections = Array.from(document.querySelectorAll('.category-section'));
+  const searchInput = document.getElementById('supplier-search');
+  const catSelect = document.getElementById('cat-filter');
+  const tierSelect = document.getElementById('tier-filter');
+  const fitSelect = document.getElementById('fit-filter');
+  const resetBtn = document.getElementById('reset-filters');
+  const randomBtn = document.getElementById('random-pick');
+  const stats = document.getElementById('filter-stats');
+  const totalCards = cards.length;
+
+  function applyFilters() {
+    const q = (searchInput.value || '').toLowerCase().trim();
+    const cat = catSelect.value;
+    const tier = tierSelect.value;
+    const fit = fitSelect.value;
+    let visible = 0;
+    cards.forEach(card => {
+      const matchCat = !cat || card.dataset.category === cat;
+      const matchTier = !tier || card.dataset.tier === tier;
+      const matchFit = !fit || card.dataset.fit === fit;
+      const haystack = card.dataset.search;
+      const matchQuery = !q || haystack.indexOf(q) !== -1;
+      const shown = matchCat && matchTier && matchFit && matchQuery;
+      card.classList.toggle('hidden', !shown);
+      if (shown) visible++;
+    });
+    sections.forEach(sec => {
+      const any = Array.from(sec.querySelectorAll('.supplier-card')).some(c => !c.classList.contains('hidden'));
+      sec.style.display = any ? '' : 'none';
+    });
+    stats.textContent = visible + ' of ' + totalCards + ' suppliers';
+  }
+
+  function pickRandom() {
+    const visible = cards.filter(c => !c.classList.contains('hidden'));
+    if (!visible.length) return;
+    const pick = visible[Math.floor(Math.random() * visible.length)];
+    pick.scrollIntoView({behavior: 'smooth', block: 'center'});
+    pick.style.boxShadow = '0 0 0 3px #c9b88a';
+    setTimeout(() => { pick.style.boxShadow = ''; }, 1800);
+  }
+
+  function resetAll() {
+    searchInput.value = '';
+    catSelect.value = '';
+    tierSelect.value = '';
+    fitSelect.value = '';
+    applyFilters();
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  catSelect.addEventListener('change', applyFilters);
+  tierSelect.addEventListener('change', applyFilters);
+  fitSelect.addEventListener('change', applyFilters);
+  resetBtn.addEventListener('click', resetAll);
+  randomBtn.addEventListener('click', pickRandom);
+
+  applyFilters();
+})();
+</script>
+
+</body>
+</html>
