@@ -652,6 +652,40 @@ def check_no_orphan_sku_refs_in_notes(items: List[Item], meta: Meta) -> List[Lin
     return findings
 
 
+def check_catalog_status_callouts(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Surface items with non-None catalog_status as warnings so they show up in lint output.
+
+    - needs_reselection → warning (vendor catalog moved; owner must pick a new SKU)
+    - spec_error → warning (spec'd product doesn't exist in this vendor's catalog at all)
+    - verified → info (spec matches live catalog; image re-sourced from real PDP)
+    """
+    findings = []
+    for item in items:
+        if not item.catalog_status:
+            continue
+        if item.catalog_status == "verified":
+            sev = "info"
+            msg = f"{item.id}: catalog VERIFIED against live vendor PDP"
+        elif item.catalog_status == "needs_reselection":
+            sev = "warning"
+            msg = (
+                f"{item.id}: CATALOG GAP — spec'd SKU not in current vendor catalog "
+                f"with no clean successor; owner must reselect"
+            )
+        elif item.catalog_status == "spec_error":
+            sev = "warning"
+            msg = (
+                f"{item.id}: SPEC ERROR — spec'd product does not exist in this vendor's "
+                f"catalog (likely wrong line/format); owner must reselect"
+            )
+        else:
+            continue
+        if item.catalog_status_note:
+            msg += f" — {item.catalog_status_note}"
+        findings.append(LintFinding(severity=sev, message=msg, item_id=item.id))
+    return findings
+
+
 def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings: List[LintFinding] = []
     findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
@@ -665,4 +699,5 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_known_vendor_finishes(items, meta)
     findings += check_per_item_budget_overshoot(items, meta)
     findings += check_no_orphan_sku_refs_in_notes(items, meta)
+    findings += check_catalog_status_callouts(items, meta)
     return findings

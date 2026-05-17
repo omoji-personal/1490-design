@@ -117,6 +117,38 @@ def test_invalid_category_rejected():
         parse_item(raw)
 
 
+def test_catalog_status_field_optional_and_validated():
+    """catalog_status is None by default and accepts only the three documented values."""
+    base = {
+        "id": "MB-FAUCET",
+        "title": "x",
+        "category": "plumbing_fixture",
+        "room": "master_bath",
+        "urgency": "T0",
+        "lead_time_weeks": 2,
+        "budget_source": "construction_allowance",
+        "budget_target_usd": 450,
+        "sourcing_actor": "owner_direct",
+        "decision_status": "decided",
+        "annika_loop": False,
+        "decided_sku": "Delta Trinsic",
+    }
+    # Default = None
+    item = parse_item(dict(base))
+    assert item.catalog_status is None
+    assert item.catalog_status_note is None
+    # All three valid statuses parse and round-trip
+    for s in ("verified", "needs_reselection", "spec_error"):
+        raw = dict(base, catalog_status=s, catalog_status_note=f"note for {s}")
+        item = parse_item(raw)
+        assert item.catalog_status == s
+        assert item.catalog_status_note == f"note for {s}"
+    # Invalid value rejected
+    raw = dict(base, catalog_status="bogus")
+    with pytest.raises(ValidationError, match="invalid catalog_status"):
+        parse_item(raw)
+
+
 def test_options_and_vintage_both_rejected():
     raw = {
         "id": "X-2",

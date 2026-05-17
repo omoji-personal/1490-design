@@ -149,6 +149,7 @@ from sourcing_lint import (
     check_known_vendor_finishes,
     check_per_item_budget_overshoot,
     check_no_orphan_sku_refs_in_notes,
+    check_catalog_status_callouts,
 )
 from sourcing_schema import Meta, Budgets, ConsistencyLocks
 
@@ -577,6 +578,42 @@ def test_orphan_sku_real_orphan_still_flagged():
     items[0].notes = "Previously was OLDSKU-789 but swapped out in R4."
     findings = check_no_orphan_sku_refs_in_notes(items, _meta_simple())
     assert any("OR1" in f.message and "OLDSKU-789" in f.message for f in findings)
+
+
+# --- Catalog status callouts ---
+
+def test_catalog_status_callouts_none_returns_no_findings():
+    items = [_i("X1", decided_sku="A")]
+    assert check_catalog_status_callouts(items, _meta()) == []
+
+
+def test_catalog_status_needs_reselection_warns():
+    item = _i("X1", decided_sku="A")
+    item.catalog_status = "needs_reselection"
+    item.catalog_status_note = "vendor discontinued"
+    findings = check_catalog_status_callouts([item], _meta())
+    assert len(findings) == 1
+    assert findings[0].severity == "warning"
+    assert "CATALOG GAP" in findings[0].message
+    assert "vendor discontinued" in findings[0].message
+
+
+def test_catalog_status_spec_error_warns():
+    item = _i("X2", decided_sku="A")
+    item.catalog_status = "spec_error"
+    findings = check_catalog_status_callouts([item], _meta())
+    assert len(findings) == 1
+    assert findings[0].severity == "warning"
+    assert "SPEC ERROR" in findings[0].message
+
+
+def test_catalog_status_verified_is_info_severity():
+    item = _i("X3", decided_sku="A")
+    item.catalog_status = "verified"
+    findings = check_catalog_status_callouts([item], _meta())
+    assert len(findings) == 1
+    assert findings[0].severity == "info"
+    assert "VERIFIED" in findings[0].message
 
 
 # --- Lint aggregator ---

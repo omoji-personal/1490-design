@@ -152,6 +152,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -332,14 +344,44 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
 
     history_html = _render_revision_history(item)
 
-    return f"""<article class="item-card" data-id="{escape(item.id)}"
+    # Catalog reconciliation banner (yellow tint) for items whose spec'd SKU does
+    # not match the live vendor catalog. Surfaces above the body so owners see
+    # the gap before reading the decided-SKU line.
+    catalog_gap_html = ""
+    extra_card_class = ""
+    catalog_gap_pill = ""
+    if item.catalog_status == "needs_reselection":
+        extra_card_class = " catalog-gap"
+        catalog_gap_pill = '<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span>'
+        catalog_gap_html = (
+            f'<div class="catalog-gap-banner">'
+            f'<strong>⚠ CATALOG GAP — see notes</strong>'
+            f'Spec\'d SKU is no longer in the current vendor catalog with no clean successor; owner reselect required.'
+            + (f' <em>{escape(item.catalog_status_note)}</em>' if item.catalog_status_note else "")
+            + '</div>'
+        )
+    elif item.catalog_status == "spec_error":
+        extra_card_class = " catalog-gap"
+        catalog_gap_pill = '<span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span>'
+        catalog_gap_html = (
+            f'<div class="catalog-gap-banner">'
+            f'<strong>⚠ CATALOG GAP — see notes</strong>'
+            f'Spec\'d product does not exist in this vendor\'s catalog (wrong line/format). Owner reselect required.'
+            + (f' <em>{escape(item.catalog_status_note)}</em>' if item.catalog_status_note else "")
+            + '</div>'
+        )
+    elif item.catalog_status == "verified":
+        catalog_gap_pill = '<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span>'
+
+    return f"""<article class="item-card{extra_card_class}" data-id="{escape(item.id)}"
        data-urgency="{escape(item.urgency)}" data-room="{escape(item.room)}"
        data-category="{escape(item.category)}" data-status="{escape(item.decision_status)}"
        data-annika="{str(item.annika_loop).lower()}"
+       data-catalog-status="{escape(item.catalog_status or '')}"
        data-schedule-locked="{str(sched_locked).lower()}">
       <div class="item-card-header">
         <span class="item-id">{escape(item.id)}</span>
-        <h3>{escape(item.title)}</h3>
+        <h3>{escape(item.title)}{catalog_gap_pill}</h3>
         <span class="status-badge {badge_class}">{badge_text}</span>
         {sched_badge}
       </div>
@@ -351,6 +393,7 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
         <strong>Budget:</strong> ${item.budget_target_usd:,.0f} ({escape(item.budget_source)}) ·
         <strong>Actor:</strong> {escape(item.sourcing_actor)}{annika_flag}{sample_flag}
       </div>
+      {catalog_gap_html}
       {body}
       {notes_html}
       {history_html}
@@ -564,14 +607,22 @@ def _render_locked_row(item: Item) -> str:
     is still available on the per-room page for in-room decision context.
     """
     decided_sku = item.decided_sku or "see per-room page for detail"
+    # Yellow tint + pill on rows whose vendor catalog disagrees with spec.
+    row_extra = " catalog-gap" if item.catalog_status in ("needs_reselection", "spec_error") else ""
+    gap_pill = ""
+    if item.catalog_status == "needs_reselection":
+        gap_pill = '<span class="catalog-gap-pill">⚠ CATALOG GAP</span>'
+    elif item.catalog_status == "spec_error":
+        gap_pill = '<span class="catalog-gap-pill">⚠ SPEC ERROR</span>'
     return (
-        f'<div class="locked-row" data-id="{escape(item.id)}" '
+        f'<div class="locked-row{row_extra}" data-id="{escape(item.id)}" '
         f'data-urgency="{escape(item.urgency)}" data-room="{escape(item.room)}" '
         f'data-category="{escape(item.category)}" data-status="{escape(item.decision_status)}" '
         f'data-annika="{str(item.annika_loop).lower()}" '
+        f'data-catalog-status="{escape(item.catalog_status or "")}" '
         f'data-schedule-locked="true">'
         f'<span class="locked-row-id">{escape(item.id)}</span>'
-        f'<span class="locked-row-title">{escape(item.title)}</span>'
+        f'<span class="locked-row-title">{escape(item.title)}{gap_pill}</span>'
         f'<span class="locked-row-sku">{escape(decided_sku)}</span>'
         f'<span class="locked-row-meta">{escape(item.room)} · {escape(item.category)}</span>'
         f'</div>'

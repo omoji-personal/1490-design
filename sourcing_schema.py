@@ -27,6 +27,12 @@ VALID_STATUSES = {
     "watch_list", "found_candidate",
 }
 
+# Catalog reconciliation flags (set when vendor catalog disagrees with spec).
+# - "verified": spec matches live catalog, image confirmed at PDP (informational)
+# - "needs_reselection": spec'd SKU is gone with no clean successor; owner must reselect
+# - "spec_error": spec'd product/format doesn't exist in this vendor's catalog at all
+VALID_CATALOG_STATUSES = {"verified", "needs_reselection", "spec_error"}
+
 
 class ValidationError(Exception):
     pass
@@ -80,6 +86,10 @@ class Item:
     # Top-level image — used for canon-decided items (no options/vintage_brief)
     # so locked-in selections can show their representative product photo.
     image: Optional[str] = None
+    # Catalog reconciliation flag — None for normal items. Set when vendor
+    # catalog disagrees with spec (see VALID_CATALOG_STATUSES).
+    catalog_status: Optional[str] = None
+    catalog_status_note: Optional[str] = None
 
 
 @dataclass
@@ -141,6 +151,11 @@ def parse_item(raw: Dict[str, Any]) -> Item:
         raise ValidationError(f"{raw.get('id', '?')}: invalid sourcing_actor '{raw['sourcing_actor']}'")
     if raw["decision_status"] not in VALID_STATUSES:
         raise ValidationError(f"{raw.get('id', '?')}: invalid decision_status '{raw['decision_status']}'")
+    if raw.get("catalog_status") is not None and raw["catalog_status"] not in VALID_CATALOG_STATUSES:
+        raise ValidationError(
+            f"{raw.get('id', '?')}: invalid catalog_status '{raw['catalog_status']}' "
+            f"(allowed: {sorted(VALID_CATALOG_STATUSES)})"
+        )
 
     options = [parse_option(o) for o in raw["options"]] if raw.get("options") else None
     vintage = parse_vintage_brief(raw["vintage_brief"]) if raw.get("vintage_brief") else None
@@ -186,6 +201,8 @@ def parse_item(raw: Dict[str, Any]) -> Item:
         notes=raw.get("notes", ""),
         revision_history=list(raw.get("revision_history", [])),
         image=raw.get("image"),
+        catalog_status=raw.get("catalog_status"),
+        catalog_status_note=raw.get("catalog_status_note"),
     )
 
 
