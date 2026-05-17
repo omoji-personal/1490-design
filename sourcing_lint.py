@@ -449,6 +449,13 @@ def check_known_vendor_finishes(items: List[Item], meta: Meta) -> List[LintFindi
 
     This correctly flags "lacquered brass" for Cedar & Moss (whose known finish is just
     "brass", not "lacquered brass") while not flagging "brass" alone.
+
+    R7-I4 (sentinel filter on vendor-finish guard): Bare modifier candidates like "raw" or
+    "true" that appear ONLY as substrings inside larger non-finish words (e.g. "raw" inside
+    "Crawford", "true" inside "true price") were the source of 7 R6 false positives.  The
+    SENTINEL_WORDS exclusion (originally shipped on Rule 9 orphan-SKU guard) is duplicated
+    here as a case-insensitive set: a bare modifier candidate whose token form is a sentinel
+    word is filtered out before vocabulary check.
     """
     # Modifier words that narrow a finish beyond the base material
     _MODIFIERS = frozenset([
@@ -458,6 +465,11 @@ def check_known_vendor_finishes(items: List[Item], meta: Meta) -> List[LintFindi
     ])
     # Material nouns that can follow a modifier
     _MATERIALS = frozenset(["brass", "black", "bronze", "nickel", "chrome", "white", "gold"])
+
+    # R7-I4: lowercase sentinel-word set for the bare-modifier exclusion path.
+    # SENTINEL_WORDS is uppercase (shared with Rule 9); we lower-case for case-insensitive
+    # match against bare modifier candidates ("raw", "true", etc.).
+    _SENTINEL_LOWER = {w.lower() for w in SENTINEL_WORDS}
 
     findings = []
     for item in items:
@@ -473,18 +485,31 @@ def check_known_vendor_finishes(items: List[Item], meta: Meta) -> List[LintFindi
             text = ((opt.sku or "") + " " + (opt.details or "")).lower()
 
             # Build finish candidates: any multi-word (modifier + material) or
-            # single-word finish that matches a modifier (e.g. "lacquered" alone)
+            # single-word finish that matches a modifier (e.g. "lacquered" alone).
+            # R7-I4: for the bare-modifier path, require a whole-word hit (word boundaries)
+            # so "raw" inside "Crawford" / "Drawer" / "Outdrawn" doesn't fire.  The
+            # modifier+material multi-word path already requires the material token so
+            # is naturally protected.
             candidates: list = []
             for mod in _MODIFIERS:
                 if mod not in text:
                     continue
+                # Multi-word candidates always require the material — these stand.
+                has_paired = False
                 for mat in _MATERIALS:
                     phrase = f"{mod} {mat}"
                     if phrase in text:
                         candidates.append(phrase)
-                # Also record bare modifier if no material follows within text
-                # (e.g. "lacquered finish" without a material — still a signal)
-                if not any(f"{mod} {mat}" in text for mat in _MATERIALS):
+                        has_paired = True
+                if has_paired:
+                    continue
+                # Bare modifier path: only count if `mod` appears as a whole word AND
+                # isn't in the sentinel exclusion list (filters the 'raw' / 'true' false
+                # positives caused by substring matches inside non-finish prose).
+                if mod in _SENTINEL_LOWER:
+                    continue
+                # Whole-word boundary check
+                if re.search(rf"\b{re.escape(mod)}\b", text):
                     candidates.append(mod)
 
             if not candidates:
@@ -572,6 +597,11 @@ SENTINEL_WORDS = {
     "RULE", "HARD", "RULES", "NOTES", "NOTE", "SPEC", "SPECS",
     "HARD-RULE", "HARD-RULES", "CRITICAL", "FIXED", "STATUS",
     "CAUTION", "WARNING", "UPDATE", "PAUSED", "DONE", "BUDGET",
+    # R7-I4: modifier words that appear as substrings of non-finish prose
+    # (e.g. "raw" inside "Crawford", bare "true" inside "true price"). These
+    # are sentinel exclusions for the vendor-finish guard (Rule 11) when no
+    # paired material noun follows.
+    "RAW", "TRUE",
 }
 
 

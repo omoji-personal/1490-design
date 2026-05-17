@@ -490,6 +490,36 @@ def test_known_vendor_finishes_no_finish_words_skipped():
     assert not any("CM3" in f.message for f in findings)
 
 
+def test_known_vendor_finishes_substring_modifier_not_flagged():
+    """Modifier substrings buried inside non-finish words (e.g. 'raw' inside 'Crawford') must
+    NOT trigger a finish-vocabulary warning.  Same for 'true' inside 'true price' in details
+    prose. These were R6-I3 / R7-I4 false positives."""
+    from sourcing_schema import Option
+    # 'raw' is a substring of 'Crawford' — must not fire
+    opt_raw = Option(
+        sku="Rejuvenation Crawford Single Wall Sconce — Lacquered Brass",
+        vendor="Rejuvenation", price_usd=200.0, image="",
+        reasoning="r", recommend=True,
+        details="Crawford lacquered brass, hardwire, pair",
+    )
+    items_raw = [_i("RAW1", options=[opt_raw])]
+    findings_raw = check_known_vendor_finishes(items_raw, _meta_simple())
+    assert not any("RAW1" in f.message for f in findings_raw), \
+        f"'raw' inside 'Crawford' must not fire vendor-finish warning; got: {findings_raw}"
+
+    # 'true' inside 'true price' (sentinel-style prose) must not fire either
+    opt_true = Option(
+        sku="Rejuvenation Massey Single Hook — Natural Brass",
+        vendor="Rejuvenation", price_usd=225.0, image="",
+        reasoning="r", recommend=True,
+        details="true price would be $295. natural brass finish.",
+    )
+    items_true = [_i("TRUE1", options=[opt_true])]
+    findings_true = check_known_vendor_finishes(items_true, _meta_simple())
+    assert not any("TRUE1" in f.message for f in findings_true), \
+        f"bare 'true' word in details prose must not fire vendor-finish warning; got: {findings_true}"
+
+
 # --- Rule 8 extended: decided items with budget but no priced option ---
 
 def test_per_item_budget_decided_no_options_info():
