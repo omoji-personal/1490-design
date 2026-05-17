@@ -31,6 +31,36 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
 .page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
 .page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
 .page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
@@ -109,6 +139,49 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -129,12 +202,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <span class="group-label">Rooms</span>
-    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
-    <span class="group-label">Canon</span>
-    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
@@ -148,7 +219,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </header>
 <main>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
-<article class="item-card" data-id="HB-TILE-WALL"
+<article class="item-card" id="item-HB-TILE-WALL" data-id="HB-TILE-WALL"
        data-urgency="T0" data-room="hall_bath"
        data-category="tile_stone" data-status="options_drafted"
        data-annika="false"
@@ -168,6 +239,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com)</div>
@@ -197,7 +269,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon family: Cle Sea Salt palette. Owner must reconcile G2 (Cloé) vs DESIGN_SPEC §6 (Cle Sea Salt) at sample stage. Step 2 drafted both options + budget tier below.</div>
       
     </article>
-<article class="item-card" data-id="HB-TILE-FLOOR"
+<article class="item-card" id="item-HB-TILE-FLOOR" data-id="HB-TILE-FLOOR"
        data-urgency="T0" data-room="hall_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="false"
@@ -217,12 +289,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Daltile Portfolio White 12×24 honed</div><img class="option-img-main item-img-main" src="/images/sourcing/hb-tile-floor-0.jpg" alt="Hall bath floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6.</div>
       
     </article>
-<article class="item-card" data-id="BB-TILE-WALL"
+<article class="item-card" id="item-BB-TILE-WALL" data-id="BB-TILE-WALL"
        data-urgency="T0" data-room="basement_bath"
        data-category="tile_stone" data-status="options_drafted"
        data-annika="false"
@@ -242,6 +315,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com) — combine order with HB-TILE-WALL for single lead-time pull</div>
@@ -271,7 +345,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Chains to HB-TILE-WALL final pick — match whatever is selected for hall bath. Options below are the same three products sized for ~45 sf basement coverage. Recommend flag mirrors HB-TILE-WALL selection at owner decision point.</div>
       
     </article>
-<article class="item-card" data-id="BB-TILE-FLOOR"
+<article class="item-card" id="item-BB-TILE-FLOOR" data-id="BB-TILE-FLOOR"
        data-urgency="T0" data-room="basement_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="false"
@@ -291,12 +365,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Daltile Portfolio White 12×24 honed (match hall bath)</div><img class="option-img-main item-img-main" src="/images/sourcing/bb-tile-floor-0.jpg" alt="Basement bath floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6.</div>
       
     </article>
-<article class="item-card" data-id="HB-FAUCET"
+<article class="item-card" id="item-HB-FAUCET" data-id="HB-FAUCET"
        data-urgency="T0" data-room="hall_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -316,12 +391,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</div><img class="option-img-main item-img-main" src="/images/sourcing/hb-faucet-0.jpg" alt="Hall bath sink faucet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked — Champagne Bronze family consistency.</div>
       
     </article>
-<article class="item-card" data-id="HB-TUB-FILLER"
+<article class="item-card" id="item-HB-TUB-FILLER" data-id="HB-TUB-FILLER"
        data-urgency="T0" data-room="hall_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -341,12 +417,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $999 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Delta Trinsic T4759-CZ Roman Tub Filler with Hand Shower, Deck-Mount (4-hole, 8-16&quot; spread), Champagne Bronze</div>
       <div class="notes-line">Kohler Bellwether cast iron tub per G2; Trinsic trim. | budget revised UP per HARD RULE 2026-05-16: from $500 to $999. T4759-CZ actual price is $999 — no Trinsic-family tub filler exists at $500. approved_overshoot: true.</div>
       
     </article>
-<article class="item-card" data-id="HB-TUB"
+<article class="item-card" id="item-HB-TUB" data-id="HB-TUB"
        data-urgency="T0" data-room="hall_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -366,12 +443,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Kohler Bellwether 60-inch cast iron alcove tub, White</div><img class="option-img-main item-img-main" src="/images/sourcing/hb-tub-0.jpg" alt="Hall bath tub (Kohler Bellwether)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
-<article class="item-card" data-id="BB-FAUCET"
+<article class="item-card" id="item-BB-FAUCET" data-id="BB-FAUCET"
        data-urgency="T0" data-room="basement_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
@@ -391,6 +469,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $350 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / eFaucets</div>
@@ -420,7 +499,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Deck-mount (559LF-CZMPU) is the recommended default pending TCW confirmation of vanity rough-in. If Mason vanity is confirmed wall-hung with no counter, switch to 558LF-CZ wall-mount. Both are within $350 budget.</div>
       
     </article>
-<article class="item-card" data-id="BB-SHOWER-SYSTEM"
+<article class="item-card" id="item-BB-SHOWER-SYSTEM" data-id="BB-SHOWER-SYSTEM"
        data-urgency="T0" data-room="basement_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
@@ -440,6 +519,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Build.com / eFaucets</div>
@@ -469,7 +549,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">17-Series (T17253-CZ) is preferred over Monitor 14 for the smoother valve feel. Valve body (R10000) ordered by TCW with rough plumbing. Neo-angle 32×32 doesn&#x27;t require a rainhead — standard 2.5 GPM showerhead (52140-CZ) is sufficient.</div>
       
     </article>
-<article class="item-card" data-id="HB-TOILET"
+<article class="item-card" id="item-HB-TOILET" data-id="HB-TOILET"
        data-urgency="T0" data-room="hall_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -489,12 +569,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div><img class="option-img-main item-img-main" src="/images/sourcing/hb-toilet-0.jpg" alt="Hall bath toilet + washlet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
-<article class="item-card" data-id="BB-TOILET"
+<article class="item-card" id="item-BB-TOILET" data-id="BB-TOILET"
        data-urgency="T0" data-room="basement_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -514,12 +595,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Toto Drake II Two-Piece + Toto Washlet C5</div><img class="option-img-main item-img-main" src="/images/sourcing/bb-toilet-0.jpg" alt="Basement bath toilet + washlet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
-<article class="item-card" data-id="HB-SCONCES"
+<article class="item-card" id="item-HB-SCONCES" data-id="HB-SCONCES"
        data-urgency="T0" data-room="hall_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -539,6 +621,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
@@ -568,7 +651,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon family: Cedar &amp; Moss, lacquered brass. Specific product (Cylinder, Globe, Dome — which line?) and size not picked. Step 2 draft Cedar &amp; Moss sconce options at $180-220/each price band.</div>
       
     </article>
-<article class="item-card" data-id="BB-SCONCES"
+<article class="item-card" id="item-BB-SCONCES" data-id="BB-SCONCES"
        data-urgency="T0" data-room="basement_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -588,6 +671,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $320 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
@@ -617,7 +701,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Match hall bath family — Cedar &amp; Moss or Schoolhouse budget tier. | budget revised UP per HARD RULE 2026-05-16: from $300 to $320. Cedar &amp; Moss Cylinder matte black at $319 is spec-correct finish and canon brand; no cheaper canon-brand pair available.</div>
       
     </article>
-<article class="item-card" data-id="HB-CAB-HARDWARE"
+<article class="item-card" id="item-HB-CAB-HARDWARE" data-id="HB-CAB-HARDWARE"
        data-urgency="T1" data-room="hall_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
@@ -637,6 +721,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
@@ -666,7 +751,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Match master bath family.</div>
       
     </article>
-<article class="item-card" data-id="BB-CAB-HARDWARE"
+<article class="item-card" id="item-BB-CAB-HARDWARE" data-id="BB-CAB-HARDWARE"
        data-urgency="T1" data-room="basement_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
@@ -686,6 +771,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $80 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Schoolhouse</div>
@@ -707,7 +793,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Minimal hardware for 24-inch wall-mount vanity.</div>
       
     </article>
-<article class="item-card" data-id="HB-VANITY"
+<article class="item-card" id="item-HB-VANITY" data-id="HB-VANITY"
        data-urgency="T0" data-room="hall_bath"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="false"
@@ -727,12 +813,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ West Elm Hutchinson Single Vanity 36-inch, Blonde</div><img class="option-img-main item-img-main" src="/images/sourcing/hb-vanity-0.jpg" alt="Hall bath vanity (WE Hutchinson 36-inch Single)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6 + G2 line.</div>
       
     </article>
-<article class="item-card catalog-gap" data-id="BB-VANITY"
+<article class="item-card catalog-gap" id="item-BB-VANITY" data-id="BB-VANITY"
        data-urgency="T0" data-room="basement_bath"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="false"
@@ -752,6 +839,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Mason vanity line smallest current size is 31.5&quot; (Mason 31.5&quot; Single Sink Vanity, ~$2,799). No 24&quot; Mason and no wall-mount Mason configuration exists in PB catalog. Budget $1,100 is also short of current Mason pricing. Owner reselect: candidates at 24&quot; wall-mount from PB current = Bryston 24-30, Sabine 24-30, Sinclaire 24-30, Warner 24-30, Alderson 24-30 — pick one or upsize budget to fit Mason 31.5.</em></div>
       <div class="decided-line">✅ Pottery Barn Mason 24-inch wall-mount vanity</div><img class="option-img-main item-img-main" src="/images/sourcing/bb-vanity-0.jpg" alt="Basement bath vanity (Pottery Barn Mason 24)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>

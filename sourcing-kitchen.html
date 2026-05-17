@@ -31,6 +31,36 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
 .page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
 .page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
 .page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
@@ -109,6 +139,49 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -129,12 +202,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <span class="group-label">Rooms</span>
-    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
-    <span class="group-label">Canon</span>
-    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
@@ -148,7 +219,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </header>
 <main>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
-<article class="item-card" data-id="CABINET-FINISH-KITCHEN"
+<article class="item-card" id="item-CABINET-FINISH-KITCHEN" data-id="CABINET-FINISH-KITCHEN"
        data-urgency="T0" data-room="kitchen"
        data-category="paint_finish" data-status="decided"
        data-annika="true"
@@ -168,12 +239,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ KraftMaid Vantage Lyndale Shaker, oak — factory finish included in cabinet line (K-CABINETS); color match to bleached-oak floor (Rubio Pure) required at sample stage</div><img class="option-img-main item-img-main" src="/images/sourcing/cabinet-finish-kitchen-1.jpg" alt="Kitchen cabinet finish" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak (Rubio Pure) floor required at sample stage.</div>
       
     </article>
-<article class="item-card" data-id="K-TILE-BACKSPLASH"
+<article class="item-card" id="item-K-TILE-BACKSPLASH" data-id="K-TILE-BACKSPLASH"
        data-urgency="T0" data-room="kitchen"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
@@ -193,12 +265,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</div><img class="option-img-main item-img-main" src="/images/sourcing/k-tile-backsplash-0.jpg" alt="Kitchen backsplash" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Per DESIGN_SPEC §7 [OWNER CONFIRM #1]: PIVOT from Bejmat to Carrara+zellige (canon-consistent). Cle lead 4-6 wk.</div>
       
     </article>
-<article class="item-card catalog-gap" data-id="K-FLOOR-TILE"
+<article class="item-card catalog-gap" id="item-K-FLOOR-TILE" data-id="K-FLOOR-TILE"
        data-urgency="T0" data-room="kitchen"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
@@ -218,12 +291,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Same Daltile Choice Ivory catalog gap as MB-TILE-FLOOR — spec says porcelain but Choice Ivory is currently sold as ceramic (AR04 series, 12x24 matte). Owner reselect at Daltile Norcross showroom; should match the master-bath floor SKU for one-vendor batch.</em></div>
       <div class="decided-line">✅ Daltile Choice Ivory porcelain</div><img class="option-img-main item-img-main" src="/images/sourcing/k-floor-tile-0.jpg" alt="Kitchen floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6.</div>
       
     </article>
-<article class="item-card" data-id="K-COUNTERS"
+<article class="item-card" id="item-K-COUNTERS" data-id="K-COUNTERS"
        data-urgency="T0" data-room="kitchen"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
@@ -243,12 +317,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Caesarstone Statuario waterfall island + perimeter</div><img class="option-img-main item-img-main" src="/images/sourcing/k-counters-0.jpg" alt="Kitchen counters + waterfall island" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked. Template after cab install. 5-week fab+install typical.</div>
       
     </article>
-<article class="item-card" data-id="K-FAUCET"
+<article class="item-card" id="item-K-FAUCET" data-id="K-FAUCET"
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="true"
@@ -268,12 +343,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $550 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</div><img class="option-img-main item-img-main" src="/images/sourcing/k-faucet-0.png" alt="Kitchen faucet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6 — Delta Trinsic Champagne Bronze line. Pull-down for kitchen workflow.</div>
       
     </article>
-<article class="item-card" data-id="K-POT-FILLER"
+<article class="item-card" id="item-K-POT-FILLER" data-id="K-POT-FILLER"
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
@@ -293,6 +369,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $756 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / QualityBath / Ferguson</div>
@@ -322,7 +399,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Confirm pot-filler is in plumbing rough scope before ordering — if TCW has not roughed the wall stub, add to change order first. Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler (Champagne Bronze) is the correct default — NOT 1953LF-CZ which is a bar/prep faucet. | budget revised UP per HARD RULE 2026-05-16: from $400 → $685 (R4) → $756 (R5). ★ pick 1165LF-CZ is ~$756 at QualityBath; no Delta champagne-bronze pot filler exists at lower price. approved_overshoot: true.</div>
       
     </article>
-<article class="item-card" data-id="K-SINK"
+<article class="item-card" id="item-K-SINK" data-id="K-SINK"
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
@@ -342,6 +419,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $765 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / Home Depot / Ferguson</div>
@@ -371,7 +449,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Stainless undermount, 30-32 inch single bowl preferred. Kohler Strive at $590 hits the $600 cap cleanly and keeps brand tier consistent with the overall kitchen package. | budget revised UP per HARD RULE 2026-05-16: from $600 to $765. Audit C2: correct Kohler SKU is K-5409-NA not K-5418-NA — verify with Ferguson before ordering. Ruvati opt2 at $359 is cheaper alt if owner wants to recover $400.</div>
       
     </article>
-<article class="item-card" data-id="K-RO-FAUCET"
+<article class="item-card" id="item-K-RO-FAUCET" data-id="K-RO-FAUCET"
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
@@ -391,6 +469,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Aquasana.com / Amazon</div>
@@ -420,7 +499,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">R7 budget consolidation: budget_target_usd: 0 — bundled in K-RO-SYSTEM ($400 covers both system + companion faucet). Prior split ($100 here + $400 in K-RO-SYSTEM = $475) double-priced the faucet because the Aquasana SmartFlow system ships with the BN companion faucet included. Per DESIGN_SPEC notes: order full system from K-RO-SYSTEM and treat K-RO-FAUCET as satisfied by bundle. R6 note (preserved for context): Aquasana SmartFlow companion faucet (AQ-SFRO2-BN) in Brushed Nickel is the correct SKU — it ships bundled with the full system (AQ-SFRO2-BN at $479.99) or as standalone faucet only (~$75). No champagne bronze RO faucet exists from any major manufacturer; BN is the accepted finish compromise for this secondary under-sink spout. Delta 1953LF-CZ REMOVED — bar/prep faucet, not RO.</div>
       
     </article>
-<article class="item-card" data-id="K-RO-SYSTEM"
+<article class="item-card" id="item-K-RO-SYSTEM" data-id="K-RO-SYSTEM"
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
@@ -440,6 +519,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Aquasana.com / Amazon</div>
@@ -453,7 +533,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">R6 split from K-RO-FAUCET: RO system budget ($400) tracked separately from companion faucet ($100 in K-RO-FAUCET). Aquasana SmartFlow is the confirmed brand per G4 line (&quot;Aquasana whole-house carbon + softener + RO under kitchen sink&quot;). Full system AQ-SFRO2-BN ~$480 retail but frequently discounted to $300-$400. Companion BN faucet is included in the full system — order full system here and mark K-RO-FAUCET as satisfied by bundle; do not double-order standalone faucet.</div>
       
     </article>
-<article class="item-card catalog-gap" data-id="K-PENDANTS"
+<article class="item-card catalog-gap" id="item-K-PENDANTS" data-id="K-PENDANTS"
        data-urgency="T0" data-room="kitchen"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
@@ -473,6 +553,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,260 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Schoolhouse Hyatt 8&quot; Pendant URL 404 — product is no longer in the Schoolhouse catalog. Current Schoolhouse catalog has Otto 8&quot;, Ray 8&quot;, Alfred 20&quot; lantern in natural brass — none match Hyatt geometry+price. Rejuvenation Pinnock Cone (opt 1) is the only remaining canon-compliant choice in current catalogs at this budget; owner reselect.</em></div>
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse (schoolhouse.com)</div>
@@ -502,7 +583,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Original ★ Schoolhouse Hyatt at $420ea × 3 is no longer in the Schoolhouse catalog (404). Rejuvenation Pinnock Cone (opt 1) becomes the canon-compliant successor pending owner pick; or escalate to Cedar &amp; Moss / Allied Maker globe in lacquered brass. approved_overshoot: true (carried).</div>
       
     </article>
-<article class="item-card" data-id="K-UNDERCAB-LIGHTING"
+<article class="item-card" id="item-K-UNDERCAB-LIGHTING" data-id="K-UNDERCAB-LIGHTING"
        data-urgency="T0" data-room="kitchen"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -522,6 +603,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Waveform LED (Amazon/direct)</div>
@@ -551,7 +633,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">LED strip or puck under upper cabs; 2700K CRI 90+. TCW spec.</div>
       
     </article>
-<article class="item-card" data-id="K-CAB-HARDWARE"
+<article class="item-card" id="item-K-CAB-HARDWARE" data-id="K-CAB-HARDWARE"
        data-urgency="T1" data-room="kitchen"
        data-category="hardware" data-status="options_drafted"
        data-annika="true"
@@ -571,6 +653,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $816 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
@@ -608,7 +691,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon family: Rejuvenation and/or Forge Hardware, matte black + lacquered brass mix. Per §5d: both finishes ≥3× in kitchen. Specific pull styles and knob shapes not picked. Step 2 draft options: 2 pull styles (one each finish) + optional knob variant. | budget revised UP per HARD RULE 2026-05-16: from $500 → $560 (R4) → $816 (R5). Schoolhouse Edgecliff ★ at $816 for 24 units (14 brass + 10 black) is the minimum viable full-run. approved_overshoot: true.</div>
       
     </article>
-<article class="item-card" data-id="K-CABINETS"
+<article class="item-card" id="item-K-CABINETS" data-id="K-CABINETS"
        data-urgency="T0" data-room="kitchen"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="true"
@@ -628,12 +711,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $9,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</div><img class="option-img-main item-img-main" src="/images/sourcing/k-cabinets-0.jpg" alt="Kitchen cabinets (KraftMaid Vantage)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Per G3 line. Sample door required for finish match to floor.</div>
       
     </article>
-<article class="item-card" data-id="K-STORAGE-ADDER"
+<article class="item-card" id="item-K-STORAGE-ADDER" data-id="K-STORAGE-ADDER"
        data-urgency="T0" data-room="kitchen"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="false"
@@ -653,12 +737,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ KraftMaid Vantage storage adder, matching</div><img class="option-img-main item-img-main" src="/images/sourcing/k-storage-adder-0.jpg" alt="Kitchen storage cabinet adder" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Per G3 line.</div>
       
     </article>
-<article class="item-card" data-id="K-PANTRY-BUILTIN"
+<article class="item-card" id="item-K-PANTRY-BUILTIN" data-id="K-PANTRY-BUILTIN"
        data-urgency="T1" data-room="kitchen"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="true"
@@ -678,6 +763,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $4,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">KraftMaid Vantage (via TCW dealer account)</div>
@@ -707,7 +793,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §18 — canon Hiroo cali_2i floor-to-ceiling. MED-HIGH priority. Reconcile with KraftMaid Vantage match.</div>
       
     </article>
-<article class="item-card" data-id="K-RANGE"
+<article class="item-card" id="item-K-RANGE" data-id="K-RANGE"
        data-urgency="T0" data-room="kitchen"
        data-category="appliance" data-status="decided"
        data-annika="false"
@@ -727,12 +813,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</div><img class="option-img-main item-img-main" src="/images/sourcing/k-range-0.jpg" alt="Kitchen range (LG ThinQ — owned)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
-<article class="item-card" data-id="K-DISHWASHER"
+<article class="item-card" id="item-K-DISHWASHER" data-id="K-DISHWASHER"
        data-urgency="T0" data-room="kitchen"
        data-category="appliance" data-status="decided"
        data-annika="false"
@@ -752,12 +839,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Bosch dishwasher (owned per May 2023 Home Depot order — stays)</div><img class="option-img-main item-img-main" src="/images/sourcing/k-dishwasher-0.jpg" alt="Dishwasher (Bosch — owned)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Already owned. Listed for completeness — zero budget impact.</div>
       
     </article>
-<article class="item-card" data-id="K-FRIDGE"
+<article class="item-card" id="item-K-FRIDGE" data-id="K-FRIDGE"
        data-urgency="T0" data-room="kitchen"
        data-category="appliance" data-status="decided"
        data-annika="false"
@@ -777,12 +865,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Existing refrigerator stays per G3 spec</div><div class="img-placeholder">Refrigerator (owned, stays)<br><small>locked · no image on file</small></div>
       <div class="notes-line">Existing fridge stays — no change.</div>
       
     </article>
-<article class="item-card" data-id="G3-HOOD"
+<article class="item-card" id="item-G3-HOOD" data-id="G3-HOOD"
        data-urgency="T0" data-room="kitchen"
        data-category="appliance" data-status="options_drafted"
        data-annika="true"
@@ -802,6 +891,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,435 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">AJ Madison / CDGA</div>
@@ -831,7 +921,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Original SKU K2240SS does not exist in CDGA catalog — successor model (likely SLDH9-K42 or equivalent) must be confirmed before ordering. Step 2 draft confirmed Vent-A-Hood SKU options at 42-inch 900+ CFM matte black. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. Vent-A-Hood PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</div>
       
     </article>
-<article class="item-card" data-id="KITCHEN-OPEN-SHELF"
+<article class="item-card" id="item-KITCHEN-OPEN-SHELF" data-id="KITCHEN-OPEN-SHELF"
        data-urgency="T2" data-room="kitchen"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
@@ -851,6 +941,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">East Fork + Berard/Food52 + Bookshop.org</div>

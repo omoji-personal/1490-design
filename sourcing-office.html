@@ -31,6 +31,36 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
 .page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
 .page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
 .page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
@@ -109,6 +139,49 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -129,12 +202,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <span class="group-label">Rooms</span>
-    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
-    <span class="group-label">Canon</span>
-    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
@@ -148,7 +219,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </header>
 <main>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
-<article class="item-card" data-id="OFFICE-LIGHTING"
+<article class="item-card" id="item-OFFICE-LIGHTING" data-id="OFFICE-LIGHTING"
        data-urgency="T1" data-room="office"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -168,6 +239,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -205,7 +277,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Flush mount or pendant + desk task lamp. Schoolhouse or Cedar &amp; Moss.</div>
       
     </article>
-<article class="item-card" data-id="OFFICE-BUILTIN"
+<article class="item-card" id="item-OFFICE-BUILTIN" data-id="OFFICE-BUILTIN"
        data-urgency="T2" data-room="office"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
@@ -225,6 +297,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $7,500 (path3_direct) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Marc Calibri Cabinets (Atlanta custom mill)</div>
@@ -254,7 +327,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §18 custom millwork sub-budget. MED priority — defer to post-move-back if path 3 dollars constrained. | budget revised UP per HARD RULE 2026-05-16: from $6,000 to $7,500. Custom Wellington-style built-in requires custom millwork budget. IKEA PAX opt1 at $3,800 is viable cheaper path if owner accepts trade-off.</div>
       
     </article>
-<article class="item-card" data-id="WT-OFFICE"
+<article class="item-card" id="item-WT-OFFICE" data-id="WT-OFFICE"
        data-urgency="T2" data-room="office"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
@@ -274,6 +347,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Shade Store (online or Buckhead)</div>
@@ -303,7 +377,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §13: shade only, no drapery (pet area, simple cleaning).</div>
       
     </article>
-<article class="item-card" data-id="OFFICE-DESK"
+<article class="item-card" id="item-OFFICE-DESK" data-id="OFFICE-DESK"
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -323,6 +397,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
@@ -352,7 +427,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Standalone desk if OFFICE-BUILTIN deferred. Light oak — Article Madera or R&amp;B.</div>
       
     </article>
-<article class="item-card" data-id="OFFICE-CHAIR"
+<article class="item-card" id="item-OFFICE-CHAIR" data-id="OFFICE-CHAIR"
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -372,6 +447,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Herman Miller (via DWR or Herman Miller dealer)</div>

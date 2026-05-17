@@ -31,6 +31,36 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
 .page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
 .page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
 .page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
@@ -109,6 +139,49 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -129,12 +202,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <span class="group-label">Rooms</span>
-    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
-    <span class="group-label">Canon</span>
-    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
@@ -148,7 +219,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </header>
 <main>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
-<article class="item-card" data-id="MB-TILE-WALL"
+<article class="item-card" id="item-MB-TILE-WALL" data-id="MB-TILE-WALL"
        data-urgency="T0" data-room="master_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
@@ -168,12 +239,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-wall-1.jpg" alt="Master bath wall tile (shower walls)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</div>
       
     </article>
-<article class="item-card catalog-gap" data-id="MB-TILE-FLOOR"
+<article class="item-card catalog-gap" id="item-MB-TILE-FLOOR" data-id="MB-TILE-FLOOR"
        data-urgency="T0" data-room="master_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
@@ -193,12 +265,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Daltile Choice Ivory product line still listed at daltile.com/products/stone-look/choice/ivory, but site search returns no results and current third-party listings show Choice Ivory only as AR04 12x24 matte ceramic — not 24x24 honed porcelain. The 24x24 honed format spec&#x27;d here is not in the current vendor catalog. Owner reselect at Daltile Norcross showroom: candidates = Daltile Bee Hive Ivory 24x20 porcelain (current ColorBody, matte, hex format) or Kesler Marble Avorio 24x48 polished porcelain (wrong finish for spec).</em></div>
       <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-floor-0.jpg" alt="Master bath floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
       
     </article>
-<article class="item-card" data-id="MB-FAUCET"
+<article class="item-card" id="item-MB-FAUCET" data-id="MB-FAUCET"
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="true"
@@ -218,12 +291,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $450 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-faucet-0.png" alt="Master bath sink faucet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</div>
       
     </article>
-<article class="item-card" data-id="MB-SHOWER-SYSTEM"
+<article class="item-card" id="item-MB-SHOWER-SYSTEM" data-id="MB-SHOWER-SYSTEM"
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
@@ -243,6 +317,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,520 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / Home Depot / SupplyHouse</div>
@@ -272,7 +347,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon: Delta Trinsic Champagne Bronze thermostatic (17T-Series). Bundle pricing on Build.com often brings three-piece kits below individual list — confirm bundle availability. Valve body (R22000) must be ordered separately by TCW before trim ships. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,520. Thermostatic 17T-series is spec-correct for master bath; pressure-balance opt1 at $1,099 saves $420 if owner accepts downgrade. Audit C2: T17T453-CZ is Vero family not Trinsic — confirm lever silhouette matches adjacent Trinsic fixtures before ordering.</div>
       
     </article>
-<article class="item-card" data-id="MB-SHOWER-DRAIN"
+<article class="item-card" id="item-MB-SHOWER-DRAIN" data-id="MB-SHOWER-DRAIN"
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -292,12 +367,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-shower-drain-0.jpg" alt="Master bath linear shower drain (Schluter)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Curbless walk-in spec per G2. TCW orders with rough plumbing. Image is Schluter shower-drains category reference; actual product PDP image pending direct vendor access.</div>
       
     </article>
-<article class="item-card" data-id="MB-TOILET"
+<article class="item-card" id="item-MB-TOILET" data-id="MB-TOILET"
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
@@ -317,12 +393,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-toilet-0.jpg" alt="Master bath toilet + washlet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line. One-piece form for master.</div>
       
     </article>
-<article class="item-card" data-id="MB-CEILING"
+<article class="item-card" id="item-MB-CEILING" data-id="MB-CEILING"
        data-urgency="T0" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
@@ -342,6 +419,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -371,7 +449,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Flush mount or low-profile — 8-ft ceiling. Schoolhouse Vera or Rejuvenation Burbank.</div>
       
     </article>
-<article class="item-card" data-id="MB-SCONCES"
+<article class="item-card" id="item-MB-SCONCES" data-id="MB-SCONCES"
        data-urgency="T1" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
@@ -391,6 +469,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -420,7 +499,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Swing-arm reading sconces per §15. Schoolhouse Princeton or Cedar &amp; Moss.</div>
       
     </article>
-<article class="item-card" data-id="MBA-SCONCES"
+<article class="item-card" id="item-MBA-SCONCES" data-id="MBA-SCONCES"
        data-urgency="T0" data-room="master_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
@@ -440,6 +519,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -477,7 +557,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Canon family: Schoolhouse Princeton, lacquered brass. Specific size (3-inch vs 4-inch globe), shade variant, and exact SKU not picked. Step 2 draft Princeton CZ-adjacent options within Schoolhouse lineup.</div>
       
     </article>
-<article class="item-card" data-id="MB-CAB-HARDWARE"
+<article class="item-card" id="item-MB-CAB-HARDWARE" data-id="MB-CAB-HARDWARE"
        data-urgency="T1" data-room="master_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="true"
@@ -497,6 +577,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
@@ -526,7 +607,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Lacquered brass to match Trinsic Champagne Bronze tone family. Schoolhouse Sutton or Rejuvenation Vise.</div>
       
     </article>
-<article class="item-card catalog-gap" data-id="MB-MEDICINE-CABINET"
+<article class="item-card catalog-gap" id="item-MB-MEDICINE-CABINET" data-id="MB-MEDICINE-CABINET"
        data-urgency="T1" data-room="master_bath"
        data-category="hardware" data-status="decided"
        data-annika="true"
@@ -546,12 +627,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Hutchinson is a VANITY range at Pottery Barn — there is no Hutchinson medicine cabinet in the PB catalog. Owner reselect from current PB medicine cabinets: PB Vintage Recessed Medicine Cabinet (Vintage Brass/Aged Bronze, 17W x 25H, $400-600) or PB Vintage Slim Recessed; PB Kensington Recessed for a wider unit. Carries G2 line callout but spec needs an actual SKU.</em></div>
       <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-medicine-cabinet-0.jpg" alt="Master bath medicine cabinet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
-<article class="item-card" data-id="MB-VANITY"
+<article class="item-card" id="item-MB-VANITY" data-id="MB-VANITY"
        data-urgency="T0" data-room="master_bath"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="true"
@@ -571,12 +653,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-vanity-0.jpg" alt="Master bath vanity (WE Hutchinson 60-inch Double)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</div>
       
     </article>
-<article class="item-card" data-id="MASTER-CLOSET"
+<article class="item-card" id="item-MASTER-CLOSET" data-id="MASTER-CLOSET"
        data-urgency="T1" data-room="master_br"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="true"
@@ -596,6 +679,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,800 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">California Closets (Sandy Springs showroom, 5901 Peachtree Dunwoody Rd)</div>
@@ -625,7 +709,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per G1 closets line $6,500 includes master reach-in + hybrid for others. California Closets style. | budget revised UP per HARD RULE 2026-05-16: from $3,500 to $3,800. California Closets is spec-appropriate reach-in system; Container Store Elfa opt1 at $1,900 is viable if owner accepts trade-off.</div>
       
     </article>
-<article class="item-card" data-id="WT-MASTER"
+<article class="item-card" id="item-WT-MASTER" data-id="WT-MASTER"
        data-urgency="T2" data-room="master_br"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="true"
@@ -645,6 +729,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (blackout Roman) + Pottery Barn (sheer panels)</div>
@@ -674,7 +759,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §13: Sheer linen drapery puddled + blackout Roman behind. Sleep priority.</div>
       
     </article>
-<article class="item-card" data-id="MB-BED"
+<article class="item-card" id="item-MB-BED" data-id="MB-BED"
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
@@ -694,6 +779,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -723,7 +809,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Cream upholstered (cali_25) OR walnut spindle (loved_15) — owner pick. WE Andes or Cathie Hong-style spindle.</div>
       
     </article>
-<article class="item-card" data-id="MB-NIGHTSTANDS"
+<article class="item-card" id="item-MB-NIGHTSTANDS" data-id="MB-NIGHTSTANDS"
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
@@ -743,6 +829,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -772,7 +859,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Light oak — WE Mid-Century or R&amp;B Linnea.</div>
       
     </article>
-<article class="item-card" data-id="MB-DRESSER"
+<article class="item-card" id="item-MB-DRESSER" data-id="MB-DRESSER"
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
@@ -792,6 +879,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
@@ -821,7 +909,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Light oak 6-drawer — WE Mid-Century or vintage Danish.</div>
       
     </article>
-<article class="item-card" data-id="MB-BENCH"
+<article class="item-card" id="item-MB-BENCH" data-id="MB-BENCH"
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
@@ -841,6 +929,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
@@ -870,7 +959,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Boucle or performance linen — WE or vintage.</div>
       
     </article>
-<article class="item-card" data-id="MB-RUG"
+<article class="item-card" id="item-MB-RUG" data-id="MB-RUG"
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
@@ -890,6 +979,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -919,7 +1009,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Flat-weave wool placeholder until LR-RUG-VINTAGE moves over (year 4 swap).</div>
       
     </article>
-<article class="item-card" data-id="MB-BEDDING"
+<article class="item-card" id="item-MB-BEDDING" data-id="MB-BEDDING"
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
@@ -939,6 +1029,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cultiver (cultiver.com)</div>
@@ -976,7 +1067,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §7 [OWNER CONFIRM #3] — bedding is the one place pure linen survives (weekly laundered). Cultiver, MagicLinen, or Quince.</div>
       
     </article>
-<article class="item-card" data-id="MB-PILLOWS"
+<article class="item-card" id="item-MB-PILLOWS" data-id="MB-PILLOWS"
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
@@ -996,6 +1087,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm + Etsy</div>
@@ -1025,7 +1117,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Sage + mustard accents per loved_15 canon. 3-5 pillow layered stack.</div>
       
     </article>
-<article class="item-card" data-id="MB-ART"
+<article class="item-card" id="item-MB-ART" data-id="MB-ART"
        data-urgency="T3" data-room="master_br"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="true"
@@ -1045,6 +1137,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="vintage-brief">
           <div><strong>Style:</strong> Calming abstract or landscape, 24-36 inch, sage/oat palette</div>
@@ -1055,7 +1148,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Sleep-sanctuary calm. Over-bed placement. | WE option: West Elm Minimalist Fabric Wall Art (large-format soft-neutral linen-mounted abstract, white wood frame) @ $449.0 — Soft fabric-mounted minimalist piece reads quieter than gallery print — fits the sleep-sanctuary calm brief; over-bed sc...</div>
       
     </article>
-<article class="item-card" data-id="MB-MIRROR"
+<article class="item-card" id="item-MB-MIRROR" data-id="MB-MIRROR"
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
@@ -1075,6 +1168,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation (rejuvenation.com)</div>

@@ -31,6 +31,36 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 2
   border-radius: 999px; border: 1px solid var(--border); }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block;
+  margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer;
+  color: var(--ink); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 13px; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\25BE"; font-size: 9px;
+  color: var(--muted); margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg);
+  border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint);
+  border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%;
+  left: 0; margin-top: 4px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint);
+  border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg);
+    border-color: var(--accent); }
+}
 .page-header { max-width: 1200px; margin: 36px auto 20px; padding: 0 28px; }
 .page-header h1 { font-size: 30px; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.5px; }
 .page-header .subtitle { color: var(--muted); font-size: 15px; max-width: 760px; }
@@ -109,6 +139,49 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
+.decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
+  border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+  box-shadow: 0 2px 8px rgba(212, 169, 58, 0.12); }
+.decisions-needed-banner h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700;
+  color: #6b4f10; letter-spacing: 0.3px; }
+.decisions-needed-banner .summary-line { font-size: 13.5px; color: #5a4310;
+  margin: 0 0 10px; line-height: 1.5; }
+.decisions-needed-banner ul { margin: 0; padding-left: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px; }
+.decisions-needed-banner li { margin: 0; }
+.decisions-needed-banner a { display: inline-block; background: #fff; color: #6b4f10;
+  text-decoration: none; border: 1px solid #d4a93a; border-radius: 999px;
+  padding: 4px 12px; font-size: 12.5px; font-weight: 600; }
+.decisions-needed-banner a:hover { background: #fef3e2; border-color: #b08a20;
+  color: #4a3510; }
+.decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
+  margin-right: 4px; font-weight: 700; }
+.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+  visibility: hidden; pointer-events: none; }
+/* Git-history audit-trail line shown under item title. */
+.item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
+  margin: -4px 0 8px; }
+/* Budget rollup block. */
+.budget-rollup { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; margin: 0 0 18px; }
+.budget-rollup h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.budget-rollup .totals-row { display: flex; gap: 22px; flex-wrap: wrap;
+  margin: 0 0 10px; font-size: 14px; align-items: baseline; }
+.budget-rollup .totals-row strong { color: var(--ink); font-size: 16px; }
+.budget-rollup .delta-positive { color: #3a6a3a; font-weight: 600; }
+.budget-rollup .delta-negative { color: #a63a3a; font-weight: 600; }
+.budget-rollup table { width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 8px; }
+.budget-rollup th, .budget-rollup td { padding: 4px 8px; text-align: left;
+  border-bottom: 1px dashed #efe7d4; }
+.budget-rollup th { color: var(--muted); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10.5px; }
+.budget-rollup td.num { text-align: right; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, Menlo, monospace; }
+.budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -129,12 +202,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 <body>
 <nav class="topnav">
   <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <span class="group-label">Rooms</span>
-    <a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a>
-    <span class="group-label">Canon</span>
-    <a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a>
+    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing" class="current">Sourcing</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
     <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
   </div>
 </nav>
@@ -148,7 +219,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </header>
 <main>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
-<article class="item-card" data-id="DR-CHANDELIER"
+<article class="item-card" id="item-DR-CHANDELIER" data-id="DR-CHANDELIER"
        data-urgency="T0" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
@@ -168,6 +239,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -197,7 +269,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Brass branching chandelier — canon move per loved_13 (Campbell House Rue). Schoolhouse Edith or Rejuvenation Otis candidate.</div>
       
     </article>
-<article class="item-card" data-id="LR-OVERHEAD"
+<article class="item-card" id="item-LR-OVERHEAD" data-id="LR-OVERHEAD"
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -217,6 +289,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Herman Miller / Design Within Reach</div>
@@ -246,7 +319,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Nelson Saucer Bubble OR Formakami JH5 — 8-ft ceiling constraint limits drop. Sconces carry load (LR-SCONCES).</div>
       
     </article>
-<article class="item-card" data-id="LR-SCONCES"
+<article class="item-card" id="item-LR-SCONCES" data-id="LR-SCONCES"
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -266,6 +339,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
@@ -295,7 +369,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Schoolhouse or Rejuvenation lacquered brass disc/globe. Carry lighting load per §8a.</div>
       
     </article>
-<article class="item-card" data-id="DR-PICTURE-LIGHT"
+<article class="item-card" id="item-DR-PICTURE-LIGHT" data-id="DR-PICTURE-LIGHT"
        data-urgency="T2" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -315,6 +389,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
@@ -352,7 +427,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Optional layer — depends on dining art/sideboard arrangement. Hardwire during electrical rough or plug-in post.</div>
       
     </article>
-<article class="item-card" data-id="LR-FLOOR-LAMP"
+<article class="item-card" id="item-LR-FLOOR-LAMP" data-id="LR-FLOOR-LAMP"
        data-urgency="T2" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
@@ -372,6 +447,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
@@ -401,7 +477,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §8b — tall thin floor lamp fights ceiling compression. Vibia, Cedar &amp; Moss, or vintage.</div>
       
     </article>
-<article class="item-card" data-id="LR-BUILTIN"
+<article class="item-card" id="item-LR-BUILTIN" data-id="LR-BUILTIN"
        data-urgency="T1" data-room="lr"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
@@ -421,6 +497,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,100 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Atlanta Cabinet Co (local mill, 1310 White St SW, Atlanta)</div>
@@ -450,7 +527,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per G1 line. White oak slab face per §18 canon. Frame TV mount + AV cabinet logic per §12.</div>
       
     </article>
-<article class="item-card" data-id="WT-LR"
+<article class="item-card" id="item-WT-LR" data-id="WT-LR"
        data-urgency="T2" data-room="lr"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
@@ -470,6 +547,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (Peachtree Blinds &amp; Shutters, Atlanta)</div>
@@ -499,7 +577,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §13: Hunter Douglas Vignette Roman in Linen Weave (Stone) OR Smith &amp; Noble Belgian Linen Roman. Performance fabric required for pet zone.</div>
       
     </article>
-<article class="item-card" data-id="WT-DINING"
+<article class="item-card" id="item-WT-DINING" data-id="WT-DINING"
        data-urgency="T2" data-room="dining"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
@@ -519,6 +597,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Pottery Barn (online or Phipps Plaza)</div>
@@ -548,7 +627,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §13: sheer linen, formal occasion only. Lower pet traffic — pure linen OK.</div>
       
     </article>
-<article class="item-card" data-id="LR-SOFA"
+<article class="item-card" id="item-LR-SOFA" data-id="LR-SOFA"
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -568,6 +647,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -597,7 +677,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §6 + §7 [OWNER CONFIRM #3] performance fabric pivot. Anchor: West Elm Andes / Harmony or Article Lyle. Cream/oat/camel, NOT pure linen.</div>
       
     </article>
-<article class="item-card" data-id="LR-ACCENT-CHAIR"
+<article class="item-card" id="item-LR-ACCENT-CHAIR" data-id="LR-ACCENT-CHAIR"
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -617,6 +697,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
@@ -646,7 +727,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per cali_08 canon — tan leather wing. Article Sven Charme Tan or Sundays Leather Reading Chair.</div>
       
     </article>
-<article class="item-card" data-id="LR-COFFEE-TABLE"
+<article class="item-card" id="item-LR-COFFEE-TABLE" data-id="LR-COFFEE-TABLE"
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="false"
@@ -666,6 +747,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Atlanta vintage (Westside Modern / City Issue / Mid Mod Market) or Chairish</div>
@@ -679,7 +761,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">One real vintage gesture per major room per §4 principle 7. | WE option: West Elm Reeve Mid-Century Oval Coffee Table, Pecan (58W × 24D × 17H, walnut veneer top + solid wood legs, pecan finish) @ $899.0 — Tapered-leg oval mid-century silhouette in walnut tones is the direct WE expression of the vintage-walnut-oval spec; a t...</div>
       
     </article>
-<article class="item-card" data-id="LR-SIDE-TABLES"
+<article class="item-card" id="item-LR-SIDE-TABLES" data-id="LR-SIDE-TABLES"
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -699,6 +781,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
@@ -744,7 +827,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Light oak or marble — Article Mara, Crate &amp; Barrel Bowen, or vintage oak stump (canon cali_25).</div>
       
     </article>
-<article class="item-card" data-id="LR-RUG"
+<article class="item-card" id="item-LR-RUG" data-id="LR-RUG"
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -764,6 +847,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -793,7 +877,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §7 [OWNER CONFIRM #2]: DEFER Beni Ourain to year 4. Spec WE/Rejuvenation flat-weave wool for years 1-3.</div>
       
     </article>
-<article class="item-card" data-id="LR-RUG-VINTAGE"
+<article class="item-card" id="item-LR-RUG-VINTAGE" data-id="LR-RUG-VINTAGE"
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="true"
@@ -813,6 +897,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $4,000 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="vintage-brief">
           <div><strong>Style:</strong> Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</div>
@@ -823,7 +908,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">DEFERRED to year 4 post-potty-train + post-pet-maturity per §7.</div>
       
     </article>
-<article class="item-card" data-id="DR-TABLE"
+<article class="item-card" id="item-DR-TABLE" data-id="DR-TABLE"
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -843,6 +928,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
@@ -880,7 +966,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per loved_13 + loved_11 canon — round oak. R&amp;B Bayside or Article Madera or vintage.</div>
       
     </article>
-<article class="item-card" data-id="DR-CHAIRS"
+<article class="item-card" id="item-DR-CHAIRS" data-id="DR-CHAIRS"
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -900,6 +986,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Carl Hansen &amp; Søn (via Design Within Reach or dealer)</div>
@@ -929,7 +1016,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §3a — Wishbone CH24 or paper-cord oak silhouette. Carl Hansen authentic ($800+/chair) OR licensed reissue. Set of 6.</div>
       
     </article>
-<article class="item-card" data-id="DR-SIDEBOARD"
+<article class="item-card" id="item-DR-SIDEBOARD" data-id="DR-SIDEBOARD"
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
@@ -949,6 +1036,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
@@ -986,7 +1074,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Light oak credenza — R&amp;B Hudson or vintage Danish.</div>
       
     </article>
-<article class="item-card" data-id="LR-PILLOWS"
+<article class="item-card" id="item-LR-PILLOWS" data-id="LR-PILLOWS"
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
@@ -1006,6 +1094,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
@@ -1035,7 +1124,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">One bold accent per §4 principle 5. Olive/rust/mustard — pick ONE.</div>
       
     </article>
-<article class="item-card" data-id="LR-THROW"
+<article class="item-card" id="item-LR-THROW" data-id="LR-THROW"
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
@@ -1055,6 +1144,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Hawkins New York (hawkinsnewyork.com)</div>
@@ -1084,7 +1174,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Wool or cotton — Hawkins New York, MagicLinen, or vintage.</div>
       
     </article>
-<article class="item-card" data-id="LR-ART"
+<article class="item-card" id="item-LR-ART" data-id="LR-ART"
        data-urgency="T3" data-room="lr"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
@@ -1104,6 +1194,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="vintage-brief">
           <div><strong>Style:</strong> Modern abstract or landscape painting, 36+ inch, muted palette aligned with §3a accent</div>
@@ -1114,7 +1205,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Soul-layer piece — slow hunt. | WE option: West Elm Abstract Landscape Framed Wall Art by Minted (Kirsta Niemie Benedetti, 30×30, Black Wood Frame) @ $356.0 — WE+Minted&#x27;s neutral abstract landscape program is a legitimate drop-in placeholder for the LR primary art moment while t...</div>
       
     </article>
-<article class="item-card" data-id="DR-ART"
+<article class="item-card" id="item-DR-ART" data-id="DR-ART"
        data-urgency="T3" data-room="dining"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
@@ -1134,6 +1225,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="vintage-brief">
           <div><strong>Style:</strong> Statement piece — large painting or vintage rug as wall hanging</div>
@@ -1144,7 +1236,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Dining is canon-classic dinner moment — wall art carries weight. | WE option: West Elm The Arts Capsule Framed Print (32W × 24H, white wood frame, neutral abstract) @ $399.0 — Dining wall benefits from a single calmer framed moment vs. busy gallery wall — Arts Capsule format reads restrained at ...</div>
       
     </article>
-<article class="item-card" data-id="LR-MIRROR"
+<article class="item-card" id="item-LR-MIRROR" data-id="LR-MIRROR"
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
@@ -1164,6 +1256,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
@@ -1201,7 +1294,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Reflective for §8c bounce. Schoolhouse Edith mirror or Rejuvenation.</div>
       
     </article>
-<article class="item-card" data-id="TABLETOP-DINING"
+<article class="item-card" id="item-TABLETOP-DINING" data-id="TABLETOP-DINING"
        data-urgency="T2" data-room="dining"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
@@ -1221,6 +1314,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Etsy + Schoolhouse + Hawkins New York</div>
@@ -1250,7 +1344,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Hand-thrown vase + brass candleholders + linen runner.</div>
       
     </article>
-<article class="item-card" data-id="FRAME-TV"
+<article class="item-card" id="item-FRAME-TV" data-id="FRAME-TV"
        data-urgency="T2" data-room="lr"
        data-category="appliance" data-status="options_drafted"
        data-annika="false"
@@ -1270,6 +1364,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Best Buy / Samsung.com</div>
