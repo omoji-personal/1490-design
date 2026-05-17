@@ -212,6 +212,164 @@ def parse_item(raw: Dict[str, Any]) -> Item:
     )
 
 
+# ---------------------------------------------------------------------------
+# Supplier directory schema (R2 Fix C2)
+# ---------------------------------------------------------------------------
+# Validates ~/Desktop/HomeAI/scope/supplier_directory.yaml. Unlike sourcing.yaml
+# (decision tracker), the supplier_directory is a *browse map* across 15 design
+# categories. /suppliers consumes it directly. Adding a typed dataclass + parser
+# lets the renderer/lint pipeline fail loud on malformed entries.
+
+VALID_PRICE_TIERS = {"entry", "mid", "premium", "aspirational"}
+VALID_FITS = {"STRONG", "GOOD", "MIXED", "CANON-ADJACENT", "WATCH_LIST"}
+
+
+@dataclass
+class Supplier:
+    id: str
+    category: str
+    name: str
+    url: str
+    price_tier: str
+    fit: str
+    style_fingerprint: str
+    fit_for_project: str
+    # Optional / variable fields
+    off_canon_warning: Optional[str] = None
+    collections_to_browse: List[Dict[str, Any]] = field(default_factory=list)
+    lead_time_typical: Optional[str] = None
+    sample_policy: Optional[str] = None
+    notes: Optional[str] = None
+    # R2 Fix UX4: operator_notes is OPERATOR-INTERNAL and must NEVER render in
+    # user-facing HTML. The schema accepts it so YAML can carry context, but
+    # render_suppliers_page() must not surface it.
+    operator_notes: Optional[str] = None
+    url_verified: Optional[bool] = None
+    url_status: Any = None  # int or str
+    hero_image: Optional[str] = None
+    hero_image_source_url: Optional[str] = None
+    hero_image_source: Optional[str] = None
+    price_validation: List[Dict[str, Any]] = field(default_factory=list)
+    price_range_typical: Dict[str, Any] = field(default_factory=dict)
+    justification: Optional[str] = None
+    canon_classification_basis: Optional[str] = None
+    canon_classification_reasoning: Optional[str] = None
+    url_status_note: Optional[str] = None
+    verification_source_batch: Optional[str] = None
+
+
+def parse_supplier(raw: Dict[str, Any]) -> Supplier:
+    """Validate and parse a supplier dict. Raises ValidationError on missing or
+    invalid required fields. Unknown keys are tolerated (forward-compat with
+    Alpha-introduced fields)."""
+    if not isinstance(raw, dict):
+        raise ValidationError(f"supplier must be a dict, got {type(raw).__name__}")
+    sid = raw.get("id")
+    if not sid or not isinstance(sid, str):
+        raise ValidationError(f"supplier missing or non-string id: {raw!r}")
+    name = raw.get("name")
+    if not name or not isinstance(name, str):
+        raise ValidationError(f"{sid}: supplier missing or non-string name")
+    category = raw.get("category")
+    if not category or not isinstance(category, str):
+        raise ValidationError(f"{sid}: supplier missing or non-string category")
+    price_tier = raw.get("price_tier")
+    if price_tier not in VALID_PRICE_TIERS:
+        raise ValidationError(
+            f"{sid}: invalid price_tier {price_tier!r} (allowed: {sorted(VALID_PRICE_TIERS)})"
+        )
+    fit = raw.get("fit")
+    if fit not in VALID_FITS:
+        raise ValidationError(
+            f"{sid}: invalid fit {fit!r} (allowed: {sorted(VALID_FITS)})"
+        )
+    return Supplier(
+        id=sid,
+        category=category,
+        name=name,
+        url=str(raw.get("url", "")),
+        price_tier=price_tier,
+        fit=fit,
+        style_fingerprint=str(raw.get("style_fingerprint", "")),
+        fit_for_project=str(raw.get("fit_for_project", "")),
+        off_canon_warning=raw.get("off_canon_warning"),
+        collections_to_browse=list(raw.get("collections_to_browse") or []),
+        lead_time_typical=raw.get("lead_time_typical"),
+        sample_policy=raw.get("sample_policy"),
+        notes=raw.get("notes"),
+        operator_notes=raw.get("operator_notes"),
+        url_verified=raw.get("url_verified"),
+        url_status=raw.get("url_status"),
+        hero_image=raw.get("hero_image"),
+        hero_image_source_url=raw.get("hero_image_source_url"),
+        hero_image_source=raw.get("hero_image_source"),
+        price_validation=list(raw.get("price_validation") or []),
+        price_range_typical=dict(raw.get("price_range_typical") or {}),
+        justification=raw.get("justification"),
+        canon_classification_basis=raw.get("canon_classification_basis"),
+        canon_classification_reasoning=raw.get("canon_classification_reasoning"),
+        url_status_note=raw.get("url_status_note"),
+        verification_source_batch=raw.get("verification_source_batch"),
+    )
+
+
+def load_supplier_directory(path) -> Dict[str, Any]:
+    """Load supplier_directory.yaml and validate every supplier. Returns the
+    parsed dict (meta + categories + suppliers-as-Supplier-instances under the
+    'suppliers' key, with the original dict shape preserved for renderer
+    convenience). Fails loud if the file is missing, malformed, or empty.
+    """
+    import os
+    import yaml as _yaml
+    if not os.path.exists(path):
+        raise ValidationError(f"supplier_directory.yaml not found at {path}")
+    with open(path) as f:
+        data = _yaml.safe_load(f)
+    if not isinstance(data, dict):
+        raise ValidationError(f"supplier_directory.yaml is not a mapping at {path}")
+    if not data.get("suppliers"):
+        raise ValidationError(f"supplier_directory.yaml has no suppliers at {path}")
+    # Validate every supplier; collect typed instances back onto the dict so
+    # downstream consumers can keep using mapping-style access while the
+    # validation pass has already failed loud on bad data.
+    validated = []
+    for raw in data["suppliers"]:
+        # parse_supplier raises ValidationError on bad data — keep loud failure.
+        sup = parse_supplier(raw)
+        # Round-trip back to dict for renderer compatibility.
+        validated.append({
+            "id": sup.id,
+            "category": sup.category,
+            "name": sup.name,
+            "url": sup.url,
+            "price_tier": sup.price_tier,
+            "fit": sup.fit,
+            "style_fingerprint": sup.style_fingerprint,
+            "fit_for_project": sup.fit_for_project,
+            "off_canon_warning": sup.off_canon_warning,
+            "collections_to_browse": sup.collections_to_browse,
+            "lead_time_typical": sup.lead_time_typical,
+            "sample_policy": sup.sample_policy,
+            "notes": sup.notes,
+            # operator_notes intentionally NOT propagated — renderer is the only
+            # consumer and UX4 forbids surfacing it. Lint may read raw separately.
+            "url_verified": sup.url_verified,
+            "url_status": sup.url_status,
+            "hero_image": sup.hero_image,
+            "hero_image_source_url": sup.hero_image_source_url,
+            "hero_image_source": sup.hero_image_source,
+            "price_validation": sup.price_validation,
+            "price_range_typical": sup.price_range_typical,
+            "justification": sup.justification,
+            "canon_classification_basis": sup.canon_classification_basis,
+            "canon_classification_reasoning": sup.canon_classification_reasoning,
+            "url_status_note": sup.url_status_note,
+            "verification_source_batch": sup.verification_source_batch,
+        })
+    data["suppliers"] = validated
+    return data
+
+
 def parse_meta(raw: Dict[str, Any]) -> Meta:
     b = raw["budgets"]
     c = raw["consistency_locks"]

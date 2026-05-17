@@ -2295,12 +2295,23 @@ SUPPLIERS_JS = """
 
 
 def _load_supplier_directory():
-    """Load supplier_directory.yaml from HomeAI/scope. Returns dict with meta, categories, suppliers."""
+    """Load supplier_directory.yaml from HomeAI/scope.
+
+    R2 Fix C2 — route through `sourcing_schema.load_supplier_directory()` which
+    validates each supplier (id/name/category required; price_tier + fit checked
+    against allow-lists) before the renderer touches the data. Returns None only
+    when the file is genuinely absent — malformed YAML or invalid rows raise.
+
+    The fallback (missing file) is preserved for tests that exercise the empty
+    placeholder branch; build_sourcing.py treats missing-on-real-build as a
+    loud failure (R2 Fix C9).
+    """
     homeai_scope = Path.home() / "Desktop" / "HomeAI" / "scope"
     directory_path = homeai_scope / "supplier_directory.yaml"
     if not directory_path.exists():
         return None
-    return yaml.safe_load(directory_path.read_text())
+    from sourcing_schema import load_supplier_directory
+    return load_supplier_directory(str(directory_path))
 
 
 # Tokens to ignore when normalizing a supplier name for vendor matching.
@@ -2510,6 +2521,32 @@ def _supplier_sourcing_links(supplier_id: str, supplier_name: str,
     return matches
 
 
+_SAFE_HREF_SCHEMES = ("http://", "https://", "mailto:")
+
+
+def _safe_href(url) -> str:
+    """R2 Fix C1 — scheme-sanitize external URLs before rendering as href.
+
+    Codex flagged that yaml-sourced URLs are HTML-escaped but not scheme-validated:
+    a malicious `javascript:` URL in supplier_directory.yaml would render as a
+    clickable link. Return the URL unchanged (HTML-escaped by caller) if it's
+    a recognized safe scheme; otherwise return "#" so the link is inert.
+    """
+    if url is None:
+        return "#"
+    s = str(url).strip()
+    if not s:
+        return "#"
+    lower = s.lower()
+    for scheme in _SAFE_HREF_SCHEMES:
+        if lower.startswith(scheme):
+            return s
+    # Internal-relative paths (e.g. "/sourcing", "#anchor") are safe.
+    if s.startswith("/") or s.startswith("#"):
+        return s
+    return "#"
+
+
 def _supplier_fit_pill(fit: str) -> str:
     """Return HTML pill for fit category."""
     cls_map = {
@@ -2540,7 +2577,10 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     """
     sid = sup.get("id", "")
     name = escape(sup.get("name", ""))
-    url = escape(sup.get("url", ""))
+    # R2 Fix C1 — scheme-sanitize external URL before HTML-escaping. A
+    # `javascript:` value from the YAML would have rendered as a clickable
+    # link otherwise.
+    url = escape(_safe_href(sup.get("url", "")))
     tier = sup.get("price_tier", "mid")
     fit = sup.get("fit", "GOOD")
     fingerprint = escape(sup.get("style_fingerprint", ""))
@@ -2562,7 +2602,11 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         chips = []
         for c in cols[:6]:
             cname = escape(c.get("name", ""))
-            curl = escape(c.get("url", url))
+            # R2 Fix C1 — sanitize per-collection URL too. Note: `url` is
+            # already the safe-rendered supplier URL (or "#"), so falling
+            # back to it is safe.
+            raw_curl = c.get("url") if isinstance(c, dict) else None
+            curl = escape(_safe_href(raw_curl)) if raw_curl else url
             chips.append(
                 f'<a class="collection-chip" href="{curl}" target="_blank" rel="noopener">{cname}</a>'
             )

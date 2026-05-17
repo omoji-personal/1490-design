@@ -1210,7 +1210,7 @@ def test_supplier_directory_url_freshness_lint_passes_when_all_verified(tmp_path
             url_status: 200
           - id: b
             url_verified: true
-            url_status: "200 ok"
+            url_status: "ok"
         """)
     target = tmp_path / "Desktop" / "HomeAI" / "scope"
     target.mkdir(parents=True)
@@ -1260,3 +1260,227 @@ def test_supplier_directory_url_freshness_lint_flags_unverified(tmp_path, monkey
     assert "bravo" in findings[0].message
     # charlie should NOT appear
     assert "charlie" not in findings[0].message
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C3 — URL freshness uses exact-match allow-list (not prefix-match)
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_directory_url_freshness_lint_flags_prefix_match_bug(tmp_path, monkeypatch):
+    """Codex flagged: '200 BUT IS 404' previously passed lint via prefix-match on '200'.
+
+    R2 Fix C3 makes the status comparison exact against {200, 301, 302, 'ok',
+    'bot_blocked_ok', 'redirected_changed_path', 'redirected_brand_change'}.
+    """
+    from sourcing_lint import check_supplier_directory_url_freshness
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: stale_lying
+            url_verified: true
+            url_status: "200 BUT IS 404"
+          - id: stale_appended_404
+            url_verified: true
+            url_status: "200 (actually 404 in retest)"
+          - id: ok_canonical
+            url_verified: true
+            url_status: "ok"
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_url_freshness([], None)
+    # Both "200 BUT IS 404" and "200 (actually 404...)" must now be flagged.
+    assert len(findings) == 1
+    msg = findings[0].message
+    assert "2 supplier" in msg
+    assert "stale_lying" in msg
+    assert "stale_appended_404" in msg
+    assert "ok_canonical" not in msg
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C1 — XSS href scheme sanitization
+# ---------------------------------------------------------------------------
+
+
+def test_safe_href_strips_javascript_scheme():
+    """Malicious javascript: URLs in the YAML must NOT survive into rendered hrefs."""
+    from sourcing_render_html import _safe_href
+    assert _safe_href("javascript:alert(1)") == "#"
+    assert _safe_href("JAVASCRIPT:alert(1)") == "#"
+    assert _safe_href("  javascript:alert(1)") == "#"
+    assert _safe_href("data:text/html,<script>alert(1)</script>") == "#"
+    assert _safe_href("vbscript:msgbox(1)") == "#"
+    # Safe schemes pass through.
+    assert _safe_href("https://example.com") == "https://example.com"
+    assert _safe_href("http://example.com") == "http://example.com"
+    assert _safe_href("mailto:x@example.com") == "mailto:x@example.com"
+    # Internal links survive.
+    assert _safe_href("/sourcing?vendor=x") == "/sourcing?vendor=x"
+    assert _safe_href("#anchor") == "#anchor"
+    # Empty/None → safe fallback.
+    assert _safe_href("") == "#"
+    assert _safe_href(None) == "#"
+
+
+def test_render_suppliers_page_xss_url_is_neutralized():
+    """A javascript: URL in supplier_directory.yaml must render as href='#', not be clickable."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "xss-test", "category": "lighting", "name": "Evil Supplier",
+            "url": "javascript:alert('xss')",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "collections_to_browse": [
+                {"name": "Bad chip", "url": "javascript:steal()"},
+            ],
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "javascript:" not in html
+    # Explore button + collection chip both fell back to '#'.
+    assert 'href="#"' in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C2 — Supplier dataclass + load_supplier_directory
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_dataclass_accepts_valid_minimum():
+    from sourcing_schema import parse_supplier, Supplier
+    sup = parse_supplier({
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    })
+    assert isinstance(sup, Supplier)
+    assert sup.id == "x"
+    assert sup.fit == "STRONG"
+
+
+def test_supplier_dataclass_rejects_bad_price_tier():
+    from sourcing_schema import parse_supplier, ValidationError
+    import pytest
+    with pytest.raises(ValidationError):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "luxury",  # invalid
+            "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        })
+
+
+def test_supplier_dataclass_rejects_bad_fit():
+    from sourcing_schema import parse_supplier, ValidationError
+    import pytest
+    with pytest.raises(ValidationError):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid",
+            "fit": "PERFECT",  # invalid
+            "style_fingerprint": "x", "fit_for_project": "x",
+        })
+
+
+def test_supplier_dataclass_accepts_watch_list_fit():
+    """R2 schema must accept WATCH_LIST as a valid fit alongside the original four."""
+    from sourcing_schema import parse_supplier
+    sup = parse_supplier({
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "WATCH_LIST",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    })
+    assert sup.fit == "WATCH_LIST"
+
+
+def test_supplier_dataclass_accepts_operator_notes():
+    """R2 Fix UX4 — Alpha's operator_notes field must be accepted by schema."""
+    from sourcing_schema import parse_supplier
+    sup = parse_supplier({
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+        "operator_notes": "internal: WE blocks WebFetch — use real browser",
+    })
+    assert sup.operator_notes == "internal: WE blocks WebFetch — use real browser"
+
+
+def test_load_supplier_directory_fails_loud_on_missing_file(tmp_path):
+    """R2 Fix C9 — missing yaml must raise, not silently produce an empty page."""
+    from sourcing_schema import load_supplier_directory, ValidationError
+    import pytest
+    with pytest.raises(ValidationError):
+        load_supplier_directory(str(tmp_path / "does-not-exist.yaml"))
+
+
+def test_load_supplier_directory_fails_loud_on_empty_suppliers(tmp_path):
+    from sourcing_schema import load_supplier_directory, ValidationError
+    import pytest
+    p = tmp_path / "empty.yaml"
+    p.write_text("meta: {}\ncategories: []\nsuppliers: []\n")
+    with pytest.raises(ValidationError):
+        load_supplier_directory(str(p))
+
+
+def test_load_supplier_directory_fails_loud_on_bad_row(tmp_path):
+    from sourcing_schema import load_supplier_directory, ValidationError
+    import pytest
+    p = tmp_path / "bad.yaml"
+    p.write_text(textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: bad
+            category: lighting
+            name: Bad
+            url: https://example.com
+            price_tier: invented_tier
+            fit: STRONG
+            style_fingerprint: x
+            fit_for_project: x
+        """))
+    with pytest.raises(ValidationError):
+        load_supplier_directory(str(p))
+
+
+def test_load_supplier_directory_strips_operator_notes_from_output(tmp_path):
+    """operator_notes must NOT be passed through to the renderer's data dict."""
+    from sourcing_schema import load_supplier_directory
+    p = tmp_path / "ok.yaml"
+    p.write_text(textwrap.dedent("""\
+        meta: {}
+        categories:
+          - {id: lighting, label: Lighting}
+        suppliers:
+          - id: x
+            category: lighting
+            name: X
+            url: https://example.com
+            price_tier: mid
+            fit: STRONG
+            style_fingerprint: x
+            fit_for_project: x
+            operator_notes: secret internal stuff
+        """))
+    data = load_supplier_directory(str(p))
+    sup = data["suppliers"][0]
+    assert "operator_notes" not in sup
+    assert "secret internal stuff" not in str(sup)

@@ -708,12 +708,17 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
     except Exception:
         return findings
     suppliers = (data or {}).get("suppliers", []) or []
+    # R2 Fix C3 — exact-match against allow-list. Codex flagged that prefix
+    # matching on "200" silently passed strings like "200 BUT IS 404". Lint
+    # only treats these explicit values as fresh; anything else is flagged.
+    FRESH_STATUS_STRINGS = {
+        "200", "301", "302", "ok", "bot_blocked_ok",
+        "redirected_changed_path", "redirected_brand_change",
+    }
     stale = []
     for s in suppliers:
         url_verified = s.get("url_verified")
         url_status = s.get("url_status")
-        # Treat as fresh if url_verified is True AND (url_status is 200, OR is a string
-        # starting with "200" / "ok", OR is None when url_verified is True).
         if url_verified is True:
             if url_status is None:
                 continue
@@ -724,12 +729,7 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
                 continue
             if isinstance(url_status, str):
                 s_lower = url_status.strip().lower()
-                if (s_lower.startswith("200")
-                        or s_lower.startswith("301")
-                        or s_lower.startswith("302")
-                        or s_lower in ("ok", "bot_blocked_ok",
-                                       "redirected_changed_path",
-                                       "redirected_brand_change")):
+                if s_lower in FRESH_STATUS_STRINGS:
                     continue
             # Otherwise: verified but with a non-200 status → flag.
             stale.append(s.get("id", "?"))
