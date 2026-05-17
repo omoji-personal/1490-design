@@ -36,9 +36,10 @@ def update(filename, current):
         html = BODY_OPEN_RE.sub(r'\1\n' + new_nav, html, count=1)
         print(f"  {filename}: injected new topnav after <body>")
 
-    # Also need to inject the topnav CSS if missing
-    if 'topnav-inner' not in html or '.topnav-inner .home' not in html:
-        # Add a minimal supplementary CSS block (the topnav style)
+    # Also need to inject the topnav CSS if missing. Includes the Rooms ▾ +
+    # Canon ▾ dropdown rules so /, /mood-board, /spectrum, /decisions render
+    # the same collapsed pattern as build_pages.py outputs.
+    if 'topnav-inner' not in html or 'nav-dropdown' not in html:
         topnav_css = """
 <style>
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250,248,244,0.96);
@@ -53,6 +54,28 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250,248,244
   border-radius: 999px; border: 1px solid #e8e2d6; }
 .topnav-inner a:not(.home):hover { background: #fff; border-color: #8a7a5a; }
 .topnav-inner a.current { background: #f7eedc; border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block; margin: 0; }
+.topnav-inner details.nav-dropdown > summary { list-style: none; cursor: pointer; color: #2a2622;
+  padding: 4px 10px; border-radius: 999px; border: 1px solid #e8e2d6; font-size: 13px;
+  user-select: none; display: inline-flex; align-items: center; gap: 4px; }
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after { content: "\\25BE"; font-size: 9px;
+  color: #6b6660; margin-left: 2px; }
+.topnav-inner details.nav-dropdown > summary:hover { background: #fff; border-color: #8a7a5a; }
+.topnav-inner details.nav-dropdown[open] > summary { background: #f7eedc; border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu { position: absolute; top: 100%; left: 0;
+  margin-top: 4px; background: #fff; border: 1px solid #e8e2d6; border-radius: 8px;
+  padding: 6px; box-shadow: 0 4px 16px rgba(42,38,34,0.08); min-width: 180px;
+  z-index: 60; display: none; flex-direction: column; gap: 2px; }
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a { border: none; padding: 6px 10px;
+  border-radius: 5px; font-size: 13px; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: #f7eedc; border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: #f7eedc; }
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: #fff; border-color: #8a7a5a; }
+}
 </style>
 """
         html = html.replace('</head>', f'{topnav_css}\n</head>', 1)

@@ -51,6 +51,36 @@ nav.topnav {
 }
 .topnav-inner a:not(.home):hover { background: var(--card-bg); border-color: var(--accent); }
 .topnav-inner a.current { background: var(--warm-tint); border-color: #c9b88a; }
+/* Topnav dropdowns: Rooms ▾ + Canon ▾ — CSS-only, accessible via keyboard + hover. */
+.topnav-inner details.nav-dropdown { position: relative; display: inline-block; margin: 0; }
+.topnav-inner details.nav-dropdown > summary {
+  list-style: none; cursor: pointer; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border);
+  font-size: 13px; user-select: none; display: inline-flex; align-items: center; gap: 4px;
+}
+.topnav-inner details.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.topnav-inner details.nav-dropdown > summary::after {
+  content: "\\25BE"; font-size: 9px; color: var(--muted); margin-left: 2px;
+}
+.topnav-inner details.nav-dropdown > summary:hover { background: var(--card-bg); border-color: var(--accent); }
+.topnav-inner details.nav-dropdown[open] > summary { background: var(--warm-tint); border-color: #c9b88a; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu {
+  position: absolute; top: 100%; left: 0; margin-top: 4px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px; box-shadow: 0 4px 16px rgba(42, 38, 34, 0.08);
+  min-width: 180px; z-index: 60; display: none; flex-direction: column; gap: 2px;
+}
+.topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu { display: flex; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a {
+  border: none; padding: 6px 10px; border-radius: 5px; font-size: 13px;
+}
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a:hover { background: var(--warm-tint); border: none; }
+.topnav-inner details.nav-dropdown .nav-dropdown-menu a.current { background: var(--warm-tint); }
+/* Hover-reveal alongside click-reveal for mouse users (does not trap focus). */
+@media (hover: hover) {
+  .topnav-inner details.nav-dropdown:hover > .nav-dropdown-menu { display: flex; }
+  .topnav-inner details.nav-dropdown:not([open]):hover > summary { background: var(--card-bg); border-color: var(--accent); }
+}
 
 header.page-header { max-width: 1100px; margin: 0 auto; padding: 44px 28px 14px; }
 h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.15; }
@@ -157,7 +187,11 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 }
 """
 
-# Topnav — shared across all pages
+# Topnav — shared across all pages.
+# Rooms ▾ + Canon ▾ collapse into CSS-only <details> dropdowns to match the
+# pattern produced by sourcing_render_html._build_topnav_html(). All other
+# entries (Home, Mood, Spectrum, Decisions, Budget, Sourcing, Suppliers,
+# Vendors, Annika, Spec, Materials, Rejected) stay inline.
 def topnav(current=""):
     items_main = [
         ("/", "Home"),
@@ -167,6 +201,7 @@ def topnav(current=""):
         ("/budget", "Budget"),
         ("/sourcing", "Sourcing"),
         ("/suppliers", "Suppliers"),
+        ("/vendors", "Vendors"),
         ("/for-annika", "Annika"),
         ("/spec", "Spec"),
     ]
@@ -188,20 +223,32 @@ def topnav(current=""):
         ("/materials", "Materials"),
         ("/rejected", "Rejected"),
     ]
-    def render(items):
-        return "".join(
-            f'<a href="{href}"{" class=\"current\"" if href.strip("/") == current.strip("/") else ""}>{label}</a>'
-            for href, label in items
+
+    cur_norm = (current or "").strip("/")
+
+    def cls(href):
+        return ' class="current"' if href.strip("/") == cur_norm else ""
+
+    def render_inline(items):
+        return "".join(f'<a href="{href}"{cls(href)}>{label}</a>' for href, label in items)
+
+    def render_dropdown(label, aria, items):
+        open_attr = " open" if any(href.strip("/") == cur_norm for href, _ in items) else ""
+        menu_inner = "".join(f'<a href="{href}"{cls(href)}>{lbl}</a>' for href, lbl in items)
+        return (
+            f'<details class="nav-dropdown"{open_attr} aria-label="{aria}">'
+            f'<summary>{label}</summary>'
+            f'<div class="nav-dropdown-menu" role="menu">{menu_inner}</div>'
+            f'</details>'
         )
+
     return f"""<nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">← 1490 Lively Ridge</a>
-    {render(items_main)}
-    <span class="group-label">Rooms</span>
-    {render(items_rooms)}
-    <span class="group-label">Canon</span>
-    {render(items_designers)}
-    {render(items_extra)}
+    {render_inline(items_main)}
+    {render_dropdown("Rooms", "Rooms", items_rooms)}
+    {render_dropdown("Canon", "Canon designers", items_designers)}
+    {render_inline(items_extra)}
   </div>
 </nav>
 """
