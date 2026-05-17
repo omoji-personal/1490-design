@@ -686,6 +686,68 @@ def check_catalog_status_callouts(items: List[Item], meta: Meta) -> List[LintFin
     return findings
 
 
+def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """Surface supplier_directory.yaml entries whose URLs failed verification.
+
+    Reads ~/Desktop/HomeAI/scope/supplier_directory.yaml if present. Counts
+    suppliers where url_verified is false OR url_status is not a 200 (or similar
+    successful tag). Emits a single rollup warning when count > 0.
+
+    This is a directory-level lint, not a sourcing-item lint — it shares the
+    LintFinding surface so the lint output stays unified. item_id is None.
+    """
+    import os
+    import yaml as _yaml
+    findings = []
+    path = os.path.expanduser("~/Desktop/HomeAI/scope/supplier_directory.yaml")
+    if not os.path.exists(path):
+        return findings
+    try:
+        with open(path) as f:
+            data = _yaml.safe_load(f)
+    except Exception:
+        return findings
+    suppliers = (data or {}).get("suppliers", []) or []
+    stale = []
+    for s in suppliers:
+        url_verified = s.get("url_verified")
+        url_status = s.get("url_status")
+        # Treat as fresh if url_verified is True AND (url_status is 200, OR is a string
+        # starting with "200" / "ok", OR is None when url_verified is True).
+        if url_verified is True:
+            if url_status is None:
+                continue
+            if isinstance(url_status, int) and url_status in (200, 301, 302):
+                # 301/302 acceptable when the URL override has already been
+                # applied (the recorded url in supplier_directory IS the
+                # post-redirect target). url_verified=true is the signal.
+                continue
+            if isinstance(url_status, str):
+                s_lower = url_status.strip().lower()
+                if (s_lower.startswith("200")
+                        or s_lower.startswith("301")
+                        or s_lower.startswith("302")
+                        or s_lower in ("ok", "bot_blocked_ok",
+                                       "redirected_changed_path",
+                                       "redirected_brand_change")):
+                    continue
+            # Otherwise: verified but with a non-200 status → flag.
+            stale.append(s.get("id", "?"))
+        else:
+            stale.append(s.get("id", "?"))
+    if stale:
+        findings.append(LintFinding(
+            severity="warning",
+            message=(
+                f"supplier_directory.yaml: {len(stale)} supplier(s) with stale/unverified URLs — "
+                f"first few: {', '.join(stale[:5])}"
+                + (f" (+{len(stale)-5} more)" if len(stale) > 5 else "")
+            ),
+            item_id=None,
+        ))
+    return findings
+
+
 def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings: List[LintFinding] = []
     findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
@@ -700,4 +762,5 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_per_item_budget_overshoot(items, meta)
     findings += check_no_orphan_sku_refs_in_notes(items, meta)
     findings += check_catalog_status_callouts(items, meta)
+    findings += check_supplier_directory_url_freshness(items, meta)
     return findings

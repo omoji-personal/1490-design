@@ -970,3 +970,293 @@ def test_render_suppliers_page_empty_fallback_when_no_directory():
     # Normal render path with zero data still produces a valid page with the topnav
     assert "<title>Suppliers" in html
     assert "0 suppliers across 0 categories" in html
+
+
+# ---------------------------------------------------------------------------
+# Enhancement-pass tests (2026-05-17): hero images, cross-link, verification
+# badge, action selector, URL filter persistence, sort dropdown.
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_hero_image_renders_when_present():
+    """Card hero image is emitted with the supplier_directory.yaml hero_image path."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"generated": "2026-05-17", "last_verification_pass": "2026-05-17"},
+        "categories": [{"id": "furniture-seating", "label": "Seating"}],
+        "suppliers": [{
+            "id": "west-elm-seating",
+            "category": "furniture-seating",
+            "name": "West Elm",
+            "url": "https://www.westelm.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "hero_image": "/images/suppliers/west-elm-seating.jpg",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # When the file exists on disk → an <img> tag is emitted; when it doesn't,
+    # the placeholder is emitted. Both are acceptable; assert one of them.
+    assert ('src="/images/suppliers/west-elm-seating.jpg"' in html
+            or 'supplier-hero-placeholder' in html)
+    # Container always present.
+    assert 'class="supplier-hero' in html
+
+
+def test_render_suppliers_page_hero_placeholder_when_image_missing():
+    """Missing hero_image OR missing-on-disk path falls back to soft placeholder."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"generated": "2026-05-17"},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "fictional-supplier-xyz",
+            "category": "lighting",
+            "name": "Fictional Supplier XYZ",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "GOOD",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "hero_image": "/images/suppliers/fictional-supplier-xyz-NOT-PRESENT.jpg",
+            "url_verified": False,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'supplier-hero-placeholder' in html
+    assert 'Fictional Supplier XYZ' in html
+
+
+def test_render_suppliers_page_verification_badge():
+    """Verified suppliers get a green badge; unverified get an amber badge."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"generated": "2026-05-17", "last_verification_pass": "2026-05-17"},
+        "categories": [
+            {"id": "furniture-seating", "label": "Seating"},
+            {"id": "lighting", "label": "Lighting"},
+        ],
+        "suppliers": [
+            {"id": "a", "category": "furniture-seating", "name": "A",
+             "url": "https://example.com", "price_tier": "mid", "fit": "STRONG",
+             "style_fingerprint": "x", "fit_for_project": "x",
+             "url_verified": True, "url_status": 200},
+            {"id": "b", "category": "lighting", "name": "B",
+             "url": "https://example.com", "price_tier": "mid", "fit": "GOOD",
+             "style_fingerprint": "x", "fit_for_project": "x",
+             "url_verified": False},
+        ],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'verif-badge verif-ok' in html
+    assert 'verif-badge verif-warn' in html
+    assert 'Verified 2026-05-17' in html
+    assert 'Unverified' in html
+
+
+def test_render_suppliers_page_action_selector_present():
+    """Each card has a Visit / Saved / Ruled-out tri-state radio."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "furniture-seating", "label": "Seating"}],
+        "suppliers": [{
+            "id": "a", "category": "furniture-seating", "name": "A",
+            "url": "https://example.com", "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'class="supplier-action"' in html
+    assert 'data-action="visit"' in html
+    assert 'data-action="saved"' in html
+    assert 'data-action="ruled"' in html
+
+
+def test_render_suppliers_page_sort_dropdown_and_copy_button():
+    """Sort dropdown and Copy filter URL button present in the filter bar."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'id="sort-by"' in html
+    assert 'value="tier"' in html
+    assert 'value="fit"' in html
+    assert 'value="verified"' in html
+    assert 'value="random"' in html
+    assert 'id="copy-filter-url"' in html
+
+
+def test_render_suppliers_page_action_filter_chips():
+    """Filter bar exposes 4 action filter chips (All / Visit / Saved / Ruled)."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {"meta": {}, "categories": [], "suppliers": []}
+    html = render_suppliers_page(fixture)
+    assert 'data-action-filter="all"' in html
+    assert 'data-action-filter="visit"' in html
+    assert 'data-action-filter="saved"' in html
+    assert 'data-action-filter="ruled"' in html
+
+
+def test_render_suppliers_page_url_filter_persistence_js():
+    """JS reads URL params on load (search, category, tier, fit, sort, action, vendor)."""
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    # Init reads URL params
+    assert "URLSearchParams" in html
+    assert "history.replaceState" in html
+    # Sort + action filter + vendor handling all live in the same script.
+    assert "p.get('vendor')" in html or 'p.get("vendor")' in html
+    assert "p.set('category'" in html or 'p.set("category"' in html
+
+
+def test_render_suppliers_page_crosslink_counts_when_sourcing_present(tmp_path, monkeypatch):
+    """When sourcing.yaml has matching vendor strings, the cross-link block shows the count."""
+    from sourcing_render_html import _supplier_sourcing_links, _vendor_string_matches_supplier
+    # Direct unit test on the helper — covers the matching logic without needing
+    # to override the HomeAI/scope sourcing.yaml path.
+    sourcing_items = [
+        {"id": "LR-SOFA", "top_vendor": "West Elm", "option_vendors": []},
+        {"id": "MB-VANITY", "top_vendor": "West Elm", "option_vendors": []},
+        {"id": "K-PENDANTS", "top_vendor": "Rejuvenation", "option_vendors": ["Schoolhouse", "West Elm"]},
+        {"id": "OTHER", "top_vendor": "Generic", "option_vendors": []},
+    ]
+    matches = _supplier_sourcing_links("west-elm-seating", "West Elm", sourcing_items)
+    assert sorted(matches) == sorted(["LR-SOFA", "MB-VANITY", "K-PENDANTS"])
+
+    matches_schoolhouse = _supplier_sourcing_links("schoolhouse", "Schoolhouse", sourcing_items)
+    assert matches_schoolhouse == ["K-PENDANTS"]
+
+    matches_none = _supplier_sourcing_links("nonexistent-id", "Nonexistent Brand", sourcing_items)
+    assert matches_none == []
+
+
+def test_render_suppliers_page_crosslink_block_in_html():
+    """Cross-link footer renders for both matched and unmatched suppliers."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "furniture-seating", "label": "Seating"}],
+        "suppliers": [{
+            "id": "west-elm-seating",
+            "category": "furniture-seating",
+            "name": "West Elm",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # Either matched or unmatched block must render
+    assert 'sourcing-crosslink' in html
+    assert ('Tracked in /sourcing' in html) or ('Not yet tracked' in html)
+
+
+def test_render_suppliers_page_verification_badge_tooltip():
+    """Verification badge carries a data-tooltip with URL status + price probe count."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"last_verification_pass": "2026-05-17"},
+        "categories": [{"id": "plumbing", "label": "Plumbing"}],
+        "suppliers": [{
+            "id": "delta", "category": "plumbing", "name": "Delta",
+            "url": "https://example.com", "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "url_verified": True, "url_status": 200,
+            "price_validation": [{"sku": "S1", "retail_typical": 100}, {"sku": "S2", "retail_typical": 200}],
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'data-tooltip="URL status: 200' in html
+    assert 'price probe' in html
+
+
+def test_render_suppliers_page_card_carries_verified_date():
+    """Card data-verified-date attribute supports the 'recently verified' sort."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"last_verification_pass": "2026-05-17"},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com", "price_tier": "mid", "fit": "GOOD",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'data-verified-date="2026-05-17"' in html
+    assert 'data-verified="true"' in html
+
+
+# ---------------------------------------------------------------------------
+# Lint rule: supplier_directory URL freshness
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_directory_url_freshness_lint_passes_when_all_verified(tmp_path, monkeypatch):
+    """check_supplier_directory_url_freshness emits no findings when every supplier is verified."""
+    from sourcing_lint import check_supplier_directory_url_freshness
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: a
+            url_verified: true
+            url_status: 200
+          - id: b
+            url_verified: true
+            url_status: "200 ok"
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    monkeypatch.setenv("HOME", str(tmp_path))
+    # Monkeypatch os.path.expanduser used inside the lint
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_url_freshness([], None)
+    assert findings == []
+
+
+def test_supplier_directory_url_freshness_lint_flags_unverified(tmp_path, monkeypatch):
+    """check_supplier_directory_url_freshness emits a warning when suppliers are unverified."""
+    from sourcing_lint import check_supplier_directory_url_freshness
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: alpha
+            url_verified: false
+          - id: bravo
+            url_verified: true
+            url_status: 404
+          - id: charlie
+            url_verified: true
+            url_status: 200
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_url_freshness([], None)
+    assert len(findings) == 1
+    assert findings[0].severity == "warning"
+    assert "2 supplier" in findings[0].message
+    assert "alpha" in findings[0].message
+    assert "bravo" in findings[0].message
+    # charlie should NOT appear
+    assert "charlie" not in findings[0].message

@@ -1989,9 +1989,81 @@ SUPPLIERS_CSS = """
 .supplier-card .explore-btn:hover { background: #6e6346; }
 .suppliers-empty { background: var(--note-tint); border-radius: 8px; padding: 24px;
   text-align: center; color: var(--muted); font-size: 14px; }
+
+/* === Hero image === */
+.supplier-hero { width: 100%; height: 130px; border-radius: 8px; overflow: hidden;
+  background: var(--warm-tint); border: 1px solid var(--border); margin: 0 0 6px;
+  display: flex; align-items: center; justify-content: center; }
+.supplier-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.supplier-hero-placeholder { font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px; color: #8a7e60; letter-spacing: 0.3px; text-align: center;
+  padding: 8px 12px; background: linear-gradient(135deg, #f4ecd6, #ece4cc); }
+.supplier-hero-placeholder span { display: block; line-height: 1.2; }
+
+/* === Verification badge === */
+.supplier-card-header .verif-badge { margin-left: auto; font-size: 10px;
+  padding: 2px 7px; border-radius: 999px; cursor: help; border: 1px solid transparent;
+  text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; font-family: inherit;
+  position: relative; }
+.verif-badge.verif-ok { background: #d9ead2; color: #2a5a2a; border-color: #b9d2af; }
+.verif-badge.verif-warn { background: #fbe9df; color: #973a1c; border-color: #f0c8b3; }
+.verif-badge:hover::after {
+  content: attr(data-tooltip);
+  position: absolute; right: 0; top: 100%; margin-top: 4px; z-index: 50;
+  background: #2a2622; color: #f7f1e3; padding: 6px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0;
+  white-space: normal; min-width: 200px; max-width: 320px; line-height: 1.4;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+}
+
+/* === /sourcing cross-link === */
+.sourcing-crosslink { font-size: 11.5px; border-top: 1px dashed var(--border);
+  padding: 7px 0 0; margin-top: 4px; line-height: 1.45; }
+.sourcing-crosslink.has-matches a { color: var(--ink); text-decoration: none;
+  display: inline-block; }
+.sourcing-crosslink.has-matches a:hover { color: var(--accent); }
+.sourcing-crosslink .crosslink-ids { color: var(--muted); font-variant-numeric: tabular-nums;
+  font-size: 11px; }
+.sourcing-crosslink.no-matches { color: var(--muted); font-style: italic; }
+
+/* === Tri-state action selector === */
+.supplier-action { display: flex; gap: 4px; margin-top: 4px; }
+.supplier-action .action-btn { flex: 1; font-size: 11px; padding: 4px 6px;
+  border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg);
+  color: var(--muted); cursor: pointer; font-family: inherit;
+  transition: background .12s, color .12s, border-color .12s; }
+.supplier-action .action-btn:hover { background: var(--warm-tint); }
+.supplier-action .action-btn.active.action-visit { background: #dde6f0; color: #2f4870;
+  border-color: #9ab6d3; }
+.supplier-action .action-btn.active.action-saved { background: #d9ead2; color: #2a5a2a;
+  border-color: #aac9a0; }
+.supplier-action .action-btn.active.action-ruled { background: #ececec; color: #555;
+  border-color: #c5c5c5; }
+/* Card border-color shift based on action state */
+.supplier-card[data-action-state="visit"] { border-color: #9ab6d3; box-shadow: 0 0 0 1px rgba(154, 182, 211, 0.3); }
+.supplier-card[data-action-state="saved"] { border-color: #aac9a0; box-shadow: 0 0 0 1px rgba(170, 201, 160, 0.3); }
+.supplier-card[data-action-state="ruled"] { border-color: #c5c5c5; opacity: 0.55; }
+
+/* === Filter additions === */
+.suppliers-filter-bar .action-filter { display: flex; gap: 4px; align-items: center;
+  margin-left: 4px; }
+.suppliers-filter-bar .action-filter button { padding: 4px 10px; font-size: 12px;
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 999px;
+  cursor: pointer; color: var(--muted); }
+.suppliers-filter-bar .action-filter button.active { background: var(--accent);
+  color: white; border-color: var(--accent); }
+.suppliers-filter-bar #copy-filter-url { background: var(--card-bg); color: var(--ink);
+  border-color: var(--border); }
+.suppliers-filter-bar #copy-filter-url:hover { background: var(--warm-tint); }
+.suppliers-filter-bar #copy-filter-url.copied { background: #d9ead2; color: #2a5a2a;
+  border-color: #b9d2af; }
+.suppliers-filter-bar select#sort-by { background: var(--card-bg);
+  border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px;
+  font-size: 13px; color: var(--ink); }
 """
 
-# JavaScript filter + random-pick logic — interpolated as string to avoid double-braces.
+# JavaScript filter + random-pick + action persistence + URL sync + sort
+# — interpolated as string to avoid double-braces. Note: keep ALL { } as JS braces.
 SUPPLIERS_JS = """
 <script>
 (function() {
@@ -2001,16 +2073,135 @@ SUPPLIERS_JS = """
   const catSelect = document.getElementById('cat-filter');
   const tierSelect = document.getElementById('tier-filter');
   const fitSelect = document.getElementById('fit-filter');
+  const sortSelect = document.getElementById('sort-by');
   const resetBtn = document.getElementById('reset-filters');
   const randomBtn = document.getElementById('random-pick');
+  const copyBtn = document.getElementById('copy-filter-url');
+  const actionFilterBtns = Array.from(document.querySelectorAll('.action-filter button'));
   const stats = document.getElementById('filter-stats');
   const totalCards = cards.length;
+  const ACTION_STORE_KEY = 'suppliers.actions.v1';
+  let currentActionFilter = 'all';
 
+  // --- localStorage actions ---
+  function loadActions() {
+    try { return JSON.parse(localStorage.getItem(ACTION_STORE_KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function saveActions(actions) {
+    try { localStorage.setItem(ACTION_STORE_KEY, JSON.stringify(actions)); }
+    catch (e) { /* quota or disabled */ }
+  }
+  function applyActionToCard(card, state) {
+    card.dataset.actionState = state || '';
+    const btns = card.querySelectorAll('.supplier-action .action-btn');
+    btns.forEach(b => b.classList.toggle('active', state && b.dataset.action === state));
+  }
+  function setAction(card, state) {
+    const actions = loadActions();
+    const id = card.dataset.supplierId;
+    if (!state) delete actions[id]; else actions[id] = state;
+    saveActions(actions);
+    applyActionToCard(card, state);
+    applyFilters();
+  }
+
+  // --- Wire tri-state buttons per card ---
+  cards.forEach(card => {
+    const id = card.dataset.supplierId;
+    const actions = loadActions();
+    if (actions[id]) applyActionToCard(card, actions[id]);
+    card.querySelectorAll('.supplier-action .action-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const wanted = btn.dataset.action;
+        const cur = card.dataset.actionState || '';
+        setAction(card, cur === wanted ? '' : wanted);
+      });
+    });
+  });
+
+  // --- URL parameter sync ---
+  function readUrlParams() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.has('q')) searchInput.value = p.get('q');
+    if (p.has('category')) catSelect.value = p.get('category');
+    if (p.has('tier')) tierSelect.value = p.get('tier');
+    if (p.has('fit')) fitSelect.value = p.get('fit');
+    if (p.has('sort') && sortSelect) sortSelect.value = p.get('sort');
+    if (p.has('action')) {
+      currentActionFilter = p.get('action');
+      actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === currentActionFilter));
+    }
+    // /sourcing cross-link uses ?vendor=<id> on the /sourcing page itself, but if someone
+    // lands on /suppliers with ?vendor= we treat it as a search seed.
+    if (p.has('vendor')) {
+      const v = p.get('vendor');
+      // Find that card and scroll to it, highlight briefly.
+      const target = cards.find(c => c.dataset.supplierId === v);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({behavior: 'smooth', block: 'center'});
+          target.style.boxShadow = '0 0 0 3px #c9b88a';
+          setTimeout(() => { target.style.boxShadow = ''; }, 2000);
+        }, 50);
+      }
+    }
+  }
+  function writeUrlParams() {
+    const p = new URLSearchParams();
+    if (searchInput.value) p.set('q', searchInput.value);
+    if (catSelect.value) p.set('category', catSelect.value);
+    if (tierSelect.value) p.set('tier', tierSelect.value);
+    if (fitSelect.value) p.set('fit', fitSelect.value);
+    if (sortSelect && sortSelect.value && sortSelect.value !== 'category') p.set('sort', sortSelect.value);
+    if (currentActionFilter && currentActionFilter !== 'all') p.set('action', currentActionFilter);
+    const qs = p.toString();
+    const newUrl = window.location.pathname + (qs ? '?' + qs : '');
+    history.replaceState(null, '', newUrl);
+  }
+
+  // --- Sorting ---
+  function applySort() {
+    if (!sortSelect) return;
+    const mode = sortSelect.value;
+    const tierOrder = {'entry': 0, 'mid': 1, 'premium': 2, 'aspirational': 3};
+    const fitOrder = {'STRONG': 0, 'GOOD': 1, 'MIXED': 2, 'CANON-ADJACENT': 3};
+    sections.forEach(sec => {
+      const grid = sec.querySelector('.supplier-card-grid');
+      if (!grid) return;
+      const localCards = Array.from(grid.querySelectorAll('.supplier-card'));
+      const sorted = localCards.slice();
+      if (mode === 'tier') {
+        sorted.sort((a, b) => (tierOrder[a.dataset.tier] || 9) - (tierOrder[b.dataset.tier] || 9));
+      } else if (mode === 'fit') {
+        sorted.sort((a, b) => (fitOrder[a.dataset.fit] || 9) - (fitOrder[b.dataset.fit] || 9));
+      } else if (mode === 'verified') {
+        sorted.sort((a, b) => (b.dataset.verifiedDate || '').localeCompare(a.dataset.verifiedDate || ''));
+      } else if (mode === 'random') {
+        for (let i = sorted.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
+        }
+      } else {
+        // default: by name within section
+        sorted.sort((a, b) => {
+          const an = a.querySelector('h3') ? a.querySelector('h3').textContent : '';
+          const bn = b.querySelector('h3') ? b.querySelector('h3').textContent : '';
+          return an.localeCompare(bn);
+        });
+      }
+      sorted.forEach(c => grid.appendChild(c));
+    });
+  }
+
+  // --- Filter ---
   function applyFilters() {
     const q = (searchInput.value || '').toLowerCase().trim();
     const cat = catSelect.value;
     const tier = tierSelect.value;
     const fit = fitSelect.value;
+    const actions = loadActions();
     let visible = 0;
     cards.forEach(card => {
       const matchCat = !cat || card.dataset.category === cat;
@@ -2018,7 +2209,13 @@ SUPPLIERS_JS = """
       const matchFit = !fit || card.dataset.fit === fit;
       const haystack = card.dataset.search;
       const matchQuery = !q || haystack.indexOf(q) !== -1;
-      const shown = matchCat && matchTier && matchFit && matchQuery;
+      const state = actions[card.dataset.supplierId] || '';
+      let matchAction = true;
+      if (currentActionFilter === 'visit') matchAction = state === 'visit';
+      else if (currentActionFilter === 'saved') matchAction = state === 'saved';
+      else if (currentActionFilter === 'ruled') matchAction = state === 'ruled';
+      else if (currentActionFilter === 'unrated') matchAction = !state;
+      const shown = matchCat && matchTier && matchFit && matchQuery && matchAction;
       card.classList.toggle('hidden', !shown);
       if (shown) visible++;
     });
@@ -2027,8 +2224,10 @@ SUPPLIERS_JS = """
       sec.style.display = any ? '' : 'none';
     });
     stats.textContent = visible + ' of ' + totalCards + ' suppliers';
+    writeUrlParams();
   }
 
+  // --- Random pick (respects current filter) ---
   function pickRandom() {
     const visible = cards.filter(c => !c.classList.contains('hidden'));
     if (!visible.length) return;
@@ -2043,16 +2242,52 @@ SUPPLIERS_JS = """
     catSelect.value = '';
     tierSelect.value = '';
     fitSelect.value = '';
+    if (sortSelect) sortSelect.value = 'category';
+    currentActionFilter = 'all';
+    actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === 'all'));
+    applySort();
     applyFilters();
+  }
+
+  // --- Copy filter URL ---
+  function copyFilterUrl() {
+    const url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = 'Copy link'; copyBtn.classList.remove('copied'); }, 1500);
+      });
+    } else {
+      // Legacy
+      const ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1500);
+    }
   }
 
   searchInput.addEventListener('input', applyFilters);
   catSelect.addEventListener('change', applyFilters);
   tierSelect.addEventListener('change', applyFilters);
   fitSelect.addEventListener('change', applyFilters);
+  if (sortSelect) sortSelect.addEventListener('change', () => { applySort(); writeUrlParams(); });
   resetBtn.addEventListener('click', resetAll);
   randomBtn.addEventListener('click', pickRandom);
+  if (copyBtn) copyBtn.addEventListener('click', copyFilterUrl);
+  actionFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentActionFilter = btn.dataset.actionFilter;
+      actionFilterBtns.forEach(b => b.classList.toggle('active', b === btn));
+      applyFilters();
+    });
+  });
 
+  // --- Init ---
+  readUrlParams();
+  applySort();
   applyFilters();
 })();
 </script>
@@ -2066,6 +2301,213 @@ def _load_supplier_directory():
     if not directory_path.exists():
         return None
     return yaml.safe_load(directory_path.read_text())
+
+
+# Tokens to ignore when normalizing a supplier name for vendor matching.
+_VENDOR_NAME_NOISE = re.compile(r"[^a-z0-9]+")
+# Aliases/expansions some vendor strings use vs the supplier brand name.
+_VENDOR_ALIAS_MAP = {
+    "west-elm": ["west elm", "westelm", "we"],
+    "crate-barrel": ["crate barrel", "crateandbarrel", "crate and barrel", "c&b", "cb"],
+    "room-board": ["room board", "roomandboard", "room and board", "r&b"],
+    "pottery-barn": ["pottery barn", "potterybarn", "pb"],
+    "rejuvenation": ["rejuvenation"],
+    "schoolhouse": ["schoolhouse"],
+    "ferm-living": ["ferm living", "fermliving"],
+    "delta": ["delta", "delta faucet"],
+    "kohler": ["kohler"],
+    "toto": ["toto"],
+    "babyletto": ["babyletto"],
+    "kraftmaid": ["kraftmaid"],
+    "ikea": ["ikea"],
+    "benjamin-moore": ["benjamin moore"],
+    "sherwin-williams": ["sherwin williams", "sherwin-williams", "sw"],
+    "farrow-ball": ["farrow ball", "farrow & ball", "farrow and ball"],
+    "daltile": ["daltile"],
+    "cle-tile": ["cle", "cle tile"],
+    "heath-ceramics": ["heath ceramics", "heath"],
+    "fireclay": ["fireclay"],
+    "anthropologie": ["anthropologie"],
+    "lulu-georgia": ["lulu and georgia", "lulu & georgia", "lulu georgia"],
+    "loloi": ["loloi"],
+    "westside-modern-atlanta": ["westside modern"],
+    "city-issue-atlanta": ["city issue"],
+    "mid-mod-market-atlanta": ["mid mod market", "midmodmarket"],
+    "chairish": ["chairish"],
+    "1stdibs": ["1stdibs"],
+    "industry-west": ["industry west"],
+    "interior-define": ["interior define"],
+    "cb2": ["cb2"],
+    "burrow": ["burrow"],
+    "sundays": ["sundays"],
+    "rh": ["rh", "restoration hardware"],
+    "bosch": ["bosch"],
+    "miele": ["miele"],
+    "wolf": ["wolf"],
+    "sub-zero": ["sub-zero", "sub zero"],
+    "ge-cafe": ["ge cafe", "ge café"],
+    "kitchenaid": ["kitchenaid"],
+    "lg": ["lg"],
+    "samsung": ["samsung"],
+    "vent-a-hood": ["vent-a-hood", "vent a hood"],
+    "emtek": ["emtek"],
+    "rejuvenation-hardware": ["rejuvenation"],
+    "schoolhouse-hardware": ["schoolhouse"],
+    "top-knobs": ["top knobs"],
+    "hapny": ["hapny"],
+    "baldwin": ["baldwin"],
+    "phylrich": ["phylrich"],
+    "brizo": ["brizo"],
+    "hansgrohe": ["hansgrohe"],
+    "perrin-rowe": ["perrin", "perrin rowe", "perrin and rowe"],
+    "watermark-designs": ["watermark"],
+    "signature-hardware": ["signature hardware"],
+    "lewis-dolin": ["lewis dolin"],
+    "house-of-antique-hardware": ["house of antique"],
+    "hamilton-sinkler": ["hamilton sinkler"],
+    "muuto": ["muuto"],
+    "hay": ["hay"],
+    "flos": ["flos"],
+    "visual-comfort": ["visual comfort"],
+    "lumens": ["lumens"],
+    "allied-maker": ["allied maker"],
+    "workstead": ["workstead"],
+    "cedar-moss": ["cedar moss", "cedar & moss"],
+    "fireclay-tile": ["fireclay"],
+    "zia-tile": ["zia"],
+    "clay-imports": ["clay imports"],
+    "riad-tile": ["riad"],
+    "bedrosians": ["bedrosians"],
+    "floor-decor": ["floor & decor", "floor and decor"],
+    "pratt-larson": ["pratt larson", "pratt & larson"],
+    "parachute": ["parachute"],
+    "nestig": ["nestig"],
+    "armadillo": ["armadillo"],
+    "revival-rugs": ["revival"],
+    "beni-rugs": ["beni"],
+    "tigmi-trading": ["tigmi"],
+    "lawrence-of-labrea": ["lawrence of la brea", "lawrence of labrea"],
+    "abc-carpet-home": ["abc carpet"],
+    "etsy-curated": ["etsy"],
+    "saatchi-art": ["saatchi"],
+    "artfully-walls": ["artfully walls"],
+    "minted": ["minted"],
+    "tappan-collective": ["tappan"],
+    "cb2-decor": ["cb2"],
+    "anthropologie-home": ["anthropologie"],
+    "shade-store": ["shade store", "the shade store"],
+    "smith-noble": ["smith & noble", "smith and noble", "smith noble"],
+    "hunter-douglas": ["hunter douglas"],
+    "tonic-living": ["tonic living"],
+    "ikea-window": ["ikea"],
+    "gloster": ["gloster"],
+    "tropitone": ["tropitone"],
+    "terrain": ["terrain"],
+    "bauer-pottery": ["bauer pottery"],
+    "campania-planters": ["campania"],
+    "caesarstone": ["caesarstone"],
+    "silestone": ["silestone"],
+    "cambria": ["cambria"],
+    "dekton-cosentino": ["dekton", "cosentino"],
+    "msi-surfaces": ["msi"],
+    "concreteworks": ["concreteworks"],
+    "natural-stone-source": ["natural stone source"],
+    "semihandmade": ["semihandmade"],
+    "reform": ["reform"],
+    "plain-english": ["plain english"],
+    "cabinetnow-custom": ["cabinetnow"],
+    "portola-paints": ["portola"],
+    "backdrop": ["backdrop"],
+    "clare": ["clare"],
+    "dunn-edwards": ["dunn edwards", "dunn-edwards"],
+    "best-hoods": ["best", "best hoods"],
+}
+
+
+def _normalize_vendor_name(s):
+    if not s:
+        return ""
+    return _VENDOR_NAME_NOISE.sub(" ", s.lower()).strip()
+
+
+def _vendor_string_matches_supplier(vendor_str: str, supplier_id: str, supplier_name: str) -> bool:
+    """Return True if a sourcing.yaml vendor string matches the given supplier.
+
+    Strategy: build a list of candidate tokens from (supplier_id, supplier_name, alias_map),
+    then check substring match (whole-word, case-insensitive) against the normalized vendor string.
+    """
+    if not vendor_str:
+        return False
+    norm = _normalize_vendor_name(vendor_str)
+    # Build candidate aliases. Strip category suffix from supplier id (e.g. west-elm-seating → west-elm).
+    base = supplier_id
+    for suf in ("-seating", "-tables", "-bedroom", "-lighting", "-appliances",
+                "-outdoor", "-decor", "-window", "-bedding", "-hardware"):
+        if base.endswith(suf):
+            base = base[: -len(suf)]
+    candidates = set()
+    # alias map keyed by full id and by base
+    for key in (supplier_id, base):
+        for alias in _VENDOR_ALIAS_MAP.get(key, []):
+            candidates.add(alias)
+    # Always include the supplier name itself, lowercased.
+    if supplier_name:
+        candidates.add(supplier_name.lower())
+        candidates.add(_normalize_vendor_name(supplier_name))
+    # And the base id dehyphenated.
+    candidates.add(base.replace("-", " "))
+    candidates.discard("")
+    for c in candidates:
+        cnorm = _normalize_vendor_name(c)
+        if not cnorm:
+            continue
+        # whole-word match — boundaries are spaces in the normalized string
+        if cnorm == norm:
+            return True
+        if (" " + cnorm + " ") in (" " + norm + " "):
+            return True
+    return False
+
+
+def _load_sourcing_for_cross_link():
+    """Load sourcing.yaml items minimally (id + vendor strings).
+
+    Returns list of dicts: {id, top_vendor, option_vendors}. Returns [] if file missing
+    or unreadable — cross-link rendering degrades gracefully.
+    """
+    sourcing_yaml = Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
+    if not sourcing_yaml.exists():
+        return []
+    try:
+        raw = yaml.safe_load(sourcing_yaml.read_text())
+    except Exception:
+        return []
+    out = []
+    for it in (raw.get("items") or []):
+        out.append({
+            "id": it.get("id", ""),
+            "top_vendor": it.get("vendor") or "",
+            "option_vendors": [
+                (o or {}).get("vendor", "")
+                for o in (it.get("options") or [])
+            ],
+        })
+    return out
+
+
+def _supplier_sourcing_links(supplier_id: str, supplier_name: str,
+                              sourcing_items: list) -> List[str]:
+    """Return list of sourcing item IDs that reference this supplier (top vendor or option vendor)."""
+    matches = []
+    for it in sourcing_items:
+        if _vendor_string_matches_supplier(it["top_vendor"], supplier_id, supplier_name):
+            matches.append(it["id"])
+            continue
+        for ov in it["option_vendors"]:
+            if _vendor_string_matches_supplier(ov, supplier_id, supplier_name):
+                matches.append(it["id"])
+                break
+    return matches
 
 
 def _supplier_fit_pill(fit: str) -> str:
@@ -2085,9 +2527,18 @@ def _supplier_tier_pill(tier: str) -> str:
     return f'<span class="supplier-pill {cls}">{escape(tier)}</span>'
 
 
-def _render_supplier_card(sup: dict) -> str:
+def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = None,
+                            verification_date: str = "") -> str:
     """Render a single supplier card with all rich detail (style fingerprint,
-    fit pill, price ranges, collections, sample/lead-time footer)."""
+    fit pill, price ranges, collections, sample/lead-time footer).
+
+    Enhancements (2026-05-17):
+      - hero image (with disk-existence + soft-tinted text fallback)
+      - verification badge (top-right)
+      - /sourcing cross-link footer
+      - tri-state action selector (Visit / Saved / Ruled out)
+    """
+    sid = sup.get("id", "")
     name = escape(sup.get("name", ""))
     url = escape(sup.get("url", ""))
     tier = sup.get("price_tier", "mid")
@@ -2098,6 +2549,11 @@ def _render_supplier_card(sup: dict) -> str:
     sample_policy = sup.get("sample_policy")
     lead_time = sup.get("lead_time_typical")
     notes = sup.get("notes")
+    hero_image = sup.get("hero_image") or ""
+    url_verified = bool(sup.get("url_verified"))
+    url_status = sup.get("url_status")
+    price_validation = sup.get("price_validation") or []
+    sourcing_match_ids = sourcing_match_ids or []
 
     # Collection chips
     cols = sup.get("collections_to_browse") or []
@@ -2156,14 +2612,85 @@ def _render_supplier_card(sup: dict) -> str:
     for c in cols:
         haystack_bits.append(c.get("name", ""))
     haystack = " ".join(haystack_bits).lower()
-    # Escape quotes for the data attr
     haystack_attr = escape(haystack)
 
-    return f'''<article class="supplier-card" data-category="{escape(sup.get("category", ""))}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-search="{haystack_attr}">
+    # Hero image with disk-existence check + fallback. hero_image path is
+    # site-relative (e.g. "/images/suppliers/<id>.jpg"); existence checked on
+    # SITE_DIR-rooted path.
+    hero_html = ""
+    if hero_image:
+        # Strip leading slash for filesystem lookup
+        rel = hero_image.lstrip("/")
+        disk_path = SITE_DIR / rel
+        if disk_path.exists():
+            hero_html = (
+                f'<div class="supplier-hero">'
+                f'<img src="{escape(hero_image)}" alt="{name}" loading="lazy">'
+                f'</div>'
+            )
+    if not hero_html:
+        # Soft tinted placeholder with supplier name centered in serif font.
+        hero_html = (
+            f'<div class="supplier-hero supplier-hero-placeholder">'
+            f'<span>{name}</span>'
+            f'</div>'
+        )
+
+    # Verification badge
+    if url_verified:
+        verif_label = f"&#10003; Verified {escape(verification_date or '2026-05-17')}"
+        verif_cls = "verif-ok"
+        verif_tip = f"URL status: {escape(str(url_status))} · {len(price_validation)} price probe(s) · verified {escape(verification_date or '2026-05-17')}"
+    else:
+        verif_label = "&#9888; Unverified"
+        verif_cls = "verif-warn"
+        verif_tip = "URL not verified in last pass"
+    verif_html = (
+        f'<button type="button" class="verif-badge {verif_cls}" '
+        f'aria-label="Verification status" '
+        f'data-tooltip="{verif_tip}">{verif_label}</button>'
+    )
+
+    # /sourcing cross-link footer
+    if sourcing_match_ids:
+        match_count = len(sourcing_match_ids)
+        preview = ", ".join(sourcing_match_ids[:6])
+        if match_count > 6:
+            preview += f", +{match_count - 6} more"
+        cross_html = (
+            f'<div class="sourcing-crosslink has-matches">'
+            f'<a href="/sourcing?vendor={escape(sid)}" class="crosslink-line">'
+            f'&#128230; Tracked in /sourcing: <strong>{match_count}</strong> '
+            f'item{"s" if match_count != 1 else ""} &mdash; '
+            f'<span class="crosslink-ids">{escape(preview)}</span>'
+            f'</a></div>'
+        )
+    else:
+        cross_html = (
+            f'<div class="sourcing-crosslink no-matches">'
+            f'&#128235; Not yet tracked &mdash; explore the supplier and add picks via /sourcing'
+            f'</div>'
+        )
+
+    # Tri-state action selector. State is persisted in localStorage by JS via supplier id.
+    action_html = (
+        f'<div class="supplier-action" role="radiogroup" aria-label="Action for {name}">'
+        f'<button type="button" class="action-btn action-visit" data-action="visit" '
+        f'aria-label="Mark to visit">&#128270; Visit</button>'
+        f'<button type="button" class="action-btn action-saved" data-action="saved" '
+        f'aria-label="Save">&#11088; Saved</button>'
+        f'<button type="button" class="action-btn action-ruled" data-action="ruled" '
+        f'aria-label="Rule out">&#128683; Ruled out</button>'
+        f'</div>'
+    )
+
+    return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category", ""))}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
+  {hero_html}
   <div class="supplier-card-header">
     <h3>{name}</h3>
     {_supplier_tier_pill(tier)}
     {_supplier_fit_pill(fit)}
+    {verif_html}
   </div>
   <p class="fingerprint">{fingerprint}</p>
   <p class="fit-line"><strong>Fit:</strong> {fit_text}</p>
@@ -2172,6 +2699,8 @@ def _render_supplier_card(sup: dict) -> str:
   {pr_html}
   {lead_sample_html}
   {notes_html}
+  {cross_html}
+  {action_html}
   <a class="explore-btn" href="{url}" target="_blank" rel="noopener">Explore {name} &rarr;</a>
 </article>'''
 
@@ -2200,6 +2729,18 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     meta = directory.get("meta", {})
     categories = directory.get("categories", [])
     suppliers = directory.get("suppliers", [])
+    verification_date = str(meta.get("last_verification_pass") or meta.get("generated") or "")
+
+    # Load sourcing.yaml once for /sourcing cross-link counting
+    sourcing_items = _load_sourcing_for_cross_link()
+
+    # Pre-compute matches per supplier id
+    matches_by_supplier: Dict[str, List[str]] = {}
+    for s in suppliers:
+        sid = s.get("id", "")
+        matches_by_supplier[sid] = _supplier_sourcing_links(
+            sid, s.get("name", ""), sourcing_items
+        )
 
     # Group suppliers by category, in the canonical category order
     by_cat: Dict[str, List[dict]] = {c["id"]: [] for c in categories}
@@ -2218,7 +2759,7 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
         )
     sidenav_html = "\n".join(sidenav_html_parts)
 
-    # Filter bar: search + 3 selects + reset + random
+    # Filter bar: search + 3 selects + sort + action chips + reset + random + copy URL
     cat_options = "".join(
         f'<option value="{escape(c["id"])}">{escape(c["label"])}</option>'
         for c in categories
@@ -2247,8 +2788,23 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     <option value="MIXED">Mixed</option>
     <option value="CANON-ADJACENT">Canon-adjacent</option>
   </select>
+  <label>Sort</label>
+  <select id="sort-by">
+    <option value="category">Category (default)</option>
+    <option value="tier">Price tier &uarr;</option>
+    <option value="fit">Fit (STRONG first)</option>
+    <option value="verified">Recently verified</option>
+    <option value="random">Random</option>
+  </select>
+  <span class="action-filter" role="group" aria-label="Filter by action">
+    <button type="button" data-action-filter="all" class="active">All</button>
+    <button type="button" data-action-filter="visit">&#128270; Visit</button>
+    <button type="button" data-action-filter="saved">&#11088; Saved</button>
+    <button type="button" data-action-filter="ruled">&#128683; Ruled</button>
+  </span>
   <button id="reset-filters" type="button">Reset</button>
   <button id="random-pick" type="button" title="Pick a random visible supplier">&#127922; Random</button>
+  <button id="copy-filter-url" type="button" title="Copy a sharable URL of the current filter state">Copy link</button>
   <span class="filter-stats" id="filter-stats"></span>
 </div>'''
 
@@ -2259,7 +2815,14 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
         cat_suppliers = by_cat.get(cid, [])
         if not cat_suppliers:
             continue
-        cards_html = "\n".join(_render_supplier_card(s) for s in cat_suppliers)
+        cards_html = "\n".join(
+            _render_supplier_card(
+                s,
+                sourcing_match_ids=matches_by_supplier.get(s.get("id", ""), []),
+                verification_date=verification_date,
+            )
+            for s in cat_suppliers
+        )
         sections_parts.append(
             f'<section class="category-section" id="cat-{escape(cid)}">'
             f'<div class="category-section-header">'
