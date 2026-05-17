@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -288,7 +300,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
         <h3 class="annika-item-title">Master bath wall tile (shower walls)</h3>
         <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="annika-tagline">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock). Image shown is Cle Sea Salt zellige reference — Bejmat hero shot pending; actual sample required.</p>
+      <p class="annika-tagline">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</p>
       <div class="annika-item-body" style="grid-template-columns: 1fr;">
         <div class="annika-brief-block">
           <div class="annika-label">Locked</div>
@@ -1014,11 +1026,11 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
         <h3 class="annika-item-title">Kitchen cabinet finish</h3>
         <span class="annika-status-pill decided">Locked</span>
       </div>
-      <p class="annika-tagline">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak floor required at sample stage. Image is representative light-oak swatch — actual KraftMaid finish sample required at K-CABINETS sample stage.</p>
+      <p class="annika-tagline">Factory finish on KraftMaid Vantage cab line — no separate spend. Color match to bleached-oak (Rubio Pure) floor required at sample stage.</p>
       <div class="annika-item-body" style="grid-template-columns: 1fr;">
         <div class="annika-brief-block">
           <div class="annika-label">Locked</div>
-          <p class="annika-decided">KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</p>
+          <p class="annika-decided">KraftMaid Vantage Lyndale Shaker, oak — factory finish included in cabinet line (K-CABINETS); color match to bleached-oak floor (Rubio Pure) required at sample stage</p>
           <p class="annika-locked-note">No input needed &mdash; just FYI on the direction.</p>
         </div>
       </div>
@@ -1145,7 +1157,7 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
         <h3 class="annika-item-title">Kitchen island pendants (3+1)</h3>
         <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="annika-tagline">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Schoolhouse Hyatt ★ at $1,260 for 3 is 57% over original $800 budget; no §6a-compliant brass pendant set at this quality tier exists under $800 for 3 units. approved_overshoot: true.</p>
+      <p class="annika-tagline">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Original ★ Schoolhouse Hyatt at $420ea × 3 is no longer in the Schoolhouse catalog (404). Rejuvenation Pinnock Cone (opt 1) becomes the canon-compliant successor pending owner pick; or escalate to Cedar &amp; Moss / Allied Maker globe in lacquered brass. approved_overshoot: true (carried).</p>
       <div class="annika-item-body">
         <div class="annika-pick-image-wrap">
           <img class="annika-pick-image" src="/images/sourcing/k-pendants-0.jpg" alt="Schoolhouse Hyatt 8-inch Pendant in Natural Brass × 3 (island) + matched 4th from Build.com or salvage" loading="lazy" onerror="this.style.opacity=0.3;">

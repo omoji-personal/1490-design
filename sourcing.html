@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -173,8 +185,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 </div>
 <main>
 <div class="approved-overshoots-block"><h4>Approved overshoots (9)</h4><ul><li>K-POT-FILLER &mdash; $756 vs target $756 (+0%)</li><li>K-PENDANTS &mdash; $1,260 vs target $1,260 (+0%)</li><li>K-CAB-HARDWARE &mdash; $816 vs target $816 (+0%)</li><li>SMART-LOCKS &mdash; $658 vs target $658 (+0%)</li><li>MUDROOM-HOOKS &mdash; $225 vs target $225 (+0%)</li><li>LR-SOFA &mdash; $2,799 vs target $3,200 (-13%)</li><li>LR-RUG &mdash; $999 vs target $1,200 (-17%)</li><li>NURSERY-DRESSER &mdash; $1,799 vs target $1,799 (+0%)</li><li>MB-BEDDING &mdash; $580 vs target $600 (-3%)</li></ul></div>
-<div class="lint-alert lint-warning"><h4>Lint warnings (23)</h4><ul><li>CABINET-FINISH-KITCHEN: wood-finish item missing rubio reference (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>OFFICE-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>K-PANTRY-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>NURSERY-DRESSER: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>BB-SHOWER-SYSTEM opt 2 ★ product_url looks like category/collection landing, not specific product: https://www.deltafaucet.com/bathroom/collections/trinsic</li><li>LR-FLOOR-LAMP opt 2 ★ product_url looks like category/collection landing, not specific product: https://www.chairish.com/category/floor-lamps?query=brass+torchiere+vintage</li><li>BATH-MIRRORS opt 1 ★ product_url looks like category/collection landing, not specific product: https://www.rejuvenation.com/shop/mirrors/wall-mirrors/</li><li>K-PANTRY-BUILTIN opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.kraftmaid.com/pantry-zone/</li><li>MASTER-CLOSET opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.californiaclosets.com/reach-in-closets/</li><li>WT-DINING opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.potterybarn.com/shop/window-treatments/curtains-drapes-by-style/belgian-linen-drapes/</li><li>NURSERY-GLIDER opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.babyletto.com/collections/gliders/products/toco-swivel-glider-and-ottoman-in-eco-perform</li><li>NURSERY-RUG opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/kids-furniture/nursery+rugs/</li><li>BASEMENT-RUG opt 0 ★ product_url looks like category/collection landing, not specific product: https://ruggable.com/collections/8x10-grey-rugs</li><li>MB-PILLOWS opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throw-pillows/</li><li>LR-PILLOWS opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throw-pillows/</li><li>LR-THROW opt 1 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throws-blankets/</li><li>NURSERY-ART opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.minted.com/nursery-wall-art</li><li>CERAMICS-BUNDLE opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.eastfork.com/collections/pottery</li><li>KITCHEN-OPEN-SHELF opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.eastfork.com/collections/pottery</li><li>K-TILE-BACKSPLASH notes references SKU &#x27;PIVOT&#x27; not in current options — possible orphan reference after sku swap</li><li>K-SINK notes references SKU &#x27;K-5418-NA&#x27; not in current options — possible orphan reference after sku swap</li><li>G3-HOOD notes references SKU &#x27;K2240SS&#x27; not in current options — possible orphan reference after sku swap</li><li>G3-HOOD notes references SKU &#x27;SLDH9-K42&#x27; not in current options — possible orphan reference after sku swap</li></ul></div>
-<div class="lint-alert"><h4>Lint info (38)</h4><ul><li>kitchen: hardware mix unbalanced (brass=1, matte_black=0; rule wants ≥2 each for 8-item room)</li><li>master_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 7-item room)</li><li>hall_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 6-item room)</li><li>exterior: hardware mix unbalanced (brass=4, matte_black=0; rule wants ≥2 each for 8-item room)</li><li>HARDWOOD-FINISH is decided (Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.) with budget $11200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-INTERIOR-WALLS-PRIMARY is decided (BM Aura interior — White Dove (OC-17), matte) with budget $8500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-BEDROOM-ALT is decided (SW Accessible Beige (SW 7036), matte — color matched in BM Aura base) with budget $500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-BATH-ACCENT is decided (BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte) with budget $400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-TRIM-DOORS is decided (BM Simply White (OC-117), Aura satin) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TILE-WALL is decided (Cle Weathered White 2×6 Bejmat) with budget $2400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TILE-FLOOR is decided (Daltile Choice Ivory 24×24 honed) with budget $900 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TILE-FLOOR is decided (Daltile Portfolio White 12×24 honed) with budget $600 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-TILE-FLOOR is decided (Daltile Portfolio White 12×24 honed (match hall bath)) with budget $500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-TILE-BACKSPLASH is decided (Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash) with budget $2500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-FLOOR-TILE is decided (Daltile Choice Ivory porcelain) with budget $1800 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-COUNTERS is decided (Caesarstone Statuario waterfall island + perimeter) with budget $5000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-FAUCET is decided (Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST) with budget $550 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-FAUCET is decided (Delta Trinsic 559LF-CZMPU Champagne Bronze) with budget $450 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-SHOWER-DRAIN is decided (Schluter KERDI-LINE linear drain, brushed stainless) with budget $300 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-FAUCET is decided (Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)) with budget $400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TUB is decided (Kohler Bellwether 60-inch cast iron alcove tub, White) with budget $700 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TOILET is decided (Toto Drake II One-Piece + Toto Washlet C5) with budget $1400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TOILET is decided (Toto Drake II Two-Piece + Toto Washlet C5) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-TOILET is decided (Toto Drake II Two-Piece + Toto Washlet C5) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>WATER-FILTRATION is decided (Aquasana whole-house carbon + softener + RO under kitchen sink) with budget $4000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>RECESSED-CANS is decided (Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans) with budget $1200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>INTERIOR-DOOR-HARDWARE is decided (Emtek Modern lever sets, matte black — 10 sets bundled with doors) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>INTERIOR-DOORS-SLABS is decided (10 interior solid-core 5-panel doors, paint-grade primed) with budget $7080 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-MEDICINE-CABINET is decided (Pottery Barn Hutchinson medicine cabinet) with budget $600 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-CABINETS is decided (CDGA KraftMaid Vantage light oak Shaker, 30 LF installed) with budget $9500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-STORAGE-ADDER is decided (KraftMaid Vantage storage adder, matching) with budget $2000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-VANITY is decided (West Elm Hutchinson Double Vanity 60-inch, Blonde) with budget $3500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-VANITY is decided (West Elm Hutchinson Single Vanity 36-inch, Blonde) with budget $1800 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-VANITY is decided (Pottery Barn Mason 24-inch wall-mount vanity) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>STAIR-REFACING is decided (Stair tread refacing + matching Bleach + Rubio finish) with budget $3200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>LANDSCAPE-IRRIGATION is decided (2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)) with budget $2500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>NEST-PROTECT is decided (Nest Protect × 6 hardwired) with budget $720 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>ROBOLITTER is decided (Custom cabinet + dedicated vent for Robolitter — basement utility) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li></ul></div>
+<div class="lint-alert lint-warning"><h4>Lint warnings (27)</h4><ul><li>OFFICE-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>K-PANTRY-BUILTIN: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>NURSERY-DRESSER: wood treatment references forbidden term (expected &#x27;white_oak_bleach_rubio_pure&#x27;)</li><li>BB-SHOWER-SYSTEM opt 2 ★ product_url looks like category/collection landing, not specific product: https://www.deltafaucet.com/bathroom/collections/trinsic</li><li>LR-FLOOR-LAMP opt 2 ★ product_url looks like category/collection landing, not specific product: https://www.chairish.com/category/floor-lamps?query=brass+torchiere+vintage</li><li>BATH-MIRRORS opt 1 ★ product_url looks like category/collection landing, not specific product: https://www.rejuvenation.com/shop/mirrors/wall-mirrors/</li><li>K-PANTRY-BUILTIN opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.kraftmaid.com/pantry-zone/</li><li>MASTER-CLOSET opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.californiaclosets.com/reach-in-closets/</li><li>WT-DINING opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.potterybarn.com/shop/window-treatments/curtains-drapes-by-style/belgian-linen-drapes/</li><li>NURSERY-GLIDER opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.babyletto.com/collections/gliders/products/toco-swivel-glider-and-ottoman-in-eco-perform</li><li>NURSERY-RUG opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/kids-furniture/nursery+rugs/</li><li>BASEMENT-RUG opt 0 ★ product_url looks like category/collection landing, not specific product: https://ruggable.com/collections/8x10-grey-rugs</li><li>MB-PILLOWS opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throw-pillows/</li><li>LR-PILLOWS opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throw-pillows/</li><li>LR-THROW opt 1 ★ product_url looks like category/collection landing, not specific product: https://www.westelm.com/shop/pillows-comforters/throws-blankets/</li><li>NURSERY-ART opt 0 ★ product_url path too shallow for a product page (expected ≥2 segments): https://www.minted.com/nursery-wall-art</li><li>CERAMICS-BUNDLE opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.eastfork.com/collections/pottery</li><li>KITCHEN-OPEN-SHELF opt 0 ★ product_url looks like category/collection landing, not specific product: https://www.eastfork.com/collections/pottery</li><li>K-TILE-BACKSPLASH notes references SKU &#x27;PIVOT&#x27; not in current options — possible orphan reference after sku swap</li><li>K-SINK notes references SKU &#x27;K-5418-NA&#x27; not in current options — possible orphan reference after sku swap</li><li>G3-HOOD notes references SKU &#x27;SLDH9-K42&#x27; not in current options — possible orphan reference after sku swap</li><li>G3-HOOD notes references SKU &#x27;K2240SS&#x27; not in current options — possible orphan reference after sku swap</li><li>MB-TILE-FLOOR: CATALOG GAP — spec&#x27;d SKU not in current vendor catalog with no clean successor; owner must reselect — Daltile Choice Ivory product line still listed at daltile.com/products/stone-look/choice/ivory, but site search returns no results and current third-party listings show Choice Ivory only as AR04 12x24 matte ceramic — not 24x24 honed porcelain. The 24x24 honed format spec&#x27;d here is not in the current vendor catalog. Owner reselect at Daltile Norcross showroom: candidates = Daltile Bee Hive Ivory 24x20 porcelain (current ColorBody, matte, hex format) or Kesler Marble Avorio 24x48 polished porcelain (wrong finish for spec).</li><li>K-FLOOR-TILE: CATALOG GAP — spec&#x27;d SKU not in current vendor catalog with no clean successor; owner must reselect — Same Daltile Choice Ivory catalog gap as MB-TILE-FLOOR — spec says porcelain but Choice Ivory is currently sold as ceramic (AR04 series, 12x24 matte). Owner reselect at Daltile Norcross showroom; should match the master-bath floor SKU for one-vendor batch.</li><li>K-PENDANTS: CATALOG GAP — spec&#x27;d SKU not in current vendor catalog with no clean successor; owner must reselect — Schoolhouse Hyatt 8&quot; Pendant URL 404 — product is no longer in the Schoolhouse catalog. Current Schoolhouse catalog has Otto 8&quot;, Ray 8&quot;, Alfred 20&quot; lantern in natural brass — none match Hyatt geometry+price. Rejuvenation Pinnock Cone (opt 1) is the only remaining canon-compliant choice in current catalogs at this budget; owner reselect.</li><li>MB-MEDICINE-CABINET: SPEC ERROR — spec&#x27;d product does not exist in this vendor&#x27;s catalog (likely wrong line/format); owner must reselect — PB Hutchinson is a VANITY range at Pottery Barn — there is no Hutchinson medicine cabinet in the PB catalog. Owner reselect from current PB medicine cabinets: PB Vintage Recessed Medicine Cabinet (Vintage Brass/Aged Bronze, 17W x 25H, $400-600) or PB Vintage Slim Recessed; PB Kensington Recessed for a wider unit. Carries G2 line callout but spec needs an actual SKU.</li><li>BB-VANITY: SPEC ERROR — spec&#x27;d product does not exist in this vendor&#x27;s catalog (likely wrong line/format); owner must reselect — PB Mason vanity line smallest current size is 31.5&quot; (Mason 31.5&quot; Single Sink Vanity, ~$2,799). No 24&quot; Mason and no wall-mount Mason configuration exists in PB catalog. Budget $1,100 is also short of current Mason pricing. Owner reselect: candidates at 24&quot; wall-mount from PB current = Bryston 24-30, Sabine 24-30, Sinclaire 24-30, Warner 24-30, Alderson 24-30 — pick one or upsize budget to fit Mason 31.5.</li></ul></div>
+<div class="lint-alert"><h4>Lint info (43)</h4><ul><li>kitchen: hardware mix unbalanced (brass=1, matte_black=0; rule wants ≥2 each for 8-item room)</li><li>master_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 7-item room)</li><li>hall_bath: hardware mix unbalanced (brass=2, matte_black=0; rule wants ≥2 each for 6-item room)</li><li>exterior: hardware mix unbalanced (brass=4, matte_black=0; rule wants ≥2 each for 8-item room)</li><li>HARDWOOD-FINISH is decided (Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.) with budget $11200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-INTERIOR-WALLS-PRIMARY is decided (BM Aura interior — White Dove (OC-17), matte) with budget $8500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-BEDROOM-ALT is decided (SW Accessible Beige (SW 7036), matte — color matched in BM Aura base) with budget $500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-BATH-ACCENT is decided (BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte) with budget $400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-TRIM-DOORS is decided (BM Simply White (OC-117), Aura satin) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TILE-WALL is decided (Cle Weathered White 2×6 Bejmat) with budget $2400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TILE-FLOOR is decided (Daltile Choice Ivory 24×24 honed) with budget $900 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TILE-FLOOR is decided (Daltile Portfolio White 12×24 honed) with budget $600 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-TILE-FLOOR is decided (Daltile Portfolio White 12×24 honed (match hall bath)) with budget $500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-TILE-BACKSPLASH is decided (Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash) with budget $2500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-FLOOR-TILE is decided (Daltile Choice Ivory porcelain) with budget $1800 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-COUNTERS is decided (Caesarstone Statuario waterfall island + perimeter) with budget $5000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-FAUCET is decided (Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST) with budget $550 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-FAUCET is decided (Delta Trinsic 559LF-CZMPU Champagne Bronze) with budget $450 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-SHOWER-DRAIN is decided (Schluter KERDI-LINE linear drain, brushed stainless) with budget $300 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-FAUCET is decided (Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)) with budget $400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TUB is decided (Kohler Bellwether 60-inch cast iron alcove tub, White) with budget $700 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-TOILET is decided (Toto Drake II One-Piece + Toto Washlet C5) with budget $1400 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-TOILET is decided (Toto Drake II Two-Piece + Toto Washlet C5) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-TOILET is decided (Toto Drake II Two-Piece + Toto Washlet C5) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>WATER-FILTRATION is decided (Aquasana whole-house carbon + softener + RO under kitchen sink) with budget $4000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>RECESSED-CANS is decided (Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans) with budget $1200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>INTERIOR-DOOR-HARDWARE is decided (Emtek Modern lever sets, matte black — 10 sets bundled with doors) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>INTERIOR-DOORS-SLABS is decided (10 interior solid-core 5-panel doors, paint-grade primed) with budget $7080 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-MEDICINE-CABINET is decided (Pottery Barn Hutchinson medicine cabinet) with budget $600 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-CABINETS is decided (CDGA KraftMaid Vantage light oak Shaker, 30 LF installed) with budget $9500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>K-STORAGE-ADDER is decided (KraftMaid Vantage storage adder, matching) with budget $2000 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>MB-VANITY is decided (West Elm Hutchinson Double Vanity 60-inch, Blonde) with budget $3500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>HB-VANITY is decided (West Elm Hutchinson Single Vanity 36-inch, Blonde) with budget $1800 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>BB-VANITY is decided (Pottery Barn Mason 24-inch wall-mount vanity) with budget $1100 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>STAIR-REFACING is decided (Stair tread refacing + matching Bleach + Rubio finish) with budget $3200 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>LANDSCAPE-IRRIGATION is decided (2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)) with budget $2500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>NEST-PROTECT is decided (Nest Protect × 6 hardwired) with budget $720 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>ROBOLITTER is decided (Custom cabinet + dedicated vent for Robolitter — basement utility) with budget $1500 but has no priced option — actual price unknown, budget compliance unverifiable</li><li>PAINT-BEDROOM-ALT: catalog VERIFIED against live vendor PDP — SW Accessible Beige SW 7036 confirmed current (LRV 57.67, hex #D1C7B8); SW site image not extractable (CDN blocks scraping) so generated swatch placeholder stays. Verify chip at dealer pickup.</li><li>CABINET-FINISH-KITCHEN: catalog VERIFIED against live vendor PDP — KraftMaid Lyndale full-overlay Shaker confirmed current at kraftmaid.com/lyndale-full/. Image is current Lyndale Maple Natural; actual oak finish sample required at K-CABINETS sample stage to color-match Rubio Pure floor.</li><li>MB-TILE-WALL: catalog VERIFIED against live vendor PDP — Cle Bejmat Weathered White 2x6 confirmed in-stock at cletile.com/products/zellige-terracotta-weathered-white-2x6 ($22.03/sqft, 13,047 sqft available, ships within 10 business days). Image re-sourced from current PDP.</li><li>MB-VANITY: catalog VERIFIED against live vendor PDP — WE Hutchinson Double Bathroom Vanity 60&quot; Blonde confirmed live at westelm.com/products/hutchinson-double-bathroom-vanity-60-b4307/ (white quartz top, water-based Blonde finish, kiln-dried solid poplar + oak veneer). WE CDN blocks scraping; placeholder image stays — verify in-store or via PDP at order time.</li><li>HVAC-DEHUMIDIFIER: catalog VERIFIED against live vendor PDP — Originally spec&#x27;d Aprilaire 1850; vendor superseded with E100 in the new e-series line (2023-2024). E100 is the direct successor: 100 pints/day (was 95 on 1850), 5,000-5,500 sqft coverage, HVAC-ductable, corrosion-resistant coils, Energy Star. Confirm with TCW HVAC sub that E100 (not 1850, not 1870, not E80) is the unit being installed.</li></ul></div>
 <div class="schedule-banner">⚠️ Construction schedule not yet locked — urgency badges deferred until dates are confirmed.</div>
 <div class="filter-bar">
       <button data-filter="all" class="active">All</button>
@@ -189,6 +201,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="exterior"
        data-category="paint_finish" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">PAINT-EXTERIOR</span>
@@ -204,6 +217,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $10,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Benjamin Moore dealer (e.g., Johnson Paint, Hirshfield&#x27;s, local BM store)</div>
       <div class="sku"><a href="https://www.benjaminmoore.com/en-us/product/aura-exterior-paint-satin-1-gallon/N631" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> BM Aura Exterior — White Dove OC-17, satin →</a></div>
@@ -236,6 +250,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="common"
        data-category="paint_finish" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">PAINT-CEILINGS</span>
@@ -251,6 +266,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Benjamin Moore dealer</div>
       <div class="sku"><a href="https://www.benjaminmoore.com/en-us/product/aura-interior-paint-matte-1-gallon/N522" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> BM Aura — White Dove OC-17, flat (ceiling application) →</a></div>
@@ -283,6 +299,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="hall_bath"
        data-category="tile_stone" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">HB-TILE-WALL</span>
@@ -298,6 +315,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com)</div>
       <div class="sku"><a href="https://www.cletile.com/products/zellige-moroccan-sea-salt-2x6-subway" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed →</a></div>
@@ -330,6 +348,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="basement_bath"
        data-category="tile_stone" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-TILE-WALL</span>
@@ -345,6 +364,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com) — combine order with HB-TILE-WALL for single lead-time pull</div>
       <div class="sku"><a href="https://www.cletile.com/products/zellige-moroccan-sea-salt-2x6-subway" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath) →</a></div>
@@ -377,6 +397,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-POT-FILLER</span>
@@ -392,6 +413,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $756 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / QualityBath / Ferguson</div>
       <div class="sku"><a href="https://www.deltafaucet.com/kitchen/product/1165LF-CZ.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Delta 1165LF-CZ Contemporary Wall-Mount Pot Filler Champagne Bronze →</a></div>
@@ -424,6 +446,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-SINK</span>
@@ -439,6 +462,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $765 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / Home Depot / Ferguson</div>
       <div class="sku"><a href="https://www.homedepot.com/p/KOHLER-Strive-Undermount-Stainless-Steel-29-in-Single-Bowl-Kitchen-Sink-Kit-with-Sink-Rack-K-5409-NA/205208983" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Kohler Strive K-5409-NA 29&quot; Undermount Single Bowl Kitchen Sink with SilentShield + Rack →</a></div>
@@ -471,6 +495,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-RO-FAUCET</span>
@@ -486,6 +511,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $0 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Aquasana.com / Amazon</div>
       <div class="sku"><a href="https://www.aquasana.com/under-sink-water-filters/smart-flow-reverse-osmosis/brushed-nickel-100385794.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Aquasana SmartFlow RO Companion Faucet, Brushed Nickel (AQ-SFRO2-BN) — accept BN as nearest canon-adjacent finish for under-sink secondary spout →</a></div>
@@ -518,6 +544,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="kitchen"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-RO-SYSTEM</span>
@@ -533,6 +560,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Aquasana.com / Amazon</div>
       <div class="sku"><a href="https://www.aquasana.com/under-sink-water-filters/smart-flow-reverse-osmosis/brushed-nickel-100385794.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Aquasana SmartFlow RO System (AQ-SFRO2-BN full bundle — includes BN companion faucet + 5-stage filtration) →</a></div>
@@ -549,6 +577,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-SHOWER-SYSTEM</span>
@@ -564,6 +593,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,520 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / Home Depot / SupplyHouse</div>
       <div class="sku"><a href="https://www.deltafaucet.com/bathroom/product/T17T259-CZH2O.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Delta Trinsic TempAssure 17T H2Okinetic Shower Trim Champagne Bronze T17T259-CZH2O →</a></div>
@@ -596,6 +626,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="basement_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-FAUCET</span>
@@ -611,6 +642,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $350 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / eFaucets</div>
       <div class="sku"><a href="https://www.deltafaucet.com/bathroom/product/559LF-CZMPU.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Delta Trinsic 559LF-CZMPU Single-Handle Bathroom Faucet Champagne Bronze (Deck-Mount) →</a></div>
@@ -643,6 +675,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="basement_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-SHOWER-SYSTEM</span>
@@ -658,6 +691,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Build.com / eFaucets</div>
       <div class="sku"><a href="https://www.deltafaucet.com/bathroom/collections/trinsic" target="_blank" rel="noopener" class="sku-link">Delta Trinsic Monitor 17 Pressure-Balance Trim Champagne Bronze T17259-CZ (verify at Delta catalog) →</a></div>
@@ -690,6 +724,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="exterior"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OUTDOOR-SHOWER</span>
@@ -705,6 +740,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Sonoma Forge direct / Ferguson</div>
       <div class="sku"><a href="https://www.sonomaforge.com/products/wb-os-cxp" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Sonoma Forge WB-OS-CXP Non-Thermostatic Outdoor Shower — Brushed Brass option →</a></div>
@@ -737,6 +773,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="exterior"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">HOSE-BIBS</span>
@@ -752,6 +789,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Ferguson / local plumbing supply</div>
       <div class="sku"><a href="https://www.plumbersstock.com/woodford-25p-6-wall-faucet-p-inlet-6-inch.html" target="_blank" rel="noopener" class="sku-link">Woodford Model 25 1/2-inch Frost-Free Wall Hydrant x3 (anti-siphon) →</a></div>
@@ -780,14 +818,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">TCW specifies Woodford or Prier — let TCW order through their plumbing supplier for best pricing and correct stem length per wall thickness. $200 budget covers 3 units comfortably at either brand.</div>
       
     </article>
-<article class="item-card" data-id="K-PENDANTS"
+<article class="item-card catalog-gap" data-id="K-PENDANTS"
        data-urgency="T0" data-room="kitchen"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status="needs_reselection"
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-PENDANTS</span>
-        <h3>Kitchen island pendants (3+1)</h3>
+        <h3>Kitchen island pendants (3+1)<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span></h3>
         <span class="status-badge decide-now">Decide now</span>
         
       </div>
@@ -799,6 +838,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,260 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Schoolhouse Hyatt 8&quot; Pendant URL 404 — product is no longer in the Schoolhouse catalog. Current Schoolhouse catalog has Otto 8&quot;, Ray 8&quot;, Alfred 20&quot; lantern in natural brass — none match Hyatt geometry+price. Rejuvenation Pinnock Cone (opt 1) is the only remaining canon-compliant choice in current catalogs at this budget; owner reselect.</em></div>
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse (schoolhouse.com)</div>
       <div class="sku"><a href="https://schoolhouse.com/products/hyatt-pendant" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schoolhouse Hyatt 8-inch Pendant in Natural Brass × 3 (island) + matched 4th from Build.com or salvage →</a></div>
@@ -824,13 +864,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="option-details">Existing 3 white dome pendants (condition: functional, circa unknown). 4th pendant sourcing: (1) contact original installer/TCW for fixture spec sheet to identify exact make/model; (2) if spec unavailable, source matching white-dome pendant from Build.com generic white schoolhouse globe line (~$80-$150 for matching form — search &quot;10-inch white dome pendant hardwire&quot;); (3) if no match found, source from Habitat for Humanity ReStore Atlanta (3100 Northeast Expy NE) or online salvage market for a coordinating white globe pendant. $0 for existing + ~$80-$250 for 4th. NOTE: This is an off-canon configuration per §6a — accept only with documented budget justification.</div>
       <div class="reasoning">Budget-preservation option only. Keeping existing white dome pendants saves $1,035-$1,680 vs brass alternatives but explicitly breaks §6a (kitchen pendants are brass-anchor hero) and §3a element 5 (at least one brass light fixture per public room). This option means the kitchen will not match cali_02/cali_21 sourcing anchors and the kitchen island will read off-canon. Valid ONLY if cap tightens and brass pendants must be deferred to a future phase; document as a known §6a exception in that case.</div>
     </div></div>
-      <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Schoolhouse Hyatt ★ at $1,260 for 3 is 57% over original $800 budget; no §6a-compliant brass pendant set at this quality tier exists under $800 for 3 units. approved_overshoot: true.</div>
+      <div class="notes-line">Per G3 line. Match-existing source-hunt — likely Cedar &amp; Moss or Schoolhouse white-globe match. | budget revised UP per HARD RULE 2026-05-16: from $800 to $1,260. Original ★ Schoolhouse Hyatt at $420ea × 3 is no longer in the Schoolhouse catalog (404). Rejuvenation Pinnock Cone (opt 1) becomes the canon-compliant successor pending owner pick; or escalate to Cedar &amp; Moss / Allied Maker globe in lacquered brass. approved_overshoot: true (carried).</div>
       
     </article>
 <article class="item-card" data-id="K-UNDERCAB-LIGHTING"
        data-urgency="T0" data-room="kitchen"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-UNDERCAB-LIGHTING</span>
@@ -846,6 +887,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Waveform LED (Amazon/direct)</div>
       <div class="sku"><a href="https://store.waveformlighting.com/products/ultra-high-95-cri-led-strip-lights-for-home-residential" target="_blank" rel="noopener" class="sku-link">Waveform Centric Home LED Strip 2700K CRI 95, 16.4ft reel, warm white, linkable with controller →</a></div>
@@ -878,6 +920,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-CHANDELIER</span>
@@ -893,6 +936,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/catalog/products/eastham-8-arm-chandelier" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Eastham 8-Arm Single Tier Chandelier — Lacquered Brass →</a></div>
@@ -925,6 +969,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-OVERHEAD</span>
@@ -940,6 +985,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Herman Miller / Design Within Reach</div>
       <div class="sku"><a href="https://store.hermanmiller.com/lighting-ceiling-lights-pendants/nelson-saucer-bubble-pendant/6241.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> George Nelson Saucer Bubble Pendant 22-inch, white, short-cord semi-flush canopy adapter, E26 →</a></div>
@@ -972,6 +1018,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SCONCES</span>
@@ -987,6 +1034,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -1019,6 +1067,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-CEILING</span>
@@ -1034,6 +1083,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-14-flush-mount/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass →</a></div>
@@ -1066,6 +1116,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-SCONCES</span>
@@ -1081,6 +1132,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -1113,6 +1165,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MBA-SCONCES</span>
@@ -1128,6 +1181,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -1168,6 +1222,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="hall_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">HB-SCONCES</span>
@@ -1183,6 +1238,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
       <div class="sku"><a href="https://cedarandmoss.com/products/marie-petite-sconce" target="_blank" rel="noopener" class="sku-link">Cedar &amp; Moss Globe Sconce, lacquered brass, 4-inch clear glass globe, hardwire — pair →</a></div>
@@ -1215,6 +1271,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="basement_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-SCONCES</span>
@@ -1230,6 +1287,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $320 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
       <div class="sku"><a href="https://cedarandmoss.com/products/bijou-single" target="_blank" rel="noopener" class="sku-link">Cedar &amp; Moss Globe Sconce, lacquered brass, 3-inch clear glass globe, hardwire — pair →</a></div>
@@ -1262,6 +1320,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="office"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-LIGHTING</span>
@@ -1277,6 +1336,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-14-flush-mount/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass + Rejuvenation Jenesen or desk task lamp →</a></div>
@@ -1317,6 +1377,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-PENDANT</span>
@@ -1332,6 +1393,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $350 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Noguchi Store / Design Within Reach</div>
       <div class="sku"><a href="https://shop.noguchi.org/products/akari-1a" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Isamu Noguchi Akari UF4-L1 Paper Pendant, natural mulberry, 17-inch diameter, E26 medium base →</a></div>
@@ -1364,6 +1426,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="mudroom_carport"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MUDROOM-LIGHTING</span>
@@ -1379,6 +1442,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $250 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/foster-8-flush-mount-fixture/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Crawford 7&quot; or Foster 8&quot; Flush Mount — Matte Black (utility-tier default per §6a) →</a></div>
@@ -1411,6 +1475,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="basement"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BASEMENT-LIGHTING</span>
@@ -1426,6 +1491,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">WAC Lighting</div>
       <div class="sku"><a href="https://waclightinglights.com/product/lighting/ceiling-lights/flush-mounts/wac-lighting-glo-flush-mount-fm-214-cs-wt/2114929.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> WAC Lighting Surface LED Flush Mount 2700K CRI 90, 14-inch matte white, integrated LED — set of 2 →</a></div>
@@ -1458,6 +1524,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="exterior"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">EXTERIOR-LIGHTING-BUNDLE</span>
@@ -1473,6 +1540,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,000 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">TCW-sourced mix: Kichler / WAC / RAB / VOLT / Google</div>
       <div class="sku"><span class="star">★</span> Bundle A — Kichler matte black soffit downlights (6) + WAC LED path lights (4) + RAB LED motion flood matte black (2) + VOLT brass tree uplights (2) + doorway sconces via ENTRY-SCONCES line + Google Nest Cam wired (3)</div>
@@ -1505,6 +1573,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="exterior"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">ENTRY-SCONCES</span>
@@ -1520,6 +1589,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/carson-12-wall-sconce/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Carson 12&quot; Wall Sconce — Matte Black, wet-rated — set of 3 →</a></div>
@@ -1552,6 +1622,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-PICTURE-LIGHT</span>
@@ -1567,6 +1638,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/jenesen-picture-light/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Jenesen Picture Light, 18-inch arm, solid brass, plug-in (Schoolhouse does not carry a picture light — Rejuvenation Jenesen is the canon-brand substitute) →</a></div>
@@ -1607,6 +1679,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-FLOOR-LAMP</span>
@@ -1622,6 +1695,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
       <div class="sku"><a href="https://www.google.com/search?q=Visual+Comfort+brass+column+floor+lamp+linen+shade" target="_blank" rel="noopener" class="sku-link">Cedar &amp; Moss Tall Column Floor Lamp, lacquered brass, 62-inch, linen shade, E26 →</a></div>
@@ -1654,6 +1728,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="exterior"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">FRONT-DOOR</span>
@@ -1669,6 +1744,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $4,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Emtek</div>
       <div class="sku"><a href="https://www.emtek.com/all-products/door-hardware/front-door-entry-sets/tubular-entry-sets/lausanne/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Emtek Lausanne Tubular Entry Set — Unlacquered Brass (US3NL) with interior lever of choice →</a></div>
@@ -1701,6 +1777,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="exterior"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BACK-DECK-DOOR</span>
@@ -1716,6 +1793,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,300 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/tumalo-brass-lever-exterior-door-set/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Pinnock Entry Lever Set, Lacquered Brass, 2-3/8&quot; backset, keyed entry function →</a></div>
@@ -1748,6 +1826,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="kitchen"
        data-category="hardware" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-CAB-HARDWARE</span>
@@ -1763,6 +1842,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $816 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
       <div class="sku"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x14 + True Black x10 →</a></div>
@@ -1803,6 +1883,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="master_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-CAB-HARDWARE</span>
@@ -1818,6 +1899,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
       <div class="sku"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x4 →</a></div>
@@ -1850,6 +1932,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="hall_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">HB-CAB-HARDWARE</span>
@@ -1865,6 +1948,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
       <div class="sku"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x2 →</a></div>
@@ -1897,6 +1981,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="basement_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-CAB-HARDWARE</span>
@@ -1912,6 +1997,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $80 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Schoolhouse</div>
       <div class="sku"><a href="https://www.schoolhouse.com/collections/cabinet-knobs?filter.p.m.product_type=Hardware&amp;sort_by=title-ascending" target="_blank" rel="noopener" class="sku-link">Schoolhouse Tab Knob 1.25&quot;, True Black × 2 — confirm current in-stock black knob SKU before ordering (Mid Century Knob True Black 404; Rhone Knob Final Sale, no black available) →</a></div>
@@ -1936,6 +2022,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="exterior"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">SMART-LOCKS</span>
@@ -1951,6 +2038,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $658 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schlage (via Home Depot, Lowe&#x27;s, or Amazon)</div>
       <div class="sku"><a href="https://www.schlage.com/en/home/smart-locks/encode-plus.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schlage Encode Plus Smart WiFi Deadbolt BE499WB, Aged Bronze finish — Front door + Schlage Encode Plus BE499WB, Matte Black — Back/utility door (2 units total: 1 × aged bronze + 1 × matte black) →</a></div>
@@ -1983,6 +2071,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="mudroom_carport"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MUDROOM-HOOKS</span>
@@ -1998,6 +2087,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $225 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/massey-single-hook/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Massey Single Hook — Natural Brass x4 + Matte Black x1 (leash hook) →</a></div>
@@ -2038,6 +2128,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="common"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BATH-MIRRORS</span>
@@ -2053,6 +2144,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Pottery Barn / Rejuvenation</div>
       <div class="sku"><a href="https://www.potterybarn.com/products/eastwood-round-wall-mirror/" target="_blank" rel="noopener" class="sku-link">Pottery Barn Marin Round Wood Mirror 30\&quot;, Natural (hall bath, $249) +
@@ -2103,6 +2195,7 @@ McGee &amp; Co. Cora Round Mirror 18\&quot;, same (basement, $148)
        data-urgency="T1" data-room="common"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">TOWEL-BARS-HOOKS</span>
@@ -2118,6 +2211,7 @@ McGee &amp; Co. Cora Round Mirror 18\&quot;, same (basement, $148)
         <strong>Budget:</strong> $880 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Delta</div>
       <div class="sku"><a href="https://www.deltafaucet.com/bathroom/product/759240-CZ.html" target="_blank" rel="noopener" class="sku-link">Delta Trinsic 24\&quot; Towel Bar Champagne Bronze 75924-CZ × 2 (master + hall, $89ea) +
@@ -2178,6 +2272,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="lr"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-BUILTIN</span>
@@ -2193,6 +2288,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $5,100 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Atlanta Cabinet Co (local mill, 1310 White St SW, Atlanta)</div>
       <div class="sku">Atlanta Cabinet Co custom — white oak slab face, open TV bay (48W×16D), lower closed cabinets w/ AV venting, Rubio Monocoat Pure, 144W total run</div>
@@ -2225,6 +2321,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="office"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-BUILTIN</span>
@@ -2240,6 +2337,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $7,500 (path3_direct) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Marc Calibri Cabinets (Atlanta custom mill)</div>
       <div class="sku"><span class="star">★</span> Marc Calibri Cabinets — full-height Wellington library wall 144W×96H, white oak slab doors + open upper shelves, integrated cable chase, Rubio Pure</div>
@@ -2272,6 +2370,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="mudroom_carport"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MUDROOM-BENCH</span>
@@ -2287,6 +2386,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,400 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Atlanta Cabinet Co (local mill)</div>
       <div class="sku"><span class="star">★</span> Atlanta Cabinet Co custom — white oak slab bench seat 72W×18D×20H, 6 open cubbies below, integrated Rejuvenation hooks backing panel above, Rubio Pure</div>
@@ -2327,6 +2427,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="kitchen"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">K-PANTRY-BUILTIN</span>
@@ -2342,6 +2443,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $4,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">KraftMaid Vantage (via TCW dealer account)</div>
       <div class="sku"><a href="https://www.kraftmaid.com/pantry-zone/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> KraftMaid Vantage tall pantry tower 24W×96H, light oak Shaker, integrated with kitchen cab order — factory finish match guaranteed →</a></div>
@@ -2374,6 +2476,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="master_br"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MASTER-CLOSET</span>
@@ -2389,6 +2492,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,800 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">California Closets (Sandy Springs showroom, 5901 Peachtree Dunwoody Rd)</div>
       <div class="sku"><a href="https://www.californiaclosets.com/reach-in-closets/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured →</a></div>
@@ -2421,6 +2525,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="common"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">HYBRID-CLOSETS</span>
@@ -2436,6 +2541,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,000 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">IKEA (Cobb County)</div>
       <div class="sku"><a href="https://www.ikea.com/us/en/p/pax-mehamn-wardrobe-with-sliding-doors-white-aluminum-double-sided-oak-effect-s19608833/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> IKEA PAX 2350H × 6 units (2 per closet) + Mehamn white-oak veneer sliding doors; modify with custom solid-oak door pulls matching house hardware →</a></div>
@@ -2468,6 +2574,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T0" data-room="kitchen"
        data-category="appliance" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">G3-HOOD</span>
@@ -2483,6 +2590,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,435 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">AJ Madison / CDGA</div>
       <div class="sku"><a href="https://www.ajmadison.com/cgi-bin/ajmadison/PRH18342SS.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison) →</a></div>
@@ -2515,6 +2623,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-LR</span>
@@ -2530,6 +2639,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (Peachtree Blinds &amp; Shutters, Atlanta)</div>
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/vignette" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Stone) — custom 48–60&quot; w × 72–84&quot; h, 2-window set →</a></div>
@@ -2562,6 +2672,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-MASTER</span>
@@ -2577,6 +2688,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (blackout Roman) + Pottery Barn (sheer panels)</div>
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/alustra-woven-textures-roman" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows →</a></div>
@@ -2609,6 +2721,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="office"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-OFFICE</span>
@@ -2624,6 +2737,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Shade Store (online or Buckhead)</div>
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> The Shade Store Linen Roman Shade — light-filtering — Natural/Cream — flat-fold, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
@@ -2656,6 +2770,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="dining"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-DINING</span>
@@ -2671,6 +2786,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Pottery Barn (online or Phipps Plaza)</div>
       <div class="sku"><a href="https://www.potterybarn.com/shop/window-treatments/curtains-drapes-by-style/belgian-linen-drapes/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Pottery Barn Belgian Flax Linen Sheer Drapery Panel pair — Ivory/Natural — 100×108&quot; (floor-to-almost-puddle) — 1–2 pairs →</a></div>
@@ -2703,6 +2819,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="common"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-BATHS</span>
@@ -2718,6 +2835,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $700 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Lowe&#x27;s / Levolor.com</div>
       <div class="sku"><a href="https://www.blinds.com/p/levolor-cellular-shades/656658" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Levolor Platinum Plus Cellular Shade — White/Alabaster — light-filtering top + blackout bottom-up/top-down, 24–36&quot; w × 36–60&quot; h, qty 3 (one per bath) →</a></div>
@@ -2750,6 +2868,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-NURSERY</span>
@@ -2765,6 +2884,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Shade Store (blackout roller) + IKEA (sheer overlay)</div>
       <div class="sku"><a href="https://www.theshadestore.com/shades/roller-shades/custom-roller-shades" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> The Shade Store Blackout Roller Shade — Cream/White — custom 36–48&quot; w × 72–84&quot; h + IKEA LILL Sheer Curtain pair (as overlay) — 1 window →</a></div>
@@ -2797,6 +2917,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SOFA</span>
@@ -2812,6 +2933,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/andes-sofa-h1844/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Andes Sofa, 88-inch, Crypton Performance Slipcover — Twill Natural / Ivory →</a></div>
@@ -2844,6 +2966,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-ACCENT-CHAIR</span>
@@ -2859,6 +2982,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/24181/sven-42-tufted-leather-lounge-chair-charme-tan" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Sven Chair, Charme Tan full-grain leather, solid walnut legs →</a></div>
@@ -2891,6 +3015,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-COFFEE-TABLE</span>
@@ -2906,6 +3031,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Atlanta vintage (Westside Modern / City Issue / Mid Mod Market) or Chairish</div>
       <div class="sku"><span class="star">★</span> Vintage mid-century walnut or oak oval coffee table, ~48-54W x 24D x 17H, solid wood, tapered brass or walnut legs — Atlanta source</div>
@@ -2922,6 +3048,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SIDE-TABLES</span>
@@ -2937,6 +3064,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/3247/mara-oak-side-table" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Mara Side Table, White Oak, 22-inch round — quantity 2 →</a></div>
@@ -2985,6 +3113,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-RUG</span>
@@ -3000,6 +3129,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tweed-flatweave-dhurrie-rug-t3472/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Dhurrie Wool Rug, Oatmeal / Ivory, 9x12 flat-weave →</a></div>
@@ -3032,6 +3162,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-RUG-VINTAGE</span>
@@ -3047,6 +3178,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $4,000 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</div>
           <div><strong>Avoid:</strong> no synthetic, no fringe-less, no high-contrast geometric, no kilim flat-weave</div>
@@ -3060,6 +3192,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-TABLE</span>
@@ -3075,6 +3208,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
       <div class="sku"><a href="https://www.roomandboard.com/catalog/dining-and-kitchen/tables/decker-tables" target="_blank" rel="noopener" class="sku-link">Room &amp; Board Bayside Round Dining Table, White Oak, 54-inch →</a></div>
@@ -3115,6 +3249,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-CHAIRS</span>
@@ -3130,6 +3265,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Carl Hansen &amp; Søn (via Design Within Reach or dealer)</div>
       <div class="sku"><a href="https://www.carlhansen.com/en/en/collection/chairs/dining-chairs/ch24" target="_blank" rel="noopener" class="sku-link">Carl Hansen &amp; Søn CH24 Wishbone Chair, White Oak / Natural Paper Cord — set of 6 →</a></div>
@@ -3162,6 +3298,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-SIDEBOARD</span>
@@ -3177,6 +3314,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
       <div class="sku"><a href="https://www.roomandboard.com/catalog/storage-and-entryway/storage-cabinets/hudson-storage-cabinets" target="_blank" rel="noopener" class="sku-link">Room &amp; Board Hudson Credenza, White Oak, 72-inch →</a></div>
@@ -3217,6 +3355,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BED</span>
@@ -3232,6 +3371,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $2,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/andes-bed-wood-legs-h8478/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream →</a></div>
@@ -3264,6 +3404,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-NIGHTSTANDS</span>
@@ -3279,6 +3420,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-nightstand-acorn-g968/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2 →</a></div>
@@ -3311,6 +3453,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-DRESSER</span>
@@ -3326,6 +3469,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-6-drawer-dresser-g815/" target="_blank" rel="noopener" class="sku-link">West Elm Mid-Century 6-Drawer Dresser, White Oak →</a></div>
@@ -3358,6 +3502,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BENCH</span>
@@ -3373,6 +3518,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tillary-bench-h1246/" target="_blank" rel="noopener" class="sku-link">West Elm Tillary Bench, Boucle — Ivory, 52-inch →</a></div>
@@ -3405,6 +3551,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-RUG</span>
@@ -3420,6 +3567,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tweed-flatweave-dhurrie-rug-t3472/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave →</a></div>
@@ -3452,6 +3600,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-CRIB</span>
@@ -3467,6 +3616,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Babyletto (via buybuyBaby or Amazon)</div>
       <div class="sku"><a href="https://babyletto.com/products/hudson-3-in-1-convertible-crib-with-toddler-bed-conversion-kit" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Babyletto Hudson 3-in-1 Convertible Crib, Natural Oak →</a></div>
@@ -3499,6 +3649,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-GLIDER</span>
@@ -3514,6 +3665,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $900 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Babyletto (babyletto.com / buybuyBaby / Amazon)</div>
       <div class="sku"><a href="https://www.babyletto.com/collections/gliders/products/toco-swivel-glider-and-ottoman-in-eco-performance-fabric-water-repellent-stain-resistant" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural →</a></div>
@@ -3546,6 +3698,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-DRESSER</span>
@@ -3561,6 +3714,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,799 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-6-drawer-dresser-g815/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Mid-Century 6-Drawer Dresser in White Oak (or nearest current WE nursery/bedroom dresser in white oak finish) — with WE or Babyletto changing tray topper →</a></div>
@@ -3593,6 +3747,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-RUG</span>
@@ -3608,6 +3763,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/shop/kids-furniture/nursery+rugs/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Cotton Dhurrie Rug, Ivory / Natural stripe, 5x8 — machine washable →</a></div>
@@ -3640,6 +3796,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-DESK</span>
@@ -3655,6 +3812,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $900 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/15168/madera-54-desk-oak" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Madera Writing Desk, White Oak, 55-inch →</a></div>
@@ -3687,6 +3845,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-CHAIR</span>
@@ -3702,6 +3861,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Herman Miller (via DWR or Herman Miller dealer)</div>
       <div class="sku"><a href="https://store.hermanmiller.com/office-chairs-home-office/eames-soft-pad-chair/1113.html" target="_blank" rel="noopener" class="sku-link">Herman Miller Eames Soft Pad Management Chair EA 217, Tan leather, aluminum base →</a></div>
@@ -3734,6 +3894,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="basement"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BASEMENT-SOFA</span>
@@ -3749,6 +3910,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,000 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/harmony-l-shaped-sectional-h2507/" target="_blank" rel="noopener" class="sku-link">West Elm Harmony Sectional, L-shape, 112×84-inch, Crypton Performance Chenille — Stone →</a></div>
@@ -3781,6 +3943,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="basement"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BASEMENT-COFFEE</span>
@@ -3796,6 +3959,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/23357/torme-48-storage-coffee-table-white-oak" target="_blank" rel="noopener" class="sku-link">Article Slab Coffee Table, White Oak, 48-inch rectangular →</a></div>
@@ -3828,6 +3992,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="basement"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BASEMENT-RUG</span>
@@ -3843,6 +4008,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Ruggable</div>
       <div class="sku"><a href="https://ruggable.com/collections/8x10-grey-rugs" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Ruggable Marta Wool Blend Rug, Warm Grey, 8x10 — washable →</a></div>
@@ -3875,6 +4041,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="common"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">ENTRY-BENCH</span>
@@ -3890,6 +4057,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/collections/furniture/benches" target="_blank" rel="noopener" class="sku-link">Rejuvenation Slab Bench, White Oak, 42-inch + Rejuvenation Oak Tray, 16-inch →</a></div>
@@ -3922,6 +4090,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="exterior"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DECK-FURNITURE</span>
@@ -3937,6 +4106,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $3,260 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/29097/sarek-89-outdoor-sofa-set-sunbrella-linen" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Atra Outdoor Sofa + 2 Chairs + Coffee Table, Teak / Sunbrella Graphite →</a></div>
@@ -3969,6 +4139,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BEDDING</span>
@@ -3984,6 +4155,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cultiver (cultiver.com)</div>
       <div class="sku"><a href="https://cultiver.com/collections/linen-sheet-set-with-pillowcases" target="_blank" rel="noopener" class="sku-link">Cultiver Washed Linen Sheet Set + Quilt — Oat/Bone →</a></div>
@@ -4024,6 +4196,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-PILLOWS</span>
@@ -4039,6 +4212,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm + Etsy</div>
       <div class="sku"><a href="https://www.westelm.com/shop/pillows-comforters/throw-pillows/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1 →</a></div>
@@ -4071,6 +4245,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-PILLOWS</span>
@@ -4086,6 +4261,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/shop/pillows-comforters/throw-pillows/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Textured Linen Pillow — Antique Brass/Rust × 2 (22in) + West Elm Oversized Pillow Cover — Ivory Linen × 1 (24in) →</a></div>
@@ -4118,6 +4294,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-THROW</span>
@@ -4133,6 +4310,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Hawkins New York (hawkinsnewyork.com)</div>
       <div class="sku"><a href="https://hawkinsnewyork.com/products/simple-linen-throw" target="_blank" rel="noopener" class="sku-link">Hawkins New York Simple Linen Throw — Natural →</a></div>
@@ -4165,6 +4343,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T3" data-room="lr"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-ART</span>
@@ -4180,6 +4359,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Modern abstract or landscape painting, 36+ inch, muted palette aligned with §3a accent</div>
           <div><strong>Avoid:</strong> no posters, no mass-print canvas, no jewel-tone saturation</div>
@@ -4193,6 +4373,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T3" data-room="master_br"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">MB-ART</span>
@@ -4208,6 +4389,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $700 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Calming abstract or landscape, 24-36 inch, sage/oat palette</div>
           <div><strong>Avoid:</strong> no figurative portrait, no kids&#x27; art, no saturated abstract</div>
@@ -4221,6 +4403,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="nursery"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-ART</span>
@@ -4236,6 +4419,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Minted (minted.com)</div>
       <div class="sku"><a href="https://www.minted.com/nursery-wall-art" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Minted &#x27;Abstract Terrain&#x27; archival print — Oat/Sage, 24×30in framed →</a></div>
@@ -4276,6 +4460,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T3" data-room="dining"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">DR-ART</span>
@@ -4291,6 +4476,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Statement piece — large painting or vintage rug as wall hanging</div>
           <div><strong>Avoid:</strong> no commercial print</div>
@@ -4304,6 +4490,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="common"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">CERAMICS-BUNDLE</span>
@@ -4319,6 +4506,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">East Fork + Schoolhouse + Etsy</div>
       <div class="sku"><a href="https://www.eastfork.com/collections/pottery" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Individual East Fork pieces: 3 Mugs in DIFFERENT colorways (Panna Cotta + Heron + Eggshell — single pieces NOT 4-pack) + 2 Bud Vases in different colorways (Panna Cotta + Heron) + 1 Bowl (Eggshell) — 6 East Fork pieces total, no two identical colorway + 2 hand-thrown Atlanta-maker ceramic vases (Etsy or Westside Modern) — TOTAL: 8 pieces across 6 rooms, 1-2 per room placement →</a></div>
@@ -4359,6 +4547,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="common"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">PLANTS-INDOOR</span>
@@ -4374,6 +4563,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Sill + Bloomscape + local nursery (Scottsdale Farms Atlanta or Pike Nurseries)</div>
       <div class="sku"><a href="https://www.thesill.com/products/kentia-palm" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> The Sill Kentia Palm (mature potted, ~48-52in, pot included) × 1 LR anchor + The Sill Kentia Palm (mid, ~36in) × 1 secondary corner + Bloomscape Calathea Medallion (med) × 2 + Spider Plant × 3 (local nursery) →</a></div>
@@ -4406,6 +4596,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-MIRROR</span>
@@ -4421,6 +4612,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/arched-metal-framed-mirror/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Arched Metal Framed Mirror — Brass, 24×36&quot; (or nearest available size) →</a></div>
@@ -4461,6 +4653,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-MIRROR</span>
@@ -4476,6 +4669,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation (rejuvenation.com)</div>
       <div class="sku"><a href="https://www.rejuvenation.com/shop/mirrors" target="_blank" rel="noopener" class="sku-link">Rejuvenation Oak Wood Wall Mirror Natural — wall-hung, ~24×36in or nearest available size →</a></div>
@@ -4508,6 +4702,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="dining"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">TABLETOP-DINING</span>
@@ -4523,6 +4718,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Etsy + Schoolhouse + Hawkins New York</div>
       <div class="sku"><a href="https://www.hawkinsnewyork.com/products/simple-candle-holder-brass" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Etsy hand-thrown stoneware bud vases (set of 2, matte clay glaze) + Schoolhouse Tapered Candlestick Holder brass × 3 + Hawkins New York Linen Table Runner — Natural →</a></div>
@@ -4555,6 +4751,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="common"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BATH-SOFTGOODS</span>
@@ -4570,6 +4767,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Snowe (snowehome.com)</div>
       <div class="sku"><a href="https://snowehome.com/products/bath-towels" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Snowe Classic Bath Towel Set × 3 (Ivory, 2 bath + 1 hand per set) + Snowe Bath Mat × 3 (Ivory) →</a></div>
@@ -4602,6 +4800,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="kitchen"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">KITCHEN-OPEN-SHELF</span>
@@ -4617,6 +4816,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">East Fork + Berard/Food52 + Bookshop.org</div>
       <div class="sku"><a href="https://www.eastfork.com/collections/pottery" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> 4× East Fork Everyday Bowls (Panna Cotta + Heron + Eggshell + 1 additional current colorway) + 3× East Fork Mugs (Panna Cotta + Heron + 1 additional) + 2× hand-thrown ceramic vases from local Atlanta makers (Etsy or Westside Modern) + 1× olive wood cutting board (Berard or Food52) + 2× cookbook stacks — TARGET: 11-13 pieces total, no two identical colorways →</a></div>
@@ -4657,6 +4857,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T1" data-room="exterior"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LANDSCAPE-PLANTS</span>
@@ -4672,6 +4873,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $2,500 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Scottsdale Farms Atlanta (primary) + Pike Nurseries (fill)</div>
       <div class="sku"><a href="https://www.kinseyfamilyfarm.com/nursery-plants/japanese-maples/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Japanese Maple &#x27;Bloodgood&#x27; (6-7ft, balled) × 1 + Boxwood globe × 4 (18in) + Holly fern × 6 + Hellebore × 8 + Liriope muscari border × 20 plugs + Restrained azalea × 3 (Encore variety) →</a></div>
@@ -4704,6 +4906,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T0" data-room="mudroom_carport"
        data-category="hardware" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">EV-CHARGER</span>
@@ -4719,6 +4922,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Tesla</div>
       <div class="sku"><a href="https://shop.tesla.com/product/wall-connector" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Tesla Wall Connector Gen 3, 24-ft cable, hardwired 60A/48A charge rate (up to 44 mph charge) →</a></div>
@@ -4751,6 +4955,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="lr"
        data-category="appliance" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">FRAME-TV</span>
@@ -4766,6 +4971,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Best Buy / Samsung.com</div>
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/65-inch-the-frame-qled-4k-tv-ls03he-sku-qn65ls03hefxza/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Samsung QN65LS03HEFXZA (65&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) →</a></div>
@@ -4798,6 +5004,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
        data-urgency="T2" data-room="basement"
        data-category="appliance" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BASEMENT-TV</span>
@@ -4813,6 +5020,7 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Best Buy</div>
       <div class="sku"><a href="https://www.lg.com/us/tvs/lg-65qned75bua-qned-4k-tv" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> LG 65QNED75BUA (65&quot; 2026 QNED AI Mini LED 4K, webOS, 120Hz) →</a></div>
@@ -4843,47 +5051,47 @@ Delta Trinsic 18\&quot; Bar Champagne Bronze × 1 (basement, $79)
     </article>
 </div>
 <details class="locked-decisions-banner"><summary><span class="locked-count">41 decisions locked</span><span>(paint, hardwood, tile, plumbing, appliances)</span><span class="locked-hint">Tap to show all locked decisions</span></summary><div class="locked-decisions-inner">
-<div class="locked-row" data-id="HARDWOOD-FINISH" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HARDWOOD-FINISH</span><span class="locked-row-title">Hardwood refinish (Bleach + Rubio Pure)</span><span class="locked-row-sku">Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.</span><span class="locked-row-meta">common · paint_finish</span></div>
-<div class="locked-row" data-id="PAINT-INTERIOR-WALLS-PRIMARY" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">PAINT-INTERIOR-WALLS-PRIMARY</span><span class="locked-row-title">Interior wall paint — primary (BM Aura, White Dove)</span><span class="locked-row-sku">BM Aura interior — White Dove (OC-17), matte</span><span class="locked-row-meta">common · paint_finish</span></div>
-<div class="locked-row" data-id="PAINT-BEDROOM-ALT" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">PAINT-BEDROOM-ALT</span><span class="locked-row-title">Bedroom alt wall color (Accessible Beige)</span><span class="locked-row-sku">SW Accessible Beige (SW 7036), matte — color matched in BM Aura base</span><span class="locked-row-meta">common · paint_finish</span></div>
-<div class="locked-row" data-id="PAINT-BATH-ACCENT" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">PAINT-BATH-ACCENT</span><span class="locked-row-title">Bath accent wall paint (Saybrook Sage)</span><span class="locked-row-sku">BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte</span><span class="locked-row-meta">common · paint_finish</span></div>
-<div class="locked-row" data-id="PAINT-TRIM-DOORS" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">PAINT-TRIM-DOORS</span><span class="locked-row-title">Trim + doors paint (Simply White)</span><span class="locked-row-sku">BM Simply White (OC-117), Aura satin</span><span class="locked-row-meta">common · paint_finish</span></div>
-<div class="locked-row" data-id="CABINET-FINISH-KITCHEN" data-urgency="T0" data-room="kitchen" data-category="paint_finish" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">CABINET-FINISH-KITCHEN</span><span class="locked-row-title">Kitchen cabinet finish</span><span class="locked-row-sku">KraftMaid Vantage light oak Shaker — factory finish included in cabinet line (K-CABINETS)</span><span class="locked-row-meta">kitchen · paint_finish</span></div>
-<div class="locked-row" data-id="MB-TILE-WALL" data-urgency="T0" data-room="master_bath" data-category="tile_stone" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">MB-TILE-WALL</span><span class="locked-row-title">Master bath wall tile (shower walls)</span><span class="locked-row-sku">Cle Weathered White 2×6 Bejmat</span><span class="locked-row-meta">master_bath · tile_stone</span></div>
-<div class="locked-row" data-id="MB-TILE-FLOOR" data-urgency="T0" data-room="master_bath" data-category="tile_stone" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">MB-TILE-FLOOR</span><span class="locked-row-title">Master bath floor tile</span><span class="locked-row-sku">Daltile Choice Ivory 24×24 honed</span><span class="locked-row-meta">master_bath · tile_stone</span></div>
-<div class="locked-row" data-id="HB-TILE-FLOOR" data-urgency="T0" data-room="hall_bath" data-category="tile_stone" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-TILE-FLOOR</span><span class="locked-row-title">Hall bath floor tile</span><span class="locked-row-sku">Daltile Portfolio White 12×24 honed</span><span class="locked-row-meta">hall_bath · tile_stone</span></div>
-<div class="locked-row" data-id="BB-TILE-FLOOR" data-urgency="T0" data-room="basement_bath" data-category="tile_stone" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">BB-TILE-FLOOR</span><span class="locked-row-title">Basement bath floor tile</span><span class="locked-row-sku">Daltile Portfolio White 12×24 honed (match hall bath)</span><span class="locked-row-meta">basement_bath · tile_stone</span></div>
-<div class="locked-row" data-id="K-TILE-BACKSPLASH" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">K-TILE-BACKSPLASH</span><span class="locked-row-title">Kitchen backsplash</span><span class="locked-row-sku">Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
-<div class="locked-row" data-id="K-FLOOR-TILE" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">K-FLOOR-TILE</span><span class="locked-row-title">Kitchen floor tile</span><span class="locked-row-sku">Daltile Choice Ivory porcelain</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
-<div class="locked-row" data-id="K-COUNTERS" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">K-COUNTERS</span><span class="locked-row-title">Kitchen counters + waterfall island</span><span class="locked-row-sku">Caesarstone Statuario waterfall island + perimeter</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
-<div class="locked-row" data-id="K-FAUCET" data-urgency="T0" data-room="kitchen" data-category="plumbing_fixture" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">K-FAUCET</span><span class="locked-row-title">Kitchen faucet</span><span class="locked-row-sku">Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</span><span class="locked-row-meta">kitchen · plumbing_fixture</span></div>
-<div class="locked-row" data-id="MB-FAUCET" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">MB-FAUCET</span><span class="locked-row-title">Master bath sink faucet</span><span class="locked-row-sku">Delta Trinsic 559LF-CZMPU Champagne Bronze</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="MB-SHOWER-DRAIN" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">MB-SHOWER-DRAIN</span><span class="locked-row-title">Master bath linear shower drain (Schluter)</span><span class="locked-row-sku">Schluter KERDI-LINE linear drain, brushed stainless</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="HB-FAUCET" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-FAUCET</span><span class="locked-row-title">Hall bath sink faucet</span><span class="locked-row-sku">Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="HB-TUB-FILLER" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-TUB-FILLER</span><span class="locked-row-title">Hall bath tub filler</span><span class="locked-row-sku">Delta Trinsic T4759-CZ Roman Tub Filler with Hand Shower, Deck-Mount (4-hole, 8-16&quot; spread), Champagne Bronze</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="HB-TUB" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-TUB</span><span class="locked-row-title">Hall bath tub (Kohler Bellwether)</span><span class="locked-row-sku">Kohler Bellwether 60-inch cast iron alcove tub, White</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="MB-TOILET" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">MB-TOILET</span><span class="locked-row-title">Master bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II One-Piece + Toto Washlet C5</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="HB-TOILET" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-TOILET</span><span class="locked-row-title">Hall bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II Two-Piece + Toto Washlet C5</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="BB-TOILET" data-urgency="T0" data-room="basement_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">BB-TOILET</span><span class="locked-row-title">Basement bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II Two-Piece + Toto Washlet C5</span><span class="locked-row-meta">basement_bath · plumbing_fixture</span></div>
-<div class="locked-row" data-id="WATER-FILTRATION" data-urgency="T0" data-room="basement" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">WATER-FILTRATION</span><span class="locked-row-title">Whole-house carbon + softener + RO</span><span class="locked-row-sku">Aquasana whole-house carbon + softener + RO under kitchen sink</span><span class="locked-row-meta">basement · plumbing_fixture</span></div>
-<div class="locked-row" data-id="RECESSED-CANS" data-urgency="T0" data-room="common" data-category="lighting_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">RECESSED-CANS</span><span class="locked-row-title">Recessed lighting (25-35 cans whole-house)</span><span class="locked-row-sku">Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans</span><span class="locked-row-meta">common · lighting_fixture</span></div>
-<div class="locked-row" data-id="INTERIOR-DOOR-HARDWARE" data-urgency="T1" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">INTERIOR-DOOR-HARDWARE</span><span class="locked-row-title">Interior door hardware (10 doors, Emtek matte black)</span><span class="locked-row-sku">Emtek Modern lever sets, matte black — 10 sets bundled with doors</span><span class="locked-row-meta">common · hardware</span></div>
-<div class="locked-row" data-id="INTERIOR-DOORS-SLABS" data-urgency="T0" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">INTERIOR-DOORS-SLABS</span><span class="locked-row-title">Interior solid-core 5-panel doors (10)</span><span class="locked-row-sku">10 interior solid-core 5-panel doors, paint-grade primed</span><span class="locked-row-meta">common · hardware</span></div>
-<div class="locked-row" data-id="MB-MEDICINE-CABINET" data-urgency="T1" data-room="master_bath" data-category="hardware" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">MB-MEDICINE-CABINET</span><span class="locked-row-title">Master bath medicine cabinet</span><span class="locked-row-sku">Pottery Barn Hutchinson medicine cabinet</span><span class="locked-row-meta">master_bath · hardware</span></div>
-<div class="locked-row" data-id="K-CABINETS" data-urgency="T0" data-room="kitchen" data-category="cabinetry_millwork" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">K-CABINETS</span><span class="locked-row-title">Kitchen cabinets (KraftMaid Vantage)</span><span class="locked-row-sku">CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</span><span class="locked-row-meta">kitchen · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="K-STORAGE-ADDER" data-urgency="T0" data-room="kitchen" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">K-STORAGE-ADDER</span><span class="locked-row-title">Kitchen storage cabinet adder</span><span class="locked-row-sku">KraftMaid Vantage storage adder, matching</span><span class="locked-row-meta">kitchen · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="MB-VANITY" data-urgency="T0" data-room="master_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="true" data-schedule-locked="true"><span class="locked-row-id">MB-VANITY</span><span class="locked-row-title">Master bath vanity (WE Hutchinson 60-inch Double)</span><span class="locked-row-sku">West Elm Hutchinson Double Vanity 60-inch, Blonde</span><span class="locked-row-meta">master_bath · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="HB-VANITY" data-urgency="T0" data-room="hall_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HB-VANITY</span><span class="locked-row-title">Hall bath vanity (WE Hutchinson 36-inch Single)</span><span class="locked-row-sku">West Elm Hutchinson Single Vanity 36-inch, Blonde</span><span class="locked-row-meta">hall_bath · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="BB-VANITY" data-urgency="T0" data-room="basement_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">BB-VANITY</span><span class="locked-row-title">Basement bath vanity (Pottery Barn Mason 24)</span><span class="locked-row-sku">Pottery Barn Mason 24-inch wall-mount vanity</span><span class="locked-row-meta">basement_bath · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="STAIR-REFACING" data-urgency="T0" data-room="common" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">STAIR-REFACING</span><span class="locked-row-title">Stair refacing</span><span class="locked-row-sku">Stair tread refacing + matching Bleach + Rubio finish</span><span class="locked-row-meta">common · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="K-RANGE" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">K-RANGE</span><span class="locked-row-title">Kitchen range (LG ThinQ — owned)</span><span class="locked-row-sku">LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</span><span class="locked-row-meta">kitchen · appliance</span></div>
-<div class="locked-row" data-id="K-DISHWASHER" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">K-DISHWASHER</span><span class="locked-row-title">Dishwasher (Bosch — owned)</span><span class="locked-row-sku">Bosch dishwasher (owned per May 2023 Home Depot order — stays)</span><span class="locked-row-meta">kitchen · appliance</span></div>
-<div class="locked-row" data-id="K-FRIDGE" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">K-FRIDGE</span><span class="locked-row-title">Refrigerator (owned, stays)</span><span class="locked-row-sku">Existing refrigerator stays per G3 spec</span><span class="locked-row-meta">kitchen · appliance</span></div>
-<div class="locked-row" data-id="HVAC-DEHUMIDIFIER" data-urgency="T0" data-room="basement" data-category="appliance" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HVAC-DEHUMIDIFIER</span><span class="locked-row-title">Aprilaire 1850 whole-house dehumidifier</span><span class="locked-row-sku">Aprilaire 1850 — in HVAC $17K bundle</span><span class="locked-row-meta">basement · appliance</span></div>
-<div class="locked-row" data-id="LANDSCAPE-IRRIGATION" data-urgency="T1" data-room="exterior" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">LANDSCAPE-IRRIGATION</span><span class="locked-row-title">2-zone drip/rotor irrigation</span><span class="locked-row-sku">2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)</span><span class="locked-row-meta">exterior · plumbing_fixture</span></div>
-<div class="locked-row" data-id="NEST-PROTECT" data-urgency="T1" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">NEST-PROTECT</span><span class="locked-row-title">Smart smoke/CO × 6 (Nest Protect)</span><span class="locked-row-sku">Nest Protect × 6 hardwired</span><span class="locked-row-meta">common · hardware</span></div>
-<div class="locked-row" data-id="ROBOLITTER" data-urgency="T1" data-room="basement" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">ROBOLITTER</span><span class="locked-row-title">Robolitter cabinet enclosure + vent</span><span class="locked-row-sku">Custom cabinet + dedicated vent for Robolitter — basement utility</span><span class="locked-row-meta">basement · cabinetry_millwork</span></div>
-<div class="locked-row" data-id="HOT-TUB" data-urgency="T0" data-room="exterior" data-category="appliance" data-status="decided" data-annika="false" data-schedule-locked="true"><span class="locked-row-id">HOT-TUB</span><span class="locked-row-title">Hot tub (Lifesmart — existing, stays)</span><span class="locked-row-sku">Existing Lifesmart hot tub on slab — stays, deck rebuild works around</span><span class="locked-row-meta">exterior · appliance</span></div>
+<div class="locked-row" data-id="HARDWOOD-FINISH" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HARDWOOD-FINISH</span><span class="locked-row-title">Hardwood refinish (Bleach + Rubio Pure)</span><span class="locked-row-sku">Bleach + Rubio Monocoat Pure on red oak (or Smoke 5% if no bleach acceptable). Patch + replace damaged boards. Creak remediation pre-finish.</span><span class="locked-row-meta">common · paint_finish</span></div>
+<div class="locked-row" data-id="PAINT-INTERIOR-WALLS-PRIMARY" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">PAINT-INTERIOR-WALLS-PRIMARY</span><span class="locked-row-title">Interior wall paint — primary (BM Aura, White Dove)</span><span class="locked-row-sku">BM Aura interior — White Dove (OC-17), matte</span><span class="locked-row-meta">common · paint_finish</span></div>
+<div class="locked-row" data-id="PAINT-BEDROOM-ALT" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="true" data-catalog-status="verified" data-schedule-locked="true"><span class="locked-row-id">PAINT-BEDROOM-ALT</span><span class="locked-row-title">Bedroom alt wall color (Accessible Beige)</span><span class="locked-row-sku">SW Accessible Beige (SW 7036), matte — color matched in BM Aura base</span><span class="locked-row-meta">common · paint_finish</span></div>
+<div class="locked-row" data-id="PAINT-BATH-ACCENT" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">PAINT-BATH-ACCENT</span><span class="locked-row-title">Bath accent wall paint (Saybrook Sage)</span><span class="locked-row-sku">BM Saybrook Sage (HC-114), Aura Bath &amp; Spa matte</span><span class="locked-row-meta">common · paint_finish</span></div>
+<div class="locked-row" data-id="PAINT-TRIM-DOORS" data-urgency="T0" data-room="common" data-category="paint_finish" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">PAINT-TRIM-DOORS</span><span class="locked-row-title">Trim + doors paint (Simply White)</span><span class="locked-row-sku">BM Simply White (OC-117), Aura satin</span><span class="locked-row-meta">common · paint_finish</span></div>
+<div class="locked-row" data-id="CABINET-FINISH-KITCHEN" data-urgency="T0" data-room="kitchen" data-category="paint_finish" data-status="decided" data-annika="true" data-catalog-status="verified" data-schedule-locked="true"><span class="locked-row-id">CABINET-FINISH-KITCHEN</span><span class="locked-row-title">Kitchen cabinet finish</span><span class="locked-row-sku">KraftMaid Vantage Lyndale Shaker, oak — factory finish included in cabinet line (K-CABINETS); color match to bleached-oak floor (Rubio Pure) required at sample stage</span><span class="locked-row-meta">kitchen · paint_finish</span></div>
+<div class="locked-row" data-id="MB-TILE-WALL" data-urgency="T0" data-room="master_bath" data-category="tile_stone" data-status="decided" data-annika="true" data-catalog-status="verified" data-schedule-locked="true"><span class="locked-row-id">MB-TILE-WALL</span><span class="locked-row-title">Master bath wall tile (shower walls)</span><span class="locked-row-sku">Cle Weathered White 2×6 Bejmat</span><span class="locked-row-meta">master_bath · tile_stone</span></div>
+<div class="locked-row catalog-gap" data-id="MB-TILE-FLOOR" data-urgency="T0" data-room="master_bath" data-category="tile_stone" data-status="decided" data-annika="true" data-catalog-status="needs_reselection" data-schedule-locked="true"><span class="locked-row-id">MB-TILE-FLOOR</span><span class="locked-row-title">Master bath floor tile<span class="catalog-gap-pill">⚠ CATALOG GAP</span></span><span class="locked-row-sku">Daltile Choice Ivory 24×24 honed</span><span class="locked-row-meta">master_bath · tile_stone</span></div>
+<div class="locked-row" data-id="HB-TILE-FLOOR" data-urgency="T0" data-room="hall_bath" data-category="tile_stone" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-TILE-FLOOR</span><span class="locked-row-title">Hall bath floor tile</span><span class="locked-row-sku">Daltile Portfolio White 12×24 honed</span><span class="locked-row-meta">hall_bath · tile_stone</span></div>
+<div class="locked-row" data-id="BB-TILE-FLOOR" data-urgency="T0" data-room="basement_bath" data-category="tile_stone" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">BB-TILE-FLOOR</span><span class="locked-row-title">Basement bath floor tile</span><span class="locked-row-sku">Daltile Portfolio White 12×24 honed (match hall bath)</span><span class="locked-row-meta">basement_bath · tile_stone</span></div>
+<div class="locked-row" data-id="K-TILE-BACKSPLASH" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-TILE-BACKSPLASH</span><span class="locked-row-title">Kitchen backsplash</span><span class="locked-row-sku">Carrara honed slab on range wall + Cle Sea Salt zellige squares on remaining backsplash</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
+<div class="locked-row catalog-gap" data-id="K-FLOOR-TILE" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-catalog-status="needs_reselection" data-schedule-locked="true"><span class="locked-row-id">K-FLOOR-TILE</span><span class="locked-row-title">Kitchen floor tile<span class="catalog-gap-pill">⚠ CATALOG GAP</span></span><span class="locked-row-sku">Daltile Choice Ivory porcelain</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
+<div class="locked-row" data-id="K-COUNTERS" data-urgency="T0" data-room="kitchen" data-category="tile_stone" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-COUNTERS</span><span class="locked-row-title">Kitchen counters + waterfall island</span><span class="locked-row-sku">Caesarstone Statuario waterfall island + perimeter</span><span class="locked-row-meta">kitchen · tile_stone</span></div>
+<div class="locked-row" data-id="K-FAUCET" data-urgency="T0" data-room="kitchen" data-category="plumbing_fixture" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-FAUCET</span><span class="locked-row-title">Kitchen faucet</span><span class="locked-row-sku">Delta Trinsic Pull-Down Champagne Bronze 9159-CZ-DST</span><span class="locked-row-meta">kitchen · plumbing_fixture</span></div>
+<div class="locked-row" data-id="MB-FAUCET" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">MB-FAUCET</span><span class="locked-row-title">Master bath sink faucet</span><span class="locked-row-sku">Delta Trinsic 559LF-CZMPU Champagne Bronze</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="MB-SHOWER-DRAIN" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">MB-SHOWER-DRAIN</span><span class="locked-row-title">Master bath linear shower drain (Schluter)</span><span class="locked-row-sku">Schluter KERDI-LINE linear drain, brushed stainless</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="HB-FAUCET" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-FAUCET</span><span class="locked-row-title">Hall bath sink faucet</span><span class="locked-row-sku">Delta Trinsic 559LF-CZMPU Champagne Bronze (match master)</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="HB-TUB-FILLER" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-TUB-FILLER</span><span class="locked-row-title">Hall bath tub filler</span><span class="locked-row-sku">Delta Trinsic T4759-CZ Roman Tub Filler with Hand Shower, Deck-Mount (4-hole, 8-16&quot; spread), Champagne Bronze</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="HB-TUB" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-TUB</span><span class="locked-row-title">Hall bath tub (Kohler Bellwether)</span><span class="locked-row-sku">Kohler Bellwether 60-inch cast iron alcove tub, White</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="MB-TOILET" data-urgency="T0" data-room="master_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">MB-TOILET</span><span class="locked-row-title">Master bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II One-Piece + Toto Washlet C5</span><span class="locked-row-meta">master_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="HB-TOILET" data-urgency="T0" data-room="hall_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-TOILET</span><span class="locked-row-title">Hall bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II Two-Piece + Toto Washlet C5</span><span class="locked-row-meta">hall_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="BB-TOILET" data-urgency="T0" data-room="basement_bath" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">BB-TOILET</span><span class="locked-row-title">Basement bath toilet + washlet</span><span class="locked-row-sku">Toto Drake II Two-Piece + Toto Washlet C5</span><span class="locked-row-meta">basement_bath · plumbing_fixture</span></div>
+<div class="locked-row" data-id="WATER-FILTRATION" data-urgency="T0" data-room="basement" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">WATER-FILTRATION</span><span class="locked-row-title">Whole-house carbon + softener + RO</span><span class="locked-row-sku">Aquasana whole-house carbon + softener + RO under kitchen sink</span><span class="locked-row-meta">basement · plumbing_fixture</span></div>
+<div class="locked-row" data-id="RECESSED-CANS" data-urgency="T0" data-room="common" data-category="lighting_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">RECESSED-CANS</span><span class="locked-row-title">Recessed lighting (25-35 cans whole-house)</span><span class="locked-row-sku">Halo or Lithonia 2700K CRI 90+ gimbaled, 4-inch trim, ~25-35 cans</span><span class="locked-row-meta">common · lighting_fixture</span></div>
+<div class="locked-row" data-id="INTERIOR-DOOR-HARDWARE" data-urgency="T1" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">INTERIOR-DOOR-HARDWARE</span><span class="locked-row-title">Interior door hardware (10 doors, Emtek matte black)</span><span class="locked-row-sku">Emtek Modern lever sets, matte black — 10 sets bundled with doors</span><span class="locked-row-meta">common · hardware</span></div>
+<div class="locked-row" data-id="INTERIOR-DOORS-SLABS" data-urgency="T0" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">INTERIOR-DOORS-SLABS</span><span class="locked-row-title">Interior solid-core 5-panel doors (10)</span><span class="locked-row-sku">10 interior solid-core 5-panel doors, paint-grade primed</span><span class="locked-row-meta">common · hardware</span></div>
+<div class="locked-row catalog-gap" data-id="MB-MEDICINE-CABINET" data-urgency="T1" data-room="master_bath" data-category="hardware" data-status="decided" data-annika="true" data-catalog-status="spec_error" data-schedule-locked="true"><span class="locked-row-id">MB-MEDICINE-CABINET</span><span class="locked-row-title">Master bath medicine cabinet<span class="catalog-gap-pill">⚠ SPEC ERROR</span></span><span class="locked-row-sku">Pottery Barn Hutchinson medicine cabinet</span><span class="locked-row-meta">master_bath · hardware</span></div>
+<div class="locked-row" data-id="K-CABINETS" data-urgency="T0" data-room="kitchen" data-category="cabinetry_millwork" data-status="decided" data-annika="true" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-CABINETS</span><span class="locked-row-title">Kitchen cabinets (KraftMaid Vantage)</span><span class="locked-row-sku">CDGA KraftMaid Vantage light oak Shaker, 30 LF installed</span><span class="locked-row-meta">kitchen · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="K-STORAGE-ADDER" data-urgency="T0" data-room="kitchen" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-STORAGE-ADDER</span><span class="locked-row-title">Kitchen storage cabinet adder</span><span class="locked-row-sku">KraftMaid Vantage storage adder, matching</span><span class="locked-row-meta">kitchen · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="MB-VANITY" data-urgency="T0" data-room="master_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="true" data-catalog-status="verified" data-schedule-locked="true"><span class="locked-row-id">MB-VANITY</span><span class="locked-row-title">Master bath vanity (WE Hutchinson 60-inch Double)</span><span class="locked-row-sku">West Elm Hutchinson Double Vanity 60-inch, Blonde</span><span class="locked-row-meta">master_bath · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="HB-VANITY" data-urgency="T0" data-room="hall_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HB-VANITY</span><span class="locked-row-title">Hall bath vanity (WE Hutchinson 36-inch Single)</span><span class="locked-row-sku">West Elm Hutchinson Single Vanity 36-inch, Blonde</span><span class="locked-row-meta">hall_bath · cabinetry_millwork</span></div>
+<div class="locked-row catalog-gap" data-id="BB-VANITY" data-urgency="T0" data-room="basement_bath" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-catalog-status="spec_error" data-schedule-locked="true"><span class="locked-row-id">BB-VANITY</span><span class="locked-row-title">Basement bath vanity (Pottery Barn Mason 24)<span class="catalog-gap-pill">⚠ SPEC ERROR</span></span><span class="locked-row-sku">Pottery Barn Mason 24-inch wall-mount vanity</span><span class="locked-row-meta">basement_bath · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="STAIR-REFACING" data-urgency="T0" data-room="common" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">STAIR-REFACING</span><span class="locked-row-title">Stair refacing</span><span class="locked-row-sku">Stair tread refacing + matching Bleach + Rubio finish</span><span class="locked-row-meta">common · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="K-RANGE" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-RANGE</span><span class="locked-row-title">Kitchen range (LG ThinQ — owned)</span><span class="locked-row-sku">LG ThinQ gas range (owned per May 2023 Home Depot order — model retained, stays)</span><span class="locked-row-meta">kitchen · appliance</span></div>
+<div class="locked-row" data-id="K-DISHWASHER" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-DISHWASHER</span><span class="locked-row-title">Dishwasher (Bosch — owned)</span><span class="locked-row-sku">Bosch dishwasher (owned per May 2023 Home Depot order — stays)</span><span class="locked-row-meta">kitchen · appliance</span></div>
+<div class="locked-row" data-id="K-FRIDGE" data-urgency="T0" data-room="kitchen" data-category="appliance" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">K-FRIDGE</span><span class="locked-row-title">Refrigerator (owned, stays)</span><span class="locked-row-sku">Existing refrigerator stays per G3 spec</span><span class="locked-row-meta">kitchen · appliance</span></div>
+<div class="locked-row" data-id="HVAC-DEHUMIDIFIER" data-urgency="T0" data-room="basement" data-category="appliance" data-status="decided" data-annika="false" data-catalog-status="verified" data-schedule-locked="true"><span class="locked-row-id">HVAC-DEHUMIDIFIER</span><span class="locked-row-title">Aprilaire E100 whole-house dehumidifier (formerly 1850)</span><span class="locked-row-sku">Aprilaire E100 100-pint whole-house dehumidifier (formerly Model 1850) — in HVAC $17K bundle</span><span class="locked-row-meta">basement · appliance</span></div>
+<div class="locked-row" data-id="LANDSCAPE-IRRIGATION" data-urgency="T1" data-room="exterior" data-category="plumbing_fixture" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">LANDSCAPE-IRRIGATION</span><span class="locked-row-title">2-zone drip/rotor irrigation</span><span class="locked-row-sku">2-zone drip/rotor + manifold + smart timer (Rachio or Hunter)</span><span class="locked-row-meta">exterior · plumbing_fixture</span></div>
+<div class="locked-row" data-id="NEST-PROTECT" data-urgency="T1" data-room="common" data-category="hardware" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">NEST-PROTECT</span><span class="locked-row-title">Smart smoke/CO × 6 (Nest Protect)</span><span class="locked-row-sku">Nest Protect × 6 hardwired</span><span class="locked-row-meta">common · hardware</span></div>
+<div class="locked-row" data-id="ROBOLITTER" data-urgency="T1" data-room="basement" data-category="cabinetry_millwork" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">ROBOLITTER</span><span class="locked-row-title">Robolitter cabinet enclosure + vent</span><span class="locked-row-sku">Custom cabinet + dedicated vent for Robolitter — basement utility</span><span class="locked-row-meta">basement · cabinetry_millwork</span></div>
+<div class="locked-row" data-id="HOT-TUB" data-urgency="T0" data-room="exterior" data-category="appliance" data-status="decided" data-annika="false" data-catalog-status="" data-schedule-locked="true"><span class="locked-row-id">HOT-TUB</span><span class="locked-row-title">Hot tub (Lifesmart — existing, stays)</span><span class="locked-row-sku">Existing Lifesmart hot tub on slab — stays, deck rebuild works around</span><span class="locked-row-meta">exterior · appliance</span></div>
 </div></details>
 </main>
 <div style="max-width:900px;margin:0 auto 48px;padding:0 16px;">

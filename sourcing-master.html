@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -140,10 +152,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
+       data-catalog-status="verified"
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-TILE-WALL</span>
-        <h3>Master bath wall tile (shower walls)</h3>
+        <h3>Master bath wall tile (shower walls)<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -155,18 +168,20 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
-      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-wall-0.jpg" alt="Master bath wall tile (shower walls)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock). Image shown is Cle Sea Salt zellige reference — Bejmat hero shot pending; actual sample required.</div>
+      
+      <div class="decided-line">✅ Cle Weathered White 2×6 Bejmat</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-wall-1.jpg" alt="Master bath wall tile (shower walls)" loading="lazy" onerror="this.style.opacity=0.3;">
+      <div class="notes-line">Locked per §6. Cle 4-6 week lead — sample order this week or bath gut starts before sample arrives. Bejmat is master-bath-only (consistency lock).</div>
       
     </article>
-<article class="item-card" data-id="MB-TILE-FLOOR"
+<article class="item-card catalog-gap" data-id="MB-TILE-FLOOR"
        data-urgency="T0" data-room="master_bath"
        data-category="tile_stone" data-status="decided"
        data-annika="true"
+       data-catalog-status="needs_reselection"
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-TILE-FLOOR</span>
-        <h3>Master bath floor tile</h3>
+        <h3>Master bath floor tile<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -178,6 +193,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Daltile Choice Ivory product line still listed at daltile.com/products/stone-look/choice/ivory, but site search returns no results and current third-party listings show Choice Ivory only as AR04 12x24 matte ceramic — not 24x24 honed porcelain. The 24x24 honed format spec&#x27;d here is not in the current vendor catalog. Owner reselect at Daltile Norcross showroom: candidates = Daltile Bee Hive Ivory 24x20 porcelain (current ColorBody, matte, hex format) or Kesler Marble Avorio 24x48 polished porcelain (wrong finish for spec).</em></div>
       <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-floor-0.jpg" alt="Master bath floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
       
@@ -186,6 +202,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-FAUCET</span>
@@ -201,6 +218,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $450 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="decided-line">✅ Delta Trinsic 559LF-CZMPU Champagne Bronze</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-faucet-0.png" alt="Master bath sink faucet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Canon-locked per DESIGN_SPEC §6 — Delta Trinsic Champagne Bronze, non-negotiable.</div>
       
@@ -209,6 +227,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-SHOWER-SYSTEM</span>
@@ -224,6 +243,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,520 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Build.com / Home Depot / SupplyHouse</div>
       <div class="sku"><a href="https://www.deltafaucet.com/bathroom/product/T17T259-CZH2O.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Delta Trinsic TempAssure 17T H2Okinetic Shower Trim Champagne Bronze T17T259-CZH2O →</a></div>
@@ -256,6 +276,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-SHOWER-DRAIN</span>
@@ -271,6 +292,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (construction_allowance) ·
         <strong>Actor:</strong> tcw
       </div>
+      
       <div class="decided-line">✅ Schluter KERDI-LINE linear drain, brushed stainless</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-shower-drain-0.jpg" alt="Master bath linear shower drain (Schluter)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Curbless walk-in spec per G2. TCW orders with rough plumbing. Image is Schluter shower-drains category reference; actual product PDP image pending direct vendor access.</div>
       
@@ -279,6 +301,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="plumbing_fixture" data-status="decided"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-TOILET</span>
@@ -294,6 +317,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="decided-line">✅ Toto Drake II One-Piece + Toto Washlet C5</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-toilet-0.jpg" alt="Master bath toilet + washlet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line. One-piece form for master.</div>
       
@@ -302,6 +326,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-CEILING</span>
@@ -317,6 +342,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-14-flush-mount/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass →</a></div>
@@ -349,6 +375,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="master_br"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-SCONCES</span>
@@ -364,6 +391,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -396,6 +424,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MBA-SCONCES</span>
@@ -411,6 +440,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -451,6 +481,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="master_bath"
        data-category="hardware" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-CAB-HARDWARE</span>
@@ -466,6 +497,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Schoolhouse</div>
       <div class="sku"><a href="https://schoolhouse.com/products/edgecliff-pull" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Schoolhouse Edgecliff Pull 4&quot; CC — Natural Brass x4 →</a></div>
@@ -494,14 +526,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Lacquered brass to match Trinsic Champagne Bronze tone family. Schoolhouse Sutton or Rejuvenation Vise.</div>
       
     </article>
-<article class="item-card" data-id="MB-MEDICINE-CABINET"
+<article class="item-card catalog-gap" data-id="MB-MEDICINE-CABINET"
        data-urgency="T1" data-room="master_bath"
        data-category="hardware" data-status="decided"
        data-annika="true"
+       data-catalog-status="spec_error"
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-MEDICINE-CABINET</span>
-        <h3>Master bath medicine cabinet</h3>
+        <h3>Master bath medicine cabinet<span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -513,6 +546,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Hutchinson is a VANITY range at Pottery Barn — there is no Hutchinson medicine cabinet in the PB catalog. Owner reselect from current PB medicine cabinets: PB Vintage Recessed Medicine Cabinet (Vintage Brass/Aged Bronze, 17W x 25H, $400-600) or PB Vintage Slim Recessed; PB Kensington Recessed for a wider unit. Carries G2 line callout but spec needs an actual SKU.</em></div>
       <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-medicine-cabinet-0.jpg" alt="Master bath medicine cabinet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
@@ -521,10 +555,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="master_bath"
        data-category="cabinetry_millwork" data-status="decided"
        data-annika="true"
+       data-catalog-status="verified"
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-VANITY</span>
-        <h3>Master bath vanity (WE Hutchinson 60-inch Double)</h3>
+        <h3>Master bath vanity (WE Hutchinson 60-inch Double)<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -536,6 +571,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,500 (construction_allowance) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="decided-line">✅ West Elm Hutchinson Double Vanity 60-inch, Blonde</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-vanity-0.jpg" alt="Master bath vanity (WE Hutchinson 60-inch Double)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6 + G2 line. Order during G2 rough phase to land by tile-set.</div>
       
@@ -544,6 +580,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="master_br"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MASTER-CLOSET</span>
@@ -559,6 +596,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,800 (construction_allowance) ·
         <strong>Actor:</strong> tcw · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">California Closets (Sandy Springs showroom, 5901 Peachtree Dunwoody Rd)</div>
       <div class="sku"><a href="https://www.californiaclosets.com/reach-in-closets/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> California Closets reach-in system — double hang + long hang + 4-drawer tower, natural white oak finish, soft-close, custom-measured →</a></div>
@@ -591,6 +629,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-MASTER</span>
@@ -606,6 +645,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (blackout Roman) + Pottery Barn (sheer panels)</div>
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/alustra-woven-textures-roman" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Hunter Douglas Alustra Woven Textures Roman Shade — blackout — custom 36–54&quot; w × 84–96&quot; h + Pottery Barn Belgian Flax Linen sheer drapery panel pair (100×108&quot;) in Ivory, 2 windows →</a></div>
@@ -638,6 +678,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BED</span>
@@ -653,6 +694,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $2,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/andes-bed-wood-legs-h8478/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Andes Bed, King, Crypton Performance Linen — Ivory / Cream →</a></div>
@@ -685,6 +727,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-NIGHTSTANDS</span>
@@ -700,6 +743,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-nightstand-acorn-g968/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Mid-Century Nightstand, White Oak, 2-drawer — quantity 2 →</a></div>
@@ -732,6 +776,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-DRESSER</span>
@@ -747,6 +792,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-6-drawer-dresser-g815/" target="_blank" rel="noopener" class="sku-link">West Elm Mid-Century 6-Drawer Dresser, White Oak →</a></div>
@@ -779,6 +825,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BENCH</span>
@@ -794,6 +841,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tillary-bench-h1246/" target="_blank" rel="noopener" class="sku-link">West Elm Tillary Bench, Boucle — Ivory, 52-inch →</a></div>
@@ -826,6 +874,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-RUG</span>
@@ -841,6 +890,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tweed-flatweave-dhurrie-rug-t3472/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Dhurrie Wool Rug, Warm Sand / Ivory, 8x10 flat-weave →</a></div>
@@ -873,6 +923,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-BEDDING</span>
@@ -888,6 +939,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cultiver (cultiver.com)</div>
       <div class="sku"><a href="https://cultiver.com/collections/linen-sheet-set-with-pillowcases" target="_blank" rel="noopener" class="sku-link">Cultiver Washed Linen Sheet Set + Quilt — Oat/Bone →</a></div>
@@ -928,6 +980,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-PILLOWS</span>
@@ -943,6 +996,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm + Etsy</div>
       <div class="sku"><a href="https://www.westelm.com/shop/pillows-comforters/throw-pillows/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Linen Pillow Cover 2-pack + Insert — Sage × 20in + Etsy hand-loomed Mudcloth lumbar — Mustard/Cream × 1 →</a></div>
@@ -975,6 +1029,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T3" data-room="master_br"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">MB-ART</span>
@@ -990,6 +1045,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Calming abstract or landscape, 24-36 inch, sage/oat palette</div>
           <div><strong>Avoid:</strong> no figurative portrait, no kids&#x27; art, no saturated abstract</div>
@@ -1003,6 +1059,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="master_br"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-MIRROR</span>
@@ -1018,6 +1075,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation (rejuvenation.com)</div>
       <div class="sku"><a href="https://www.rejuvenation.com/shop/mirrors" target="_blank" rel="noopener" class="sku-link">Rejuvenation Oak Wood Wall Mirror Natural — wall-hung, ~24×36in or nearest available size →</a></div>

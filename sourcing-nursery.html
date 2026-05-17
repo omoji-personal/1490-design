@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -140,6 +152,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-PENDANT</span>
@@ -155,6 +168,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $350 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Noguchi Store / Design Within Reach</div>
       <div class="sku"><a href="https://shop.noguchi.org/products/akari-1a" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Isamu Noguchi Akari UF4-L1 Paper Pendant, natural mulberry, 17-inch diameter, E26 medium base →</a></div>
@@ -187,6 +201,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-NURSERY</span>
@@ -202,6 +217,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Shade Store (blackout roller) + IKEA (sheer overlay)</div>
       <div class="sku"><a href="https://www.theshadestore.com/shades/roller-shades/custom-roller-shades" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> The Shade Store Blackout Roller Shade — Cream/White — custom 36–48&quot; w × 72–84&quot; h + IKEA LILL Sheer Curtain pair (as overlay) — 1 window →</a></div>
@@ -234,6 +250,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-CRIB</span>
@@ -249,6 +266,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Babyletto (via buybuyBaby or Amazon)</div>
       <div class="sku"><a href="https://babyletto.com/products/hudson-3-in-1-convertible-crib-with-toddler-bed-conversion-kit" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Babyletto Hudson 3-in-1 Convertible Crib, Natural Oak →</a></div>
@@ -281,6 +299,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-GLIDER</span>
@@ -296,6 +315,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Babyletto (babyletto.com / buybuyBaby / Amazon)</div>
       <div class="sku"><a href="https://www.babyletto.com/collections/gliders/products/toco-swivel-glider-and-ottoman-in-eco-performance-fabric-water-repellent-stain-resistant" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Babyletto Toco Glider, Eco-Weave Performance Fabric — Cream/Natural →</a></div>
@@ -328,6 +348,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-DRESSER</span>
@@ -343,6 +364,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,799 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/mid-century-6-drawer-dresser-g815/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Mid-Century 6-Drawer Dresser in White Oak (or nearest current WE nursery/bedroom dresser in white oak finish) — with WE or Babyletto changing tray topper →</a></div>
@@ -375,6 +397,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="furniture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-RUG</span>
@@ -390,6 +413,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/shop/kids-furniture/nursery+rugs/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Cotton Dhurrie Rug, Ivory / Natural stripe, 5x8 — machine washable →</a></div>
@@ -422,6 +446,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="nursery"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">NURSERY-ART</span>
@@ -437,6 +462,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Minted (minted.com)</div>
       <div class="sku"><a href="https://www.minted.com/nursery-wall-art" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Minted &#x27;Abstract Terrain&#x27; archival print — Oat/Sage, 24×30in framed →</a></div>

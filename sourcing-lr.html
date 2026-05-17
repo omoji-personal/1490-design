@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -140,6 +152,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-CHANDELIER</span>
@@ -155,6 +168,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,100 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/catalog/products/eastham-8-arm-chandelier" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Eastham 8-Arm Single Tier Chandelier — Lacquered Brass →</a></div>
@@ -187,6 +201,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-OVERHEAD</span>
@@ -202,6 +217,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $700 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Herman Miller / Design Within Reach</div>
       <div class="sku"><a href="https://store.hermanmiller.com/lighting-ceiling-lights-pendants/nelson-saucer-bubble-pendant/6241.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> George Nelson Saucer Bubble Pendant 22-inch, white, short-cord semi-flush canopy adapter, E26 →</a></div>
@@ -234,6 +250,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T0" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SCONCES</span>
@@ -249,6 +266,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-single-wall-sconce/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford Single Wall Sconce — Lacquered Brass, hardwire, pair →</a></div>
@@ -281,6 +299,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-PICTURE-LIGHT</span>
@@ -296,6 +315,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/jenesen-picture-light/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Jenesen Picture Light, 18-inch arm, solid brass, plug-in (Schoolhouse does not carry a picture light — Rejuvenation Jenesen is the canon-brand substitute) →</a></div>
@@ -336,6 +356,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-FLOOR-LAMP</span>
@@ -351,6 +372,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss</div>
       <div class="sku"><a href="https://www.google.com/search?q=Visual+Comfort+brass+column+floor+lamp+linen+shade" target="_blank" rel="noopener" class="sku-link">Cedar &amp; Moss Tall Column Floor Lamp, lacquered brass, 62-inch, linen shade, E26 →</a></div>
@@ -383,6 +405,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="lr"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-BUILTIN</span>
@@ -398,6 +421,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $5,100 (construction_allowance) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Atlanta Cabinet Co (local mill, 1310 White St SW, Atlanta)</div>
       <div class="sku">Atlanta Cabinet Co custom — white oak slab face, open TV bay (48W×16D), lower closed cabinets w/ AV venting, Rubio Monocoat Pure, 144W total run</div>
@@ -430,6 +454,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-LR</span>
@@ -445,6 +470,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Hunter Douglas authorized dealer (Peachtree Blinds &amp; Shutters, Atlanta)</div>
       <div class="sku"><a href="https://www.hunterdouglas.com/window-treatments/shades/roman-shades/vignette" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Hunter Douglas Vignette Modern Roman Shade — Linen Weave (Stone) — custom 48–60&quot; w × 72–84&quot; h, 2-window set →</a></div>
@@ -477,6 +503,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-DINING</span>
@@ -492,6 +519,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Pottery Barn (online or Phipps Plaza)</div>
       <div class="sku"><a href="https://www.potterybarn.com/shop/window-treatments/curtains-drapes-by-style/belgian-linen-drapes/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Pottery Barn Belgian Flax Linen Sheer Drapery Panel pair — Ivory/Natural — 100×108&quot; (floor-to-almost-puddle) — 1–2 pairs →</a></div>
@@ -524,6 +552,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SOFA</span>
@@ -539,6 +568,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $3,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/andes-sofa-h1844/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Andes Sofa, 88-inch, Crypton Performance Slipcover — Twill Natural / Ivory →</a></div>
@@ -571,6 +601,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-ACCENT-CHAIR</span>
@@ -586,6 +617,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/24181/sven-42-tufted-leather-lounge-chair-charme-tan" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Sven Chair, Charme Tan full-grain leather, solid walnut legs →</a></div>
@@ -618,6 +650,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-COFFEE-TABLE</span>
@@ -633,6 +666,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Atlanta vintage (Westside Modern / City Issue / Mid Mod Market) or Chairish</div>
       <div class="sku"><span class="star">★</span> Vintage mid-century walnut or oak oval coffee table, ~48-54W x 24D x 17H, solid wood, tapered brass or walnut legs — Atlanta source</div>
@@ -649,6 +683,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-SIDE-TABLES</span>
@@ -664,6 +699,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $600 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/3247/mara-oak-side-table" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Mara Side Table, White Oak, 22-inch round — quantity 2 →</a></div>
@@ -712,6 +748,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-RUG</span>
@@ -727,6 +764,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/products/tweed-flatweave-dhurrie-rug-t3472/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Dhurrie Wool Rug, Oatmeal / Ivory, 9x12 flat-weave →</a></div>
@@ -759,6 +797,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T3" data-room="lr"
        data-category="furniture" data-status="watch_list"
        data-annika="true"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-RUG-VINTAGE</span>
@@ -774,6 +813,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $4,000 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt · 👩 Annika
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Authentic Beni Ourain, neutral cream + sumi black diamond, 8x10 or 9x12</div>
           <div><strong>Avoid:</strong> no synthetic, no fringe-less, no high-contrast geometric, no kilim flat-weave</div>
@@ -787,6 +827,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-TABLE</span>
@@ -802,6 +843,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
       <div class="sku"><a href="https://www.roomandboard.com/catalog/dining-and-kitchen/tables/decker-tables" target="_blank" rel="noopener" class="sku-link">Room &amp; Board Bayside Round Dining Table, White Oak, 54-inch →</a></div>
@@ -842,6 +884,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-CHAIRS</span>
@@ -857,6 +900,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,800 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Carl Hansen &amp; Søn (via Design Within Reach or dealer)</div>
       <div class="sku"><a href="https://www.carlhansen.com/en/en/collection/chairs/dining-chairs/ch24" target="_blank" rel="noopener" class="sku-link">Carl Hansen &amp; Søn CH24 Wishbone Chair, White Oak / Natural Paper Cord — set of 6 →</a></div>
@@ -889,6 +933,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">DR-SIDEBOARD</span>
@@ -904,6 +949,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Room &amp; Board</div>
       <div class="sku"><a href="https://www.roomandboard.com/catalog/storage-and-entryway/storage-cabinets/hudson-storage-cabinets" target="_blank" rel="noopener" class="sku-link">Room &amp; Board Hudson Credenza, White Oak, 72-inch →</a></div>
@@ -944,6 +990,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-PILLOWS</span>
@@ -959,6 +1006,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $400 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">West Elm</div>
       <div class="sku"><a href="https://www.westelm.com/shop/pillows-comforters/throw-pillows/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> West Elm Textured Linen Pillow — Antique Brass/Rust × 2 (22in) + West Elm Oversized Pillow Cover — Ivory Linen × 1 (24in) →</a></div>
@@ -991,6 +1039,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-THROW</span>
@@ -1006,6 +1055,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $200 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Hawkins New York (hawkinsnewyork.com)</div>
       <div class="sku"><a href="https://hawkinsnewyork.com/products/simple-linen-throw" target="_blank" rel="noopener" class="sku-link">Hawkins New York Simple Linen Throw — Natural →</a></div>
@@ -1038,6 +1088,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T3" data-room="lr"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">LR-ART</span>
@@ -1053,6 +1104,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,200 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Modern abstract or landscape painting, 36+ inch, muted palette aligned with §3a accent</div>
           <div><strong>Avoid:</strong> no posters, no mass-print canvas, no jewel-tone saturation</div>
@@ -1066,6 +1118,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T3" data-room="dining"
        data-category="decor_softgoods" data-status="watch_list"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="true">
       <div class="item-card-header">
         <span class="item-id">DR-ART</span>
@@ -1081,6 +1134,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $800 (furniture_envelope) ·
         <strong>Actor:</strong> vintage_hunt
       </div>
+      
       <div class="vintage-brief">
           <div><strong>Style:</strong> Statement piece — large painting or vintage rug as wall hanging</div>
           <div><strong>Avoid:</strong> no commercial print</div>
@@ -1094,6 +1148,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">LR-MIRROR</span>
@@ -1109,6 +1164,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/arched-metal-framed-mirror/" target="_blank" rel="noopener" class="sku-link">Rejuvenation Arched Metal Framed Mirror — Brass, 24×36&quot; (or nearest available size) →</a></div>
@@ -1149,6 +1205,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="dining"
        data-category="decor_softgoods" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">TABLETOP-DINING</span>
@@ -1164,6 +1221,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $300 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Etsy + Schoolhouse + Hawkins New York</div>
       <div class="sku"><a href="https://www.hawkinsnewyork.com/products/simple-candle-holder-brass" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Etsy hand-thrown stoneware bud vases (set of 2, matte clay glaze) + Schoolhouse Tapered Candlestick Holder brass × 3 + Hawkins New York Linen Table Runner — Natural →</a></div>
@@ -1196,6 +1254,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="lr"
        data-category="appliance" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">FRAME-TV</span>
@@ -1211,6 +1270,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Best Buy / Samsung.com</div>
       <div class="sku"><a href="https://www.samsung.com/us/lifestyle-tvs/the-frame/65-inch-the-frame-qled-4k-tv-ls03he-sku-qn65ls03hefxza/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Samsung QN65LS03HEFXZA (65&quot; The Frame 2026, QLED 4K, Glare-Free, Art Mode, Vision AI) →</a></div>

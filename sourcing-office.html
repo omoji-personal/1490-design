@@ -97,6 +97,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .img-placeholder { width: 100%; height: 120px; background: var(--note-tint); border-radius: 6px;
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 12px; color: var(--muted); text-align: center; padding: 8px; margin: 8px 0; }
+/* Catalog reconciliation banner — shows on cards whose spec'd SKU does not match
+   the current vendor catalog (yellow tint per spec). */
+.catalog-gap-banner { background: #fff4d6; border: 1px solid #d4a93a; color: #6b4f10;
+  border-radius: 6px; padding: 8px 12px; margin: 8px 0 10px; font-size: 13px; line-height: 1.45; }
+.catalog-gap-banner strong { color: #8a5a10; text-transform: uppercase; letter-spacing: 0.4px;
+  font-size: 11px; display: inline-block; margin-right: 6px; }
+.item-card.catalog-gap { border-color: #d4a93a; box-shadow: 0 0 0 2px #fff4d6 inset; }
+.locked-row.catalog-gap { background: #fff8e0; border-left: 3px solid #d4a93a;
+  padding-left: 9px; }
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
 
 @media (max-width: 720px) {
   .page-header h1 { font-size: 24px; }
@@ -140,6 +152,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T1" data-room="office"
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-LIGHTING</span>
@@ -155,6 +168,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (construction_allowance) ·
         <strong>Actor:</strong> owner_direct
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation</div>
       <div class="sku"><a href="https://www.rejuvenation.com/products/crawford-14-flush-mount/" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass + Rejuvenation Jenesen or desk task lamp →</a></div>
@@ -195,6 +209,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="office"
        data-category="cabinetry_millwork" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-BUILTIN</span>
@@ -210,6 +225,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $7,500 (path3_direct) ·
         <strong>Actor:</strong> tcw · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Marc Calibri Cabinets (Atlanta custom mill)</div>
       <div class="sku"><span class="star">★</span> Marc Calibri Cabinets — full-height Wellington library wall 144W×96H, white oak slab doors + open upper shelves, integrated cable chase, Rubio Pure</div>
@@ -242,6 +258,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="office"
        data-category="window_treatment" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">WT-OFFICE</span>
@@ -257,6 +274,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture · ⚠️ sample required
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">The Shade Store (online or Buckhead)</div>
       <div class="sku"><a href="https://www.theshadestore.com/shades/roman-shades" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> The Shade Store Linen Roman Shade — light-filtering — Natural/Cream — flat-fold, custom 36–48&quot; w × 72–84&quot; h, 1–2 windows →</a></div>
@@ -289,6 +307,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-DESK</span>
@@ -304,6 +323,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $900 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Article</div>
       <div class="sku"><a href="https://www.article.com/product/15168/madera-54-desk-oak" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Article Madera Writing Desk, White Oak, 55-inch →</a></div>
@@ -336,6 +356,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-urgency="T2" data-room="office"
        data-category="furniture" data-status="options_drafted"
        data-annika="false"
+       data-catalog-status=""
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">OFFICE-CHAIR</span>
@@ -351,6 +372,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Budget:</strong> $1,500 (furniture_envelope) ·
         <strong>Actor:</strong> owner_furniture
       </div>
+      
       <div class="options-grid"><div class="option-card ">
       <div class="vendor">Herman Miller (via DWR or Herman Miller dealer)</div>
       <div class="sku"><a href="https://store.hermanmiller.com/office-chairs-home-office/eames-soft-pad-chair/1113.html" target="_blank" rel="noopener" class="sku-link">Herman Miller Eames Soft Pad Management Chair EA 217, Tan leather, aluminum base →</a></div>
