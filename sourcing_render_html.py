@@ -1692,12 +1692,17 @@ def _vendor_for_item(item: Item) -> Optional[str]:
     """Return the vendor string to attribute this item to in /vendors.
 
     Strategy (per spec):
-    - Decided items with a top-level decided_sku and no options: skip vendor attribution
-      (vendor field is in the prose only; no clean handle). These are reported under
-      a single bucket below. We return None.
-    - Items with options: use the ★ recommend option's vendor; fallback to options[0].
+    - Top-level item.vendor wins when set. Canon-decided items where the
+      vendor lived in `decided_sku` prose now carry a structured vendor on
+      the item itself, so we route them to the right bucket directly.
+    - Items with options: use the ★ recommend option's vendor; fallback to
+      options[0].
     - Vintage items: bucket under "Vintage" string.
+    - Canon-decided with no top-level vendor and no options: return None and
+      pool under "(canon-locked — vendor in spec text)".
     """
+    if item.vendor:
+        return item.vendor.strip()
     if item.vintage_brief is not None:
         return "Vintage"
     if item.options:

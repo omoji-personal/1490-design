@@ -786,6 +786,73 @@ def test_render_vendors_page_includes_vendors_topnav_link():
     assert 'href="/vendors" class="current"' in html
 
 
+def test_render_vendors_page_attributes_canon_decided_via_top_level_vendor():
+    """Canon-decided items (no options[], no vintage_brief) with a top-level
+    `vendor` field get attributed to that vendor's section — they no longer
+    fall into the '(canon-locked — vendor in spec text)' bucket."""
+    from sourcing_render_html import render_vendors_page
+    from sourcing_schema import Item
+    items = [
+        # A canon-decided item with top-level vendor → routed to West Elm
+        Item(
+            id="MB-VANITY", title="Master vanity",
+            category="furniture", room="master_bath", urgency="T0",
+            lead_time_weeks=6, budget_source="construction_allowance",
+            budget_target_usd=2500.0, sourcing_actor="owner_direct",
+            decision_status="decided", annika_loop=False,
+            decided_sku="WE Hutchinson Vanity Double 60 Blonde",
+            vendor="West Elm",
+        ),
+        # A canon-decided item without top-level vendor → unattributed bucket
+        Item(
+            id="UNATTRIBUTED", title="Unattributed item",
+            category="paint_finish", room="common", urgency="T0",
+            lead_time_weeks=0, budget_source="construction_allowance",
+            budget_target_usd=1000.0, sourcing_actor="tcw",
+            decision_status="decided", annika_loop=False,
+            decided_sku="Some prose-only spec",
+        ),
+    ]
+    meta = _make_meta()
+    html = render_vendors_page(items, meta)
+    # MB-VANITY appears under West Elm
+    assert "<h2>West Elm</h2>" in html
+    # Unattributed item lands in the canon-locked pool
+    assert "(canon-locked &mdash; vendor in spec text)" in html or \
+        "(canon-locked — vendor in spec text)" in html
+    # The MB-VANITY id should appear inside the West Elm section, not the
+    # canon-locked pool. Validate by locating positions.
+    we_idx = html.find("<h2>West Elm</h2>")
+    pool_idx = html.find("canon-locked")
+    mb_idx = html.find("MB-VANITY")
+    assert we_idx != -1 and pool_idx != -1 and mb_idx != -1
+    # The MB-VANITY id should be closer to the West Elm header than the pool header.
+    assert abs(mb_idx - we_idx) < abs(mb_idx - pool_idx)
+
+
+def test_render_vendors_page_top_level_vendor_wins_over_option_vendor():
+    """If both a top-level `vendor` and `options` are set, top-level wins.
+    (This isn't the typical case but the precedence has to be deterministic.)"""
+    from sourcing_render_html import render_vendors_page
+    from sourcing_schema import Item, Option
+    opt = Option(sku="X", vendor="OptionVendor", price_usd=100.0, image="",
+                 reasoning="r", recommend=True)
+    items = [
+        Item(
+            id="X1", title="x",
+            category="furniture", room="lr", urgency="T1",
+            lead_time_weeks=4, budget_source="furniture_envelope",
+            budget_target_usd=500.0, sourcing_actor="owner_furniture",
+            decision_status="options_drafted", annika_loop=False,
+            options=[opt], vendor="TopLevelVendor",
+        ),
+    ]
+    meta = _make_meta()
+    html = render_vendors_page(items, meta)
+    assert "<h2>TopLevelVendor</h2>" in html
+    assert "<h2>OptionVendor</h2>" not in html
+
+
 # ---------------------------------------------------------------------------
 # Suppliers directory page (/suppliers) — browse-style discovery surface
 # ---------------------------------------------------------------------------

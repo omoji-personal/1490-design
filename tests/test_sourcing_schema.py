@@ -167,3 +167,29 @@ def test_options_and_vintage_both_rejected():
     }
     with pytest.raises(ValidationError, match="cannot have both"):
         parse_item(raw)
+
+
+def test_item_vendor_field_optional_and_roundtrips():
+    """The new top-level `vendor` field is None by default and round-trips
+    a non-empty value through parse_item."""
+    base = {
+        "id": "MB-FAUCET",
+        "title": "Master bath faucet",
+        "category": "plumbing_fixture",
+        "room": "master_bath",
+        "urgency": "T0",
+        "lead_time_weeks": 2,
+        "budget_source": "construction_allowance",
+        "budget_target_usd": 450,
+        "sourcing_actor": "owner_direct",
+        "decision_status": "decided",
+        "annika_loop": True,
+        "decided_sku": "Delta Trinsic 559LF-CZMPU Champagne Bronze",
+    }
+    # Missing → None
+    item = parse_item(base)
+    assert item.vendor is None
+    # Set → round-trips through
+    raw_with_vendor = dict(base, vendor="Delta")
+    item2 = parse_item(raw_with_vendor)
+    assert item2.vendor == "Delta"

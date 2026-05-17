@@ -90,6 +90,11 @@ class Item:
     # catalog disagrees with spec (see VALID_CATALOG_STATUSES).
     catalog_status: Optional[str] = None
     catalog_status_note: Optional[str] = None
+    # Top-level vendor attribution — used for canon-decided items where the
+    # vendor lives in `decided_sku` prose only (no options[] to read .vendor
+    # from). Drives /vendors-page bucketing so canon-decided $ doesn't fall
+    # into the "(other / TCW / specialty)" bucket by default.
+    vendor: Optional[str] = None
 
 
 @dataclass
@@ -203,6 +208,7 @@ def parse_item(raw: Dict[str, Any]) -> Item:
         image=raw.get("image"),
         catalog_status=raw.get("catalog_status"),
         catalog_status_note=raw.get("catalog_status_note"),
+        vendor=raw.get("vendor"),
     )
 
 
