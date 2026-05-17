@@ -166,6 +166,7 @@ def topnav(current=""):
         ("/decisions", "Decisions"),
         ("/budget", "Budget"),
         ("/sourcing", "Sourcing"),
+        ("/suppliers", "Suppliers"),
         ("/for-annika", "Annika"),
         ("/spec", "Spec"),
     ]

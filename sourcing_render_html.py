@@ -294,9 +294,9 @@ SOURCING_MAIN_CSS = """
 
 def _build_topnav_html(current: str = "sourcing") -> str:
     """Render the shared topnav with Rooms ▾ + Canon ▾ collapsed into <details> dropdowns.
-    `current` is one of: home, mood, spectrum, decisions, budget, sourcing, annika, spec,
-    kitchen, master, baths, lr, nursery, office, cathie-hong, owiu, sss, jenni-kayne,
-    materials, rejected, vendors. Marks the matching link with class="current".
+    `current` is one of: home, mood, spectrum, decisions, budget, sourcing, suppliers,
+    vendors, annika, spec, kitchen, master, baths, lr, nursery, office, cathie-hong,
+    owiu, sss, jenni-kayne, materials, rejected. Marks the matching link with class="current".
     """
     def cls(name: str) -> str:
         return ' class="current"' if name == current else ""
@@ -309,7 +309,7 @@ def _build_topnav_html(current: str = "sourcing") -> str:
     return f"""<nav class="topnav">
   <div class="topnav-inner">
     <a href="/" class="home">&larr; 1490 Lively Ridge</a>
-    <a href="/"{cls('home')}>Home</a><a href="/mood-board"{cls('mood')}>Mood</a><a href="/spectrum"{cls('spectrum')}>Spectrum</a><a href="/decisions"{cls('decisions')}>Decisions</a><a href="/budget"{cls('budget')}>Budget</a><a href="/sourcing"{cls('sourcing')}>Sourcing</a><a href="/vendors"{cls('vendors')}>Vendors</a><a href="/for-annika"{cls('annika')}>Annika</a><a href="/spec"{cls('spec')}>Spec</a>
+    <a href="/"{cls('home')}>Home</a><a href="/mood-board"{cls('mood')}>Mood</a><a href="/spectrum"{cls('spectrum')}>Spectrum</a><a href="/decisions"{cls('decisions')}>Decisions</a><a href="/budget"{cls('budget')}>Budget</a><a href="/sourcing"{cls('sourcing')}>Sourcing</a><a href="/suppliers"{cls('suppliers')}>Suppliers</a><a href="/vendors"{cls('vendors')}>Vendors</a><a href="/for-annika"{cls('annika')}>Annika</a><a href="/spec"{cls('spec')}>Spec</a>
     <details class="nav-dropdown"{rooms_attr} aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen"{cls('kitchen')}>Kitchen</a><a href="/master"{cls('master')}>Master</a><a href="/baths"{cls('baths')}>Baths</a><a href="/lr"{cls('lr')}>LR</a><a href="/nursery"{cls('nursery')}>Nursery</a><a href="/office"{cls('office')}>Office</a></div></details>
     <details class="nav-dropdown"{canon_attr} aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong"{cls('cathie-hong')}>Cathie Hong</a><a href="/owiu"{cls('owiu')}>OWIU</a><a href="/sss"{cls('sss')}>SSS</a><a href="/jenni-kayne"{cls('jenni-kayne')}>Jenni Kayne</a></div></details>
     <a href="/materials"{cls('materials')}>Materials</a><a href="/rejected"{cls('rejected')}>Rejected</a>
@@ -1875,6 +1875,445 @@ def render_vendors_page(items: List[Item], meta: Meta,
 {canon_summary_html}
 {sections_html}
 </main>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------------------
+# /suppliers — supplier directory browse surface
+# Reads scope/supplier_directory.yaml (separate from sourcing.yaml). Browse-style
+# discovery for where to look across the 15 design categories. Not a tracker.
+# ---------------------------------------------------------------------------
+
+SUPPLIERS_TOPNAV_HTML = _build_topnav_html("suppliers")
+
+SUPPLIERS_CSS = """
+.suppliers-page main { max-width: 1200px; }
+.suppliers-anchor-block { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 20px; margin: 0 0 20px; }
+.suppliers-anchor-block h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); }
+.suppliers-anchor-block p { margin: 4px 0; font-size: 13.5px; color: var(--ink);
+  line-height: 1.55; }
+.suppliers-anchor-block strong { color: var(--ink); }
+.suppliers-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 12px 0;
+  margin: 0 0 18px; border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 44px; background: var(--bg); z-index: 40; align-items: center; }
+.suppliers-filter-bar label { font-size: 11.5px; color: var(--muted); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+.suppliers-filter-bar input[type=search] { background: var(--card-bg);
+  border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px;
+  font-size: 13px; color: var(--ink); min-width: 220px; }
+.suppliers-filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; color: var(--ink); }
+.suppliers-filter-bar button { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 14px; font-size: 13px; cursor: pointer;
+  color: var(--ink); }
+.suppliers-filter-bar button:hover { background: var(--warm-tint); border-color: #c9b88a; }
+.suppliers-filter-bar .filter-stats { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+.suppliers-page-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px;
+  align-items: flex-start; }
+.category-side-nav { position: sticky; top: 100px; align-self: flex-start;
+  font-size: 12.5px; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 6px; }
+.category-side-nav h4 { margin: 0 0 8px; padding: 0 8px; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+.category-side-nav a { display: block; padding: 5px 8px; border-radius: 4px;
+  color: var(--ink); text-decoration: none; line-height: 1.35; margin-bottom: 1px; }
+.category-side-nav a:hover { background: var(--warm-tint); color: var(--accent); }
+.category-side-nav a .count { color: var(--muted); font-size: 10.5px; margin-left: 4px; }
+@media (max-width: 900px) {
+  .suppliers-page-layout { grid-template-columns: 1fr; }
+  .category-side-nav { position: static; }
+}
+
+.category-section { margin: 0 0 36px; scroll-margin-top: 110px; }
+.category-section-header { display: flex; align-items: baseline; gap: 14px;
+  padding: 0 0 8px; border-bottom: 1px solid var(--border); margin: 0 0 16px; }
+.category-section-header h2 { margin: 0; font-size: 22px; font-weight: 600;
+  letter-spacing: -0.2px; flex: 1; }
+.category-section-header .cat-count { font-size: 12px; color: var(--muted);
+  font-variant-numeric: tabular-nums; }
+
+.supplier-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px; }
+.supplier-card { background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column;
+  gap: 8px; transition: border-color .15s, box-shadow .15s; }
+.supplier-card.hidden { display: none; }
+.supplier-card:hover { border-color: #c9b88a;
+  box-shadow: 0 2px 8px rgba(42, 38, 34, 0.06); }
+.supplier-card-header { display: flex; align-items: baseline; gap: 8px;
+  flex-wrap: wrap; }
+.supplier-card-header h3 { margin: 0; font-size: 16px; font-weight: 600; flex: 1;
+  letter-spacing: -0.1px; }
+.supplier-pill { display: inline-block; font-size: 10px; padding: 2px 8px;
+  border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;
+  font-weight: 700; white-space: nowrap; }
+.supplier-pill.tier-entry { background: #e8efe2; color: #3a5a3a; }
+.supplier-pill.tier-mid { background: #dde6f0; color: #2f4870; }
+.supplier-pill.tier-premium { background: #f7e6cb; color: #8a5a10; }
+.supplier-pill.tier-aspirational { background: #f8e6df; color: #973a1c; }
+.supplier-pill.fit-strong { background: #d9ead2; color: #2a5a2a; }
+.supplier-pill.fit-good { background: #e8efe2; color: #3a5a3a; }
+.supplier-pill.fit-mixed { background: #fef0d6; color: #6e4f1a; }
+.supplier-pill.fit-canon-adjacent { background: #ece8f4; color: #4a4566; }
+.supplier-card .fingerprint { font-size: 13px; color: var(--ink); line-height: 1.5;
+  margin: 0; }
+.supplier-card .fit-line { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.supplier-card .fit-line strong { color: var(--ink); }
+.supplier-card .warning-line { font-size: 12px; color: #973a1c;
+  background: #fbe9df; border-radius: 5px; padding: 5px 8px; line-height: 1.45; }
+.supplier-card .collections { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0; }
+.supplier-card .collection-chip { font-size: 11.5px; padding: 3px 9px;
+  border-radius: 999px; background: var(--warm-tint); color: var(--ink);
+  text-decoration: none; border: 1px solid #e9d4a2; }
+.supplier-card .collection-chip:hover { background: #f1dba0; }
+.supplier-card .footer-line { font-size: 11px; color: var(--muted);
+  border-top: 1px dashed var(--border); padding-top: 7px; margin-top: 4px;
+  line-height: 1.5; }
+.supplier-card .footer-line strong { color: var(--ink); text-transform: uppercase;
+  letter-spacing: 0.4px; font-size: 10px; margin-right: 3px; }
+.supplier-card .explore-btn { display: inline-block; align-self: flex-start;
+  background: var(--accent); color: white; text-decoration: none;
+  padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  margin-top: 2px; }
+.supplier-card .explore-btn:hover { background: #6e6346; }
+.suppliers-empty { background: var(--note-tint); border-radius: 8px; padding: 24px;
+  text-align: center; color: var(--muted); font-size: 14px; }
+"""
+
+# JavaScript filter + random-pick logic — interpolated as string to avoid double-braces.
+SUPPLIERS_JS = """
+<script>
+(function() {
+  const cards = Array.from(document.querySelectorAll('.supplier-card'));
+  const sections = Array.from(document.querySelectorAll('.category-section'));
+  const searchInput = document.getElementById('supplier-search');
+  const catSelect = document.getElementById('cat-filter');
+  const tierSelect = document.getElementById('tier-filter');
+  const fitSelect = document.getElementById('fit-filter');
+  const resetBtn = document.getElementById('reset-filters');
+  const randomBtn = document.getElementById('random-pick');
+  const stats = document.getElementById('filter-stats');
+  const totalCards = cards.length;
+
+  function applyFilters() {
+    const q = (searchInput.value || '').toLowerCase().trim();
+    const cat = catSelect.value;
+    const tier = tierSelect.value;
+    const fit = fitSelect.value;
+    let visible = 0;
+    cards.forEach(card => {
+      const matchCat = !cat || card.dataset.category === cat;
+      const matchTier = !tier || card.dataset.tier === tier;
+      const matchFit = !fit || card.dataset.fit === fit;
+      const haystack = card.dataset.search;
+      const matchQuery = !q || haystack.indexOf(q) !== -1;
+      const shown = matchCat && matchTier && matchFit && matchQuery;
+      card.classList.toggle('hidden', !shown);
+      if (shown) visible++;
+    });
+    sections.forEach(sec => {
+      const any = Array.from(sec.querySelectorAll('.supplier-card')).some(c => !c.classList.contains('hidden'));
+      sec.style.display = any ? '' : 'none';
+    });
+    stats.textContent = visible + ' of ' + totalCards + ' suppliers';
+  }
+
+  function pickRandom() {
+    const visible = cards.filter(c => !c.classList.contains('hidden'));
+    if (!visible.length) return;
+    const pick = visible[Math.floor(Math.random() * visible.length)];
+    pick.scrollIntoView({behavior: 'smooth', block: 'center'});
+    pick.style.boxShadow = '0 0 0 3px #c9b88a';
+    setTimeout(() => { pick.style.boxShadow = ''; }, 1800);
+  }
+
+  function resetAll() {
+    searchInput.value = '';
+    catSelect.value = '';
+    tierSelect.value = '';
+    fitSelect.value = '';
+    applyFilters();
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  catSelect.addEventListener('change', applyFilters);
+  tierSelect.addEventListener('change', applyFilters);
+  fitSelect.addEventListener('change', applyFilters);
+  resetBtn.addEventListener('click', resetAll);
+  randomBtn.addEventListener('click', pickRandom);
+
+  applyFilters();
+})();
+</script>
+"""
+
+
+def _load_supplier_directory():
+    """Load supplier_directory.yaml from HomeAI/scope. Returns dict with meta, categories, suppliers."""
+    homeai_scope = Path.home() / "Desktop" / "HomeAI" / "scope"
+    directory_path = homeai_scope / "supplier_directory.yaml"
+    if not directory_path.exists():
+        return None
+    return yaml.safe_load(directory_path.read_text())
+
+
+def _supplier_fit_pill(fit: str) -> str:
+    """Return HTML pill for fit category."""
+    cls_map = {
+        "STRONG": "fit-strong",
+        "GOOD": "fit-good",
+        "MIXED": "fit-mixed",
+        "CANON-ADJACENT": "fit-canon-adjacent",
+    }
+    cls = cls_map.get(fit, "fit-mixed")
+    return f'<span class="supplier-pill {cls}">{escape(fit)}</span>'
+
+
+def _supplier_tier_pill(tier: str) -> str:
+    cls = f"tier-{tier}"
+    return f'<span class="supplier-pill {cls}">{escape(tier)}</span>'
+
+
+def _render_supplier_card(sup: dict) -> str:
+    """Render a single supplier card with all rich detail (style fingerprint,
+    fit pill, price ranges, collections, sample/lead-time footer)."""
+    name = escape(sup.get("name", ""))
+    url = escape(sup.get("url", ""))
+    tier = sup.get("price_tier", "mid")
+    fit = sup.get("fit", "GOOD")
+    fingerprint = escape(sup.get("style_fingerprint", ""))
+    fit_text = escape(sup.get("fit_for_project", ""))
+    warn = sup.get("off_canon_warning")
+    sample_policy = sup.get("sample_policy")
+    lead_time = sup.get("lead_time_typical")
+    notes = sup.get("notes")
+
+    # Collection chips
+    cols = sup.get("collections_to_browse") or []
+    chips_html = ""
+    if cols:
+        chips = []
+        for c in cols[:6]:
+            cname = escape(c.get("name", ""))
+            curl = escape(c.get("url", url))
+            chips.append(
+                f'<a class="collection-chip" href="{curl}" target="_blank" rel="noopener">{cname}</a>'
+            )
+        chips_html = f'<div class="collections">{"".join(chips)}</div>'
+
+    # Price-range block (formatted compact)
+    pr = sup.get("price_range_typical") or {}
+    pr_lines = []
+    for k, v in pr.items():
+        label = k.replace("_", " ")
+        pr_lines.append(f"{escape(label)}: ${escape(str(v))}")
+    pr_html = ""
+    if pr_lines:
+        pr_html = (
+            f'<div class="footer-line"><strong>Price</strong>'
+            f'{escape(" · ".join(pr_lines))}</div>'
+        )
+
+    # Lead / sample footer
+    lead_sample_parts = []
+    if lead_time:
+        lead_sample_parts.append(f"<strong>Lead</strong>{escape(str(lead_time))}")
+    if sample_policy:
+        lead_sample_parts.append(f"<strong>Samples</strong>{escape(str(sample_policy))}")
+    lead_sample_html = ""
+    if lead_sample_parts:
+        lead_sample_html = (
+            f'<div class="footer-line">{" · ".join(lead_sample_parts)}</div>'
+        )
+
+    warn_html = ""
+    if warn:
+        warn_html = f'<div class="warning-line">&#9888; {escape(str(warn))}</div>'
+
+    notes_html = ""
+    if notes:
+        notes_html = f'<div class="footer-line"><strong>Notes</strong>{escape(str(notes))}</div>'
+
+    # Build the searchable haystack for client-side filter (lowercased)
+    haystack_bits = [
+        sup.get("name", ""),
+        sup.get("style_fingerprint", ""),
+        sup.get("fit_for_project", ""),
+        sup.get("off_canon_warning") or "",
+        sup.get("notes") or "",
+    ]
+    for c in cols:
+        haystack_bits.append(c.get("name", ""))
+    haystack = " ".join(haystack_bits).lower()
+    # Escape quotes for the data attr
+    haystack_attr = escape(haystack)
+
+    return f'''<article class="supplier-card" data-category="{escape(sup.get("category", ""))}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-search="{haystack_attr}">
+  <div class="supplier-card-header">
+    <h3>{name}</h3>
+    {_supplier_tier_pill(tier)}
+    {_supplier_fit_pill(fit)}
+  </div>
+  <p class="fingerprint">{fingerprint}</p>
+  <p class="fit-line"><strong>Fit:</strong> {fit_text}</p>
+  {warn_html}
+  {chips_html}
+  {pr_html}
+  {lead_sample_html}
+  {notes_html}
+  <a class="explore-btn" href="{url}" target="_blank" rel="noopener">Explore {name} &rarr;</a>
+</article>'''
+
+
+def render_suppliers_page(directory: Optional[dict] = None) -> str:
+    """Render /suppliers — browse-style supplier discovery surface.
+
+    Reads supplier_directory.yaml (or accepts pre-loaded dict). Shows category-grouped
+    supplier cards with filters (search, category, price tier, fit) and a random-pick
+    serendipity button. Designed for browsing, not for tracking decisions —
+    /sourcing is the tracker, /vendors is the rollup, /suppliers is the map.
+    """
+    if directory is None:
+        directory = _load_supplier_directory()
+    if directory is None:
+        # Defensive fallback if the YAML hasn't been generated yet.
+        return f"""<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><title>Suppliers &middot; 1490 Lively Ridge</title>
+<style>{SHARED_CSS}{SUPPLIERS_CSS}</style></head><body class="suppliers-page">
+{SUPPLIERS_TOPNAV_HTML}
+<main><div class="suppliers-empty">Supplier directory not yet generated. Run <code>build_sourcing.py</code> after creating <code>~/Desktop/HomeAI/scope/supplier_directory.yaml</code>.</div></main>
+</body></html>
+"""
+
+    meta = directory.get("meta", {})
+    categories = directory.get("categories", [])
+    suppliers = directory.get("suppliers", [])
+
+    # Group suppliers by category, in the canonical category order
+    by_cat: Dict[str, List[dict]] = {c["id"]: [] for c in categories}
+    for s in suppliers:
+        cid = s.get("category")
+        if cid in by_cat:
+            by_cat[cid].append(s)
+
+    # Side nav
+    sidenav_html_parts = [f'<h4>Categories</h4>']
+    for c in categories:
+        n = len(by_cat.get(c["id"], []))
+        sidenav_html_parts.append(
+            f'<a href="#cat-{escape(c["id"])}">{escape(c["label"])}'
+            f' <span class="count">({n})</span></a>'
+        )
+    sidenav_html = "\n".join(sidenav_html_parts)
+
+    # Filter bar: search + 3 selects + reset + random
+    cat_options = "".join(
+        f'<option value="{escape(c["id"])}">{escape(c["label"])}</option>'
+        for c in categories
+    )
+    filter_bar_html = f'''<div class="suppliers-filter-bar">
+  <label>Search</label>
+  <input id="supplier-search" type="search" placeholder="Brand, style, finish..." autocomplete="off">
+  <label>Category</label>
+  <select id="cat-filter">
+    <option value="">All categories</option>
+    {cat_options}
+  </select>
+  <label>Tier</label>
+  <select id="tier-filter">
+    <option value="">All tiers</option>
+    <option value="entry">Entry</option>
+    <option value="mid">Mid</option>
+    <option value="premium">Premium</option>
+    <option value="aspirational">Aspirational</option>
+  </select>
+  <label>Fit</label>
+  <select id="fit-filter">
+    <option value="">All fits</option>
+    <option value="STRONG">Strong</option>
+    <option value="GOOD">Good</option>
+    <option value="MIXED">Mixed</option>
+    <option value="CANON-ADJACENT">Canon-adjacent</option>
+  </select>
+  <button id="reset-filters" type="button">Reset</button>
+  <button id="random-pick" type="button" title="Pick a random visible supplier">&#127922; Random</button>
+  <span class="filter-stats" id="filter-stats"></span>
+</div>'''
+
+    # Category sections
+    sections_parts = []
+    for c in categories:
+        cid = c["id"]
+        cat_suppliers = by_cat.get(cid, [])
+        if not cat_suppliers:
+            continue
+        cards_html = "\n".join(_render_supplier_card(s) for s in cat_suppliers)
+        sections_parts.append(
+            f'<section class="category-section" id="cat-{escape(cid)}">'
+            f'<div class="category-section-header">'
+            f'<h2>{escape(c["label"])}</h2>'
+            f'<span class="cat-count">{len(cat_suppliers)} suppliers</span>'
+            f'</div>'
+            f'<div class="supplier-card-grid">{cards_html}</div>'
+            f'</section>'
+        )
+    sections_html = "\n".join(sections_parts)
+
+    anchor_html = (
+        f'<div class="suppliers-anchor-block">'
+        f'<h3>Browse map</h3>'
+        f'<p><strong>Aesthetic anchor:</strong> {escape(str(meta.get("aesthetic_anchor", "")))}</p>'
+        f'<p><strong>Price tier:</strong> {escape(str(meta.get("project_price_tier", "")))} '
+        f'against ${meta.get("cap_reference", 0):,} construction cap.</p>'
+        f'<p><strong>Canon brand mix</strong> (DESIGN_SPEC &sect;5d): West Elm 35-40%, '
+        f'Article / C&amp;B / R&amp;B 20-25%, Schoolhouse + Rejuvenation 15%, '
+        f'Pottery Barn / Anthropologie / S&amp;L 8%, ferm LIVING / HAY / Muuto 3%, '
+        f'Vintage 8-12%.</p>'
+        f'<p><strong>Fit legend:</strong> '
+        f'<span class="supplier-pill fit-strong">STRONG</span> explicit canon &middot; '
+        f'<span class="supplier-pill fit-good">GOOD</span> canon-aligned &middot; '
+        f'<span class="supplier-pill fit-mixed">MIXED</span> curate carefully &middot; '
+        f'<span class="supplier-pill fit-canon-adjacent">CANON-ADJACENT</span> aspirational reference.</p>'
+        f'</div>'
+    )
+
+    total_suppliers = len(suppliers)
+    generated = escape(str(meta.get("generated", "")))
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers &middot; 1490 Lively Ridge</title>
+<meta name="description" content="Browse-style supplier directory for 1490 Lively Ridge. {total_suppliers} suppliers across 15 categories matched to California Modern Japandi canon.">
+<style>{SHARED_CSS}
+{SUPPLIERS_CSS}</style>
+</head>
+<body class="suppliers-page">
+{SUPPLIERS_TOPNAV_HTML}
+<header class="page-header">
+  <h1>Suppliers</h1>
+  <p class="subtitle">{total_suppliers} suppliers across {len(categories)} categories. A map of where to look &mdash; not a tracker (that&rsquo;s /sourcing) and not a vendor rollup (that&rsquo;s /vendors). Generated {generated}.</p>
+</header>
+<main>
+{anchor_html}
+{filter_bar_html}
+<div class="suppliers-page-layout">
+  <aside class="category-side-nav">{sidenav_html}</aside>
+  <div class="suppliers-content">
+    {sections_html}
+  </div>
+</div>
+</main>
+{SUPPLIERS_JS}
 </body>
 </html>
 """

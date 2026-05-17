@@ -20,6 +20,7 @@ from sourcing_lint import run_all_lints
 from sourcing_render_md import render_full_tracker, render_decision_queue, render_annika_queue
 from sourcing_render_html import (
     render_site_page, render_room_page, render_for_annika, render_vendors_page,
+    render_suppliers_page,
 )
 from sourcing_git_history import build_last_changed_map
 
@@ -39,6 +40,7 @@ OUT_ANNIKA_MD = HOMEAI / "scope" / "annika-queue.md"
 OUT_HTML = SITE / "sourcing.html"
 OUT_ANNIKA_HTML = SITE / "for-annika.html"
 OUT_VENDORS_HTML = SITE / "vendors.html"
+OUT_SUPPLIERS_HTML = SITE / "suppliers.html"
 
 
 def main(manual_trigger_t3: bool = False) -> None:
@@ -72,6 +74,7 @@ def main(manual_trigger_t3: bool = False) -> None:
     OUT_VENDORS_HTML.write_text(render_vendors_page(
         data.items, data.meta, last_changed_map=last_changed,
     ))
+    OUT_SUPPLIERS_HTML.write_text(render_suppliers_page())
 
     print(f"Wrote {OUT_TRACKER.name} ({OUT_TRACKER.stat().st_size:,} bytes)")
     print(f"Wrote {OUT_QUEUE.name} ({OUT_QUEUE.stat().st_size:,} bytes)")
@@ -79,6 +82,7 @@ def main(manual_trigger_t3: bool = False) -> None:
     print(f"Wrote {OUT_HTML.name} ({OUT_HTML.stat().st_size:,} bytes)")
     print(f"Wrote {OUT_ANNIKA_HTML.name} ({OUT_ANNIKA_HTML.stat().st_size:,} bytes)")
     print(f"Wrote {OUT_VENDORS_HTML.name} ({OUT_VENDORS_HTML.stat().st_size:,} bytes)")
+    print(f"Wrote {OUT_SUPPLIERS_HTML.name} ({OUT_SUPPLIERS_HTML.stat().st_size:,} bytes)")
     ROOM_VIEWS = [
         ("Kitchen", ["kitchen"], "sourcing-kitchen.html", "/kitchen"),
         ("Master Suite", ["master_br", "master_bath"], "sourcing-master.html", "/master"),
