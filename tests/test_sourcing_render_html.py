@@ -1830,6 +1830,50 @@ def test_supplier_directory_uncategorized_lint(tmp_path, monkeypatch):
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# R2 Fix UX8 — Ruled-out default-hide toggle
+# ---------------------------------------------------------------------------
+
+
+def test_suppliers_page_has_hide_ruled_toggle():
+    """Filter bar exposes a 'Hide ruled-out' checkbox, default ON."""
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    assert 'id="hide-ruled-toggle"' in html
+    # Default checked = ON
+    assert 'checked' in html.split('id="hide-ruled-toggle"')[0][-200:] or 'checked>' in html
+    # JS persists state to localStorage
+    assert "HIDE_RULED_KEY" in html
+    # CSS rule hides ruled cards under .hide-ruled
+    assert "hide-ruled" in html
+
+
+def test_suppliers_page_has_unrated_filter_chip():
+    """Filter chip row exposes Unrated alongside All/Visit/Saved/Ruled."""
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    assert 'data-action-filter="unrated"' in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix UX9 — Active-filter pills + empty-state UI
+# ---------------------------------------------------------------------------
+
+
+def test_suppliers_page_has_active_filter_pills_container():
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    assert 'id="active-filter-pills"' in html
+    assert "renderActiveFilterPills" in html
+
+
+def test_suppliers_page_has_empty_state_ui():
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    assert 'id="suppliers-empty-state"' in html
+    assert "No suppliers match" in html
+
+
 def test_suppliers_action_param_has_allow_list():
     """JS that reads ?action= must use an allow-list, not accept arbitrary values."""
     from sourcing_render_html import render_suppliers_page

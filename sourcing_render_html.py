@@ -2295,9 +2295,24 @@ SUPPLIERS_JS = """
   const copyBtn = document.getElementById('copy-filter-url');
   const actionFilterBtns = Array.from(document.querySelectorAll('.action-filter button'));
   const stats = document.getElementById('filter-stats');
+  const hideRuledToggle = document.getElementById('hide-ruled-toggle');
+  const activeFilterPills = document.getElementById('active-filter-pills');
+  const emptyState = document.getElementById('suppliers-empty-state');
+  const emptyStateClear = document.getElementById('empty-state-clear');
   const totalCards = cards.length;
   const ACTION_STORE_KEY = 'suppliers.actions.v1';
+  const HIDE_RULED_KEY = 'suppliers.hideRuled.v1';
   let currentActionFilter = 'all';
+
+  // R2 Fix UX8 — restore hide-ruled toggle state from localStorage (default ON).
+  try {
+    const stored = localStorage.getItem(HIDE_RULED_KEY);
+    if (stored === 'false') hideRuledToggle.checked = false;
+  } catch (e) {}
+  function syncHideRuledClass() {
+    document.body.classList.toggle('hide-ruled', hideRuledToggle.checked);
+  }
+  syncHideRuledClass();
 
   // --- localStorage actions ---
   function loadActions() {
@@ -2445,7 +2460,49 @@ SUPPLIERS_JS = """
       sec.style.display = any ? '' : 'none';
     });
     stats.textContent = visible + ' of ' + totalCards + ' suppliers';
+    // R2 Fix UX1 — empty-state UI when filters return zero results.
+    if (emptyState) {
+      emptyState.classList.toggle('is-visible', visible === 0 && totalCards > 0);
+    }
+    renderActiveFilterPills();
     writeUrlParams();
+  }
+
+  // R2 Fix UX9 — render a row of active-filter pills below the bar with × to clear.
+  function renderActiveFilterPills() {
+    if (!activeFilterPills) return;
+    const pills = [];
+    if (searchInput.value) {
+      pills.push({label: 'search: "' + searchInput.value + '"', clear: () => { searchInput.value = ''; }});
+    }
+    if (catSelect.value) {
+      pills.push({label: 'category: ' + catSelect.value, clear: () => { catSelect.value = ''; }});
+    }
+    if (tierSelect.value) {
+      pills.push({label: 'tier: ' + tierSelect.value, clear: () => { tierSelect.value = ''; }});
+    }
+    if (fitSelect.value) {
+      pills.push({label: 'fit: ' + fitSelect.value, clear: () => { fitSelect.value = ''; }});
+    }
+    if (currentActionFilter && currentActionFilter !== 'all') {
+      pills.push({label: 'action: ' + currentActionFilter, clear: () => {
+        currentActionFilter = 'all';
+        actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === 'all'));
+      }});
+    }
+    activeFilterPills.innerHTML = '';
+    pills.forEach(p => {
+      const span = document.createElement('span');
+      span.className = 'active-filter-pill';
+      span.textContent = p.label + ' ';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = '×';
+      btn.setAttribute('aria-label', 'Remove ' + p.label + ' filter');
+      btn.addEventListener('click', () => { p.clear(); applyFilters(); });
+      span.appendChild(btn);
+      activeFilterPills.appendChild(span);
+    });
   }
 
   // --- Random pick (respects current filter) ---
@@ -2466,6 +2523,8 @@ SUPPLIERS_JS = """
     if (sortSelect) sortSelect.value = 'category';
     currentActionFilter = 'all';
     actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === 'all'));
+    // Note: hide-ruled toggle state is intentionally preserved (it's a
+    // user preference, not a filter). localStorage actions also preserved.
     applySort();
     applyFilters();
   }
@@ -2505,6 +2564,23 @@ SUPPLIERS_JS = """
       applyFilters();
     });
   });
+
+  // R2 Fix UX8 — hide-ruled toggle handler.
+  if (hideRuledToggle) {
+    hideRuledToggle.addEventListener('change', () => {
+      syncHideRuledClass();
+      try { localStorage.setItem(HIDE_RULED_KEY, hideRuledToggle.checked ? 'true' : 'false'); }
+      catch (e) {}
+    });
+  }
+  if (emptyStateClear) {
+    emptyStateClear.addEventListener('click', () => {
+      searchInput.value = ''; catSelect.value = ''; tierSelect.value = ''; fitSelect.value = '';
+      currentActionFilter = 'all';
+      actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === 'all'));
+      applyFilters();
+    });
+  }
 
   // --- Init ---
   readUrlParams();
@@ -3214,11 +3290,21 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     <button type="button" data-action-filter="visit">&#128270; Visit</button>
     <button type="button" data-action-filter="saved">&#11088; Saved</button>
     <button type="button" data-action-filter="ruled">&#128683; Ruled</button>
+    <button type="button" data-action-filter="unrated">&#9711; Unrated</button>
   </span>
+  <label class="suppliers-ruled-toggle" title="Default: hide cards marked as Ruled out">
+    <input type="checkbox" id="hide-ruled-toggle" checked>
+    Hide ruled-out
+  </label>
   <button id="reset-filters" type="button">Reset</button>
   <button id="random-pick" type="button" title="Pick a random visible supplier">&#127922; Random</button>
   <button id="copy-filter-url" type="button" title="Copy a sharable URL of the current filter state">Copy link</button>
   <span class="filter-stats" id="filter-stats"></span>
+</div>
+<div class="active-filter-pills" id="active-filter-pills" aria-live="polite"></div>
+<div class="suppliers-empty-state" id="suppliers-empty-state">
+  <p>No suppliers match the current filters.</p>
+  <button id="empty-state-clear">Clear all filters</button>
 </div>'''
 
     # Category sections
