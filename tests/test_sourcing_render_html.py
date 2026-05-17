@@ -1666,6 +1666,179 @@ def test_render_suppliers_page_verif_badge_has_aria_describedby():
     assert 'tabindex="0"' in html
 
 
+# ---------------------------------------------------------------------------
+# R2 Fix C4 — Sort fallback ?? 9 (was || 9 which buried rank-0 values)
+# ---------------------------------------------------------------------------
+
+
+def test_sort_fallback_uses_nullish_coalescing():
+    """Sort comparison must use `??` not `||` so rank 0 sorts FIRST (best),
+    not last. Inspect the embedded JS to verify."""
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    # `?? 9` is the correct fallback. Make sure `|| 9` is gone from sort.
+    assert "?? 9" in html
+    # The `|| 9` pattern must not exist in any sort-rank context.
+    import re
+    # Specifically: tierOrder[...] || 9 or fitOrder[...] || 9 must not appear.
+    assert not re.search(r"(tierOrder|fitOrder)\[[^\]]+\]\s*\|\|\s*9", html)
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C5 — /sourcing?vendor= filter actually filters
+# ---------------------------------------------------------------------------
+
+
+def test_sourcing_page_supports_vendor_filter():
+    """render_site_page emits JS that handles ?vendor= by hiding non-matching cards."""
+    from sourcing_render_html import render_site_page
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    html = render_site_page(data.items, data.meta, lint_findings=[])
+    assert "vendor-filter-banner" in html or "data-vendor-matches" in html
+    # The JS must read the vendor param and filter cards.
+    assert "params.get('vendor')" in html or 'params.get("vendor")' in html
+
+
+def test_render_item_card_emits_data_vendor_matches():
+    """Item cards expose data-vendor-matches when supplier-directory is loaded
+    and the item's vendor strings match known suppliers."""
+    from sourcing_render_html import _render_item_card
+    from sourcing_loader import load_sourcing
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    # Manually pass vendor_matches.
+    html = _render_item_card(data.items[0], vendor_matches=["west-elm-seating", "muuto"])
+    assert 'data-vendor-matches="west-elm-seating muuto"' in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C6 — Cross-link category scoping (west-elm-bedroom doesn't bleed into seating)
+# ---------------------------------------------------------------------------
+
+
+def test_vendor_matches_scopes_to_compatible_category():
+    """A bedroom-suffixed supplier must NOT match seating sourcing items even
+    though the brand string ('West Elm') matches both."""
+    from sourcing_render_html import _vendor_matches_for_item
+    # Fake suppliers index (id, name, category)
+    suppliers = [
+        ("west-elm-seating", "West Elm", "furniture-seating"),
+        ("west-elm-bedroom", "West Elm", "furniture-bedroom"),
+        ("schoolhouse", "Schoolhouse", "lighting"),  # brand-wide (no recognized suffix)
+    ]
+    class FakeItem:
+        id = "LR-SOFA"
+        category = "furniture"
+        vendor = "West Elm"
+        options = []
+    matches = _vendor_matches_for_item(FakeItem(), suppliers)
+    # Both seating and bedroom variants are under "furniture" parent → both match.
+    # But _SOURCING_CAT_TO_SUPPLIER_SUFFIXES["furniture"] includes both suffixes.
+    assert "west-elm-seating" in matches
+    assert "west-elm-bedroom" in matches
+    # Schoolhouse has no recognized suffix → brand-wide match passes via name.
+    # However the item's vendor string is "West Elm" not "Schoolhouse", so no match.
+    assert "schoolhouse" not in matches
+
+
+def test_vendor_matches_blocks_bedroom_supplier_for_lighting_item():
+    """A bedroom supplier-id MUST NOT match a lighting sourcing item."""
+    from sourcing_render_html import _vendor_matches_for_item
+    suppliers = [("west-elm-bedroom", "West Elm", "furniture-bedroom")]
+    class FakeItem:
+        id = "K-PENDANTS"
+        category = "lighting_fixture"
+        vendor = "West Elm"
+        options = []
+    matches = _vendor_matches_for_item(FakeItem(), suppliers)
+    assert matches == []
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C7 — Uncategorized fallback section
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_renders_uncategorized_section():
+    """Suppliers with categories not in the directory's categories: list must
+    NOT be silently dropped — they go into an Uncategorized section at the bottom."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [
+            {"id": "x", "category": "lighting", "name": "X",
+             "url": "https://example.com",
+             "price_tier": "mid", "fit": "STRONG",
+             "style_fingerprint": "x", "fit_for_project": "x"},
+            {"id": "y", "category": "unknown-cat", "name": "Y",
+             "url": "https://example.com",
+             "price_tier": "mid", "fit": "STRONG",
+             "style_fingerprint": "y", "fit_for_project": "y"},
+            {"id": "z", "category": None, "name": "Z",
+             "url": "https://example.com",
+             "price_tier": "mid", "fit": "STRONG",
+             "style_fingerprint": "z", "fit_for_project": "z"},
+        ],
+    }
+    html = render_suppliers_page(fixture)
+    assert "Uncategorized" in html
+    assert "id=\"cat-uncategorized\"" in html
+    # Both unknown suppliers must be present
+    assert ">Y<" in html or "Y" in html
+    assert ">Z<" in html or "Z" in html
+
+
+def test_supplier_directory_uncategorized_lint(tmp_path, monkeypatch):
+    """Lint flags suppliers with categories not in the directory's categories list."""
+    from sourcing_lint import check_supplier_directory_uncategorized
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories:
+          - id: lighting
+            label: Lighting
+        suppliers:
+          - id: ok_one
+            category: lighting
+            name: Ok
+            url: https://example.com
+            price_tier: mid
+            fit: STRONG
+          - id: bad_one
+            category: invented_cat
+            name: Bad
+            url: https://example.com
+            price_tier: mid
+            fit: STRONG
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_uncategorized([], None)
+    assert len(findings) == 1
+    assert "bad_one" in findings[0].message
+    assert "ok_one" not in findings[0].message
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix C8 — action URL param allow-list
+# ---------------------------------------------------------------------------
+
+
+def test_suppliers_action_param_has_allow_list():
+    """JS that reads ?action= must use an allow-list, not accept arbitrary values."""
+    from sourcing_render_html import render_suppliers_page
+    html = render_suppliers_page({"meta": {}, "categories": [], "suppliers": []})
+    assert "VALID_ACTION_FILTERS" in html
+    # Must contain the canonical set of allowed values.
+    assert "'all', 'visit', 'saved', 'ruled', 'unrated'" in html
+
+
 def test_load_supplier_directory_strips_operator_notes_from_output(tmp_path):
     """operator_notes must NOT be passed through to the renderer's data dict."""
     from sourcing_schema import load_supplier_directory

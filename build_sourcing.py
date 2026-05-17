@@ -2,6 +2,7 @@
 """Build sourcing outputs: 3 markdown files in HomeAI + HTML pages on the site.
 
 Reads:  ~/Desktop/HomeAI/scope/sourcing.yaml
+        ~/Desktop/HomeAI/scope/supplier_directory.yaml          (for /suppliers)
         ~/Desktop/HomeAI/data/construction_schedule.yaml
         ~/Desktop/HomeAI/correspondence/annika-cover-note.md   (optional)
         ~/Desktop/HomeAI/scope/annika-questions.yaml           (optional)
@@ -10,6 +11,12 @@ Writes: ~/Desktop/HomeAI/scope/SOURCING_TRACKER.md
         ~/Desktop/HomeAI/scope/annika-queue.md
         ~/Desktop/1490-design-site/sourcing.html
         ~/Desktop/1490-design-site/for-annika.html             (auto-generated)
+        ~/Desktop/1490-design-site/vendors.html
+        ~/Desktop/1490-design-site/suppliers.html
+        ~/Desktop/1490-design-site/sourcing-<room>.html         (6 room views)
+
+Flags: --allow-missing-suppliers   skip /suppliers render if yaml absent
+       --trigger-t3                manual T3 trigger for decision queue
 """
 from datetime import date
 from pathlib import Path
@@ -30,6 +37,7 @@ HOMEAI = HOME / "Desktop" / "HomeAI"
 SITE = HOME / "Desktop" / "1490-design-site"
 
 SOURCING_YAML = HOMEAI / "scope" / "sourcing.yaml"
+SUPPLIER_DIRECTORY_YAML = HOMEAI / "scope" / "supplier_directory.yaml"
 SCHEDULE_YAML = HOMEAI / "data" / "construction_schedule.yaml"
 COVER_NOTE = HOMEAI / "correspondence" / "annika-cover-note.md"
 ANNIKA_QUESTIONS = HOMEAI / "scope" / "annika-questions.yaml"
@@ -43,7 +51,19 @@ OUT_VENDORS_HTML = SITE / "vendors.html"
 OUT_SUPPLIERS_HTML = SITE / "suppliers.html"
 
 
-def main(manual_trigger_t3: bool = False) -> None:
+def main(manual_trigger_t3: bool = False, allow_missing_suppliers: bool = False) -> None:
+    # R2 Fix C9 — fail loud if supplier_directory.yaml is missing instead of
+    # silently writing a placeholder suppliers.html. Operator can override with
+    # --allow-missing-suppliers when bootstrapping a fresh repo.
+    if not SUPPLIER_DIRECTORY_YAML.exists() and not allow_missing_suppliers:
+        import sys
+        sys.stderr.write(
+            f"ERROR: supplier_directory.yaml not found at {SUPPLIER_DIRECTORY_YAML}\n"
+            f"       /suppliers.html cannot be rendered without it.\n"
+            f"       Pass --allow-missing-suppliers to skip this check.\n"
+        )
+        sys.exit(1)
+
     data = load_sourcing(SOURCING_YAML)
     schedule = load_schedule(SCHEDULE_YAML)
     lookup = ScheduleLookup(
@@ -112,4 +132,5 @@ def main(manual_trigger_t3: bool = False) -> None:
 if __name__ == "__main__":
     import sys
     manual = "--trigger-t3" in sys.argv
-    main(manual_trigger_t3=manual)
+    allow_missing = "--allow-missing-suppliers" in sys.argv
+    main(manual_trigger_t3=manual, allow_missing_suppliers=allow_missing)

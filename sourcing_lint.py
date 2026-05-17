@@ -748,6 +748,44 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
     return findings
 
 
+def check_supplier_directory_uncategorized(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """R2 Fix C7 — Flag supplier_directory.yaml rows whose `category` doesn't
+    appear in the directory's own `categories:` list. Without this, they were
+    silently dropped from the rendered /suppliers page.
+    """
+    import os
+    import yaml as _yaml
+    findings: List[LintFinding] = []
+    path = os.path.expanduser("~/Desktop/HomeAI/scope/supplier_directory.yaml")
+    if not os.path.exists(path):
+        return findings
+    try:
+        with open(path) as f:
+            data = _yaml.safe_load(f)
+    except Exception:
+        return findings
+    if not isinstance(data, dict):
+        return findings
+    known_cats = {c.get("id") for c in (data.get("categories") or []) if isinstance(c, dict)}
+    suppliers = (data or {}).get("suppliers", []) or []
+    bad = []
+    for s in suppliers:
+        cid = s.get("category")
+        if not cid or cid not in known_cats:
+            bad.append(s.get("id", "?"))
+    if bad:
+        findings.append(LintFinding(
+            severity="warning",
+            message=(
+                f"supplier_directory.yaml: {len(bad)} supplier(s) with unknown/missing "
+                f"category — first few: {', '.join(bad[:5])}"
+                + (f" (+{len(bad)-5} more)" if len(bad) > 5 else "")
+            ),
+            item_id=None,
+        ))
+    return findings
+
+
 def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings: List[LintFinding] = []
     findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
@@ -763,4 +801,5 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_no_orphan_sku_refs_in_notes(items, meta)
     findings += check_catalog_status_callouts(items, meta)
     findings += check_supplier_directory_url_freshness(items, meta)
+    findings += check_supplier_directory_uncategorized(items, meta)
     return findings

@@ -381,7 +381,8 @@ def _render_revision_history(item: Item) -> str:
 
 def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = None,
                       suppress_sched_badge: bool = False,
-                      last_changed: Optional[str] = None) -> str:
+                      last_changed: Optional[str] = None,
+                      vendor_matches: Optional[List[str]] = None) -> str:
     badge_class, badge_text = STATUS_BADGE.get(item.decision_status, ("", item.decision_status))
     annika_flag = ' · 👩 Annika' if item.annika_loop else ''
     sample_flag = ' · ⚠️ sample required' if item.sample_required else ''
@@ -467,12 +468,18 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
         if last_changed else ""
     )
 
+    # R2 Fix C5 — emit data-vendor-matches so /sourcing can filter to items
+    # whose vendor strings match a supplier-id from the supplier_directory.
+    vendor_attr = ""
+    if vendor_matches:
+        vendor_attr = f' data-vendor-matches="{escape(" ".join(vendor_matches))}"'
+
     return f"""<article class="item-card{extra_card_class}" id="item-{escape(item.id)}" data-id="{escape(item.id)}"
        data-urgency="{escape(item.urgency)}" data-room="{escape(item.room)}"
        data-category="{escape(item.category)}" data-status="{escape(item.decision_status)}"
        data-annika="{str(item.annika_loop).lower()}"
        data-catalog-status="{escape(item.catalog_status or '')}"
-       data-schedule-locked="{str(sched_locked).lower()}">
+       data-schedule-locked="{str(sched_locked).lower()}"{vendor_attr}>
       <div class="item-card-header">
         <span class="item-id">{escape(item.id)}</span>
         <h3>{escape(item.title)}{catalog_gap_pill}</h3>
@@ -768,6 +775,30 @@ FILTER_JS = """
     buttons.forEach(x => x.classList.toggle('active', x.dataset.filter === 'annika'));
     apply();
   }
+
+  // R2 Fix C5 — ?vendor=<supplier-id> filter. Filters visible cards to those
+  // whose data-vendor-matches attribute contains the requested supplier-id.
+  // Used by /suppliers cross-link ("Tracked in /sourcing: N items").
+  const vendor = params.get('vendor');
+  if (vendor) {
+    let kept = 0;
+    cards.forEach(c => {
+      const m = (c.dataset.vendorMatches || '').split(' ').filter(Boolean);
+      const keep = m.indexOf(vendor) >= 0;
+      if (!keep) c.classList.add('hidden');
+      else kept++;
+    });
+    // Insert a 1-line vendor banner at the top of <main> so the user knows
+    // they're looking at a filtered view, with a clear-filter affordance.
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      const banner = document.createElement('div');
+      banner.className = 'vendor-filter-banner';
+      banner.style.cssText = 'background:var(--warm-tint);border:1px solid #c9b88a;border-radius:8px;padding:10px 14px;margin:0 0 14px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;';
+      banner.innerHTML = '<span>Filtered to vendor <strong>' + vendor + '</strong> &mdash; ' + kept + ' item' + (kept !== 1 ? 's' : '') + '.</span><a href="' + window.location.pathname + '" style="color:var(--accent);font-weight:600;">Show all &times;</a>';
+      mainEl.insertBefore(banner, mainEl.firstChild);
+    }
+  }
 })();
 </script>
 """
@@ -845,6 +876,94 @@ def _render_locked_row(item: Item, last_changed: Optional[str] = None) -> str:
     )
 
 
+# Sourcing category → supplier-directory category-suffix map (R2 Fix C6).
+# Used to scope vendor-matching to compatible category buckets so e.g.
+# `west-elm-bedroom` only matches sourcing items in the furniture/bedroom space
+# (not seating). Each sourcing.yaml `category` lists which supplier suffixes
+# may match. An empty list / missing key means "no category-scoping" (the
+# match is brand-wide, e.g. paint where the supplier-id has no category suffix).
+_SOURCING_CAT_TO_SUPPLIER_SUFFIXES = {
+    "furniture": ["-seating", "-tables", "-bedroom", "-bedding"],
+    "lighting_fixture": ["-lighting"],
+    "appliance": ["-appliances"],
+    "hardware": ["-hardware"],
+    "window_treatment": ["-window"],
+    "tile_stone": ["-tile", "-counters", "-stone"],
+    "paint_finish": ["-paint", "-finish"],
+    "plumbing_fixture": ["-plumbing"],
+    "cabinetry_millwork": ["-cabinetry", "-millwork"],
+    "decor_softgoods": ["-decor", "-rugs", "-bedding", "-art"],
+}
+
+
+def _vendor_matches_for_item(item, suppliers_by_id_and_brand) -> List[str]:
+    """R2 Fix C5+C6 — Compute which supplier-ids this sourcing item matches,
+    scoped by category. Returns list of supplier-ids.
+
+    suppliers_by_id_and_brand is a list of (supplier_id, supplier_name,
+    supplier_category_string) tuples loaded from supplier_directory.yaml.
+    """
+    if not suppliers_by_id_and_brand:
+        return []
+    # Build the candidate vendor strings off this item.
+    vendor_strs = []
+    if getattr(item, "vendor", None):
+        vendor_strs.append(item.vendor)
+    for o in (item.options or []):
+        if o.vendor:
+            vendor_strs.append(o.vendor)
+    if not vendor_strs:
+        return []
+
+    allowed_suffixes = _SOURCING_CAT_TO_SUPPLIER_SUFFIXES.get(item.category, [])
+
+    matches = []
+    seen = set()
+    for sid, sname, _scat in suppliers_by_id_and_brand:
+        # Category scope: if the supplier-id ends in one of the recognized
+        # supplier-category suffixes, allow only when it's in the item's
+        # category's allow-list. Brand-wide suppliers (no recognized suffix)
+        # are always allowed (e.g. paint brands like "benjamin-moore").
+        recognized_suffix = next(
+            (s for s in (
+                "-seating", "-tables", "-bedroom", "-bedding", "-lighting",
+                "-appliances", "-hardware", "-window", "-tile", "-counters",
+                "-stone", "-paint", "-finish", "-plumbing", "-cabinetry",
+                "-millwork", "-decor", "-rugs", "-art")
+                if sid.endswith(s)),
+            None,
+        )
+        if recognized_suffix and recognized_suffix not in allowed_suffixes:
+            continue
+        # Brand-match check against any vendor string on the item.
+        for vstr in vendor_strs:
+            if _vendor_string_matches_supplier(vstr, sid, sname):
+                if sid not in seen:
+                    matches.append(sid)
+                    seen.add(sid)
+                break
+    return matches
+
+
+def _load_suppliers_brand_index() -> List[tuple]:
+    """Return list of (supplier_id, supplier_name, supplier_category) tuples
+    for vendor-matching from /sourcing pages. Returns [] when yaml missing or
+    unreadable — vendor-matching is a *progressive enhancement* of the
+    /sourcing pages, so a broken supplier yaml degrades gracefully rather
+    than crashing the build of unrelated pages.
+    """
+    try:
+        directory = _load_supplier_directory()
+    except Exception:
+        return []
+    if not directory:
+        return []
+    return [
+        (s.get("id", ""), s.get("name", ""), s.get("category", ""))
+        for s in (directory.get("suppliers") or [])
+    ]
+
+
 def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFinding],
                      schedule_lookup: Optional[ScheduleLookup] = None,
                      last_changed_map: Optional[Dict[str, str]] = None) -> str:
@@ -867,9 +986,12 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
     drafted_items = [it for it in visible if not _is_locked_decision(it)]
     locked_items = [it for it in visible if _is_locked_decision(it)]
 
+    # R2 Fix C5+C6 — load supplier-brand index once and emit per-item vendor matches.
+    suppliers_idx = _load_suppliers_brand_index()
     drafted_cards_html = "\n".join(
         _render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode,
-                          last_changed=lc.get(it.id))
+                          last_changed=lc.get(it.id),
+                          vendor_matches=_vendor_matches_for_item(it, suppliers_idx))
         for it in drafted_items
     )
     drafted_grid_html = (
@@ -970,9 +1092,12 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
         if banner_mode else ""
     )
     lc = last_changed_map or {}
+    # R2 Fix C5+C6 — emit per-item vendor matches for /sourcing?vendor= filter.
+    suppliers_idx = _load_suppliers_brand_index()
     cards_html = "\n".join(
         _render_item_card(it, schedule_lookup, suppress_sched_badge=banner_mode,
-                          last_changed=lc.get(it.id))
+                          last_changed=lc.get(it.id),
+                          vendor_matches=_vendor_matches_for_item(it, suppliers_idx))
         for it in visible
     )
 
@@ -2221,7 +2346,10 @@ SUPPLIERS_JS = """
     if (p.has('fit')) fitSelect.value = p.get('fit');
     if (p.has('sort') && sortSelect) sortSelect.value = p.get('sort');
     if (p.has('action')) {
-      currentActionFilter = p.get('action');
+      // R2 Fix C8 — allow-list the action query param.
+      const VALID_ACTION_FILTERS = ['all', 'visit', 'saved', 'ruled', 'unrated'];
+      const requested = p.get('action');
+      currentActionFilter = VALID_ACTION_FILTERS.indexOf(requested) >= 0 ? requested : 'all';
       actionFilterBtns.forEach(b => b.classList.toggle('active', b.dataset.actionFilter === currentActionFilter));
     }
     // /sourcing cross-link uses ?vendor=<id> on the /sourcing page itself, but if someone
@@ -2264,9 +2392,11 @@ SUPPLIERS_JS = """
       const localCards = Array.from(grid.querySelectorAll('.supplier-card'));
       const sorted = localCards.slice();
       if (mode === 'tier') {
-        sorted.sort((a, b) => (tierOrder[a.dataset.tier] || 9) - (tierOrder[b.dataset.tier] || 9));
+        // R2 Fix C4 — `|| 9` would push rank-0 ('entry', 'STRONG') to the bottom.
+        // Use `??` so only nullish ranks fall through to the default.
+        sorted.sort((a, b) => (tierOrder[a.dataset.tier] ?? 9) - (tierOrder[b.dataset.tier] ?? 9));
       } else if (mode === 'fit') {
-        sorted.sort((a, b) => (fitOrder[a.dataset.fit] || 9) - (fitOrder[b.dataset.fit] || 9));
+        sorted.sort((a, b) => (fitOrder[a.dataset.fit] ?? 9) - (fitOrder[b.dataset.fit] ?? 9));
       } else if (mode === 'verified') {
         sorted.sort((a, b) => (b.dataset.verifiedDate || '').localeCompare(a.dataset.verifiedDate || ''));
       } else if (mode === 'random') {
@@ -2968,7 +3098,7 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         '</details>'
     ) if expander_inner else ""
 
-    return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category", ""))}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
+    return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category") or "")}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
   {hero_html}
   {spec_strip_html}
   <p class="fingerprint">{fingerprint}</p>
@@ -3014,12 +3144,18 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
             sid, s.get("name", ""), sourcing_items
         )
 
-    # Group suppliers by category, in the canonical category order
+    # Group suppliers by category, in the canonical category order.
+    # R2 Fix C7 — suppliers with missing or unknown categories were silently
+    # dropped. Collect them into an "uncategorized" bucket rendered at the
+    # bottom of the page so nothing disappears from the surface.
     by_cat: Dict[str, List[dict]] = {c["id"]: [] for c in categories}
+    uncategorized: List[dict] = []
     for s in suppliers:
         cid = s.get("category")
         if cid in by_cat:
             by_cat[cid].append(s)
+        else:
+            uncategorized.append(s)
 
     # Side nav
     sidenav_html_parts = [f'<h4>Categories</h4>']
@@ -3028,6 +3164,11 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
         sidenav_html_parts.append(
             f'<a href="#cat-{escape(c["id"])}">{escape(c["label"])}'
             f' <span class="count">({n})</span></a>'
+        )
+    if uncategorized:
+        sidenav_html_parts.append(
+            f'<a href="#cat-uncategorized">Uncategorized'
+            f' <span class="count">({len(uncategorized)})</span></a>'
         )
     sidenav_html = "\n".join(sidenav_html_parts)
 
@@ -3104,6 +3245,27 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
             f'<div class="supplier-card-grid">{cards_html}</div>'
             f'</section>'
         )
+
+    # R2 Fix C7 — uncategorized fallback section
+    if uncategorized:
+        unc_cards_html = "\n".join(
+            _render_supplier_card(
+                s,
+                sourcing_match_ids=matches_by_supplier.get(s.get("id", ""), []),
+                verification_date=verification_date,
+            )
+            for s in uncategorized
+        )
+        sections_parts.append(
+            f'<section class="category-section category-uncategorized" id="cat-uncategorized">'
+            f'<div class="category-section-header">'
+            f'<h2>Uncategorized</h2>'
+            f'<span class="cat-count">{len(uncategorized)} supplier(s) with unknown/missing category</span>'
+            f'</div>'
+            f'<div class="supplier-card-grid">{unc_cards_html}</div>'
+            f'</section>'
+        )
+
     sections_html = "\n".join(sections_parts)
 
     anchor_html = (
