@@ -217,9 +217,138 @@ def test_approved_overshoots_block_absent_when_no_overshoots():
     assert "Approved overshoots" not in html
 
 
+def test_approved_overshoots_block_renders_when_keyword_present_but_price_within_budget():
+    """R7-I1: After HARD-RULE 'revisions UP only', the budget always covers the ★ rec,
+    so the legacy price>budget condition never fired.  The keyword presence must trigger
+    rendering regardless of price-vs-budget arithmetic."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_site_page
+
+    # Price exactly matches budget — legacy condition would have skipped this.
+    opt = Option(
+        sku="Some Pot Filler", vendor="Delta", price_usd=756.0, image="",
+        reasoning="approved_overshoot: true. No cheaper option exists.",
+        recommend=True,
+    )
+    item = Item(
+        id="KW-OVER", title="Keyword overshoot item", category="plumbing_fixture",
+        room="kitchen", urgency="T0", lead_time_weeks=4,
+        budget_source="construction_allowance", budget_target_usd=756.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=False, options=[opt],
+        notes="approved_overshoot: true per OWNER CONFIRM #1.",
+    )
+    meta = Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_site_page([item], meta, lint_findings=[])
+    assert "approved-overshoots-block" in html
+    assert "KW-OVER" in html
+
+
+def test_approved_overshoots_block_triggers_on_reasoning_keyword():
+    """The keyword can also live in the ★ option's reasoning prose, not just item.notes."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_site_page
+
+    opt = Option(
+        sku="Some Faucet", vendor="V", price_usd=200.0, image="",
+        reasoning="This is an approved overshoot ratified by owner.",
+        recommend=True,
+    )
+    item = Item(
+        id="REA-OVER", title="Reasoning overshoot", category="hardware", room="kitchen",
+        urgency="T0", lead_time_weeks=1,
+        budget_source="construction_allowance", budget_target_usd=200.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=False, options=[opt],
+        notes="ordinary note without keyword",
+    )
+    meta = Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_site_page([item], meta, lint_findings=[])
+    assert "REA-OVER" in html
+    assert "approved-overshoots-block" in html
+
+
 # ---------------------------------------------------------------------------
 # R6 new: double-vendor bug (#11)
 # ---------------------------------------------------------------------------
+
+def test_for_annika_wrong_class_red_only_fires_when_sku_field_contains_signal():
+    """R7-I2: past-tense corrective prose in reasoning/details ("the original SKU does not
+    exist; we substituted X") must NOT trigger wrong-class red escalation. The signal phrase
+    must appear in the literal sku string (or sku_canonical) for the warning to fire."""
+    from sourcing_schema import Option, Item, Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_for_annika
+
+    # Case A: signal phrase ("does not exist") appears in DETAILS as past-tense corrective
+    # prose describing what was rejected and replaced. The current SKU is the correct pick.
+    # MUST NOT escalate to red.
+    pick = Option(
+        sku="Rejuvenation Tumalo Single Sconce — Lacquered Brass",
+        vendor="Rejuvenation", price_usd=200.0, image="",
+        reasoning="Original Pinnock SKU does not exist in current catalog; substituted Tumalo.",
+        recommend=True,
+        details="WRONG SKU 1903LF-CZ not found; closest Trinsic family swap was Tumalo. "
+                "Confirmed live at rejuvenation.com.",
+    )
+    item = Item(
+        id="WC-CORRECTIVE", title="Sconce corrective", category="lighting_fixture",
+        room="kitchen", urgency="T0", lead_time_weeks=2,
+        budget_source="construction_allowance", budget_target_usd=200.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=True, options=[pick],
+    )
+    meta = Meta(
+        last_updated="2026-05-16",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_for_annika([item], meta)
+    # The wrong-class red escalation must NOT fire — past-tense prose only.
+    assert "Wrong product class flagged" not in html, \
+        "past-tense corrective prose in reasoning/details must not trigger wrong-class red"
+
+    # Case B: signal phrase appears in the SKU itself — MUST fire.
+    bad_pick = Option(
+        sku="Delta 1903LF-CZ Bar/Prep Faucet WRONG PRODUCT — not a pot filler",
+        vendor="Delta", price_usd=685.0, image="",
+        reasoning="No alternatives at this price tier.",
+        recommend=True,
+        details="Closest Trinsic family.",
+    )
+    bad_item = Item(
+        id="WC-REAL", title="Real wrong class", category="plumbing_fixture",
+        room="kitchen", urgency="T0", lead_time_weeks=2,
+        budget_source="construction_allowance", budget_target_usd=700.0,
+        sourcing_actor="owner_direct", decision_status="options_drafted",
+        annika_loop=True, options=[bad_pick],
+    )
+    html_b = render_for_annika([bad_item], meta)
+    assert "Wrong product class flagged" in html_b, \
+        "signal phrase IN the SKU string must trigger wrong-class red"
+
 
 def test_for_annika_no_double_vendor_in_alts():
     """Alt options whose SKU already starts with the vendor name must not repeat it."""

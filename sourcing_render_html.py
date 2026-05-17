@@ -305,22 +305,62 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
     </article>"""
 
 
+# R7-I1: keyword-based overshoot detection.
+# Per HARD RULE "revisions UP only", budget always covers the ★ rec — so the legacy
+# rec.price > budget condition never fired, leaving the visible 6 items unrendered.
+# Instead, look for explicit overshoot-acknowledgement keywords in the item's notes
+# OR the ★ option's reasoning prose.  These keywords indicate the owner has consciously
+# accepted a price-over-baseline outcome and wants it tracked publicly.
+_APPROVED_OVERSHOOT_KEYWORDS = (
+    "approved overshoot",
+    "approved_overshoot",
+    "approved-overshoot",
+    "owner confirm",
+    "audit ratified",
+    "ratified overshoot",
+)
+
+
 def _approved_overshoots_block(items: List[Item]) -> str:
-    """Show items with approved_overshoot=true in a distinct slate block so they remain visible."""
+    """Show items the owner has flagged as approved overshoots in a distinct slate block so
+    they remain publicly visible.
+
+    Trigger (R7-I1): the keyword presence in the item's notes OR the ★ option's reasoning
+    field (case-insensitive). Examples that match: "approved_overshoot: true", "approved-
+    overshoot per Annika", "OWNER CONFIRM", "audit ratified", "ratified overshoot".
+
+    For each match, display: item id — recommended-option price vs prior budget target,
+    and the percent gap (which may be 0% or negative now that the budget has been revised
+    UP to match — the publication value is in showing the audit trail, not enforcing math).
+    """
     overshoots = []
     for item in items:
-        if "approved_overshoot" not in (item.notes or "").lower():
+        haystack = (item.notes or "").lower()
+        # Also scan the ★ option's reasoning prose for the keyword
+        rec = None
+        if item.options:
+            rec = next((o for o in item.options if o.recommend), None)
+            if rec:
+                haystack += " " + (rec.reasoning or "").lower()
+                haystack += " " + (rec.details or "").lower()
+        if not any(kw in haystack for kw in _APPROVED_OVERSHOOT_KEYWORDS):
             continue
-        if not item.options:
+        # Require a ★ option so price-vs-target can be displayed.  Items with no priced
+        # option (decided_sku only) can't show this comparison, so skip.
+        if not rec:
             continue
-        rec = next((o for o in item.options if o.recommend), None)
-        if rec and rec.price_usd > item.budget_target_usd:
-            pct = (rec.price_usd / item.budget_target_usd - 1) * 100
-            overshoots.append((item.id, rec.price_usd, item.budget_target_usd, pct))
+        # Percent gap may be 0 or negative now that revisions-UP brought budget into line —
+        # still display so the audit trail stays visible.
+        target = item.budget_target_usd or 0
+        if target > 0:
+            pct = (rec.price_usd / target - 1) * 100
+        else:
+            pct = 0.0
+        overshoots.append((item.id, rec.price_usd, target, pct))
     if not overshoots:
         return ""
     rows = "".join(
-        f"<li>{escape(i)} &mdash; ${p:,.0f} vs target ${b:,.0f} (+{pct:.0f}%)</li>"
+        f"<li>{escape(i)} &mdash; ${p:,.0f} vs target ${b:,.0f} ({pct:+.0f}%)</li>"
         for i, p, b, pct in overshoots
     )
     return (
@@ -982,11 +1022,16 @@ def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
 
         # SKU flag if sample_required or has sku-verify note
         sku_flag_html = ""
-        # Detect wrong-product-class language in reasoning or details → escalate to error severity
+        # R7-I2: Detect wrong-product-class language ONLY in the SKU field itself (not in
+        # reasoning/details prose).  Past-tense corrective prose like "the original SKU
+        # does not exist; we substituted X" describes what was rejected and replaced — the
+        # current SKU is the correct pick, so red escalation against past-tense prose
+        # generated 5/5 false positives in R6.  By restricting the signal scope to
+        # pick_opt.sku, only literal contradictions baked into the SKU string itself fire.
         _wrong_class_signals = ["not a pot filler", "wrong product", "not a ", "doesn't exist",
                                  "does not exist", "not found", "bar/prep faucet", "wrong product class"]
-        _opt_text_lower = ((pick_opt.details or "") + " " + (pick_opt.reasoning or "")).lower()
-        _has_wrong_class = any(sig in _opt_text_lower for sig in _wrong_class_signals)
+        _sku_text_lower = (pick_opt.sku or "").lower()
+        _has_wrong_class = any(sig in _sku_text_lower for sig in _wrong_class_signals)
         if item.sample_required:
             sku_flag_html = '<div class="annika-sku-flag">&#9733; Sample required before ordering.</div>'
         elif _has_wrong_class:
