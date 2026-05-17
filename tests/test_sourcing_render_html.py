@@ -495,3 +495,292 @@ def test_render_site_page_locked_count_matches_decided_items():
         assert lid in html
     # Drafted item present too.
     assert "D1" in html
+
+
+# ---------------------------------------------------------------------------
+# D1: Decisions-needed banner — pinned at top of /sourcing
+# ---------------------------------------------------------------------------
+
+def _make_item(item_id: str, catalog_status=None, title="Test item", room="kitchen",
+               category="hardware", decision_status="options_drafted"):
+    from sourcing_schema import Option, Item
+    opt = Option(sku="X", vendor="V", price_usd=10.0, image="",
+                 reasoning="r", recommend=True)
+    return Item(
+        id=item_id, title=title, category=category, room=room,
+        urgency="T0", lead_time_weeks=1,
+        budget_source="construction_allowance", budget_target_usd=100.0,
+        sourcing_actor="owner_direct", decision_status=decision_status,
+        annika_loop=False, options=[opt],
+        catalog_status=catalog_status,
+    )
+
+
+def _make_meta():
+    from sourcing_schema import Meta, Budgets, ConsistencyLocks
+    return Meta(
+        last_updated="2026-05-17",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000, path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+
+
+def test_decisions_needed_banner_renders_when_flagged_items_exist():
+    """D1: banner renders with N count + N jump links when items have catalog_status flagged."""
+    from sourcing_render_html import render_site_page
+    items = [
+        _make_item("MB-TILE-FLOOR", catalog_status="needs_reselection"),
+        _make_item("K-FLOOR-TILE", catalog_status="needs_reselection"),
+        _make_item("MB-MEDICINE-CABINET", catalog_status="spec_error"),
+        _make_item("BB-VANITY", catalog_status="spec_error"),
+        _make_item("K-PENDANTS", catalog_status="needs_reselection"),
+        _make_item("HEALTHY-1"),  # no catalog gap — should not appear in banner
+    ]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[])
+    # Banner is present
+    assert "decisions-needed-banner" in html
+    # Heading shows the count
+    assert "5 decision" in html
+    # Jump-links present
+    for item_id in ["MB-TILE-FLOOR", "K-FLOOR-TILE", "MB-MEDICINE-CABINET", "BB-VANITY", "K-PENDANTS"]:
+        assert f'href="#item-{item_id}"' in html
+    # Anchors present on the cards
+    for item_id in ["MB-TILE-FLOOR", "K-FLOOR-TILE", "MB-MEDICINE-CABINET", "BB-VANITY", "K-PENDANTS"]:
+        assert f'id="item-{item_id}"' in html
+    # Healthy item is NOT in banner
+    assert 'href="#item-HEALTHY-1"' not in html
+
+
+def test_decisions_needed_banner_absent_when_no_flagged_items():
+    """D1: banner does not render when N=0. (CSS class definition is allowed in the
+    style block; the rendered <div class="decisions-needed-banner"> must be absent.)"""
+    from sourcing_render_html import render_site_page
+    items = [_make_item("H1"), _make_item("H2")]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[])
+    assert 'class="decisions-needed-banner"' not in html
+    assert "decisions need your reselection" not in html
+    assert "decision need your reselection" not in html
+
+
+def test_decisions_needed_banner_singular_grammar():
+    """D1: single flagged item uses singular grammar."""
+    from sourcing_render_html import render_site_page
+    items = [_make_item("ONLY-1", catalog_status="needs_reselection"), _make_item("H1")]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[])
+    assert "decisions-needed-banner" in html
+    assert "1 decision need" in html  # singular form
+
+
+# ---------------------------------------------------------------------------
+# D2: Budget rollup block
+# ---------------------------------------------------------------------------
+
+def test_budget_rollup_block_renders_totals_and_categories():
+    """D2: rollup shows total, cap, delta, and per-category breakdown."""
+    from sourcing_render_html import render_site_page
+    items = [
+        _make_item("A", category="plumbing_fixture"),  # 100
+        _make_item("B", category="plumbing_fixture"),  # 100
+        _make_item("C", category="lighting_fixture"),  # 100
+        _make_item("D", category="furniture"),         # 100
+    ]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[])
+    assert "budget-rollup" in html
+    # Total = $400, cap $342,000, delta = $341,600 positive
+    assert "Total budgeted:" in html
+    assert "$400" in html
+    assert "$342,000" in html
+    assert "delta-positive" in html
+    assert "$341,600" in html
+    # Per-category rows: plumbing (2), lighting (1), furniture (1)
+    assert "Plumbing" in html
+    assert "Lighting" in html
+    assert "Furniture" in html
+
+
+def test_budget_rollup_handles_null_budget_gracefully():
+    """D2: items with budget_target_usd=0 do not crash the rollup."""
+    from sourcing_render_html import render_site_page
+    item = _make_item("Z", category="hardware")
+    item.budget_target_usd = 0.0
+    meta = _make_meta()
+    html = render_site_page([item], meta, lint_findings=[])
+    assert "budget-rollup" in html
+    # Delta should be the full cap, positive
+    assert "$342,000" in html
+
+
+def test_budget_rollup_skips_empty_categories():
+    """D2: categories with zero items are skipped from the table (no empty rows)."""
+    from sourcing_render_html import render_site_page
+    items = [_make_item("A", category="plumbing_fixture")]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[])
+    # Plumbing appears; Tile / stone (no items) does not appear as a row
+    assert "Plumbing" in html
+    # Tile/Stone label only appears if the category has items in it
+    # We check the row marker — table rows are <tr><td>{label}</td>
+    assert "<td>Tile / stone</td>" not in html
+
+
+# ---------------------------------------------------------------------------
+# D3: Topnav dropdown collapse
+# ---------------------------------------------------------------------------
+
+def test_topnav_has_rooms_dropdown():
+    """D3: Rooms is a <details> dropdown, not inline links."""
+    from sourcing_render_html import _build_topnav_html
+    nav = _build_topnav_html("sourcing")
+    assert 'details class="nav-dropdown"' in nav
+    assert "<summary>Rooms</summary>" in nav
+    assert "<summary>Canon</summary>" in nav
+    # Room links should still be inside the dropdown menu
+    assert 'href="/kitchen"' in nav
+    assert 'href="/master"' in nav
+
+
+def test_topnav_marks_current_page():
+    """D3: current page link gets class='current'."""
+    from sourcing_render_html import _build_topnav_html
+    nav = _build_topnav_html("vendors")
+    assert 'href="/vendors" class="current"' in nav
+    # And the sourcing entry should NOT be current
+    assert 'href="/sourcing" class="current"' not in nav
+
+
+def test_topnav_includes_vendors_link():
+    """D3+D6: topnav exposes /vendors as a top-level link."""
+    from sourcing_render_html import _build_topnav_html
+    nav = _build_topnav_html("sourcing")
+    assert 'href="/vendors"' in nav
+
+
+# ---------------------------------------------------------------------------
+# D4: Git-history audit trail
+# ---------------------------------------------------------------------------
+
+def test_render_item_card_renders_last_changed_when_provided():
+    """D4: when last_changed_map is supplied, item cards show 'Last changed YYYY-MM-DD'."""
+    from sourcing_render_html import render_site_page
+    items = [_make_item("X1")]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[], last_changed_map={"X1": "2026-05-17"})
+    assert "Last changed 2026-05-17" in html
+
+
+def test_render_item_card_no_last_changed_when_id_missing():
+    """D4: when an id is not in the map, no last-changed line is rendered."""
+    from sourcing_render_html import render_site_page
+    items = [_make_item("X1")]
+    meta = _make_meta()
+    html = render_site_page(items, meta, lint_findings=[], last_changed_map={"OTHER": "2026-05-01"})
+    assert "Last changed" not in html
+
+
+# ---------------------------------------------------------------------------
+# D5: /for-annika decisions banner pull-up
+# ---------------------------------------------------------------------------
+
+def test_for_annika_surfaces_catalog_gaps_with_tailored_copy():
+    """D5: /for-annika top renders the decisions-needed banner with annika-variant copy."""
+    from sourcing_render_html import render_for_annika
+    items = [
+        _make_item("MB-TILE-FLOOR", catalog_status="needs_reselection"),
+        _make_item("K-PENDANTS", catalog_status="needs_reselection"),
+        _make_item("BB-VANITY", catalog_status="spec_error"),
+    ]
+    # Annika-only items in the active set
+    for it in items:
+        it.annika_loop = True
+    meta = _make_meta()
+    html = render_for_annika(items, meta)
+    assert "decisions-needed-banner" in html
+    assert "design eye" in html  # tailored copy variant
+    assert "MB-TILE-FLOOR" in html
+
+
+def test_for_annika_no_decisions_banner_when_no_flagged_items():
+    """D5: when no catalog gaps exist, /for-annika does NOT render the banner element."""
+    from sourcing_render_html import render_for_annika
+    items = [_make_item("HEALTHY")]
+    items[0].annika_loop = True
+    meta = _make_meta()
+    html = render_for_annika(items, meta)
+    assert 'class="decisions-needed-banner"' not in html
+    assert "picks need your design eye" not in html
+
+
+# ---------------------------------------------------------------------------
+# D6: /vendors page
+# ---------------------------------------------------------------------------
+
+def test_render_vendors_page_groups_by_vendor():
+    """D6: /vendors page groups items by vendor and renders per-vendor sections."""
+    from sourcing_render_html import render_vendors_page
+    from sourcing_schema import Option, Item
+    # Two West Elm items + one Article item
+    we_opt_a = Option(sku="WE-A", vendor="West Elm", price_usd=500.0, image="",
+                      reasoning="r", recommend=True)
+    we_opt_b = Option(sku="WE-B", vendor="West Elm", price_usd=300.0, image="",
+                      reasoning="r", recommend=True)
+    art_opt = Option(sku="ART-1", vendor="Article", price_usd=1000.0, image="",
+                     reasoning="r", recommend=True)
+    items = [
+        Item(id="A", title="WE item A", category="furniture", room="lr",
+             urgency="T1", lead_time_weeks=4,
+             budget_source="furniture_envelope", budget_target_usd=500.0,
+             sourcing_actor="owner_furniture", decision_status="options_drafted",
+             annika_loop=False, options=[we_opt_a]),
+        Item(id="B", title="WE item B", category="furniture", room="lr",
+             urgency="T1", lead_time_weeks=4,
+             budget_source="furniture_envelope", budget_target_usd=300.0,
+             sourcing_actor="owner_furniture", decision_status="options_drafted",
+             annika_loop=False, options=[we_opt_b]),
+        Item(id="C", title="Article item", category="furniture", room="lr",
+             urgency="T1", lead_time_weeks=4,
+             budget_source="furniture_envelope", budget_target_usd=1000.0,
+             sourcing_actor="owner_furniture", decision_status="options_drafted",
+             annika_loop=False, options=[art_opt]),
+    ]
+    meta = _make_meta()
+    html = render_vendors_page(items, meta)
+    # Both vendors are section headers
+    assert "West Elm" in html
+    assert "Article" in html
+    # Canon coherence summary present
+    assert "vendor-mix-summary" in html
+    assert "Canon brand-mix coherence" in html
+    # West Elm appears first (higher $ sum: $800 vs $1000? actually $800 < $1000)
+    # Article should appear before WE because $1000 > $800
+    art_pos = html.find('<h2>Article</h2>')
+    we_pos = html.find('<h2>West Elm</h2>')
+    assert art_pos != -1 and we_pos != -1
+    assert art_pos < we_pos
+
+
+def test_render_vendors_page_canon_coherence_warns_when_outside_band():
+    """D6: bucket >5pp outside its DESIGN_SPEC §5d band is flagged."""
+    from sourcing_render_html import render_vendors_page
+    meta = _make_meta()
+    # Zero items — every bucket is at 0%, well below any target band
+    html = render_vendors_page([], meta)
+    assert "vendor-mix-summary" in html
+    # All canon buckets should be flagged out-of-band (0% vs 35-40 etc)
+    assert "5pp outside" in html
+
+
+def test_render_vendors_page_includes_vendors_topnav_link():
+    """D6: /vendors page topnav shows Vendors marked as current."""
+    from sourcing_render_html import render_vendors_page
+    meta = _make_meta()
+    html = render_vendors_page([], meta)
+    assert 'href="/vendors" class="current"' in html
