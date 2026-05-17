@@ -2007,14 +2007,7 @@ SUPPLIERS_CSS = """
   position: relative; }
 .verif-badge.verif-ok { background: #d9ead2; color: #2a5a2a; border-color: #b9d2af; }
 .verif-badge.verif-warn { background: #fbe9df; color: #973a1c; border-color: #f0c8b3; }
-.verif-badge:hover::after {
-  content: attr(data-tooltip);
-  position: absolute; right: 0; top: 100%; margin-top: 4px; z-index: 50;
-  background: #2a2622; color: #f7f1e3; padding: 6px 10px; border-radius: 6px;
-  font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0;
-  white-space: normal; min-width: 200px; max-width: 320px; line-height: 1.4;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-}
+/* Hover tooltip now lives in the .verif-tooltip span (see R2 UX6 block below). */
 
 /* === /sourcing cross-link === */
 .sourcing-crosslink { font-size: 11.5px; border-top: 1px dashed var(--border);
@@ -2060,6 +2053,104 @@ SUPPLIERS_CSS = """
 .suppliers-filter-bar select#sort-by { background: var(--card-bg);
   border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px;
   font-size: 13px; color: var(--ink); }
+
+/* === R2 UX1: spec strip (replaces 4-pill header row) === */
+.supplier-spec-strip { display: flex; gap: 6px; align-items: center;
+  flex-wrap: wrap; margin: 2px 0 0; }
+.supplier-spec-strip .spec-price { font-size: 11.5px; color: var(--muted);
+  font-variant-numeric: tabular-nums; }
+
+/* === R2 UX1: collapsible details expander === */
+.supplier-details { margin-top: 4px; }
+.supplier-details summary { cursor: pointer; font-size: 11.5px;
+  color: var(--accent); font-weight: 600; padding: 4px 0;
+  letter-spacing: 0.3px; user-select: none;
+  border-top: 1px dashed var(--border); }
+.supplier-details summary:hover { color: var(--ink); }
+.supplier-details[open] summary { margin-bottom: 6px; }
+
+/* === R2 UX5: hero visual-class badge === */
+.supplier-hero { position: relative; }
+.hero-class-badge { position: absolute; top: 6px; right: 6px; font-size: 13px;
+  background: rgba(42, 38, 34, 0.78); color: #f7f1e3; border-radius: 999px;
+  padding: 2px 6px; line-height: 1; backdrop-filter: blur(4px);
+  cursor: help; user-select: none; }
+.hero-class-placeholder { background: rgba(138, 122, 90, 0.85); }
+
+/* === R2 UX6: verification badge :focus-visible fallback for touch/keyboard === */
+.verif-badge { position: relative; }
+.verif-badge .verif-tooltip { display: none; position: absolute; right: 0;
+  top: 100%; margin-top: 4px; z-index: 50;
+  background: #2a2622; color: #f7f1e3; padding: 6px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0;
+  white-space: normal; min-width: 200px; max-width: 320px; line-height: 1.4;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+.verif-badge:hover .verif-tooltip,
+.verif-badge:focus-visible .verif-tooltip,
+.verif-badge:focus .verif-tooltip { display: block; }
+.verif-badge:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* === R2 UX8: ruled-out default-hide toggle === */
+.suppliers-page.hide-ruled .supplier-card[data-action-state="ruled"] { display: none; }
+.suppliers-ruled-toggle { display: inline-flex; align-items: center;
+  gap: 6px; font-size: 11.5px; color: var(--muted); cursor: pointer;
+  margin-left: 4px; user-select: none; }
+.suppliers-ruled-toggle input { margin: 0; cursor: pointer; }
+
+/* === R2 UX9: active-filter pills under filter bar === */
+.active-filter-pills { display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 0 0 14px; padding: 4px 0; min-height: 24px; }
+.active-filter-pills:empty { display: none; }
+.active-filter-pill { background: var(--warm-tint);
+  border: 1px solid #e9d4a2; color: var(--ink); font-size: 11.5px;
+  padding: 3px 9px; border-radius: 999px; display: inline-flex;
+  align-items: center; gap: 4px; }
+.active-filter-pill button { background: none; border: none; color: var(--muted);
+  cursor: pointer; padding: 0 2px; font-size: 13px; line-height: 1; }
+.active-filter-pill button:hover { color: #973a1c; }
+
+/* === R2 UX1: empty-state message === */
+.suppliers-empty-state { background: var(--note-tint); border-radius: 8px;
+  padding: 24px; text-align: center; color: var(--muted); font-size: 14px;
+  margin: 20px 0; display: none; }
+.suppliers-empty-state.is-visible { display: block; }
+.suppliers-empty-state button { background: var(--accent); color: white;
+  border: none; padding: 6px 14px; border-radius: 999px; font-size: 12px;
+  font-weight: 600; cursor: pointer; margin-top: 8px; }
+
+/* === R2 UX2: Mobile media queries (≤720px) === */
+@media (max-width: 720px) {
+  /* Filter bar collapses to a Filters expander */
+  .suppliers-filter-bar { padding: 8px 0; }
+  .suppliers-filter-bar.is-collapsed > *:not(summary):not(.filter-stats) { display: none; }
+  .suppliers-filter-controls { display: flex; flex-wrap: wrap; gap: 8px;
+    width: 100%; align-items: center; }
+  .filter-bar-toggle { display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer;
+    width: 100%; justify-content: space-between; }
+  /* Single-column card grid */
+  .supplier-card-grid { grid-template-columns: 1fr; gap: 12px; }
+  /* Hero shorter on mobile */
+  .supplier-hero { height: 140px; }
+  /* Tap-targets: action selector becomes 44px tall on touch */
+  .supplier-action .action-btn { padding: 10px 6px; min-height: 44px;
+    font-size: 12px; }
+  .supplier-action { gap: 6px; }
+  .collection-chip { padding: 8px 12px; min-height: 36px;
+    display: inline-flex; align-items: center; }
+  /* Verification tooltip can't overflow viewport */
+  .verif-badge .verif-tooltip { right: auto; left: 0;
+    max-width: calc(100vw - 60px); }
+  /* Topnav already shrinks; nothing extra */
+}
+
+@media (max-width: 720px) {
+  /* Filters details expander on mobile */
+  details.mobile-filters > summary { padding: 8px 14px; cursor: pointer;
+    font-size: 13px; font-weight: 600; }
+  details.mobile-filters[open] > summary { border-bottom: 1px solid var(--border); }
+}
 """
 
 # JavaScript filter + random-pick + action persistence + URL sync + sort
@@ -2564,47 +2655,141 @@ def _supplier_tier_pill(tier: str) -> str:
     return f'<span class="supplier-pill {cls}">{escape(tier)}</span>'
 
 
+def _sanitize_brackets_for_display(text) -> str:
+    """R2 Fix UX3 — Strip/escape bracket sequences that could be interpreted as
+    Markdown link syntax or that contain operator-marker placeholders like
+    `[OWNER CONFIRM`. Browsers don't render [foo] as a link in plain HTML
+    (markdown isn't involved here) but the YAML has unbalanced opening
+    brackets (`Performance fabric upgrade per §7 [OWNER CONFIRM`) that look
+    truncated to users. We:
+      1. Replace `[OWNER CONFIRM ...` and similar in-flight operator markers
+         with an em-dash so the sentence reads naturally.
+      2. Pass everything else through unchanged (HTML escaping is applied by
+         the caller).
+    """
+    if not text:
+        return ""
+    s = str(text)
+    # Collapse "[OWNER CONFIRM ...]" or "[OWNER CONFIRM ..." (unclosed) into "".
+    # The closing bracket may be missing in source data — drop everything from
+    # the marker to either the next ']' or end of string.
+    import re as _re
+    s = _re.sub(r"\[OWNER CONFIRM[^\]]*\]?", "", s, flags=_re.IGNORECASE)
+    # Same treatment for "[OWNER" / "[OPERATOR" / "[TODO" patterns.
+    s = _re.sub(r"\[(?:OPERATOR|TODO)[^\]]*\]?", "", s, flags=_re.IGNORECASE)
+    # Tidy up double-spaces left behind.
+    s = _re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+# R2 Fix UX5 — visual-class classifier for hero images. Three classes:
+#   📷 photo: real product / PDP shot from brand CDN
+#   🏷 logo: brand-mark / logo banner
+#   📋 placeholder: text-on-color generated fallback
+_LOGO_FILENAME_HINTS = ("logo", "wordmark", "branding", "_logo", "-logo", "_brand")
+
+
+def _hero_visual_class(sup: dict) -> str:
+    """Return one of 'photo', 'logo', 'placeholder' based on hero_image_source_url
+    and filename heuristics.
+    """
+    source_url = (sup.get("hero_image_source_url") or "").lower()
+    hero_path = (sup.get("hero_image") or "").lower()
+    # Explicit source-source tag from yaml takes precedence.
+    explicit = (sup.get("hero_image_source") or "").lower()
+    if explicit == "text_placeholder":
+        return "placeholder"
+    if explicit in ("real_brand_cdn", "brand_pdp"):
+        # Still could be a logo banner — check filename for logo hints.
+        if any(h in source_url for h in _LOGO_FILENAME_HINTS) or any(
+            h in hero_path for h in _LOGO_FILENAME_HINTS
+        ):
+            return "logo"
+        return "photo"
+    # No explicit tag — infer.
+    if not hero_path:
+        return "placeholder"
+    if any(h in source_url for h in _LOGO_FILENAME_HINTS) or any(
+        h in hero_path for h in _LOGO_FILENAME_HINTS
+    ):
+        return "logo"
+    if source_url:
+        return "photo"
+    return "placeholder"
+
+
+def _hero_visual_badge_html(cls: str) -> str:
+    """Small corner badge announcing what kind of image the hero is."""
+    if cls == "photo":
+        return (
+            '<span class="hero-class-badge hero-class-photo" '
+            'title="Product photo from brand CDN" aria-label="Product photo">'
+            "&#128247;</span>"
+        )
+    if cls == "logo":
+        return (
+            '<span class="hero-class-badge hero-class-logo" '
+            'title="Brand logo / banner" aria-label="Brand logo">'
+            "&#127991;</span>"
+        )
+    return (
+        '<span class="hero-class-badge hero-class-placeholder" '
+        'title="Text placeholder — no real product image" '
+        'aria-label="Placeholder image">&#128203;</span>'
+    )
+
+
 def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = None,
                             verification_date: str = "") -> str:
-    """Render a single supplier card with all rich detail (style fingerprint,
-    fit pill, price ranges, collections, sample/lead-time footer).
+    """Render a single supplier card with all rich detail.
 
-    Enhancements (2026-05-17):
-      - hero image (with disk-existence + soft-tinted text fallback)
-      - verification badge (top-right)
-      - /sourcing cross-link footer
-      - tri-state action selector (Visit / Saved / Ruled out)
+    R2 layout (post-UX1 refactor):
+      Default state (closed):
+        - hero image with visual-class badge
+        - compact spec strip: name + verif badge | tier + fit + price-range
+        - 1-sentence style fingerprint
+        - Explore button + tri-state action selector
+      Expanded state (<details open>):
+        - full fit_for_project justification
+        - off-canon warning
+        - collection chips
+        - lead time + sample policy
+        - notes
+        - /sourcing cross-link
+
+    Drops default density from ~14 elements to ~5; click-to-expand keeps the
+    full detail available without a wall of text per card.
     """
     sid = sup.get("id", "")
     name = escape(sup.get("name", ""))
-    # R2 Fix C1 — scheme-sanitize external URL before HTML-escaping. A
-    # `javascript:` value from the YAML would have rendered as a clickable
-    # link otherwise.
+    # R2 Fix C1 — scheme-sanitize external URL before HTML-escaping.
     url = escape(_safe_href(sup.get("url", "")))
     tier = sup.get("price_tier", "mid")
     fit = sup.get("fit", "GOOD")
-    fingerprint = escape(sup.get("style_fingerprint", ""))
-    fit_text = escape(sup.get("fit_for_project", ""))
-    warn = sup.get("off_canon_warning")
+    # R2 Fix UX3 — sanitize bracket-truncation in source data (e.g. WE Notes
+    # ending in "[OWNER CONFIRM" with no closing bracket).
+    fingerprint = escape(_sanitize_brackets_for_display(sup.get("style_fingerprint", "")))
+    fit_text = escape(_sanitize_brackets_for_display(sup.get("fit_for_project", "")))
+    warn_raw = _sanitize_brackets_for_display(sup.get("off_canon_warning"))
     sample_policy = sup.get("sample_policy")
     lead_time = sup.get("lead_time_typical")
-    notes = sup.get("notes")
+    # R2 Fix UX4 — `operator_notes` is operator-internal and must NEVER render.
+    # The schema's load_supplier_directory() already strips it, but defend
+    # against direct-dict callers (tests) too.
+    notes_raw = _sanitize_brackets_for_display(sup.get("notes"))
     hero_image = sup.get("hero_image") or ""
     url_verified = bool(sup.get("url_verified"))
     url_status = sup.get("url_status")
     price_validation = sup.get("price_validation") or []
     sourcing_match_ids = sourcing_match_ids or []
 
-    # Collection chips
+    # Collection chips (rendered inside expander)
     cols = sup.get("collections_to_browse") or []
     chips_html = ""
     if cols:
         chips = []
         for c in cols[:6]:
-            cname = escape(c.get("name", ""))
-            # R2 Fix C1 — sanitize per-collection URL too. Note: `url` is
-            # already the safe-rendered supplier URL (or "#"), so falling
-            # back to it is safe.
+            cname = escape(_sanitize_brackets_for_display(c.get("name", "")))
             raw_curl = c.get("url") if isinstance(c, dict) else None
             curl = escape(_safe_href(raw_curl)) if raw_curl else url
             chips.append(
@@ -2612,20 +2797,28 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
             )
         chips_html = f'<div class="collections">{"".join(chips)}</div>'
 
-    # Price-range block (formatted compact)
+    # Price-range block — compact single line in the spec strip + fuller version
+    # in the expander.
     pr = sup.get("price_range_typical") or {}
-    pr_lines = []
-    for k, v in pr.items():
-        label = k.replace("_", " ")
-        pr_lines.append(f"{escape(label)}: ${escape(str(v))}")
-    pr_html = ""
-    if pr_lines:
-        pr_html = (
+    pr_compact = ""
+    pr_full_html = ""
+    if pr:
+        # Compact: just the lowest / highest range observed for the spec strip.
+        try:
+            pr_compact = next(iter(pr.values()))
+            pr_compact = f"${escape(str(pr_compact))}"
+        except StopIteration:
+            pr_compact = ""
+        pr_lines = []
+        for k, v in pr.items():
+            label = k.replace("_", " ")
+            pr_lines.append(f"{escape(label)}: ${escape(str(v))}")
+        pr_full_html = (
             f'<div class="footer-line"><strong>Price</strong>'
             f'{escape(" · ".join(pr_lines))}</div>'
-        )
+        ) if pr_lines else ""
 
-    # Lead / sample footer
+    # Lead / sample footer (expander only)
     lead_sample_parts = []
     if lead_time:
         lead_sample_parts.append(f"<strong>Lead</strong>{escape(str(lead_time))}")
@@ -2638,14 +2831,19 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         )
 
     warn_html = ""
-    if warn:
-        warn_html = f'<div class="warning-line">&#9888; {escape(str(warn))}</div>'
+    if warn_raw:
+        warn_html = f'<div class="warning-line">&#9888; {escape(warn_raw)}</div>'
 
     notes_html = ""
-    if notes:
-        notes_html = f'<div class="footer-line"><strong>Notes</strong>{escape(str(notes))}</div>'
+    if notes_raw:
+        notes_html = f'<div class="footer-line"><strong>Notes</strong>{escape(notes_raw)}</div>'
 
-    # Build the searchable haystack for client-side filter (lowercased)
+    fit_line_html = (
+        f'<p class="fit-line">{fit_text}</p>'
+        if fit_text else ""
+    )
+
+    # Searchable haystack
     haystack_bits = [
         sup.get("name", ""),
         sup.get("style_fingerprint", ""),
@@ -2654,69 +2852,77 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         sup.get("notes") or "",
     ]
     for c in cols:
-        haystack_bits.append(c.get("name", ""))
+        haystack_bits.append(c.get("name", "") if isinstance(c, dict) else "")
     haystack = " ".join(haystack_bits).lower()
     haystack_attr = escape(haystack)
 
-    # Hero image with disk-existence check + fallback. hero_image path is
-    # site-relative (e.g. "/images/suppliers/<id>.jpg"); existence checked on
-    # SITE_DIR-rooted path.
+    # Hero with visual-class badge
+    visual_cls = _hero_visual_class(sup)
+    visual_badge_html = _hero_visual_badge_html(visual_cls)
     hero_html = ""
     if hero_image:
-        # Strip leading slash for filesystem lookup
         rel = hero_image.lstrip("/")
         disk_path = SITE_DIR / rel
         if disk_path.exists():
             hero_html = (
-                f'<div class="supplier-hero">'
+                f'<div class="supplier-hero" data-hero-class="{visual_cls}">'
                 f'<img src="{escape(hero_image)}" alt="{name}" loading="lazy">'
+                f'{visual_badge_html}'
                 f'</div>'
             )
     if not hero_html:
-        # Soft tinted placeholder with supplier name centered in serif font.
         hero_html = (
-            f'<div class="supplier-hero supplier-hero-placeholder">'
+            f'<div class="supplier-hero supplier-hero-placeholder" data-hero-class="placeholder">'
             f'<span>{name}</span>'
+            f'{_hero_visual_badge_html("placeholder")}'
             f'</div>'
         )
 
-    # Verification badge
+    # Verification badge — R2 Fix UX6: focus-visible + role + tabindex + aria-describedby
+    # so touch / keyboard users can read the tooltip.
+    tooltip_id = f"verif-tip-{escape(sid) or 'x'}"
     if url_verified:
         verif_label = f"&#10003; Verified {escape(verification_date or '2026-05-17')}"
         verif_cls = "verif-ok"
-        verif_tip = f"URL status: {escape(str(url_status))} · {len(price_validation)} price probe(s) · verified {escape(verification_date or '2026-05-17')}"
+        verif_tip = (
+            f"URL status: {escape(str(url_status))} · "
+            f"{len(price_validation)} price probe(s) · "
+            f"verified {escape(verification_date or '2026-05-17')}"
+        )
     else:
         verif_label = "&#9888; Unverified"
         verif_cls = "verif-warn"
         verif_tip = "URL not verified in last pass"
     verif_html = (
         f'<button type="button" class="verif-badge {verif_cls}" '
-        f'aria-label="Verification status" '
-        f'data-tooltip="{verif_tip}">{verif_label}</button>'
+        f'role="button" tabindex="0" '
+        f'aria-label="Verification status: {verif_tip}" '
+        f'aria-describedby="{tooltip_id}" '
+        f'data-tooltip="{verif_tip}">{verif_label}'
+        f'<span role="tooltip" id="{tooltip_id}" class="verif-tooltip">{verif_tip}</span>'
+        f'</button>'
     )
 
-    # /sourcing cross-link footer
+    # /sourcing cross-link (in expander) — keep the count headline, drop the
+    # raw-id token dump that Claude flagged as zero-signal.
     if sourcing_match_ids:
         match_count = len(sourcing_match_ids)
-        preview = ", ".join(sourcing_match_ids[:6])
-        if match_count > 6:
-            preview += f", +{match_count - 6} more"
         cross_html = (
             f'<div class="sourcing-crosslink has-matches">'
             f'<a href="/sourcing?vendor={escape(sid)}" class="crosslink-line">'
             f'&#128230; Tracked in /sourcing: <strong>{match_count}</strong> '
-            f'item{"s" if match_count != 1 else ""} &mdash; '
-            f'<span class="crosslink-ids">{escape(preview)}</span>'
+            f'item{"s" if match_count != 1 else ""} &rarr;'
             f'</a></div>'
         )
     else:
         cross_html = (
             f'<div class="sourcing-crosslink no-matches">'
-            f'&#128235; Not yet tracked &mdash; explore the supplier and add picks via /sourcing'
+            f'&#128235; Not yet tracked'
             f'</div>'
         )
 
-    # Tri-state action selector. State is persisted in localStorage by JS via supplier id.
+    # Tri-state action selector — moved inside expander (lower visual weight per
+    # UX1: Explore button is the primary CTA, tri-state is secondary triage).
     action_html = (
         f'<div class="supplier-action" role="radiogroup" aria-label="Action for {name}">'
         f'<button type="button" class="action-btn action-visit" data-action="visit" '
@@ -2728,23 +2934,45 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         f'</div>'
     )
 
+    # Compact spec strip — single horizontal row of identity signals beneath the hero.
+    pr_compact_html = (
+        f'<span class="spec-price">{pr_compact}</span>' if pr_compact else ""
+    )
+    spec_strip_html = (
+        f'<div class="supplier-card-header">'
+        f'<h3>{name}</h3>'
+        f'{verif_html}'
+        f'</div>'
+        f'<div class="supplier-spec-strip">'
+        f'{_supplier_tier_pill(tier)}'
+        f'{_supplier_fit_pill(fit)}'
+        f'{pr_compact_html}'
+        f'</div>'
+    )
+
+    # Expander body — everything else
+    expander_inner = "".join([
+        fit_line_html,
+        warn_html,
+        chips_html,
+        pr_full_html,
+        lead_sample_html,
+        notes_html,
+        cross_html,
+        action_html,
+    ])
+    expander_html = (
+        '<details class="supplier-details">'
+        '<summary>Details &amp; collections</summary>'
+        f'{expander_inner}'
+        '</details>'
+    ) if expander_inner else ""
+
     return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category", ""))}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
   {hero_html}
-  <div class="supplier-card-header">
-    <h3>{name}</h3>
-    {_supplier_tier_pill(tier)}
-    {_supplier_fit_pill(fit)}
-    {verif_html}
-  </div>
+  {spec_strip_html}
   <p class="fingerprint">{fingerprint}</p>
-  <p class="fit-line"><strong>Fit:</strong> {fit_text}</p>
-  {warn_html}
-  {chips_html}
-  {pr_html}
-  {lead_sample_html}
-  {notes_html}
-  {cross_html}
-  {action_html}
+  {expander_html}
   <a class="explore-btn" href="{url}" target="_blank" rel="noopener">Explore {name} &rarr;</a>
 </article>'''
 

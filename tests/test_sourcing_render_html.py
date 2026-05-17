@@ -1461,6 +1461,211 @@ def test_load_supplier_directory_fails_loud_on_bad_row(tmp_path):
         load_supplier_directory(str(p))
 
 
+# ---------------------------------------------------------------------------
+# R2 Fix UX1 — Card density compression (hero + spec strip + <details>)
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_uses_details_expander():
+    """R2 card layout puts heavy detail (warnings, collections, lead/sample, notes,
+    crosslink, action selector) inside a <details> expander so the default state
+    shows ~5 elements not ~14."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "Brass + opal glass.",
+            "fit_for_project": "STRONG — canon anchor.",
+            "off_canon_warning": "skip glam-modern sub-line",
+            "lead_time_typical": "4 wk",
+            "sample_policy": "free",
+            "notes": "test notes",
+            "collections_to_browse": [{"name": "Spec collection", "url": "https://example.com/c"}],
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "<details" in html
+    assert "<summary>Details" in html
+    # Heavy details inside the expander
+    assert "skip glam-modern" in html
+    assert "Spec collection" in html
+    assert "test notes" in html
+    # Spec strip present
+    assert "supplier-spec-strip" in html
+
+
+def test_render_suppliers_page_compact_spec_strip_has_tier_fit_price():
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "premium", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "price_range_typical": {"sconce": "180-450"},
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "tier-premium" in html
+    assert "fit-strong" in html
+    # Compact price snippet shows the first range value.
+    assert "$180-450" in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix UX3 — Bracket-truncation sanitization
+# ---------------------------------------------------------------------------
+
+
+def test_sanitize_brackets_removes_owner_confirm_truncation():
+    """[OWNER CONFIRM ... ] markers must NOT survive into rendered HTML —
+    West Elm's notes ended in '[OWNER CONFIRM' with no closing bracket,
+    leaving the visible Notes truncated mid-sentence."""
+    from sourcing_render_html import _sanitize_brackets_for_display
+    # Truncated (unclosed)
+    s = "Performance fabric upgrade per §7 [OWNER CONFIRM"
+    out = _sanitize_brackets_for_display(s)
+    assert "[OWNER CONFIRM" not in out
+    assert "Performance fabric upgrade per §7" in out
+    # Properly bracketed
+    s2 = "Performance per §7 [OWNER CONFIRM #3] details follow"
+    out2 = _sanitize_brackets_for_display(s2)
+    assert "[OWNER CONFIRM" not in out2
+    assert "details follow" in out2
+    # Empty/None safety
+    assert _sanitize_brackets_for_display("") == ""
+    assert _sanitize_brackets_for_display(None) == ""
+
+
+def test_render_suppliers_page_strips_owner_confirm_from_notes():
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "notes": "Performance per §7 [OWNER CONFIRM #3] more after",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "[OWNER CONFIRM" not in html
+    assert "more after" in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix UX4 — operator_notes never rendered
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_never_emits_operator_notes():
+    """operator_notes is operator-internal; the renderer must NOT include it in
+    the user-facing HTML even when passed directly via the dict (bypassing
+    load_supplier_directory)."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "operator_notes": "INTERNAL SECRET STRING DO NOT LEAK",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "INTERNAL SECRET STRING" not in html
+    assert "operator_notes" not in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix UX5 — Hero visual-class badge
+# ---------------------------------------------------------------------------
+
+
+def test_hero_visual_class_explicit_text_placeholder():
+    from sourcing_render_html import _hero_visual_class
+    sup = {"hero_image_source": "text_placeholder", "hero_image": "/x.jpg"}
+    assert _hero_visual_class(sup) == "placeholder"
+
+
+def test_hero_visual_class_logo_from_filename():
+    from sourcing_render_html import _hero_visual_class
+    sup = {
+        "hero_image": "/images/suppliers/foo-logo.jpg",
+        "hero_image_source_url": "https://cdn.example.com/SC_LOGO_BLK_1200X628.jpg",
+    }
+    assert _hero_visual_class(sup) == "logo"
+
+
+def test_hero_visual_class_photo_from_brand_cdn():
+    from sourcing_render_html import _hero_visual_class
+    sup = {
+        "hero_image": "/images/suppliers/west-elm-seating.jpg",
+        "hero_image_source_url": "https://assets.weimgs.com/products/andes.jpg",
+    }
+    assert _hero_visual_class(sup) == "photo"
+
+
+def test_hero_visual_class_placeholder_when_no_image():
+    from sourcing_render_html import _hero_visual_class
+    assert _hero_visual_class({}) == "placeholder"
+
+
+def test_render_suppliers_page_emits_hero_visual_badge():
+    """Cards emit a hero-class-badge classifying the hero as photo/logo/placeholder."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert "hero-class-badge" in html
+    assert 'data-hero-class="placeholder"' in html
+
+
+# ---------------------------------------------------------------------------
+# R2 Fix UX6 — Verification badge :focus fallback + ARIA
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_verif_badge_has_aria_describedby():
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"last_verification_pass": "2026-05-17"},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert 'aria-describedby="verif-tip-x"' in html
+    assert 'id="verif-tip-x"' in html
+    assert 'role="tooltip"' in html
+    assert 'role="button"' in html
+    assert 'tabindex="0"' in html
+
+
 def test_load_supplier_directory_strips_operator_notes_from_output(tmp_path):
     """operator_notes must NOT be passed through to the renderer's data dict."""
     from sourcing_schema import load_supplier_directory
