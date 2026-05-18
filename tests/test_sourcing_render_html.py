@@ -3266,3 +3266,43 @@ def test_build_pages_wrapped_table_cascade_rule_present():
     assert "display: table" in SHARED_CSS
     assert "white-space: normal" in SHARED_CSS
 
+
+# === R4-7: test fixtures for R3-C1 (build_spec table reset) + R3-C2
+# (4 static-page topnav cascade parity). Closes the Codex R3-audit
+# residual that flagged no direct coverage for either fix. ===
+
+SITE_DIR = Path(__file__).resolve().parent.parent
+
+
+def test_build_spec_table_reset_has_full_cascade():
+    """R3-C1: build_spec.py table-wrapper > table reset must contain all 4
+    properties (display: table, white-space: normal, overflow-x: visible,
+    max-width: none). Closes the Codex R3 residual that the reset could
+    silently drop a property in a future refactor."""
+    import re
+    src = (SITE_DIR / "build_spec.py").read_text()
+    # The rule lives inside an f-string so braces are doubled. The regex
+    # matches `.table-wrapper > table {` (the leading `{` may be `{` or
+    # the first `{` of `{{`) and captures everything up to the next `}`.
+    block_match = re.search(r"\.table-wrapper\s*>\s*table\s*\{([^}]+)\}", src)
+    assert block_match, "build_spec.py is missing the .table-wrapper > table reset"
+    block = block_match.group(1)
+    assert "display: table" in block, "build_spec.py reset missing display: table"
+    assert "white-space: normal" in block, "build_spec.py reset missing white-space: normal"
+    assert "overflow-x: visible" in block, "build_spec.py reset missing overflow-x: visible"
+    assert "max-width: none" in block, "build_spec.py reset missing max-width: none"
+
+
+def test_static_pages_have_full_topnav_cascade():
+    """R3-C2: the 4 hand-written static pages (index, mood-board, spectrum,
+    decisions) must carry the same topnav cascade as the renderer output:
+    .topnav-scroller wrapper, .nav-dropdown-menu base styles, and the mobile
+    position: fixed dropdown escape. Pre-R3 these forked from the renderer."""
+    for page in ["index.html", "mood-board.html", "spectrum.html", "decisions.html"]:
+        html = (SITE_DIR / page).read_text()
+        assert "topnav-scroller" in html, f"{page} missing topnav-scroller wrapper"
+        assert "nav-dropdown-menu" in html, f"{page} missing dropdown-menu CSS class"
+        # Mobile fixed-position rule for the dropdown menu (escapes the
+        # horizontal-scroll clip on phones).
+        assert "position: fixed" in html, f"{page} missing mobile dropdown fixed-position"
+
