@@ -2106,8 +2106,15 @@ SUPPLIERS_CSS = """
 .category-section { margin: 0 0 36px; scroll-margin-top: 110px; }
 .category-section-header { display: flex; align-items: baseline; gap: 14px;
   padding: 0 0 8px; border-bottom: 1px solid var(--border); margin: 0 0 16px; }
-.category-section-header h2 { margin: 0; font-size: 22px; font-weight: 600;
-  letter-spacing: -0.2px; flex: 1; }
+/* R5-UX2: Single Japandi serif moment — category h2 only. Other headings
+ * stay sans, body stays sans. The lone serif anchors visual hierarchy
+ * per DESIGN_SPEC §4 principle 1 (restraint). DM Serif Display is loaded
+ * as a CDN-free fallback chain; Georgia is the safe Japandi-warm fallback
+ * so we don't ship a webfont request. */
+.category-section-header h2 { margin: 0; font-size: 24px; font-weight: 400;
+  letter-spacing: -0.3px; flex: 1;
+  font-family: "DM Serif Display", "Cormorant Garamond", "Playfair Display",
+    Georgia, "Times New Roman", serif; }
 .category-section-header .cat-count { font-size: 12px; color: var(--muted);
   font-variant-numeric: tabular-nums; }
 
@@ -2127,19 +2134,33 @@ SUPPLIERS_CSS = """
   border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;
   font-weight: 700; white-space: nowrap; }
 .supplier-pill.tier-entry { background: #e8efe2; color: #3a5a3a; }
-.supplier-pill.tier-mid { background: #dde6f0; color: #2f4870; }
+/* R5-UX1: tier-mid swapped from cool-blue #dde6f0 → warm-sand #ebe5d8 to
+ * eliminate the only cool tone in an otherwise warm Japandi palette. */
+.supplier-pill.tier-mid { background: #ebe5d8; color: #5a4e30; }
 .supplier-pill.tier-premium { background: #f7e6cb; color: #8a5a10; }
 .supplier-pill.tier-aspirational { background: #f8e6df; color: #973a1c; }
 .supplier-pill.fit-strong { background: #d9ead2; color: #2a5a2a; }
 .supplier-pill.fit-good { background: #e8efe2; color: #3a5a3a; }
 .supplier-pill.fit-mixed { background: #fef0d6; color: #6e4f1a; }
 .supplier-pill.fit-canon-adjacent { background: #ece8f4; color: #4a4566; }
+/* R5-UX5: merged tier·fit pill. Keeps the fit pill's load-bearing color,
+ * adds a quieter prefix carrying the tier label. Drops spec-strip element
+ * count 6 → 5 to satisfy DESIGN_SPEC §4 principle 1 (5-7 elements). */
+.supplier-pill.supplier-pill-merged { padding: 2px 10px; }
+.supplier-pill.supplier-pill-merged .merged-tier { font-weight: 600;
+  opacity: 0.65; text-transform: none; letter-spacing: 0; font-size: 9.5px; }
+.supplier-pill.supplier-pill-merged .merged-sep { opacity: 0.45;
+  margin: 0 2px; font-weight: 400; }
+.supplier-pill.supplier-pill-merged .merged-fit { font-weight: 700; }
 .supplier-card .fingerprint { font-size: 13px; color: var(--ink); line-height: 1.5;
   margin: 0; }
 .supplier-card .fit-line { font-size: 12px; color: var(--muted); line-height: 1.45; }
 .supplier-card .fit-line strong { color: var(--ink); }
-.supplier-card .warning-line { font-size: 12px; color: #973a1c;
-  background: #fbe9df; border-radius: 5px; padding: 5px 8px; line-height: 1.45; }
+/* R5-UX1: warning-line darkened from #f8e6df/#fbe9df → #f0d6c0 to
+ * differentiate from aspirational pill (same family, deeper saturation
+ * signals "needs attention"). */
+.supplier-card .warning-line { font-size: 12px; color: #7a3010;
+  background: #f0d6c0; border-radius: 5px; padding: 5px 8px; line-height: 1.45; }
 .supplier-card .collections { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0; }
 .supplier-card .collection-chip { font-size: 11.5px; padding: 3px 9px;
   border-radius: 999px; background: var(--warm-tint); color: var(--ink);
@@ -2174,7 +2195,10 @@ SUPPLIERS_CSS = """
   text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; font-family: inherit;
   position: relative; }
 .verif-badge.verif-ok { background: #d9ead2; color: #2a5a2a; border-color: #b9d2af; }
-.verif-badge.verif-warn { background: #fbe9df; color: #973a1c; border-color: #f0c8b3; }
+/* R5-UX1: verif-warn shifted from peach (#fbe9df) → muted cream (#f4ebd0)
+ * to differentiate from aspirational pill + warning-line. A subtler tone
+ * matches the badge's advisory role (URL un-verified, not "AVOID"). */
+.verif-badge.verif-warn { background: #f4ebd0; color: #6e4f1a; border-color: #e2d5a8; }
 /* Hover tooltip now lives in the .verif-tooltip span (see R2 UX6 block below). */
 
 /* === /sourcing cross-link === */
@@ -2194,14 +2218,17 @@ SUPPLIERS_CSS = """
   color: var(--muted); cursor: pointer; font-family: inherit;
   transition: background .12s, color .12s, border-color .12s; }
 .supplier-action .action-btn:hover { background: var(--warm-tint); }
-.supplier-action .action-btn.active.action-visit { background: #dde6f0; color: #2f4870;
-  border-color: #9ab6d3; }
+/* R5-UX1: action-visit shifted from cool-blue #dde6f0 → warm dusty
+ * terracotta to (a) eliminate the last cool tone in the palette and
+ * (b) distinguish from tier-mid (now warm-sand). */
+.supplier-action .action-btn.active.action-visit { background: #ead6c2; color: #6a3f1a;
+  border-color: #c8a279; }
 .supplier-action .action-btn.active.action-saved { background: #d9ead2; color: #2a5a2a;
   border-color: #aac9a0; }
 .supplier-action .action-btn.active.action-ruled { background: #ececec; color: #555;
   border-color: #c5c5c5; }
 /* Card border-color shift based on action state */
-.supplier-card[data-action-state="visit"] { border-color: #9ab6d3; box-shadow: 0 0 0 1px rgba(154, 182, 211, 0.3); }
+.supplier-card[data-action-state="visit"] { border-color: #c8a279; box-shadow: 0 0 0 1px rgba(200, 162, 121, 0.3); }
 .supplier-card[data-action-state="saved"] { border-color: #aac9a0; box-shadow: 0 0 0 1px rgba(170, 201, 160, 0.3); }
 .supplier-card[data-action-state="ruled"] { border-color: #c5c5c5; opacity: 0.55; }
 
@@ -3150,6 +3177,43 @@ def _supplier_tier_pill(tier: str) -> str:
     return f'<span class="supplier-pill {cls}">{escape(tier)}</span>'
 
 
+# Fit-pill mapping, hoisted so the merged tier·fit pill (R5-UX5) can reuse it.
+_FIT_PILL_CLASS_MAP = {
+    "STRONG": "fit-strong",
+    "GOOD": "fit-good",
+    "MIXED": "fit-mixed",
+    "CANON-ADJACENT": "fit-canon-adjacent",
+}
+
+
+def _supplier_tier_fit_merged_pill(tier: str, fit: str) -> str:
+    """R5-UX5 — spec-strip consolidation: render tier and fit as a single
+    merged pill ("Mid . STRONG") instead of two separate pills.
+
+    DESIGN_SPEC section 4 principle 1 caps visible elements at 5-7 per
+    surface. The R3 spec strip showed 6 elements (name + verif-badge +
+    tier-pill + fit-pill + price-range + hero-badge). Merging tier and fit
+    into one pill drops the visible-element count to 5 — comfortably inside
+    the envelope and giving each remaining signal more breathing room.
+
+    Visual treatment: the merged pill keeps the FIT background/foreground
+    (the load-bearing canon signal) and embeds the tier as a quieter prefix.
+    Operators can still scan tier via the first token; the fit pill's color
+    code (green/cream/lavender) remains unchanged.
+    """
+    fit_cls = _FIT_PILL_CLASS_MAP.get(fit, "fit-mixed")
+    tier_label = escape((tier or "mid").capitalize())
+    fit_label = escape(fit or "MIXED")
+    return (
+        f'<span class="supplier-pill supplier-pill-merged {fit_cls}" '
+        f'data-tier="{escape(tier or "mid")}" data-fit="{escape(fit or "MIXED")}">'
+        f'<span class="merged-tier">{tier_label}</span>'
+        f'<span class="merged-sep" aria-hidden="true"> &middot; </span>'
+        f'<span class="merged-fit">{fit_label}</span>'
+        f'</span>'
+    )
+
+
 _FIT_PREFIX_RE = None
 
 
@@ -3267,6 +3331,34 @@ def _safe_hero_image_path(hero_path):
     except ValueError:
         return None
     return site_rel
+
+
+# R5 Fix I2 — supplier hero <img> tags previously emitted only src/alt/loading,
+# so the browser reserved 0x0 until the image loaded — CLS on slow connections.
+# Reading the real on-disk dimensions via PIL at build time gives the browser
+# the correct aspect ratio for layout reservation. The CSS still controls the
+# rendered size (.supplier-hero img { width:100%; height:100%; object-fit:cover }),
+# so the intrinsic attrs only feed the aspect-ratio reservation.
+_HERO_FALLBACK_W = 400
+_HERO_FALLBACK_H = 240
+
+
+def _hero_image_dimensions(disk_path):
+    """Return (width, height) of the on-disk image, or fallback dimensions if
+    PIL is unavailable or the file can't be read. Best-effort: never raises.
+    """
+    try:
+        from PIL import Image  # type: ignore
+    except ImportError:
+        return (_HERO_FALLBACK_W, _HERO_FALLBACK_H)
+    try:
+        with Image.open(disk_path) as im:
+            w, h = im.size
+            if w > 0 and h > 0:
+                return (int(w), int(h))
+    except Exception:
+        pass
+    return (_HERO_FALLBACK_W, _HERO_FALLBACK_H)
 
 
 def _is_real_image_on_disk(hero_path: str) -> bool:
@@ -3558,9 +3650,14 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
                 # Render the canonical site-relative path with a leading slash
                 # (matches existing yaml convention `/images/suppliers/...`).
                 hero_src = "/" + safe_rel
+                # R5 Fix I2 — intrinsic width/height let the browser reserve
+                # aspect-ratio-correct space before the image loads, avoiding
+                # CLS on slow connections. CSS still drives the rendered size.
+                hero_w, hero_h = _hero_image_dimensions(disk_path)
                 hero_html = (
                     f'<div class="supplier-hero" data-hero-class="{visual_cls}">'
-                    f'<img src="{escape(hero_src)}" alt="{name}" loading="lazy">'
+                    f'<img src="{escape(hero_src)}" alt="{name}" '
+                    f'width="{hero_w}" height="{hero_h}" loading="lazy">'
                     f'{visual_badge_html}'
                     f'</div>'
                 )
@@ -3623,10 +3720,14 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     # R3 Fix UX6 — `role="radio"` + `aria-checked="false"` on each button so
     # the `role="radiogroup"` container is no longer a lie. JS handler in
     # SUPPLIERS_JS wires arrow-key navigation + updates aria-checked.
+    # R5 Fix I4 — the FIRST radio in each card gets `tabindex="0"` server-side
+    # so keyboard users tabbing through the page before JS loads can still
+    # enter the radiogroup. JS reapplies the roving tabindex on load
+    # (applyActionToCard), so any previously-saved state still wins.
     action_html = (
         f'<div class="supplier-action" role="radiogroup" aria-label="Action for {name}">'
         f'<button type="button" class="action-btn action-visit" data-action="visit" '
-        f'role="radio" aria-checked="false" tabindex="-1" '
+        f'role="radio" aria-checked="false" tabindex="0" '
         f'aria-label="Mark to visit">&#128270; Visit</button>'
         f'<button type="button" class="action-btn action-saved" data-action="saved" '
         f'role="radio" aria-checked="false" tabindex="-1" '
@@ -3641,14 +3742,16 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     pr_compact_html = (
         f'<span class="spec-price">{pr_compact}</span>' if pr_compact else ""
     )
+    # R5-UX5 — spec strip consolidation: tier + fit collapsed into a single
+    # merged pill ("Mid · STRONG") so the visible-element count drops from 6
+    # to 5, satisfying DESIGN_SPEC §4 principle 1 (5-7 elements per surface).
     spec_strip_html = (
         f'<div class="supplier-card-header">'
         f'<h3>{name}</h3>'
         f'{verif_html}'
         f'</div>'
         f'<div class="supplier-spec-strip">'
-        f'{_supplier_tier_pill(tier)}'
-        f'{_supplier_fit_pill(fit)}'
+        f'{_supplier_tier_fit_merged_pill(tier, fit)}'
         f'{pr_compact_html}'
         f'</div>'
     )
@@ -3663,9 +3766,13 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         notes_html,
         cross_html,
     ])
+    # R5 Fix I3 — every supplier card previously used the same
+    # "Details & collections" summary text, so screen readers couldn't
+    # distinguish 126 identical-looking expanders. Make the summary
+    # supplier-specific by prefixing the name.
     expander_html = (
         '<details class="supplier-details">'
-        '<summary>Details &amp; collections</summary>'
+        f'<summary>{name} &mdash; details &amp; collections</summary>'
         f'{expander_inner}'
         '</details>'
     ) if expander_inner else ""

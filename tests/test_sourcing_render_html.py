@@ -1492,7 +1492,8 @@ def test_render_suppliers_page_uses_details_expander():
     }
     html = render_suppliers_page(fixture)
     assert "<details" in html
-    assert "<summary>Details" in html
+    # R5 Fix I3 — summary is now supplier-specific (prefixed with name).
+    assert "<summary>X &mdash; details" in html
     # Heavy details inside the expander
     assert "skip glam-modern" in html
     assert "Spec collection" in html
@@ -2352,8 +2353,15 @@ def test_supplier_action_buttons_have_radio_role_and_aria_checked():
     # 3 action buttons, each with role="radio" + aria-checked="false".
     assert card_html.count('role="radio"') == 3
     assert card_html.count('aria-checked="false"') == 3
-    # tabindex="-1" on each (roving tabindex pattern; JS bumps the active one).
-    assert card_html.count('tabindex="-1"') == 3
+    # R5 Fix I4 — within the supplier-action radiogroup, the FIRST radio is the
+    # keyboard entry point (tabindex="0"); the other two stay at tabindex="-1"
+    # until the roving handler in SUPPLIERS_JS picks them.
+    import re as _re
+    action_block = _re.search(
+        r'<div class="supplier-action".*?</div>', card_html, _re.DOTALL,
+    ).group(0)
+    assert action_block.count('tabindex="0"') == 1
+    assert action_block.count('tabindex="-1"') == 2
 
 
 def test_suppliers_js_wires_arrow_key_navigation():
@@ -2722,3 +2730,149 @@ def test_lint_no_drift_when_redirect_url_matches_recommended(tmp_path, monkeypat
     )
     findings = check_supplier_directory_url_freshness([], None)
     assert findings == []
+
+
+# ---------------------------------------------------------------------------
+# R5 Fix I2 — supplier hero <img> emits intrinsic width/height for CLS-free
+# layout reservation.
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_hero_img_has_intrinsic_dimensions():
+    """R5 Fix I2 — every emitted hero <img> must carry width/height attributes."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {"generated": "2026-05-17", "last_verification_pass": "2026-05-17"},
+        "categories": [{"id": "furniture-seating", "label": "Seating"}],
+        "suppliers": [{
+            "id": "west-elm-seating",
+            "category": "furniture-seating",
+            "name": "West Elm",
+            "url": "https://www.westelm.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+            "hero_image": "/images/suppliers/west-elm-seating.jpg",
+            "url_verified": True, "url_status": 200,
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # If the on-disk file exists, the <img> is rendered with width/height.
+    # If not, the placeholder is used (no <img>); skip the assertion in that case.
+    if 'src="/images/suppliers/west-elm-seating.jpg"' in html:
+        assert ' width="' in html
+        assert ' height="' in html
+
+
+def test_hero_image_dimensions_fallback_when_path_missing(tmp_path):
+    """R5 Fix I2 — _hero_image_dimensions returns fallback when the file
+    can't be opened. Best-effort: never raises."""
+    from sourcing_render_html import (
+        _hero_image_dimensions, _HERO_FALLBACK_W, _HERO_FALLBACK_H,
+    )
+    w, h = _hero_image_dimensions(tmp_path / "does-not-exist.jpg")
+    assert (w, h) == (_HERO_FALLBACK_W, _HERO_FALLBACK_H)
+
+
+# ---------------------------------------------------------------------------
+# R5 Fix I3 — every supplier card's <details> summary is supplier-specific,
+# so screen readers can distinguish expanders.
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_details_summary_includes_name():
+    """R5 Fix I3 — supplier card summary must include the supplier name."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [
+            {"id": "furniture-seating", "label": "Seating"},
+            {"id": "lighting", "label": "Lighting"},
+        ],
+        "suppliers": [
+            {
+                "id": "a-co", "category": "furniture-seating", "name": "Alpha Co",
+                "url": "https://a.example.com",
+                "price_tier": "mid", "fit": "STRONG",
+                "style_fingerprint": "x", "fit_for_project": "x",
+                "collections_to_browse": [{"name": "Hutchinson"}],
+            },
+            {
+                "id": "b-co", "category": "lighting", "name": "Beta Co",
+                "url": "https://b.example.com",
+                "price_tier": "low", "fit": "GOOD",
+                "style_fingerprint": "y", "fit_for_project": "y",
+                "collections_to_browse": [{"name": "Glo"}],
+            },
+        ],
+    }
+    html = render_suppliers_page(fixture)
+    # Each summary names its supplier — uniqueness for screen readers.
+    assert "Alpha Co &mdash; details &amp; collections" in html
+    # Old non-distinct text must be gone.
+    assert "<summary>Details &amp; collections</summary>" not in html
+
+
+def test_render_suppliers_page_details_summaries_unique_across_cards():
+    """R5 Fix I3 — collect every <summary> from the rendered page; supplier
+    summaries must be unique."""
+    import re as _re
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [
+            {"id": "furniture-seating", "label": "Seating"},
+        ],
+        "suppliers": [
+            {
+                "id": f"s{i}", "category": "furniture-seating", "name": f"Supplier {i}",
+                "url": "https://example.com",
+                "price_tier": "mid", "fit": "STRONG",
+                "style_fingerprint": "x", "fit_for_project": "x",
+                "collections_to_browse": [{"name": "Coll"}],
+            }
+            for i in range(5)
+        ],
+    }
+    html = render_suppliers_page(fixture)
+    # Pull supplier-card summaries (the ones that end with the canonical phrase).
+    summaries = _re.findall(
+        r'<summary>([^<]*details &amp; collections)</summary>', html
+    )
+    assert len(summaries) == 5
+    assert len(set(summaries)) == 5  # All distinct.
+
+
+# ---------------------------------------------------------------------------
+# R5 Fix I4 — first action radio in each card gets tabindex="0" so keyboard
+# users can enter the radiogroup before JS loads.
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_first_action_radio_has_tabindex_zero():
+    """R5 Fix I4 — server-side rendered first radio per card has tabindex=0."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # The first action button (action-visit) must be the keyboard entry point.
+    assert (
+        'class="action-btn action-visit" data-action="visit" '
+        'role="radio" aria-checked="false" tabindex="0"'
+    ) in html
+    # Second + third buttons stay at tabindex=-1 until JS roves them.
+    assert (
+        'class="action-btn action-saved" data-action="saved" '
+        'role="radio" aria-checked="false" tabindex="-1"'
+    ) in html
+    assert (
+        'class="action-btn action-ruled" data-action="ruled" '
+        'role="radio" aria-checked="false" tabindex="-1"'
+    ) in html
