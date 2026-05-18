@@ -3778,14 +3778,16 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     filter_bar_html = f'''<details class="mobile-filters">
 <summary class="mobile-filters-summary"><span>Filters</span><span class="mobile-filters-chevron" aria-hidden="true">▾</span></summary>
 <div class="suppliers-filter-bar">
-  <label>Search</label>
+  <!-- R4 Fix I5 — <label for=...> matched to each control id so screen
+       readers announce the label when the field gains focus. -->
+  <label for="supplier-search">Search</label>
   <input id="supplier-search" type="search" placeholder="Brand, style, finish..." autocomplete="off">
-  <label>Category</label>
+  <label for="cat-filter">Category</label>
   <select id="cat-filter">
     <option value="">All categories</option>
     {cat_options}
   </select>
-  <label>Tier</label>
+  <label for="tier-filter">Tier</label>
   <select id="tier-filter">
     <option value="">All tiers</option>
     <option value="entry">Entry</option>
@@ -3793,7 +3795,7 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     <option value="premium">Premium</option>
     <option value="aspirational">Aspirational</option>
   </select>
-  <label>Fit</label>
+  <label for="fit-filter">Fit</label>
   <select id="fit-filter">
     <option value="">All fits</option>
     <option value="STRONG">Strong</option>
@@ -3801,7 +3803,7 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     <option value="MIXED">Mixed</option>
     <option value="CANON-ADJACENT">Canon-adjacent</option>
   </select>
-  <label>Sort</label>
+  <label for="sort-by">Sort</label>
   <select id="sort-by">
     <option value="category">Category (default)</option>
     <option value="tier">Price tier &uarr;</option>

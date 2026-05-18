@@ -2571,6 +2571,39 @@ def test_lint_flags_redirected_url_not_matching_recommended(tmp_path, monkeypatc
     assert "ok-redirected-already-updated" not in msg
 
 
+def test_filter_panel_labels_have_for_associations():
+    """R4 Fix I5 — every <label> in the /suppliers filter bar must carry a
+    `for=` attribute pointing to its control id. Codex flagged the bare
+    <label> nodes (no for=) as failing the WCAG association test."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # Each filter-bar control id must have a matching <label for=...>.
+    for ctl_id in ("supplier-search", "cat-filter", "tier-filter",
+                   "fit-filter", "sort-by"):
+        assert f'<label for="{ctl_id}">' in html, (
+            f"<label for=\"{ctl_id}\"> missing — filter labels must associate."
+        )
+    # No bare <label> nodes in the filter bar (smoke-test heuristic: the
+    # rendered suppliers-filter-bar block contains zero `<label>` without
+    # a `for=` attribute).
+    fb_start = html.find('<div class="suppliers-filter-bar">')
+    fb_end = html.find('</div>', fb_start)
+    fb_block = html[fb_start:fb_end] if fb_start >= 0 else ""
+    assert "<label>" not in fb_block, (
+        "Found bare <label> in suppliers-filter-bar block: must use for=."
+    )
+
+
 def test_lint_no_drift_when_redirect_url_matches_recommended(tmp_path, monkeypatch):
     """R4 Fix I3 sanity — when url == recommended_url for a redirected entry,
     no drift warning is emitted."""
