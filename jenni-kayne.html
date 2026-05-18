@@ -19,7 +19,7 @@
   --border: #e8e2d6;
   --topnav-h: 48px;
 }
-@media (max-width: 720px) { :root { --topnav-h: 52px; } }
+@media (max-width: 720px) { :root { --topnav-h: 56px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
@@ -27,7 +27,19 @@ html, body { overflow-x: hidden; max-width: 100%; }
 img, picture, video { max-width: 100%; height: auto; }
 .table-wrapper { width: 100%; }
 @media (max-width: 720px) {
-  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  /* R2-UX1: scrollable surfaces get an edge-fade affordance + a visible
+   * scrollbar so users know they can swipe. */
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;
+    position: relative; }
+  .table-wrapper::-webkit-scrollbar { height: 6px; }
+  .table-wrapper::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.3);
+    border-radius: 3px; }
+  .table-wrapper::-webkit-scrollbar-track { background: transparent; }
+  .topnav-scroller { position: relative; }
+  .topnav-scroller::after, .table-wrapper::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 24px; pointer-events: none;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
@@ -41,8 +53,11 @@ nav.topnav {
   -webkit-backdrop-filter: saturate(140%) blur(8px);
   border-bottom: 1px solid var(--border);
 }
+/* R2-C1: scroller wraps the inner so absolute dropdowns positioned vs. <nav>
+ * (or position:fixed on mobile) escape the horizontal-scroll overflow clip. */
+.topnav-scroller { max-width: 1200px; margin: 0 auto; }
 .topnav-inner {
-  max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+  padding: 11px 28px;
   display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
 }
 .topnav-inner .home {
@@ -193,20 +208,43 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   h1 { font-size: 28px; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
   main, header.page-header { padding-left: 18px; padding-right: 18px; }
-  /* Topnav: horizontally-scrollable single row with 44px touch targets. */
-  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
-    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  /* R2-C1: scroll the WRAPPER, not topnav-inner. Absolutely-positioned dropdown
+   * menus inside topnav-inner now escape the overflow scope via position:fixed
+   * so they don't get clipped on mobile. */
+  .topnav-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch;
     scrollbar-width: none; }
-  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-scroller::-webkit-scrollbar { display: none; }
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; }
   .topnav-inner > * { flex: 0 0 auto; }
   .topnav-inner a:not(.home),
   .topnav-inner details.nav-dropdown > summary {
     padding: 8px 12px; font-size: 13px; min-height: 44px;
     display: inline-flex; align-items: center; }
+  /* R2-C1: dropdown menus pop out of the horizontal-scroll container by
+   * using fixed positioning anchored below the sticky topnav. */
+  .topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu {
+    position: fixed; top: calc(var(--topnav-h) + 4px); left: 12px; right: 12px;
+    margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
+    overflow-y: auto; }
+  /* R2-T2: tags/chips/pills meet WCAG 2.5.5 44px floor on touch devices. */
+  .tag, .chip, .pill { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  /* R2-T4: in-cell anchors get vertical hit area inside tables on mobile. */
+  td a { display: inline-block; padding: 8px 0; min-height: 44px;
+    box-sizing: border-box; }
   /* Tables overflow-scroll on mobile (.table-wrapper opt-in for desktop polish). */
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
     max-width: 100%; white-space: nowrap; }
   table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* R2-C2: when a table is wrapped in .table-wrapper, the WRAPPER handles
+   * overflow and the child renders naturally (text wraps, max-width follows
+   * the wrapper). Without this rule the child is also set to display:block
+   * + nowrap, double-wrapping the overflow and forcing horizontal scroll
+   * even for tables narrow enough to fit. */
+  .table-wrapper > table { display: table; white-space: normal;
+    overflow-x: visible; max-width: none; }
   pre, code { word-break: break-word; white-space: pre-wrap; }
 }
 @media (max-width: 480px) {
@@ -220,12 +258,14 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </head>
 <body>
 <nav class="topnav">
-  <div class="topnav-inner">
-    <a href="/" class="home">← 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/suppliers">Suppliers</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
-    <details class="nav-dropdown" open aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne" class="current">Jenni Kayne</a></div></details>
-    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  <div class="topnav-scroller">
+    <div class="topnav-inner">
+      <a href="/" class="home">← 1490 Lively Ridge</a>
+      <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/suppliers">Suppliers</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+      <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+      <details class="nav-dropdown" open aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne" class="current">Jenni Kayne</a></div></details>
+      <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+    </div>
   </div>
 </nav>
 

@@ -16,7 +16,7 @@
   --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
   --topnav-h: 48px;
 }
-@media (max-width: 720px) { :root { --topnav-h: 52px; } }
+@media (max-width: 720px) { :root { --topnav-h: 56px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
@@ -24,13 +24,29 @@ html, body { overflow-x: hidden; max-width: 100%; }
 img, picture, video { max-width: 100%; height: auto; }
 .table-wrapper { width: 100%; }
 @media (max-width: 720px) {
-  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  /* R2-UX1: scrollable surfaces get an edge-fade affordance + a visible
+   * scrollbar so users know they can swipe. Applies to .table-wrapper and
+   * the topnav scroller; .filter-bar.scrollable opt-in for sourcing. */
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;
+    position: relative; }
+  .table-wrapper::-webkit-scrollbar { height: 6px; }
+  .table-wrapper::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.3);
+    border-radius: 3px; }
+  .table-wrapper::-webkit-scrollbar-track { background: transparent; }
+  .topnav-scroller { position: relative; }
+  .topnav-scroller::after, .table-wrapper::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 24px; pointer-events: none;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
 }
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
   border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
-.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+/* R2-C1: scroller wraps the inner so absolute dropdowns positioned vs. <nav>
+ * (or position:fixed on mobile) escape the horizontal-scroll overflow clip. */
+.topnav-scroller { max-width: 1200px; margin: 0 auto; }
+.topnav-inner { padding: 11px 28px; display: flex;
   gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
 .topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
 .topnav-inner .home:hover { color: var(--accent); }
@@ -167,7 +183,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
   text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
   margin-right: 4px; font-weight: 700; }
-.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+/* R2-C5: anchor-shim uses --topnav-h so jump-link offsets track the actual
+ * sticky topnav height across mobile + desktop. */
+.item-card[id]::before { content: ""; display: block; height: var(--topnav-h);
+  margin-top: calc(-1 * var(--topnav-h));
   visibility: hidden; pointer-events: none; }
 /* Git-history audit-trail line shown under item title. */
 .item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
@@ -195,13 +214,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 @media (max-width: 720px) {
   body { font-size: 16px; }
   .page-header h1 { font-size: 24px; }
-  /* R1 mobile baseline: topnav becomes a horizontally-scrollable single row
-   * with 44px touch targets. Rooms ▾ / Canon ▾ dropdowns stay inline.
-   * Per baseline.md pattern §5 + §8: avoids the 5-6-row pill-stack on phones. */
-  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
-    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  /* R2-C1: scroll the WRAPPER, not topnav-inner. Absolutely-positioned dropdown
+   * menus inside topnav-inner now escape the overflow scope and become
+   * position:fixed (anchored below the topnav) so they don't get clipped. */
+  .topnav-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch;
     scrollbar-width: none; }
-  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-scroller::-webkit-scrollbar { display: none; }
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; }
   .topnav-inner > * { flex: 0 0 auto; }
   .topnav-inner .home { margin-right: 8px; }
   .topnav-inner a:not(.home),
@@ -209,9 +229,27 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     padding: 8px 12px; font-size: 13px; min-height: 44px;
     display: inline-flex; align-items: center; }
   .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  /* R2-C1: dropdown menus pop out of the horizontal-scroll container by
+   * using fixed positioning anchored below the sticky topnav. */
+  .topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu {
+    position: fixed; top: calc(var(--topnav-h) + 4px); left: 12px; right: 12px;
+    margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
+    overflow-y: auto; }
   .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
-  .filter-bar button, .filter-bar select { font-size: 13px; padding: 8px 14px;
-    min-height: 44px; }
+  /* R2-T1: filter-bar controls meet WCAG 2.5.5 44px floor. */
+  .filter-bar button, .filter-bar select, .filter-bar input {
+    font-size: 13px; padding: 8px 14px;
+    min-height: 44px; box-sizing: border-box; }
+  /* R2-T2/T3: pills/chips/tags + decisions-needed banner links meet 44px floor. */
+  .tag, .chip, .pill { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  .decisions-needed-banner a { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  /* R2-T4: in-cell anchors get vertical hit area inside tables on mobile. */
+  td a { display: inline-flex; align-items: center; min-height: 44px;
+    box-sizing: border-box; padding: 8px 0; }
   .options-grid { grid-template-columns: 1fr; }
   .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
   .item-card { padding: 12px; }
@@ -222,6 +260,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
     max-width: 100%; white-space: nowrap; }
   table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* R2-C2: wrapped tables render naturally; the WRAPPER handles overflow.
+   * Without this rule, .table-wrapper child tables would still be display:block
+   * + nowrap, forcing horizontal scroll even when content could wrap. */
+  .table-wrapper > table { display: table; white-space: normal;
+    overflow-x: visible; max-width: none; }
   /* Long URLs / code blocks must wrap so they can't break the page layout. */
   pre, code { word-break: break-word; white-space: pre-wrap; }
 }
@@ -260,7 +303,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 
 .suppliers-page-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px;
   align-items: flex-start; }
-.category-side-nav { position: sticky; top: 100px; align-self: flex-start;
+/* R2-C5: sticky offset derives from --topnav-h plus the suppliers filter-bar
+ * row so the side nav lands below both, not at a hardcoded 100px. */
+.category-side-nav { position: sticky; top: calc(var(--topnav-h) + 52px);
+  align-self: flex-start;
   font-size: 12.5px; background: var(--card-bg); border: 1px solid var(--border);
   border-radius: 10px; padding: 14px 6px; }
 .category-side-nav h4 { margin: 0 0 8px; padding: 0 8px; font-size: 11px;
@@ -269,7 +315,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   color: var(--ink); text-decoration: none; line-height: 1.35; margin-bottom: 1px; }
 .category-side-nav a:hover { background: var(--warm-tint); color: var(--accent); }
 .category-side-nav a .count { color: var(--muted); font-size: 10.5px; margin-left: 4px; }
-@media (max-width: 900px) {
+/* R2-C6: collapse the supplier two-column layout at the unified 720px breakpoint
+ * (was 900px, an outlier vs. the site-wide 720/480 baseline). */
+@media (max-width: 720px) {
   .suppliers-page-layout { grid-template-columns: 1fr; }
   .category-side-nav { position: static; }
 }
@@ -532,12 +580,14 @@ details.mobile-filters > .suppliers-filter-bar { display: flex; }
 </head>
 <body class="suppliers-page">
 <nav class="topnav">
-  <div class="topnav-inner">
-    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
-    <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/suppliers" class="current">Suppliers</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
-    <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
-    <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
-    <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+  <div class="topnav-scroller">
+    <div class="topnav-inner">
+      <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+      <a href="/">Home</a><a href="/mood-board">Mood</a><a href="/spectrum">Spectrum</a><a href="/decisions">Decisions</a><a href="/budget">Budget</a><a href="/sourcing">Sourcing</a><a href="/suppliers" class="current">Suppliers</a><a href="/vendors">Vendors</a><a href="/for-annika">Annika</a><a href="/spec">Spec</a>
+      <details class="nav-dropdown" aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen">Kitchen</a><a href="/master">Master</a><a href="/baths">Baths</a><a href="/lr">LR</a><a href="/nursery">Nursery</a><a href="/office">Office</a></div></details>
+      <details class="nav-dropdown" aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong">Cathie Hong</a><a href="/owiu">OWIU</a><a href="/sss">SSS</a><a href="/jenni-kayne">Jenni Kayne</a></div></details>
+      <a href="/materials">Materials</a><a href="/rejected">Rejected</a>
+    </div>
   </div>
 </nav>
 <header class="page-header">
