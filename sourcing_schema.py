@@ -455,6 +455,15 @@ def load_supplier_directory(path) -> Dict[str, Any]:
             "canon_classification_reasoning": sup.canon_classification_reasoning,
             "url_status_note": sup.url_status_note,
             "verification_source_batch": sup.verification_source_batch,
+            # R4 Fix I2 — propagate URL verification metadata so lint and
+            # downstream tools can read recommended_url / url_status_tag /
+            # price_validation_status from the validated loader output.
+            # Previously the loader dropped these three fields even though
+            # the YAML carried them, breaking the lint canonical-URL check
+            # that R4-I3 now enforces.
+            "recommended_url": sup.recommended_url,
+            "url_status_tag": sup.url_status_tag,
+            "price_validation_status": sup.price_validation_status,
         })
     data["suppliers"] = validated
     return data

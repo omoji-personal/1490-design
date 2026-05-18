@@ -716,9 +716,20 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
         "redirected_changed_path", "redirected_brand_change",
     }
     stale = []
+    # R4 Fix I3 — track suppliers tagged `redirected_changed_path` whose
+    # `url` has NOT been updated to the canonical `recommended_url`. Codex
+    # named lulu-georgia-rugs as a live example: url_status_tag flags the
+    # redirect but url is still the pre-redirect string.
+    redirect_canonical_drift = []
     for s in suppliers:
         url_verified = s.get("url_verified")
         url_status = s.get("url_status")
+        # R4 Fix I3 — canonical-URL drift on redirected_changed_path entries.
+        if s.get("url_status_tag") == "redirected_changed_path":
+            cur = (s.get("url") or "").strip()
+            rec = (s.get("recommended_url") or "").strip()
+            if rec and cur and cur != rec:
+                redirect_canonical_drift.append(s.get("id", "?"))
         if url_verified is True:
             if url_status is None:
                 continue
@@ -742,6 +753,19 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
                 f"supplier_directory.yaml: {len(stale)} supplier(s) with stale/unverified URLs — "
                 f"first few: {', '.join(stale[:5])}"
                 + (f" (+{len(stale)-5} more)" if len(stale) > 5 else "")
+            ),
+            item_id=None,
+        ))
+    if redirect_canonical_drift:
+        findings.append(LintFinding(
+            severity="warning",
+            message=(
+                f"supplier_directory.yaml: {len(redirect_canonical_drift)} "
+                f"supplier(s) tagged redirected_changed_path but `url` differs "
+                f"from `recommended_url` — update the canonical URL: "
+                f"{', '.join(redirect_canonical_drift[:5])}"
+                + (f" (+{len(redirect_canonical_drift)-5} more)"
+                   if len(redirect_canonical_drift) > 5 else "")
             ),
             item_id=None,
         ))

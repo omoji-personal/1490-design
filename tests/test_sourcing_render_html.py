@@ -2487,3 +2487,113 @@ def test_render_supplier_card_skips_hero_for_unsafe_path(tmp_path, monkeypatch):
     card_html = srh._render_supplier_card(sup, sourcing_match_ids=[])
     assert "/secret/leak.jpg" not in card_html
     assert "supplier-hero-placeholder" in card_html
+
+
+# ---------------------------------------------------------------------------
+# R4 Fix I2 — round-trip url verification metadata through the loader
+# ---------------------------------------------------------------------------
+
+
+def test_load_supplier_directory_preserves_verification_metadata(tmp_path):
+    """R4 Fix I2 — the loader must propagate recommended_url, url_status_tag,
+    and price_validation_status from YAML through to the validated output
+    dicts so lint + downstream tools can read them. Codex flagged that
+    the loader was dropping all three fields."""
+    from sourcing_schema import load_supplier_directory
+    p = tmp_path / "ok.yaml"
+    p.write_text(textwrap.dedent("""\
+        meta: {}
+        categories:
+          - {id: rugs, label: Rugs}
+        suppliers:
+          - id: lulu-georgia-rugs
+            category: rugs
+            name: Lulu and Georgia
+            url: https://lulu-and-georgia.com/old-path
+            recommended_url: https://lulu-and-georgia.com/rugs
+            url_status_tag: redirected_changed_path
+            price_validation_status: verified
+            price_tier: mid
+            fit: STRONG
+            style_fingerprint: x
+            fit_for_project: x
+        """))
+    data = load_supplier_directory(str(p))
+    sup = data["suppliers"][0]
+    assert sup["recommended_url"] == "https://lulu-and-georgia.com/rugs"
+    assert sup["url_status_tag"] == "redirected_changed_path"
+    assert sup["price_validation_status"] == "verified"
+
+
+# ---------------------------------------------------------------------------
+# R4 Fix I3 — lint: redirected_changed_path entries must have url == recommended_url
+# ---------------------------------------------------------------------------
+
+
+def test_lint_flags_redirected_url_not_matching_recommended(tmp_path, monkeypatch):
+    """R4 Fix I3 — when a supplier's url_status_tag is redirected_changed_path
+    but `url` does not match `recommended_url`, lint emits a warning so the
+    operator updates to the canonical URL. Codex named lulu-georgia-rugs."""
+    from sourcing_lint import check_supplier_directory_url_freshness
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: lulu-georgia-rugs
+            url_verified: true
+            url_status: redirected_changed_path
+            url_status_tag: redirected_changed_path
+            url: https://lulu-and-georgia.com/old-path
+            recommended_url: https://lulu-and-georgia.com/rugs
+          - id: ok-redirected-already-updated
+            url_verified: true
+            url_status: redirected_changed_path
+            url_status_tag: redirected_changed_path
+            url: https://example.com/new
+            recommended_url: https://example.com/new
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_url_freshness([], None)
+    # No stale finding (both url_status values are in FRESH_STATUS_STRINGS),
+    # but exactly one redirect-canonical-drift finding.
+    drift = [f for f in findings if "redirected_changed_path" in f.message]
+    assert len(drift) == 1
+    msg = drift[0].message
+    assert "lulu-georgia-rugs" in msg
+    assert "ok-redirected-already-updated" not in msg
+
+
+def test_lint_no_drift_when_redirect_url_matches_recommended(tmp_path, monkeypatch):
+    """R4 Fix I3 sanity — when url == recommended_url for a redirected entry,
+    no drift warning is emitted."""
+    from sourcing_lint import check_supplier_directory_url_freshness
+    yaml_text = textwrap.dedent("""\
+        meta: {}
+        categories: []
+        suppliers:
+          - id: redirected-ok
+            url_verified: true
+            url_status: redirected_changed_path
+            url_status_tag: redirected_changed_path
+            url: https://example.com/canonical
+            recommended_url: https://example.com/canonical
+        """)
+    target = tmp_path / "Desktop" / "HomeAI" / "scope"
+    target.mkdir(parents=True)
+    (target / "supplier_directory.yaml").write_text(yaml_text)
+    import os as _os
+    real_expand = _os.path.expanduser
+    monkeypatch.setattr(
+        _os.path, "expanduser",
+        lambda p: p.replace("~", str(tmp_path)) if p.startswith("~") else real_expand(p),
+    )
+    findings = check_supplier_directory_url_freshness([], None)
+    assert findings == []
