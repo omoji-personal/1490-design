@@ -318,6 +318,15 @@ def load_supplier_directory(path) -> Dict[str, Any]:
     parsed dict (meta + categories + suppliers-as-Supplier-instances under the
     'suppliers' key, with the original dict shape preserved for renderer
     convenience). Fails loud if the file is missing, malformed, or empty.
+
+    R3 Fix C4 — additionally validates:
+      (a) null required-display fields (`url`, `style_fingerprint`,
+          `fit_for_project`, `name`, `id`) — `parse_supplier()` would
+          stringify a literal `None` otherwise.
+      (b) `category` membership against the directory's `categories:` list
+          so unknown categories fail loud at load instead of silently
+          falling into the renderer's "Uncategorized" bucket on the real
+          build path.
     """
     import os
     import yaml as _yaml
@@ -329,6 +338,12 @@ def load_supplier_directory(path) -> Dict[str, Any]:
         raise ValidationError(f"supplier_directory.yaml is not a mapping at {path}")
     if not data.get("suppliers"):
         raise ValidationError(f"supplier_directory.yaml has no suppliers at {path}")
+    # R3 Fix C4 — build the allowed-categories set from the file's own
+    # categories: list. Falls through to no-op when the file omits the list.
+    declared_categories = set()
+    for c in (data.get("categories") or []):
+        if isinstance(c, dict) and c.get("id"):
+            declared_categories.add(c["id"])
     # Validate every supplier; collect typed instances back onto the dict so
     # downstream consumers can keep using mapping-style access while the
     # validation pass has already failed loud on bad data.
@@ -336,6 +351,29 @@ def load_supplier_directory(path) -> Dict[str, Any]:
     for raw in data["suppliers"]:
         # parse_supplier raises ValidationError on bad data — keep loud failure.
         sup = parse_supplier(raw)
+        # R3 Fix C4 (a) — null required-display fields.
+        sid = sup.id
+        if sup.url is None or sup.url == "None" or not str(sup.url).strip():
+            # url:null in yaml round-trips to literal "None" in parse_supplier.
+            # Flag it loud so the operator can fill it in or drop the supplier.
+            raise ValidationError(
+                f"{sid}: supplier has null/empty url — every directory entry "
+                f"must point somewhere (set url to '#' if intentionally absent)."
+            )
+        if not str(sup.style_fingerprint).strip() or sup.style_fingerprint == "None":
+            raise ValidationError(
+                f"{sid}: supplier has null/empty style_fingerprint — required for card render."
+            )
+        if not str(sup.fit_for_project).strip() or sup.fit_for_project == "None":
+            raise ValidationError(
+                f"{sid}: supplier has null/empty fit_for_project — required for card render."
+            )
+        # R3 Fix C4 (b) — category membership check.
+        if declared_categories and sup.category not in declared_categories:
+            raise ValidationError(
+                f"{sid}: supplier category '{sup.category}' not in directory categories: "
+                f"{sorted(declared_categories)}"
+            )
         # Round-trip back to dict for renderer compatibility.
         validated.append({
             "id": sup.id,
