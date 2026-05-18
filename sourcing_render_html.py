@@ -1954,6 +1954,17 @@ VENDORS_CSS = """
 .vendor-section .status-drafted { background: #fef0d6; color: #6e4f1a; }
 .vendor-section .status-watch { background: #ece8f4; color: #4a4566; }
 .vendor-section .status-other { background: #efe7d4; color: var(--muted); }
+/* R2-UX3: vendors page on mobile — relax white-space: nowrap on non-SKU cells
+ * so titles wrap naturally instead of forcing 1500-3500px-wide rows that
+ * require 75 individual horizontal swipes to read. SKU column stays nowrap
+ * (long SKU strings shouldn't break mid-word). */
+@media (max-width: 720px) {
+  .vendor-section td.id-col,
+  .vendor-section td.title-col,
+  .vendor-section td.num,
+  .vendor-section td.status-col { white-space: normal; word-break: break-word; }
+  .vendor-section td.sku-col { white-space: normal; }
+}
 """
 
 
