@@ -67,7 +67,10 @@
   .section-header h2 { font-size: 24px; font-weight: 600; margin: 0; }
   .section-header .count { color: var(--muted); font-size: 14px; }
 
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  /* R4-2: tighter card stacking. Desktop uses auto-fit so 3-col emerges on
+   * wide viewports; 720px drops to 2-col to halve page height vs. the
+   * pre-R4 1-col stack; 380px keeps 1-col for the narrowest phones. */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
   .card {
     background: var(--card-bg); border: 1px solid var(--border);
     border-radius: 12px; overflow: hidden;
@@ -124,7 +127,9 @@
 
   footer { max-width: 1180px; margin: 0 auto; padding: 12px 28px 60px; color: var(--muted); font-size: 14px; text-align: center; }
 
-  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+  /* R4-2: 2-col at phone widths cuts page height ~50% vs. R3's 1-col stack. */
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr 1fr; gap: 12px; } }
+  @media (max-width: 380px) { .grid { grid-template-columns: 1fr; } }
   @media (max-width: 720px) {
     h1 { font-size: 30px; }
     header.intro-header, main, footer { padding-left: 18px; padding-right: 18px; }
@@ -232,8 +237,9 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
   h1 { font-size: 1.75rem; }
   h2 { font-size: 1.4rem; }
   h3 { font-size: 1.15rem; }
-  /* Image-heavy page: ensure single-col card grid at phone width. */
-  .grid { grid-template-columns: 1fr; }
+  /* R4-2: .grid 1-col rule removed — the 380px breakpoint above handles
+   * single-col fallback on the narrowest phones while the 720px rule
+   * keeps 2-col on the 381-720px band (was previously 1-col here). */
 }
 </style>
 
