@@ -326,6 +326,31 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 SOURCING_MAIN_CSS = """
 .sourcing-grid-2up { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .sourcing-grid-2up .item-card { margin-bottom: 0; }
+/* R2-UX2: admin-section collapse on mobile.
+ * Desktop default (>720px): the wrapper is transparent (display: contents),
+ * the summary is hidden, and the inner banners render inline as before.
+ * Mobile (≤720px): the wrapper becomes a tap-target <details>. Default
+ * closed; tapping reveals schedule/decisions/budget/overshoot/lint banners.
+ * Cuts ~5 screens of admin off the /sourcing first-paint on phone. */
+.admin-section-summary { display: none; }
+.admin-section { display: contents; }
+@media (max-width: 720px) {
+  .admin-section { display: block; margin: 0 0 16px; }
+  .admin-section[open] { background: transparent; }
+  .admin-section-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--warm-tint); border: 1px solid #c9b88a;
+    border-radius: 999px; padding: 10px 16px; font-size: 13px;
+    font-weight: 600; cursor: pointer; user-select: none;
+    list-style: none; min-height: 44px; box-sizing: border-box;
+    color: #5a4a20; }
+  .admin-section-summary::-webkit-details-marker { display: none; }
+  .admin-section-summary::marker { display: none; }
+  .admin-section-summary::after { content: "\\25BE"; font-size: 11px;
+    color: #5a4a20; transition: transform .15s; }
+  .admin-section[open] > .admin-section-summary::after { transform: rotate(180deg); }
+  .admin-section-inner { padding-top: 12px; }
+}
 .locked-decisions-banner { background: var(--warm-tint); border: 1px solid #c9b88a;
   border-radius: 10px; padding: 0; margin: 16px 0 22px; overflow: hidden; }
 .locked-decisions-banner > summary { padding: 12px 16px; cursor: pointer;
@@ -353,7 +378,32 @@ SOURCING_MAIN_CSS = """
   .sourcing-grid-2up { grid-template-columns: 1fr; gap: 12px; }
   .locked-decisions-banner > summary .locked-hint { display: none; }
   .locked-row { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+  /* R2-UX4: /sourcing filter bar wraps in <details class="mobile-filters">.
+   * Default closed on mobile; summary is the always-visible tap-target.
+   * Desktop default (below the @media block): summary hidden,
+   * wrapper transparent — bar renders inline as before. */
+  details.mobile-filters { display: block; margin: 0 0 14px; }
+  details.mobile-filters > summary.mobile-filters-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 999px; padding: 8px 14px; font-size: 13px;
+    font-weight: 600; cursor: pointer; user-select: none;
+    list-style: none; min-height: 44px; box-sizing: border-box; }
+  details.mobile-filters > summary.mobile-filters-summary::-webkit-details-marker { display: none; }
+  details.mobile-filters > summary.mobile-filters-summary::marker { display: none; }
+  details.mobile-filters > summary.mobile-filters-summary .mobile-filters-chevron {
+    transition: transform .15s; }
+  details.mobile-filters[open] > summary.mobile-filters-summary .mobile-filters-chevron {
+    transform: rotate(180deg); }
+  details.mobile-filters:not([open]) > .filter-bar { display: none; }
+  details.mobile-filters[open] > .filter-bar { display: flex;
+    border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; }
 }
+/* R2-UX4: desktop default — wrapper transparent so the filter bar lays out
+ * exactly as it did pre-wrap. Summary hidden; <details>'s default open/closed
+ * has no visual effect because the bar is shown unconditionally above 720px. */
+details.mobile-filters { display: contents; }
+details.mobile-filters > summary.mobile-filters-summary { display: none; }
 """
 
 
@@ -786,20 +836,30 @@ def _render_filter_bar() -> str:
     statuses = ["options_drafted", "awaiting_sample", "sample_in_hand", "decided",
                 "ordered", "received", "installed", "deferred_p2", "cancelled",
                 "watch_list", "found_candidate"]
-    return f"""<div class="filter-bar">
-      <button data-filter="all" class="active">All</button>
-      <button data-filter="decide-now" title="All items with options drafted — schedule not yet locked so &#39;this week&#39; is heuristic">Currently drafted</button>
-      <button data-filter="annika">Annika queue</button>
-      <select id="room-filter"><option value="">By room</option>{
-        "".join(f'<option value="{r}">{r}</option>' for r in rooms)
-      }</select>
-      <select id="category-filter"><option value="">By category</option>{
-        "".join(f'<option value="{c}">{c}</option>' for c in categories)
-      }</select>
-      <select id="status-filter"><option value="">By status</option>{
-        "".join(f'<option value="{s}">{s}</option>' for s in statuses)
-      }</select>
-    </div>"""
+    # R2-UX4: filter bar is wrapped in <details class="mobile-filters"> so it
+    # collapses behind a tap-target on phone, freeing ~180px of vertical real
+    # estate. Desktop CSS makes the wrapper transparent (display: contents) so
+    # the bar renders inline as before.
+    return f"""<details class="mobile-filters">
+      <summary class="mobile-filters-summary">
+        <span>Filters</span>
+        <span class="mobile-filters-chevron">&#9662;</span>
+      </summary>
+      <div class="filter-bar">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="decide-now" title="All items with options drafted — schedule not yet locked so &#39;this week&#39; is heuristic">Currently drafted</button>
+        <button data-filter="annika">Annika queue</button>
+        <select id="room-filter"><option value="">By room</option>{
+          "".join(f'<option value="{r}">{r}</option>' for r in rooms)
+        }</select>
+        <select id="category-filter"><option value="">By category</option>{
+          "".join(f'<option value="{c}">{c}</option>' for c in categories)
+        }</select>
+        <select id="status-filter"><option value="">By status</option>{
+          "".join(f'<option value="{s}">{s}</option>' for s in statuses)
+        }</select>
+      </div>
+    </details>"""
 
 
 FILTER_JS = """
@@ -1147,11 +1207,16 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 </header>
 {ROOM_LINKS_HTML}
 <main>
+<details class="admin-section">
+<summary class="admin-section-summary">Admin &amp; status</summary>
+<div class="admin-section-inner">
 {schedule_banner_html}
 {decisions_banner_html}
 {budget_rollup_html}
 {overshoot_html}
 {lint_html}
+</div>
+</details>
 {_render_filter_bar()}
 {cards_html}
 </main>
