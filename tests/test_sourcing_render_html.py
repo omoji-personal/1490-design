@@ -4,6 +4,8 @@ from pathlib import Path
 import tempfile
 import textwrap
 
+import pytest
+
 from sourcing_loader import load_sourcing, Schedule
 from sourcing_lint import LintFinding
 from sourcing_render_html import render_site_page, render_for_annika
@@ -1906,3 +1908,352 @@ def test_load_supplier_directory_strips_operator_notes_from_output(tmp_path):
     sup = data["suppliers"][0]
     assert "operator_notes" not in sup
     assert "secret internal stuff" not in str(sup)
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix C1 — vendor banner XSS via innerHTML
+# ---------------------------------------------------------------------------
+
+
+def test_sourcing_vendor_banner_uses_textcontent_not_innerhtml():
+    """The /sourcing ?vendor= banner must build its message via textContent /
+    DOM nodes, never via innerHTML with the un-escaped query param. Otherwise
+    a malicious ?vendor=<script>alert(1)</script> would execute.
+    """
+    import sourcing_render_html as srh
+    js = srh.FILTER_JS
+    # Locate the vendor-banner section.
+    idx = js.find("vendor-filter-banner")
+    assert idx > 0, "vendor-filter-banner missing"
+    # Take ~2000 chars of the banner construction block.
+    block = js[idx:idx + 2000]
+    # MUST NOT call .innerHTML = with the vendor variable in the banner block.
+    assert "banner.innerHTML" not in block, (
+        "vendor banner uses innerHTML — replace with textContent/createElement to "
+        "neutralize reflected XSS"
+    )
+    # SHOULD use textContent or createTextNode for the user-supplied vendor token.
+    assert "createTextNode" in block or "textContent" in block, (
+        "vendor banner needs textContent/createTextNode to safely surface the ?vendor= param"
+    )
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix C3 — _safe_href scheme-relative rejection
+# ---------------------------------------------------------------------------
+
+
+def test_safe_href_rejects_scheme_relative_urls():
+    """`//evil.com` is protocol-relative — must NOT bypass the scheme allow-list."""
+    from sourcing_render_html import _safe_href
+    assert _safe_href("//evil.com") == "#"
+    assert _safe_href("//evil.com/path?a=b") == "#"
+    assert _safe_href("  //evil.com  ") == "#"  # whitespace-padded
+    # Sanity: explicit http(s)/internal still pass.
+    assert _safe_href("https://example.com") == "https://example.com"
+    assert _safe_href("/sourcing") == "/sourcing"
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix C2 — supplier cross-link counts scoped by both brand AND category
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_sourcing_links_scopes_bedroom_supplier_to_bedroom_items():
+    """A `west-elm-bedroom` supplier (category furniture-bedroom) must match only
+    bedroom-room furniture items, NOT seating or table items, even though the brand
+    string ("West Elm") matches all three. Closes Codex's R2 C6 OPEN finding.
+    """
+    from sourcing_render_html import _supplier_sourcing_links
+    # 3 mock sourcing items, all branded West Elm:
+    sourcing_items = [
+        {"id": "MB-BED", "title": "Master bed frame", "category": "furniture",
+         "room": "master_br", "top_vendor": "West Elm", "option_vendors": []},
+        {"id": "LR-SOFA", "title": "LR primary sofa", "category": "furniture",
+         "room": "lr", "top_vendor": "West Elm", "option_vendors": []},
+        {"id": "DR-SIDEBOARD", "title": "Dining sideboard", "category": "furniture",
+         "room": "dining", "top_vendor": "West Elm", "option_vendors": []},
+    ]
+    # West Elm bedroom supplier should match ONLY the bedroom item.
+    matches = _supplier_sourcing_links(
+        "west-elm-bedroom", "West Elm", sourcing_items,
+        supplier_category="furniture-bedroom",
+    )
+    assert matches == ["MB-BED"], f"expected only MB-BED, got {matches}"
+    # West Elm seating should match ONLY the sofa.
+    matches_seating = _supplier_sourcing_links(
+        "west-elm-seating", "West Elm", sourcing_items,
+        supplier_category="furniture-seating",
+    )
+    assert matches_seating == ["LR-SOFA"], f"expected only LR-SOFA, got {matches_seating}"
+    # West Elm tables should match ONLY the sideboard.
+    matches_tables = _supplier_sourcing_links(
+        "west-elm-tables", "West Elm", sourcing_items,
+        supplier_category="furniture-tables",
+    )
+    assert matches_tables == ["DR-SIDEBOARD"], f"expected only DR-SIDEBOARD, got {matches_tables}"
+
+
+def test_supplier_sourcing_links_brand_only_match_when_no_category():
+    """When supplier_category=None, the legacy brand-only behavior is preserved
+    (back-compat for callers that haven't been updated)."""
+    from sourcing_render_html import _supplier_sourcing_links
+    sourcing_items = [
+        {"id": "LR-SOFA", "title": "LR sofa", "category": "furniture", "room": "lr",
+         "top_vendor": "West Elm", "option_vendors": []},
+        {"id": "MB-BED", "title": "Master bed frame", "category": "furniture",
+         "room": "master_br", "top_vendor": "West Elm", "option_vendors": []},
+    ]
+    matches = _supplier_sourcing_links("west-elm-seating", "West Elm", sourcing_items)
+    assert set(matches) == {"LR-SOFA", "MB-BED"}, (
+        f"brand-only match should be brand-wide; got {matches}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix C4 — schema validation: null required fields + category membership
+# ---------------------------------------------------------------------------
+
+
+def test_load_supplier_directory_rejects_null_url(tmp_path):
+    """Suppliers with `url: null` must fail loud at load."""
+    from sourcing_schema import load_supplier_directory, ValidationError
+    p = tmp_path / "bad.yaml"
+    p.write_text(textwrap.dedent("""\
+        meta: {}
+        categories:
+          - {id: lighting, label: Lighting}
+        suppliers:
+          - id: x
+            category: lighting
+            name: X
+            url: null
+            price_tier: mid
+            fit: STRONG
+            style_fingerprint: x
+            fit_for_project: x
+        """))
+    with pytest.raises(ValidationError, match="null/empty url"):
+        load_supplier_directory(str(p))
+
+
+def test_load_supplier_directory_rejects_unknown_category(tmp_path):
+    """Supplier `category` not in the file's `categories:` list fails loud."""
+    from sourcing_schema import load_supplier_directory, ValidationError
+    p = tmp_path / "bad.yaml"
+    p.write_text(textwrap.dedent("""\
+        meta: {}
+        categories:
+          - {id: lighting, label: Lighting}
+        suppliers:
+          - id: x
+            category: not-a-real-category
+            name: X
+            url: https://example.com
+            price_tier: mid
+            fit: STRONG
+            style_fingerprint: x
+            fit_for_project: x
+        """))
+    with pytest.raises(ValidationError, match="not in directory categories"):
+        load_supplier_directory(str(p))
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix C5 — locked rows emit data-vendor-matches
+# ---------------------------------------------------------------------------
+
+
+def test_render_locked_row_emits_data_vendor_matches():
+    """Canon-locked items rendered via _render_locked_row() must carry
+    data-vendor-matches so the /sourcing ?vendor= filter can keep them
+    visible when they match the requested vendor."""
+    from sourcing_render_html import _render_locked_row
+    from sourcing_schema import Item
+    it = Item(
+        id="MB-VANITY", title="Master bath vanity",
+        category="cabinetry_millwork", room="master_bath",
+        urgency="T1", lead_time_weeks=8, budget_source="construction_allowance",
+        budget_target_usd=2500.0, sourcing_actor="owner_direct",
+        decision_status="decided", annika_loop=False,
+        decided_sku="West Elm Hutchinson Vanity",
+        vendor="West Elm",
+    )
+    row = _render_locked_row(it, vendor_matches=["west-elm-bedroom", "west-elm-seating"])
+    assert 'data-vendor-matches="west-elm-bedroom west-elm-seating"' in row
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix UX5 — fit prefix strip
+# ---------------------------------------------------------------------------
+
+
+def test_strip_redundant_fit_prefix_removes_strong():
+    from sourcing_render_html import _strip_redundant_fit_prefix
+    assert _strip_redundant_fit_prefix("STRONG — anchor brand per DESIGN_SPEC §5d") == (
+        "Anchor brand per DESIGN_SPEC §5d"
+    )
+
+
+def test_strip_redundant_fit_prefix_removes_good_hyphen():
+    from sourcing_render_html import _strip_redundant_fit_prefix
+    # Plain hyphen instead of em-dash.
+    assert _strip_redundant_fit_prefix("GOOD - K-DISHWASHER is owner-existing") == (
+        "K-DISHWASHER is owner-existing"
+    )
+
+
+def test_strip_redundant_fit_prefix_removes_mixed_endash():
+    from sourcing_render_html import _strip_redundant_fit_prefix
+    assert _strip_redundant_fit_prefix("MIXED – browse carefully") == "Browse carefully"
+
+
+def test_strip_redundant_fit_prefix_leaves_other_prose_unchanged():
+    from sourcing_render_html import _strip_redundant_fit_prefix
+    s = "West Elm Andes is the §11 named sofa."
+    assert _strip_redundant_fit_prefix(s) == s
+
+
+def test_render_suppliers_page_strips_strong_prefix_from_fit_line():
+    """fit_for_project rendered in card body must NOT begin with 'STRONG — '."""
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "Test fingerprint",
+            "fit_for_project": "STRONG — anchor brand per DESIGN_SPEC reference",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    # The fit-line should NOT have "STRONG — " prefix.
+    assert "STRONG &mdash; anchor brand" not in html
+    assert "STRONG — anchor brand" not in html
+    # But the substantive part should remain (with first letter capitalized).
+    assert "Anchor brand per DESIGN_SPEC reference" in html
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix UX6 — action group ARIA + arrow-key wiring
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_action_buttons_have_radio_role_and_aria_checked():
+    """Each action-btn must have role=radio + aria-checked='false' (default)
+    so the role=radiogroup container is no longer a lie."""
+    from sourcing_render_html import _render_supplier_card
+    sup = {
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    }
+    card_html = _render_supplier_card(sup, sourcing_match_ids=[])
+    # 3 action buttons, each with role="radio" + aria-checked="false".
+    assert card_html.count('role="radio"') == 3
+    assert card_html.count('aria-checked="false"') == 3
+    # tabindex="-1" on each (roving tabindex pattern; JS bumps the active one).
+    assert card_html.count('tabindex="-1"') == 3
+
+
+def test_suppliers_js_wires_arrow_key_navigation():
+    """SUPPLIERS_JS handles ArrowRight/ArrowLeft for the action radiogroup."""
+    from sourcing_render_html import SUPPLIERS_JS
+    assert "ArrowRight" in SUPPLIERS_JS
+    assert "ArrowLeft" in SUPPLIERS_JS
+    # aria-checked toggling on click as well.
+    assert "aria-checked" in SUPPLIERS_JS
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix UX4 — tri-state action OUTSIDE the <details> expander
+# ---------------------------------------------------------------------------
+
+
+def test_supplier_action_renders_outside_details_expander():
+    """The supplier-action group must be a sibling of (not a descendant of)
+    the <details class="supplier-details"> expander."""
+    from sourcing_render_html import _render_supplier_card
+    sup = {
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+        "lead_time_typical": "1-2 weeks",  # ensures details emits
+    }
+    card_html = _render_supplier_card(sup, sourcing_match_ids=[])
+    # The action div must appear BEFORE the <details> opening tag.
+    action_idx = card_html.find('class="supplier-action"')
+    details_idx = card_html.find("<details ")
+    assert action_idx > 0, "supplier-action missing"
+    assert details_idx > 0, "supplier-details expander missing"
+    assert action_idx < details_idx, (
+        "supplier-action must render BEFORE the <details> expander so it's "
+        "always visible (R3 Fix UX4)"
+    )
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix UX3 — mobile filter-bar collapse via <details class="mobile-filters">
+# ---------------------------------------------------------------------------
+
+
+def test_render_suppliers_page_emits_mobile_filters_details():
+    """The filter bar must be wrapped in a <details class="mobile-filters">
+    so the dead CSS for mobile-collapse actually fires on mobile breakpoints.
+    """
+    from sourcing_render_html import render_suppliers_page
+    fixture = {
+        "meta": {},
+        "categories": [{"id": "lighting", "label": "Lighting"}],
+        "suppliers": [{
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        }],
+    }
+    html = render_suppliers_page(fixture)
+    assert '<details class="mobile-filters">' in html
+    assert '<summary class="mobile-filters-summary">' in html
+    # CSS must reference the open-state filter-bar visibility.
+    assert 'details.mobile-filters[open] > .suppliers-filter-bar' in html
+
+
+# ---------------------------------------------------------------------------
+# R3 Fix UX1 — hero classifier defaults to photo on real disk image
+# ---------------------------------------------------------------------------
+
+
+def test_hero_visual_class_defaults_to_photo_when_real_image_on_disk(tmp_path, monkeypatch):
+    """When YAML has neither hero_image_source nor hero_image_source_url but
+    the file on disk is real (non-trivial size, not HTML), classifier returns
+    'photo', not 'placeholder'."""
+    import sourcing_render_html as srh
+    # Build a fake site dir with a fake "image" file of >1KB that isn't HTML.
+    fake_site = tmp_path / "site"
+    img_dir = fake_site / "images" / "suppliers"
+    img_dir.mkdir(parents=True)
+    fake_img = img_dir / "totally-real-product.jpg"
+    # 2KB of JPEG-like binary (first 3 bytes are FF D8 FF = JPEG SOI).
+    fake_img.write_bytes(b"\xff\xd8\xff" + b"x" * 2048)
+    monkeypatch.setattr(srh, "SITE_DIR", fake_site)
+    sup = {"hero_image": "/images/suppliers/totally-real-product.jpg"}
+    assert srh._hero_visual_class(sup) == "photo"
+
+
+def test_hero_visual_class_returns_broken_for_html_as_image(tmp_path, monkeypatch):
+    """When the on-disk file is actually an HTML error page (e.g. 1.1MB
+    schoolhouse.jpg 403), classifier returns 'broken' not 'photo'."""
+    import sourcing_render_html as srh
+    fake_site = tmp_path / "site"
+    img_dir = fake_site / "images" / "suppliers"
+    img_dir.mkdir(parents=True)
+    fake_img = img_dir / "bad-html.jpg"
+    fake_img.write_bytes(b"<!DOCTYPE html>\n<html><head><title>403</title></head>...")
+    monkeypatch.setattr(srh, "SITE_DIR", fake_site)
+    sup = {"hero_image": "/images/suppliers/bad-html.jpg"}
+    assert srh._hero_visual_class(sup) == "broken"

@@ -790,12 +790,27 @@ FILTER_JS = """
     });
     // Insert a 1-line vendor banner at the top of <main> so the user knows
     // they're looking at a filtered view, with a clear-filter affordance.
+    // R3 Fix C1 — build banner via DOM nodes / textContent, never innerHTML
+    // with a query-param. Reflected-XSS via ?vendor=<script>... is neutralized.
     const mainEl = document.querySelector('main');
     if (mainEl) {
       const banner = document.createElement('div');
       banner.className = 'vendor-filter-banner';
       banner.style.cssText = 'background:var(--warm-tint);border:1px solid #c9b88a;border-radius:8px;padding:10px 14px;margin:0 0 14px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;';
-      banner.innerHTML = '<span>Filtered to vendor <strong>' + vendor + '</strong> &mdash; ' + kept + ' item' + (kept !== 1 ? 's' : '') + '.</span><a href="' + window.location.pathname + '" style="color:var(--accent);font-weight:600;">Show all &times;</a>';
+      const msg = document.createElement('span');
+      msg.appendChild(document.createTextNode('Filtered to vendor '));
+      const strong = document.createElement('strong');
+      strong.textContent = vendor;
+      msg.appendChild(strong);
+      msg.appendChild(document.createTextNode(
+        ' — ' + kept + ' item' + (kept !== 1 ? 's' : '') + '.'
+      ));
+      const clear = document.createElement('a');
+      clear.href = window.location.pathname;
+      clear.style.cssText = 'color:var(--accent);font-weight:600;';
+      clear.textContent = 'Show all ×';
+      banner.appendChild(msg);
+      banner.appendChild(clear);
       mainEl.insertBefore(banner, mainEl.firstChild);
     }
   }
@@ -844,13 +859,18 @@ def _is_locked_decision(item: Item) -> bool:
     return False
 
 
-def _render_locked_row(item: Item, last_changed: Optional[str] = None) -> str:
+def _render_locked_row(item: Item, last_changed: Optional[str] = None,
+                        vendor_matches: Optional[List[str]] = None) -> str:
     """R9 declutter: compact one-line representation of a canon-decided item used inside the
     collapsed <details> block on /sourcing. Carries the data-* attributes the filter JS
     expects so room/category/status filters still work when the block is expanded.
 
     Shows: id · title · decided_sku (or 'see card') · room · category. The full item card
     is still available on the per-room page for in-room decision context.
+
+    R3 Fix C5 — locked rows also emit data-vendor-matches so the /sourcing
+    `?vendor=` filter (Fix C5 in R2 Beta) does not silently hide canon-decided
+    items that match the requested vendor.
     """
     decided_sku = item.decided_sku or "see per-room page for detail"
     # Yellow tint + pill on rows whose vendor catalog disagrees with spec.
@@ -861,13 +881,16 @@ def _render_locked_row(item: Item, last_changed: Optional[str] = None) -> str:
     elif item.catalog_status == "spec_error":
         gap_pill = '<span class="catalog-gap-pill">⚠ SPEC ERROR</span>'
     changed_meta = f" · changed {escape(last_changed)}" if last_changed else ""
+    vendor_attr = ""
+    if vendor_matches:
+        vendor_attr = f' data-vendor-matches="{escape(" ".join(vendor_matches))}"'
     return (
         f'<div class="locked-row{row_extra}" id="item-{escape(item.id)}" data-id="{escape(item.id)}" '
         f'data-urgency="{escape(item.urgency)}" data-room="{escape(item.room)}" '
         f'data-category="{escape(item.category)}" data-status="{escape(item.decision_status)}" '
         f'data-annika="{str(item.annika_loop).lower()}" '
         f'data-catalog-status="{escape(item.catalog_status or "")}" '
-        f'data-schedule-locked="true">'
+        f'data-schedule-locked="true"{vendor_attr}>'
         f'<span class="locked-row-id">{escape(item.id)}</span>'
         f'<span class="locked-row-title">{escape(item.title)}{gap_pill}</span>'
         f'<span class="locked-row-sku">{escape(decided_sku)}</span>'
@@ -1002,7 +1025,15 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
     if locked_items:
         # R9: compact one-line rows inside the collapsed details block. Cuts ~20 lines per
         # locked item out of the rendered HTML while preserving filter data-attrs.
-        locked_rows_html = "\n".join(_render_locked_row(it, last_changed=lc.get(it.id)) for it in locked_items)
+        # R3 Fix C5 — also pass vendor_matches so the ?vendor= filter on /sourcing
+        # finds canon-decided items, not only options-bearing items.
+        locked_rows_html = "\n".join(
+            _render_locked_row(
+                it, last_changed=lc.get(it.id),
+                vendor_matches=_vendor_matches_for_item(it, suppliers_idx),
+            )
+            for it in locked_items
+        )
         locked_block_html = (
             f'<details class="locked-decisions-banner">'
             f'<summary>'
@@ -2201,6 +2232,7 @@ SUPPLIERS_CSS = """
   padding: 2px 6px; line-height: 1; backdrop-filter: blur(4px);
   cursor: help; user-select: none; }
 .hero-class-placeholder { background: rgba(138, 122, 90, 0.85); }
+.hero-class-broken { background: rgba(151, 58, 28, 0.92); color: #fff5ed; }
 
 /* === R2 UX6: verification badge :focus-visible fallback for touch/keyboard === */
 .verif-badge { position: relative; }
@@ -2243,17 +2275,34 @@ SUPPLIERS_CSS = """
   border: none; padding: 6px 14px; border-radius: 999px; font-size: 12px;
   font-weight: 600; cursor: pointer; margin-top: 8px; }
 
+/* === R3 Fix UX3: Mobile filter-bar collapse via <details class="mobile-filters"> ===
+ * Desktop default: summary hidden, panel always shown. Mobile: summary becomes
+ * a tap-target; panel collapses unless [open]. Closes Claude's "dead CSS" critical. */
+details.mobile-filters > summary.mobile-filters-summary { display: none; }
+details.mobile-filters > .suppliers-filter-bar { display: flex; }
+
 /* === R2 UX2: Mobile media queries (≤720px) === */
 @media (max-width: 720px) {
-  /* Filter bar collapses to a Filters expander */
-  .suppliers-filter-bar { padding: 8px 0; }
-  .suppliers-filter-bar.is-collapsed > *:not(summary):not(.filter-stats) { display: none; }
-  .suppliers-filter-controls { display: flex; flex-wrap: wrap; gap: 8px;
-    width: 100%; align-items: center; }
-  .filter-bar-toggle { display: inline-flex; align-items: center; gap: 6px;
+  /* R3 Fix UX3: <details class="mobile-filters"> becomes collapsible.
+   * Summary is the always-visible tap-target. The filter-bar inside is shown
+   * only when the details is [open]. */
+  details.mobile-filters > summary.mobile-filters-summary {
+    display: flex; justify-content: space-between; align-items: center;
     background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer;
-    width: 100%; justify-content: space-between; }
+    border-radius: 999px; padding: 8px 14px; font-size: 13px;
+    font-weight: 600; cursor: pointer; user-select: none;
+    list-style: none; min-height: 44px; box-sizing: border-box; }
+  details.mobile-filters > summary.mobile-filters-summary::-webkit-details-marker { display: none; }
+  details.mobile-filters > summary.mobile-filters-summary::marker { display: none; }
+  details.mobile-filters > summary.mobile-filters-summary .mobile-filters-chevron {
+    transition: transform .15s; }
+  details.mobile-filters[open] > summary.mobile-filters-summary .mobile-filters-chevron {
+    transform: rotate(180deg); }
+  details.mobile-filters:not([open]) > .suppliers-filter-bar { display: none; }
+  details.mobile-filters[open] > .suppliers-filter-bar { display: flex;
+    border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; }
+  /* Filter bar itself: looser sticky behavior on mobile */
+  .suppliers-filter-bar { padding: 8px 0; }
   /* Single-column card grid */
   .supplier-card-grid { grid-template-columns: 1fr; gap: 12px; }
   /* Hero shorter on mobile */
@@ -2268,13 +2317,6 @@ SUPPLIERS_CSS = """
   .verif-badge .verif-tooltip { right: auto; left: 0;
     max-width: calc(100vw - 60px); }
   /* Topnav already shrinks; nothing extra */
-}
-
-@media (max-width: 720px) {
-  /* Filters details expander on mobile */
-  details.mobile-filters > summary { padding: 8px 14px; cursor: pointer;
-    font-size: 13px; font-weight: 600; }
-  details.mobile-filters[open] > summary { border-bottom: 1px solid var(--border); }
 }
 """
 
@@ -2326,7 +2368,21 @@ SUPPLIERS_JS = """
   function applyActionToCard(card, state) {
     card.dataset.actionState = state || '';
     const btns = card.querySelectorAll('.supplier-action .action-btn');
-    btns.forEach(b => b.classList.toggle('active', state && b.dataset.action === state));
+    let firstFocusable = null;
+    btns.forEach(b => {
+      const isActive = state && b.dataset.action === state;
+      b.classList.toggle('active', isActive);
+      // R3 Fix UX6 — keep aria-checked in sync with active state.
+      b.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      if (isActive) {
+        b.setAttribute('tabindex', '0');
+      } else {
+        b.setAttribute('tabindex', '-1');
+      }
+      if (!firstFocusable) firstFocusable = b;
+    });
+    // Roving tabindex: when nothing selected, the first button is the entry point.
+    if (!state && firstFocusable) firstFocusable.setAttribute('tabindex', '0');
   }
   function setAction(card, state) {
     const actions = loadActions();
@@ -2342,12 +2398,32 @@ SUPPLIERS_JS = """
     const id = card.dataset.supplierId;
     const actions = loadActions();
     if (actions[id]) applyActionToCard(card, actions[id]);
-    card.querySelectorAll('.supplier-action .action-btn').forEach(btn => {
+    else applyActionToCard(card, ''); // ensure roving-tabindex entry point exists.
+    const groupBtns = Array.from(card.querySelectorAll('.supplier-action .action-btn'));
+    groupBtns.forEach((btn, idx) => {
       btn.addEventListener('click', e => {
         e.preventDefault();
         const wanted = btn.dataset.action;
         const cur = card.dataset.actionState || '';
         setAction(card, cur === wanted ? '' : wanted);
+      });
+      // R3 Fix UX6 — arrow-key navigation across the radio group + space/enter to select.
+      btn.addEventListener('keydown', e => {
+        const key = e.key;
+        if (key === 'ArrowRight' || key === 'ArrowDown') {
+          e.preventDefault();
+          const next = groupBtns[(idx + 1) % groupBtns.length];
+          next.focus();
+        } else if (key === 'ArrowLeft' || key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = groupBtns[(idx - 1 + groupBtns.length) % groupBtns.length];
+          prev.focus();
+        } else if (key === ' ' || key === 'Enter') {
+          e.preventDefault();
+          const wanted = btn.dataset.action;
+          const cur = card.dataset.actionState || '';
+          setAction(card, cur === wanted ? '' : wanted);
+        }
       });
     });
   });
@@ -2778,10 +2854,13 @@ def _vendor_string_matches_supplier(vendor_str: str, supplier_id: str, supplier_
 
 
 def _load_sourcing_for_cross_link():
-    """Load sourcing.yaml items minimally (id + vendor strings).
+    """Load sourcing.yaml items minimally (id + vendor strings + scope keys).
 
-    Returns list of dicts: {id, top_vendor, option_vendors}. Returns [] if file missing
-    or unreadable — cross-link rendering degrades gracefully.
+    R3 Fix C2 — also surface (title, category, room) so supplier cross-link
+    counts can be category-scoped (see `_item_in_supplier_category_scope`).
+    Returns list of dicts: {id, title, category, room, top_vendor,
+    option_vendors}. Returns [] if file missing or unreadable — cross-link
+    rendering degrades gracefully.
     """
     sourcing_yaml = Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
     if not sourcing_yaml.exists():
@@ -2794,6 +2873,9 @@ def _load_sourcing_for_cross_link():
     for it in (raw.get("items") or []):
         out.append({
             "id": it.get("id", ""),
+            "title": it.get("title", "") or "",
+            "category": it.get("category", "") or "",
+            "room": it.get("room", "") or "",
             "top_vendor": it.get("vendor") or "",
             "option_vendors": [
                 (o or {}).get("vendor", "")
@@ -2803,18 +2885,196 @@ def _load_sourcing_for_cross_link():
     return out
 
 
+#
+# R3 Fix C2 — supplier-category scoping for /suppliers cross-link counts.
+#
+# Each supplier-directory category maps to a predicate over a sourcing.yaml
+# item: the (sourcing-item category, sourcing-item room, sourcing-item
+# title) tuple. A supplier only counts a sourcing item if it both
+# brand-matches AND falls inside its category's scope.
+#
+# Supplier-directory category vocabulary (15):
+#   furniture-seating, furniture-tables, furniture-bedroom,
+#   lighting, tile, plumbing, hardware, paint, cabinetry,
+#   counters, appliances, rugs, decor-art, window-treatments, outdoor
+#
+# Mapping rules:
+#  - Each entry maps to a dict with:
+#      "categories": set of sourcing item categories that are ALWAYS in scope
+#      "title_keywords": iterable of title substrings (case-insensitive) — when present, item is in scope
+#      "title_excludes": iterable of substrings that disqualify an item even if category matches
+#      "rooms": optional set of sourcing item rooms — when set, item room MUST be in this set
+# If a sourcing item matches by category OR by title_keyword and is NOT in title_excludes (and room
+# matches when rooms is set), it counts.
+#
+# A supplier whose id has no recognized category-suffix (or whose
+# supplier-directory category is missing from this map) falls through to
+# the legacy brand-only match (no scoping).
+#
+_SUPPLIER_CATEGORY_SCOPE = {
+    "furniture-seating": {
+        "title_keywords": (
+            "sofa", "sectional", "chair", "bench", "glider", "stool",
+            "loveseat", "ottoman", "armchair", "settee",
+        ),
+        "title_excludes": ("dining chair", "dining-chair"),  # dining chairs go w/ tables
+        "categories": set(),
+    },
+    "furniture-tables": {
+        "title_keywords": (
+            "table", "desk", "sideboard", "credenza", "console",
+            "buffet", "dining chair", "dining chairs",
+        ),
+        "title_excludes": (),
+        "categories": set(),
+    },
+    "furniture-bedroom": {
+        "title_keywords": (
+            "bed ", "bed,", "bedframe", "headboard", "nightstand",
+            "dresser", "crib", "wardrobe", "armoire", "chifforobe",
+        ),
+        "title_excludes": ("bed bench", "bedding"),
+        "categories": set(),
+        # Bedrooms / nursery only.
+        "rooms": {"master_br", "nursery", "guest_br"},
+    },
+    "lighting": {
+        "categories": {"lighting_fixture"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "tile": {
+        "categories": {"tile_stone"},
+        "title_keywords": (),
+        "title_excludes": ("counter", "vanity-top"),
+    },
+    "plumbing": {
+        "categories": {"plumbing_fixture"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "hardware": {
+        "categories": {"hardware"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "paint": {
+        "categories": {"paint_finish"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "cabinetry": {
+        "categories": {"cabinetry_millwork"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "counters": {
+        "categories": set(),
+        "title_keywords": ("counter", "counters", "vanity-top", "countertop"),
+        "title_excludes": (),
+    },
+    "appliances": {
+        "categories": {"appliance"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "rugs": {
+        "categories": set(),
+        "title_keywords": ("rug",),
+        "title_excludes": (),
+    },
+    "decor-art": {
+        "categories": {"decor_softgoods"},
+        "title_keywords": ("mirror", "art", "ceramic", "pillow", "throw", "vase"),
+        "title_excludes": ("rug",),
+    },
+    "window-treatments": {
+        "categories": {"window_treatment"},
+        "title_keywords": (),
+        "title_excludes": (),
+    },
+    "outdoor": {
+        "categories": set(),
+        "title_keywords": ("outdoor", "deck", "patio"),
+        "title_excludes": (),
+        # Outdoor scope: only exterior or items with explicit outdoor in title.
+    },
+}
+
+
+def _item_in_supplier_category_scope(item: dict, supplier_category: str) -> bool:
+    """Return True when the sourcing item is in-scope for the supplier's
+    directory category. Falls through to True (no scoping) for suppliers
+    whose directory category isn't in the map (e.g. legacy / unknown).
+    """
+    scope = _SUPPLIER_CATEGORY_SCOPE.get(supplier_category)
+    if scope is None:
+        # No scope rule for this supplier category — brand-only match preserved.
+        return True
+    title = (item.get("title") or "").lower()
+    cat = item.get("category") or ""
+    room = item.get("room") or ""
+
+    # Room gate (only relevant for furniture-bedroom right now).
+    if "rooms" in scope and scope["rooms"]:
+        if room and room not in scope["rooms"]:
+            return False
+
+    # Hard category match.
+    if cat in scope["categories"]:
+        # Apply title_excludes even on category match (so e.g. furniture-bedroom
+        # never accepts a "bedding" item even if the item is in furniture).
+        for kw in scope["title_excludes"]:
+            if kw in title:
+                return False
+        return True
+
+    # Title-keyword fallback (for furniture subcategories etc.).
+    if scope["title_keywords"]:
+        for kw in scope["title_keywords"]:
+            if kw in title:
+                # Title hits — but make sure no exclude triggers.
+                for ex in scope["title_excludes"]:
+                    if ex in title:
+                        return False
+                return True
+
+    return False
+
+
 def _supplier_sourcing_links(supplier_id: str, supplier_name: str,
-                              sourcing_items: list) -> List[str]:
-    """Return list of sourcing item IDs that reference this supplier (top vendor or option vendor)."""
+                              sourcing_items: list,
+                              supplier_category: Optional[str] = None) -> List[str]:
+    """Return list of sourcing item IDs that reference this supplier
+    (top vendor or option vendor), scoped by supplier_category.
+
+    R3 Fix C2 — Previously the function matched on brand alone, which caused
+    every WE-* sub-supplier (seating / tables / bedroom) to count all 35 WE
+    items. The supplier_category arg + the per-category scope rules above
+    fix the bleed: WE-bedroom now only counts bedroom-room furniture items,
+    WE-seating only counts seating-title furniture items, etc.
+
+    When `supplier_category` is None, the legacy brand-only behavior is
+    preserved for back-compat.
+    """
     matches = []
     for it in sourcing_items:
+        # Brand-match first (cheap).
+        brand_matched = False
         if _vendor_string_matches_supplier(it["top_vendor"], supplier_id, supplier_name):
-            matches.append(it["id"])
+            brand_matched = True
+        else:
+            for ov in it["option_vendors"]:
+                if _vendor_string_matches_supplier(ov, supplier_id, supplier_name):
+                    brand_matched = True
+                    break
+        if not brand_matched:
             continue
-        for ov in it["option_vendors"]:
-            if _vendor_string_matches_supplier(ov, supplier_id, supplier_name):
-                matches.append(it["id"])
-                break
+        # Category scope (R3 Fix C2).
+        if supplier_category is None:
+            matches.append(it["id"])
+        elif _item_in_supplier_category_scope(it, supplier_category):
+            matches.append(it["id"])
     return matches
 
 
@@ -2828,11 +3088,19 @@ def _safe_href(url) -> str:
     a malicious `javascript:` URL in supplier_directory.yaml would render as a
     clickable link. Return the URL unchanged (HTML-escaped by caller) if it's
     a recognized safe scheme; otherwise return "#" so the link is inert.
+
+    R3 Fix C3 — explicitly reject scheme-relative URLs (`//evil.com`). They
+    are protocol-relative and would inherit the current page scheme, which
+    we treat as untrusted external. Return "#" for them.
     """
     if url is None:
         return "#"
     s = str(url).strip()
     if not s:
+        return "#"
+    # R3 Fix C3 — reject scheme-relative URLs (e.g. //evil.com) BEFORE the
+    # "starts with /" internal-path check below.
+    if s.startswith("//"):
         return "#"
     lower = s.lower()
     for scheme in _SAFE_HREF_SCHEMES:
@@ -2859,6 +3127,35 @@ def _supplier_fit_pill(fit: str) -> str:
 def _supplier_tier_pill(tier: str) -> str:
     cls = f"tier-{tier}"
     return f'<span class="supplier-pill {cls}">{escape(tier)}</span>'
+
+
+_FIT_PREFIX_RE = None
+
+
+def _strip_redundant_fit_prefix(text) -> str:
+    """R3 Fix UX5 — strip leading 'STRONG — ' / 'GOOD — ' / 'MIXED — '
+    / 'CANON-ADJACENT — ' prefix from fit_for_project at render time.
+
+    The fit pill (top of card) already conveys the category; the prose
+    line beneath restated it on 131 of 135 cards. Strip at render time so
+    yaml stays editable and the prose reads as a sentence.
+    """
+    if not text:
+        return ""
+    s = str(text)
+    import re as _re
+    global _FIT_PREFIX_RE
+    if _FIT_PREFIX_RE is None:
+        # Match optional whitespace + label + dash/em-dash/hyphen + optional whitespace.
+        _FIT_PREFIX_RE = _re.compile(
+            r"^\s*(?:STRONG|GOOD|MIXED|CANON-ADJACENT|WATCH_LIST)\s*[—–\-]+\s*",
+            _re.IGNORECASE,
+        )
+    stripped = _FIT_PREFIX_RE.sub("", s, count=1)
+    # Capitalize the first letter if stripping leaves lowercase mid-sentence.
+    if stripped and stripped[0].islower():
+        stripped = stripped[0].upper() + stripped[1:]
+    return stripped
 
 
 def _sanitize_brackets_for_display(text) -> str:
@@ -2895,9 +3192,61 @@ def _sanitize_brackets_for_display(text) -> str:
 _LOGO_FILENAME_HINTS = ("logo", "wordmark", "branding", "_logo", "-logo", "_brand")
 
 
+def _is_real_image_on_disk(hero_path: str) -> bool:
+    """Return True when hero_image points to a real on-disk image file that
+    is NOT an HTML-as-image error page and is non-trivial (>1KB by default).
+
+    R3 Fix UX1 — used by `_hero_visual_class()` to default to "photo" when a
+    real product image is on disk, even if YAML lacks `hero_image_source*`.
+
+    Heuristic boundaries:
+      - <1KB: tiny stub / empty placeholder — reject (real product photos
+        run from ~5KB upward; the previously-stub .png "files" were 9-22 bytes)
+      - Starts with `<!doctype` / `<html` / contains `<head>` in first 200
+        bytes: HTML masquerading as image (schoolhouse.jpg was a 1.1MB
+        403 page). Reject.
+    """
+    if not hero_path:
+        return False
+    rel = hero_path.lstrip("/")
+    disk_path = SITE_DIR / rel
+    try:
+        if not disk_path.exists() or not disk_path.is_file():
+            return False
+        size = disk_path.stat().st_size
+        if size < 1024:  # < 1KB: tiny stub / empty placeholder
+            return False
+        # Defensive sniff: HTML-as-jpg leaks (schoolhouse.jpg was a 1.1MB
+        # HTML 403/404 page). Read the first few bytes and reject obvious
+        # HTML signatures.
+        with open(disk_path, "rb") as f:
+            head = f.read(256)
+        if not head:
+            return False
+        # Lowercased ASCII first 200 bytes — easy markers.
+        low = head[:200].lower()
+        if low.startswith(b"<!doctype") or low.startswith(b"<html") or b"<head>" in low:
+            return False
+        return True
+    except (OSError, ValueError):
+        return False
+
+
 def _hero_visual_class(sup: dict) -> str:
-    """Return one of 'photo', 'logo', 'placeholder' based on hero_image_source_url
-    and filename heuristics.
+    """Return one of 'photo', 'logo', 'placeholder', 'broken' based on YAML
+    hero_image_source tag, filename heuristics, AND the actual file on disk.
+
+    R3 Fix UX1 — when YAML is silent (no hero_image_source / hero_image_source_url),
+    fall back to checking whether a real image is on disk. Previously we
+    returned "placeholder" in that case, which lied to the user on the 11
+    cards that had a real photo but no source-tag in yaml. Now:
+      1. Explicit `hero_image_source: text_placeholder` → placeholder
+      2. Explicit `real_brand_cdn` / `brand_pdp` → photo (or logo if filename hints)
+      3. No explicit tag but file is on disk + non-trivial + not-HTML →
+         logo if filename suggests so, else photo
+      4. File missing → placeholder
+      5. File present but is HTML-as-image (e.g. schoolhouse.jpg 403 page)
+         → broken (rendered as placeholder-style badge with broken tooltip)
     """
     source_url = (sup.get("hero_image_source_url") or "").lower()
     hero_path = (sup.get("hero_image") or "").lower()
@@ -2915,17 +3264,44 @@ def _hero_visual_class(sup: dict) -> str:
     # No explicit tag — infer.
     if not hero_path:
         return "placeholder"
-    if any(h in source_url for h in _LOGO_FILENAME_HINTS) or any(
-        h in hero_path for h in _LOGO_FILENAME_HINTS
-    ):
+    # Filename-hint classification takes precedence over disk-state so test
+    # fixtures (no on-disk file) still classify correctly.
+    is_logo_hint = (
+        any(h in source_url for h in _LOGO_FILENAME_HINTS)
+        or any(h in hero_path for h in _LOGO_FILENAME_HINTS)
+    )
+    # R3 Fix UX1 — disk-check: if file is missing, mark placeholder; if it's
+    # an HTML-as-jpg error page (Claude flagged schoolhouse.jpg as 1.1MB HTML),
+    # mark broken; otherwise inherit photo / logo classification.
+    rel = hero_path.lstrip("/")
+    disk_path = SITE_DIR / rel
+    if not disk_path.exists():
+        # File missing on disk; preserve logo classification when filename
+        # clearly signals it (tests rely on filename-only logo detection).
+        if is_logo_hint:
+            return "logo"
+        # Source URL exists but no on-disk file — treat as photo (preserves
+        # R2 behavior for "had a source url, never saved to disk" pre-curation).
+        if source_url:
+            return "photo"
+        return "placeholder"
+    if not _is_real_image_on_disk(hero_path):
+        # File exists but failed sanity (HTML / <1KB stub) — broken.
+        return "broken"
+    # Real on-disk image: classify logo vs photo by filename hints + source URL.
+    if is_logo_hint:
         return "logo"
-    if source_url:
-        return "photo"
-    return "placeholder"
+    # R3 Fix UX1: no source_url required — disk file existence implies real photo.
+    return "photo"
 
 
 def _hero_visual_badge_html(cls: str) -> str:
-    """Small corner badge announcing what kind of image the hero is."""
+    """Small corner badge announcing what kind of image the hero is.
+
+    R3 Fix UX1 — adds 'broken' class for hero files that exist on disk but
+    failed sanity (HTML-as-jpg, sub-30KB stubs). Distinguishes "no image"
+    (placeholder) from "image is wrong on disk" (broken).
+    """
     if cls == "photo":
         return (
             '<span class="hero-class-badge hero-class-photo" '
@@ -2937,6 +3313,12 @@ def _hero_visual_badge_html(cls: str) -> str:
             '<span class="hero-class-badge hero-class-logo" '
             'title="Brand logo / banner" aria-label="Brand logo">'
             "&#127991;</span>"
+        )
+    if cls == "broken":
+        return (
+            '<span class="hero-class-badge hero-class-broken" '
+            'title="Hero file failed sanity check (HTML-as-image or tiny stub) — needs re-fetch" '
+            'aria-label="Broken hero image">&#9888;</span>'
         )
     return (
         '<span class="hero-class-badge hero-class-placeholder" '
@@ -2975,7 +3357,11 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     # R2 Fix UX3 — sanitize bracket-truncation in source data (e.g. WE Notes
     # ending in "[OWNER CONFIRM" with no closing bracket).
     fingerprint = escape(_sanitize_brackets_for_display(sup.get("style_fingerprint", "")))
-    fit_text = escape(_sanitize_brackets_for_display(sup.get("fit_for_project", "")))
+    # R3 Fix UX5 — strip "STRONG — " / "GOOD — " / "MIXED — " / "CANON-ADJACENT — "
+    # prefix at render time so the prose line isn't redundant with the fit pill.
+    fit_text = escape(_strip_redundant_fit_prefix(
+        _sanitize_brackets_for_display(sup.get("fit_for_project", ""))
+    ))
     warn_raw = _sanitize_brackets_for_display(sup.get("off_canon_warning"))
     sample_policy = sup.get("sample_policy")
     lead_time = sup.get("lead_time_typical")
@@ -3066,7 +3452,7 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     visual_cls = _hero_visual_class(sup)
     visual_badge_html = _hero_visual_badge_html(visual_cls)
     hero_html = ""
-    if hero_image:
+    if hero_image and visual_cls != "broken":
         rel = hero_image.lstrip("/")
         disk_path = SITE_DIR / rel
         if disk_path.exists():
@@ -3077,10 +3463,14 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
                 f'</div>'
             )
     if not hero_html:
+        # R3 Fix UX1 — broken hero (HTML-as-jpg etc.) falls back to a
+        # placeholder-style block but keeps the BROKEN badge so the operator
+        # can see which suppliers need a re-fetch.
+        fallback_cls = "broken" if visual_cls == "broken" else "placeholder"
         hero_html = (
-            f'<div class="supplier-hero supplier-hero-placeholder" data-hero-class="placeholder">'
+            f'<div class="supplier-hero supplier-hero-placeholder" data-hero-class="{fallback_cls}">'
             f'<span>{name}</span>'
-            f'{_hero_visual_badge_html("placeholder")}'
+            f'{_hero_visual_badge_html(fallback_cls)}'
             f'</div>'
         )
 
@@ -3127,15 +3517,20 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
             f'</div>'
         )
 
-    # Tri-state action selector — moved inside expander (lower visual weight per
-    # UX1: Explore button is the primary CTA, tri-state is secondary triage).
+    # Tri-state action selector — R3 Fix UX4: rendered OUTSIDE the expander.
+    # R3 Fix UX6 — `role="radio"` + `aria-checked="false"` on each button so
+    # the `role="radiogroup"` container is no longer a lie. JS handler in
+    # SUPPLIERS_JS wires arrow-key navigation + updates aria-checked.
     action_html = (
         f'<div class="supplier-action" role="radiogroup" aria-label="Action for {name}">'
         f'<button type="button" class="action-btn action-visit" data-action="visit" '
+        f'role="radio" aria-checked="false" tabindex="-1" '
         f'aria-label="Mark to visit">&#128270; Visit</button>'
         f'<button type="button" class="action-btn action-saved" data-action="saved" '
+        f'role="radio" aria-checked="false" tabindex="-1" '
         f'aria-label="Save">&#11088; Saved</button>'
         f'<button type="button" class="action-btn action-ruled" data-action="ruled" '
+        f'role="radio" aria-checked="false" tabindex="-1" '
         f'aria-label="Rule out">&#128683; Ruled out</button>'
         f'</div>'
     )
@@ -3156,7 +3551,7 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         f'</div>'
     )
 
-    # Expander body — everything else
+    # Expander body — everything else EXCEPT action (R3 Fix UX4: action stays visible).
     expander_inner = "".join([
         fit_line_html,
         warn_html,
@@ -3165,7 +3560,6 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         lead_sample_html,
         notes_html,
         cross_html,
-        action_html,
     ])
     expander_html = (
         '<details class="supplier-details">'
@@ -3174,10 +3568,15 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
         '</details>'
     ) if expander_inner else ""
 
+    # R3 Fix UX4 — tri-state action selector rendered OUTSIDE the <details>
+    # expander. Triage workflow ("mark each supplier visit/saved/ruled once")
+    # was degraded in R2 because the buttons were behind a click. Moving them
+    # back to always-visible restores 1-click-per-card triage.
     return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category") or "")}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
   {hero_html}
   {spec_strip_html}
   <p class="fingerprint">{fingerprint}</p>
+  {action_html}
   {expander_html}
   <a class="explore-btn" href="{url}" target="_blank" rel="noopener">Explore {name} &rarr;</a>
 </article>'''
@@ -3212,12 +3611,14 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     # Load sourcing.yaml once for /sourcing cross-link counting
     sourcing_items = _load_sourcing_for_cross_link()
 
-    # Pre-compute matches per supplier id
+    # Pre-compute matches per supplier id (R3 Fix C2 — pass supplier_category
+    # so cross-link counts are scoped, not brand-wide).
     matches_by_supplier: Dict[str, List[str]] = {}
     for s in suppliers:
         sid = s.get("id", "")
         matches_by_supplier[sid] = _supplier_sourcing_links(
-            sid, s.get("name", ""), sourcing_items
+            sid, s.get("name", ""), sourcing_items,
+            supplier_category=s.get("category"),
         )
 
     # Group suppliers by category, in the canonical category order.
@@ -3253,7 +3654,13 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
         f'<option value="{escape(c["id"])}">{escape(c["label"])}</option>'
         for c in categories
     )
-    filter_bar_html = f'''<div class="suppliers-filter-bar">
+    # R3 Fix UX3 — wrap filter bar in a <details class="mobile-filters">.
+    # On desktop, CSS forces the details panel open + hides summary; on
+    # mobile (≤720px), the summary becomes a tap-target and the panel
+    # collapses by default. Closes Claude's "dead CSS" critical.
+    filter_bar_html = f'''<details class="mobile-filters">
+<summary class="mobile-filters-summary"><span>Filters</span><span class="mobile-filters-chevron" aria-hidden="true">▾</span></summary>
+<div class="suppliers-filter-bar">
   <label>Search</label>
   <input id="supplier-search" type="search" placeholder="Brand, style, finish..." autocomplete="off">
   <label>Category</label>
@@ -3301,6 +3708,7 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
   <button id="copy-filter-url" type="button" title="Copy a sharable URL of the current filter state">Copy link</button>
   <span class="filter-stats" id="filter-stats"></span>
 </div>
+</details>
 <div class="active-filter-pills" id="active-filter-pills" aria-live="polite"></div>
 <div class="suppliers-empty-state" id="suppliers-empty-state">
   <p>No suppliers match the current filters.</p>
