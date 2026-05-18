@@ -322,6 +322,17 @@ def topnav(current=""):
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {{
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {{
+      cur.scrollIntoView({{block: 'nearest', inline: 'center'}});
+    }}
+  }})();
+</script>
 """
 
 def page(slug, title, subtitle, body_html, current=None):

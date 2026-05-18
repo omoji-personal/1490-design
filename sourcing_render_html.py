@@ -444,7 +444,18 @@ def _build_topnav_html(current: str = "sourcing") -> str:
       <a href="/materials"{cls('materials')}>Materials</a><a href="/rejected"{cls('rejected')}>Rejected</a>
     </div>
   </div>
-</nav>"""
+</nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {{
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {{
+      cur.scrollIntoView({{block: 'nearest', inline: 'center'}});
+    }}
+  }})();
+</script>"""
 
 
 TOPNAV_HTML = _build_topnav_html("sourcing")
@@ -1945,8 +1956,10 @@ VENDORS_CSS = """
   border-radius: 12px; padding: 16px 20px; margin: 0 0 14px; }
 .vendor-section-header { display: flex; flex-wrap: wrap; align-items: baseline;
   gap: 14px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px dashed #efe7d4; }
+/* R4-6: text-wrap: balance keeps long vendor names from breaking awkwardly
+ * at narrow widths. Modern browsers honor; older ignore gracefully. */
 .vendor-section-header h2 { margin: 0; font-size: 18px; font-weight: 600;
-  flex: 1; letter-spacing: -0.2px; }
+  flex: 1; letter-spacing: -0.2px; text-wrap: balance; }
 .vendor-section-header .meta { font-size: 12px; color: var(--muted); }
 .vendor-section-header .meta strong { color: var(--ink); }
 .vendor-section table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -2495,6 +2508,13 @@ details.mobile-filters > .suppliers-filter-bar { display: flex; }
 
 /* === R2 UX2: Mobile media queries (≤720px) === */
 @media (max-width: 720px) {
+  /* R4-3: tighten .suppliers-anchor-block so the orientation block doesn't
+   * eat ~140px above the filter drawer on phones. ~60px total now.
+   * Note: rendered markup uses <h3> not <h2>; selector targets both for
+   * robustness in case the block grows other heading levels later. */
+  .suppliers-anchor-block { padding: 12px 16px; margin-bottom: 12px; font-size: 14px; }
+  .suppliers-anchor-block h2,
+  .suppliers-anchor-block h3 { font-size: 1.15rem; margin: 0 0 6px; }
   /* R3 Fix UX3: <details class="mobile-filters"> becomes collapsible.
    * Summary is the always-visible tap-target. The filter-bar inside is shown
    * only when the details is [open]. */

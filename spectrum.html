@@ -236,6 +236,17 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {
+      cur.scrollIntoView({block: 'nearest', inline: 'center'});
+    }
+  })();
+</script>
 
 <div style="background: rgba(250, 248, 244, 0.96); border-bottom: 1px solid #e8e2d6; padding: 11px 28px; font-size: 14px; position: sticky; top: 0; z-index: 60; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
   <div style="max-width: 1180px; margin: 0 auto; display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">

@@ -274,6 +274,17 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {
+      cur.scrollIntoView({block: 'nearest', inline: 'center'});
+    }
+  })();
+</script>
 
 <div class="container">
   <h1>Decisions Locked</h1>
