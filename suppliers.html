@@ -38,6 +38,17 @@ img, picture, video { max-width: 100%; height: auto; }
     content: ""; position: absolute; top: 0; right: 0; bottom: 0;
     width: 24px; pointer-events: none;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
+  /* R4-4: scroll-driven animation makes the edge-fade content-aware on
+   * Chrome 115+ / modern browsers — it fades out as the user scrolls to
+   * the right edge. Older browsers fall back to the always-shown fade. */
+  @supports (animation-timeline: scroll(x)) {
+    .table-wrapper::after, .topnav-scroller::after {
+      animation: edge-fade auto linear;
+      animation-timeline: scroll(self x);
+      animation-range: 95% 100%;
+    }
+    @keyframes edge-fade { to { opacity: 0; } }
+  }
 }
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
@@ -542,6 +553,13 @@ details.mobile-filters > .suppliers-filter-bar { display: flex; }
 
 /* === R2 UX2: Mobile media queries (≤720px) === */
 @media (max-width: 720px) {
+  /* R4-3: tighten .suppliers-anchor-block so the orientation block doesn't
+   * eat ~140px above the filter drawer on phones. ~60px total now.
+   * Note: rendered markup uses <h3> not <h2>; selector targets both for
+   * robustness in case the block grows other heading levels later. */
+  .suppliers-anchor-block { padding: 12px 16px; margin-bottom: 12px; font-size: 14px; }
+  .suppliers-anchor-block h2,
+  .suppliers-anchor-block h3 { font-size: 1.15rem; margin: 0 0 6px; }
   /* R3 Fix UX3: <details class="mobile-filters"> becomes collapsible.
    * Summary is the always-visible tap-target. The filter-bar inside is shown
    * only when the details is [open]. */
@@ -591,6 +609,17 @@ details.mobile-filters > .suppliers-filter-bar { display: flex; }
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {
+      cur.scrollIntoView({block: 'nearest', inline: 'center'});
+    }
+  })();
+</script>
 <header class="page-header">
   <h1>Suppliers</h1>
   <p class="subtitle">135 suppliers across 15 categories. A map of where to look &mdash; not a tracker (that&rsquo;s /sourcing) and not a vendor rollup (that&rsquo;s /vendors). Generated 2026-05-17.</p>

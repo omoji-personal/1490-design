@@ -40,6 +40,17 @@ img, picture, video { max-width: 100%; height: auto; }
     content: ""; position: absolute; top: 0; right: 0; bottom: 0;
     width: 24px; pointer-events: none;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
+  /* R4-4: scroll-driven animation makes the edge-fade content-aware on
+   * Chrome 115+ / modern browsers — it fades out as the user scrolls to
+   * the right edge. Older browsers fall back to the always-shown fade. */
+  @supports (animation-timeline: scroll(x)) {
+    .table-wrapper::after, .topnav-scroller::after {
+      animation: edge-fade auto linear;
+      animation-timeline: scroll(self x);
+      animation-range: 95% 100%;
+    }
+    @keyframes edge-fade { to { opacity: 0; } }
+  }
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
@@ -268,6 +279,17 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {
+      cur.scrollIntoView({block: 'nearest', inline: 'center'});
+    }
+  })();
+</script>
 
 <header class="page-header">
   <h1>Nursery</h1>

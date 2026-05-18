@@ -38,6 +38,17 @@ img, picture, video { max-width: 100%; height: auto; }
     content: ""; position: absolute; top: 0; right: 0; bottom: 0;
     width: 24px; pointer-events: none;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
+  /* R4-4: scroll-driven animation makes the edge-fade content-aware on
+   * Chrome 115+ / modern browsers — it fades out as the user scrolls to
+   * the right edge. Older browsers fall back to the always-shown fade. */
+  @supports (animation-timeline: scroll(x)) {
+    .table-wrapper::after, .topnav-scroller::after {
+      animation: edge-fade auto linear;
+      animation-timeline: scroll(self x);
+      animation-range: 95% 100%;
+    }
+    @keyframes edge-fade { to { opacity: 0; } }
+  }
 }
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
@@ -296,8 +307,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   border-radius: 12px; padding: 16px 20px; margin: 0 0 14px; }
 .vendor-section-header { display: flex; flex-wrap: wrap; align-items: baseline;
   gap: 14px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px dashed #efe7d4; }
+/* R4-6: text-wrap: balance keeps long vendor names from breaking awkwardly
+ * at narrow widths. Modern browsers honor; older ignore gracefully. */
 .vendor-section-header h2 { margin: 0; font-size: 18px; font-weight: 600;
-  flex: 1; letter-spacing: -0.2px; }
+  flex: 1; letter-spacing: -0.2px; text-wrap: balance; }
 .vendor-section-header .meta { font-size: 12px; color: var(--muted); }
 .vendor-section-header .meta strong { color: var(--ink); }
 .vendor-section table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -351,6 +364,17 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     </div>
   </div>
 </nav>
+<script>
+  /* R4-1: scroll the active topnav pill into view on mount so users on
+   * narrow viewports land on `/vendors` etc. with the .current pill
+   * centered in the horizontally-scrollable topnav, not offscreen. */
+  (function () {
+    const cur = document.querySelector('nav.topnav .current');
+    if (cur && cur.scrollIntoView) {
+      cur.scrollIntoView({block: 'nearest', inline: 'center'});
+    }
+  })();
+</script>
 <header class="page-header">
   <h1>Vendors</h1>
   <p class="subtitle">139 items grouped by vendor for batch ordering. Total budgeted across vendors: $215,123 of $342,000 cap. Updated 2026-05-16.</p>
