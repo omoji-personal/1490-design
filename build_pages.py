@@ -219,6 +219,13 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
     max-width: 100%; white-space: nowrap; }
   table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* R2-C2: when a table is wrapped in .table-wrapper, the WRAPPER handles
+   * overflow and the child renders naturally (text wraps, max-width follows
+   * the wrapper). Without this rule the child is also set to display:block
+   * + nowrap, double-wrapping the overflow and forcing horizontal scroll
+   * even for tables narrow enough to fit. */
+  .table-wrapper > table { display: table; white-space: normal;
+    overflow-x: visible; max-width: none; }
   pre, code { word-break: break-word; white-space: pre-wrap; }
 }
 @media (max-width: 480px) {

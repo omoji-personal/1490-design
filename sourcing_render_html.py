@@ -225,7 +225,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .decisions-needed-banner .gap-kind { display: inline-block; font-size: 10px;
   text-transform: uppercase; letter-spacing: 0.4px; color: #8a5a10;
   margin-right: 4px; font-weight: 700; }
-.item-card[id]::before { content: ""; display: block; height: 56px; margin-top: -56px;
+/* R2-C5: anchor-shim uses --topnav-h so jump-link offsets track the actual
+ * sticky topnav height across mobile + desktop. */
+.item-card[id]::before { content: ""; display: block; height: var(--topnav-h);
+  margin-top: calc(-1 * var(--topnav-h));
   visibility: hidden; pointer-events: none; }
 /* Git-history audit-trail line shown under item title. */
 .item-last-changed { font-size: 11.5px; color: var(--muted); font-style: italic;
@@ -287,6 +290,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
     max-width: 100%; white-space: nowrap; }
   table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* R2-C2: wrapped tables render naturally; the WRAPPER handles overflow.
+   * Without this rule, .table-wrapper child tables would still be display:block
+   * + nowrap, forcing horizontal scroll even when content could wrap. */
+  .table-wrapper > table { display: table; white-space: normal;
+    overflow-x: visible; max-width: none; }
   /* Long URLs / code blocks must wrap so they can't break the page layout. */
   pre, code { word-break: break-word; white-space: pre-wrap; }
 }
@@ -2139,7 +2147,10 @@ SUPPLIERS_CSS = """
 
 .suppliers-page-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px;
   align-items: flex-start; }
-.category-side-nav { position: sticky; top: 100px; align-self: flex-start;
+/* R2-C5: sticky offset derives from --topnav-h plus the suppliers filter-bar
+ * row so the side nav lands below both, not at a hardcoded 100px. */
+.category-side-nav { position: sticky; top: calc(var(--topnav-h) + 52px);
+  align-self: flex-start;
   font-size: 12.5px; background: var(--card-bg); border: 1px solid var(--border);
   border-radius: 10px; padding: 14px 6px; }
 .category-side-nav h4 { margin: 0 0 8px; padding: 0 8px; font-size: 11px;
@@ -2148,7 +2159,9 @@ SUPPLIERS_CSS = """
   color: var(--ink); text-decoration: none; line-height: 1.35; margin-bottom: 1px; }
 .category-side-nav a:hover { background: var(--warm-tint); color: var(--accent); }
 .category-side-nav a .count { color: var(--muted); font-size: 10.5px; margin-left: 4px; }
-@media (max-width: 900px) {
+/* R2-C6: collapse the supplier two-column layout at the unified 720px breakpoint
+ * (was 900px, an outlier vs. the site-wide 720/480 baseline). */
+@media (max-width: 720px) {
   .suppliers-page-layout { grid-template-columns: 1fr; }
   .category-side-nav { position: static; }
 }

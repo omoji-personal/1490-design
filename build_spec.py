@@ -18,16 +18,48 @@ html_body = markdown.markdown(
     extensions=["tables", "fenced_code", "toc", "attr_list", "sane_lists"],
 )
 
-# R1 mobile-fit: wrap every markdown-generated <table>…</table> in a
-# .table-wrapper div so it can horizontally scroll on mobile without
-# breaking the page layout. The wrapper has no desktop effect.
+# R1 mobile-fit / R2-C3: wrap every markdown-generated <table>…</table> in a
+# .table-wrapper div so it can horizontally scroll on mobile without breaking
+# the page layout. The wrapper has no desktop effect.
+#
+# Implementation must be idempotent + must skip tables embedded inside <pre>
+# blocks (where they are literal code samples, not rendered tables).
+# Strategy:
+#   1. Split the html on <pre>...</pre> blocks; only operate on non-pre parts.
+#   2. In each non-pre part, find each <table>...</table> span (DOTALL); skip
+#      any span already wrapped by a .table-wrapper opening div immediately
+#      preceding the <table>.
+#   3. Replace matched spans with <div class="table-wrapper">…</div>.
+# This is regex-based, not DOM-aware, but the idempotency + <pre> exclusion
+# closes the two issues Codex flagged in R1: double-wrapping on re-render and
+# clobbering <pre><table> code samples in docs.
 import re as _re
-html_body = _re.sub(
-    r"(<table[^>]*>)",
-    r'<div class="table-wrapper">\1',
-    html_body,
-)
-html_body = html_body.replace("</table>", "</table></div>")
+
+_TABLE_RE = _re.compile(r"<table\b[^>]*>.*?</table>", _re.DOTALL)
+_PRE_SPLIT_RE = _re.compile(r"(<pre\b[^>]*>.*?</pre>)", _re.DOTALL)
+_WRAPPER_PREFIX = '<div class="table-wrapper">'
+
+
+def _wrap_one_match(m):
+    span = m.string
+    start = m.start()
+    # Idempotency check: if this <table> is already directly inside a
+    # .table-wrapper opener, leave it alone.
+    if span[max(0, start - len(_WRAPPER_PREFIX)):start] == _WRAPPER_PREFIX:
+        return m.group(0)
+    return f'{_WRAPPER_PREFIX}{m.group(0)}</div>'
+
+
+def _wrap_tables(html: str) -> str:
+    parts = _PRE_SPLIT_RE.split(html)
+    for i, part in enumerate(parts):
+        if part.startswith("<pre"):
+            continue  # leave code-sample regions untouched
+        parts[i] = _TABLE_RE.sub(_wrap_one_match, part)
+    return "".join(parts)
+
+
+html_body = _wrap_tables(html_body)
 
 html = f"""<!DOCTYPE html>
 <html lang="en">
