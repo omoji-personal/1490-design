@@ -3212,6 +3212,62 @@ def _sanitize_brackets_for_display(text) -> str:
 #   📋 placeholder: text-on-color generated fallback
 _LOGO_FILENAME_HINTS = ("logo", "wordmark", "branding", "_logo", "-logo", "_brand")
 
+# R4 Fix I4 — hero_image is yaml-sourced and previously joined to SITE_DIR
+# after only an lstrip("/"), with no normalization or root-check. A
+# malicious entry like `../../etc/passwd` or `/../../tmp/x.png` could
+# escape to other parts of the filesystem (read-side: disk_path.exists()
+# checks, RTL: the rendered <img src=...> would leak the path back to
+# browsers). The renderer locks all hero_image paths to the canonical
+# images/suppliers/ subtree.
+_HERO_IMAGE_ROOT_REL = "images/suppliers"
+
+
+def _safe_hero_image_path(hero_path):
+    """R4 Fix I4 — return the canonical site-relative path for a yaml-sourced
+    hero_image string, or None if it's malformed / outside the
+    images/suppliers/ subtree.
+
+    Reject:
+      - empty / non-string input
+      - paths containing '..' segments (path-traversal)
+      - paths that don't resolve under SITE_DIR/images/suppliers/
+
+    Accept and return the normalized site-relative string (always starts
+    with 'images/suppliers/'). Callers can build a URL by prepending '/'.
+    """
+    if not hero_path or not isinstance(hero_path, str):
+        return None
+    rel = hero_path.lstrip("/").strip()
+    if not rel:
+        return None
+    # Reject any '..' parent-traversal segments BEFORE normalization to
+    # close the door on dotted-segment escapes (Path('a/../b').parts will
+    # not contain '..' but the input string carrying '..' is the signal we
+    # need to reject malicious YAML).
+    parts = rel.split("/")
+    if any(p == ".." for p in parts):
+        return None
+    # Build the absolute candidate and ensure it stays under the canonical
+    # images/suppliers/ subtree of SITE_DIR after normalization. We use
+    # os.path.normpath to collapse any . segments and then compare relative
+    # to the resolved hero root.
+    import os as _os
+    hero_root = (SITE_DIR / _HERO_IMAGE_ROOT_REL).resolve()
+    try:
+        candidate = (SITE_DIR / rel).resolve()
+    except (OSError, ValueError):
+        return None
+    try:
+        candidate.relative_to(hero_root)
+    except ValueError:
+        return None
+    # Return the canonical site-relative string (rel of SITE_DIR).
+    try:
+        site_rel = candidate.relative_to(SITE_DIR.resolve()).as_posix()
+    except ValueError:
+        return None
+    return site_rel
+
 
 def _is_real_image_on_disk(hero_path: str) -> bool:
     """Return True when hero_image points to a real on-disk image file that
@@ -3229,8 +3285,12 @@ def _is_real_image_on_disk(hero_path: str) -> bool:
     """
     if not hero_path:
         return False
-    rel = hero_path.lstrip("/")
-    disk_path = SITE_DIR / rel
+    # R4 Fix I4 — validate path is under images/suppliers/ before touching
+    # disk. Out-of-scope paths fall straight through to "not real".
+    safe_rel = _safe_hero_image_path(hero_path)
+    if not safe_rel:
+        return False
+    disk_path = SITE_DIR / safe_rel
     try:
         if not disk_path.exists() or not disk_path.is_file():
             return False
@@ -3294,8 +3354,17 @@ def _hero_visual_class(sup: dict) -> str:
     # R3 Fix UX1 — disk-check: if file is missing, mark placeholder; if it's
     # an HTML-as-jpg error page (Claude flagged schoolhouse.jpg as 1.1MB HTML),
     # mark broken; otherwise inherit photo / logo classification.
-    rel = hero_path.lstrip("/")
-    disk_path = SITE_DIR / rel
+    # R4 Fix I4 — validate path-traversal-safety before touching disk.
+    safe_rel = _safe_hero_image_path(hero_path)
+    if not safe_rel:
+        # Out-of-scope hero_image is treated identically to a missing file
+        # (preserve logo-hint classification, otherwise placeholder).
+        if is_logo_hint:
+            return "logo"
+        if source_url:
+            return "photo"
+        return "placeholder"
+    disk_path = SITE_DIR / safe_rel
     if not disk_path.exists():
         # File missing on disk; preserve logo classification when filename
         # clearly signals it (tests rely on filename-only logo detection).
@@ -3372,7 +3441,12 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     sid = sup.get("id", "")
     name = escape(sup.get("name", ""))
     # R2 Fix C1 — scheme-sanitize external URL before HTML-escaping.
-    url = escape(_safe_href(sup.get("url", "")))
+    # R4 Fix I1 — track the sanitized result separately so we can suppress
+    # the Explore CTA when _safe_href() rejected the URL (returns "#"),
+    # instead of rendering a button that goes nowhere.
+    safe_url = _safe_href(sup.get("url", ""))
+    url = escape(safe_url)
+    url_is_inert = safe_url == "#"
     tier = sup.get("price_tier", "mid")
     fit = sup.get("fit", "GOOD")
     # R2 Fix UX3 — sanitize bracket-truncation in source data (e.g. WE Notes
@@ -3474,15 +3548,22 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     visual_badge_html = _hero_visual_badge_html(visual_cls)
     hero_html = ""
     if hero_image and visual_cls != "broken":
-        rel = hero_image.lstrip("/")
-        disk_path = SITE_DIR / rel
-        if disk_path.exists():
-            hero_html = (
-                f'<div class="supplier-hero" data-hero-class="{visual_cls}">'
-                f'<img src="{escape(hero_image)}" alt="{name}" loading="lazy">'
-                f'{visual_badge_html}'
-                f'</div>'
-            )
+        # R4 Fix I4 — only render <img> when the hero_image path resolves
+        # inside SITE_DIR/images/suppliers/. Malicious YAML can't escape to
+        # other site directories or leak host paths via path traversal.
+        safe_rel = _safe_hero_image_path(hero_image)
+        if safe_rel:
+            disk_path = SITE_DIR / safe_rel
+            if disk_path.exists():
+                # Render the canonical site-relative path with a leading slash
+                # (matches existing yaml convention `/images/suppliers/...`).
+                hero_src = "/" + safe_rel
+                hero_html = (
+                    f'<div class="supplier-hero" data-hero-class="{visual_cls}">'
+                    f'<img src="{escape(hero_src)}" alt="{name}" loading="lazy">'
+                    f'{visual_badge_html}'
+                    f'</div>'
+                )
     if not hero_html:
         # R3 Fix UX1 — broken hero (HTML-as-jpg etc.) falls back to a
         # placeholder-style block but keeps the BROKEN badge so the operator
@@ -3593,13 +3674,28 @@ def _render_supplier_card(sup: dict, sourcing_match_ids: Optional[List[str]] = N
     # expander. Triage workflow ("mark each supplier visit/saved/ruled once")
     # was degraded in R2 because the buttons were behind a click. Moving them
     # back to always-visible restores 1-click-per-card triage.
+    #
+    # R4 Fix I1 — suppress the Explore CTA when _safe_href() rejected the URL
+    # (returns "#"). Rendering a clickable button that goes nowhere is a UX
+    # lie; a missing button signals "supplier has no usable external URL".
+    if url_is_inert:
+        explore_html = (
+            f'<span class="explore-btn explore-btn-disabled" '
+            f'aria-disabled="true" title="No external URL available for this supplier">'
+            f'No site for {name}</span>'
+        )
+    else:
+        explore_html = (
+            f'<a class="explore-btn" href="{url}" target="_blank" rel="noopener">'
+            f'Explore {name} &rarr;</a>'
+        )
     return f'''<article class="supplier-card" data-supplier-id="{escape(sid)}" data-category="{escape(sup.get("category") or "")}" data-tier="{escape(tier)}" data-fit="{escape(fit)}" data-verified="{str(url_verified).lower()}" data-verified-date="{escape(verification_date or "")}" data-search="{haystack_attr}">
   {hero_html}
   {spec_strip_html}
   <p class="fingerprint">{fingerprint}</p>
   {action_html}
   {expander_html}
-  <a class="explore-btn" href="{url}" target="_blank" rel="noopener">Explore {name} &rarr;</a>
+  {explore_html}
 </article>'''
 
 

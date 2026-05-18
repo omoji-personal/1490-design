@@ -2388,3 +2388,102 @@ def test_hero_visual_class_returns_broken_for_html_as_image(tmp_path, monkeypatc
     monkeypatch.setattr(srh, "SITE_DIR", fake_site)
     sup = {"hero_image": "/images/suppliers/bad-html.jpg"}
     assert srh._hero_visual_class(sup) == "broken"
+
+
+# ---------------------------------------------------------------------------
+# R4 Fix I1 — Explore CTA suppressed when _safe_href returns "#"
+# ---------------------------------------------------------------------------
+
+
+def test_explore_cta_suppressed_when_url_inert():
+    """R4 Fix I1 — suppliers whose URL is rejected by _safe_href() (e.g.
+    javascript: scheme, protocol-relative //) must NOT render a clickable
+    Explore button. Codex flagged this as an open R2 important; R3 left
+    the rendered `<a href="#">` in place."""
+    from sourcing_render_html import _render_supplier_card
+    sup = {
+        "id": "evil", "category": "lighting", "name": "Evil",
+        "url": "javascript:alert(1)",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    }
+    card_html = _render_supplier_card(sup, sourcing_match_ids=[])
+    # Explore anchor MUST be absent; disabled placeholder span present instead.
+    assert '<a class="explore-btn"' not in card_html, (
+        "Explore <a> button must not render when _safe_href returns '#'."
+    )
+    assert 'explore-btn-disabled' in card_html, (
+        "Inert URL should render a visibly-disabled placeholder span."
+    )
+    assert 'No site for Evil' in card_html
+
+
+def test_explore_cta_renders_for_safe_url():
+    """R4 Fix I1 sanity check — a well-formed https URL still renders the
+    Explore anchor exactly as before."""
+    from sourcing_render_html import _render_supplier_card
+    sup = {
+        "id": "good", "category": "lighting", "name": "Good",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    }
+    card_html = _render_supplier_card(sup, sourcing_match_ids=[])
+    assert '<a class="explore-btn" href="https://example.com"' in card_html
+    assert 'explore-btn-disabled' not in card_html
+
+
+# ---------------------------------------------------------------------------
+# R4 Fix I4 — hero_image path-traversal hardening
+# ---------------------------------------------------------------------------
+
+
+def test_safe_hero_image_path_accepts_canonical():
+    """Paths under images/suppliers/ resolve to the canonical relative form."""
+    from sourcing_render_html import _safe_hero_image_path
+    assert _safe_hero_image_path("/images/suppliers/west-elm.jpg") == (
+        "images/suppliers/west-elm.jpg"
+    )
+    assert _safe_hero_image_path("images/suppliers/x/y.jpg") == (
+        "images/suppliers/x/y.jpg"
+    )
+
+
+def test_safe_hero_image_path_rejects_traversal():
+    """`..` segments anywhere in the path are rejected outright."""
+    from sourcing_render_html import _safe_hero_image_path
+    assert _safe_hero_image_path("/images/suppliers/../../etc/passwd") is None
+    assert _safe_hero_image_path("../etc/passwd") is None
+    assert _safe_hero_image_path("images/suppliers/../sourcing/x.jpg") is None
+
+
+def test_safe_hero_image_path_rejects_outside_subtree():
+    """Paths that don't land under images/suppliers/ are rejected."""
+    from sourcing_render_html import _safe_hero_image_path
+    # Even without '..', a path outside images/suppliers must be rejected.
+    assert _safe_hero_image_path("/images/sourcing/x.jpg") is None
+    assert _safe_hero_image_path("/etc/passwd") is None
+    assert _safe_hero_image_path("") is None
+    assert _safe_hero_image_path(None) is None
+
+
+def test_render_supplier_card_skips_hero_for_unsafe_path(tmp_path, monkeypatch):
+    """A yaml entry whose hero_image lives OUTSIDE images/suppliers must
+    NOT render an <img>. Falls back to the placeholder block."""
+    import sourcing_render_html as srh
+    fake_site = tmp_path / "site"
+    bad_dir = fake_site / "secret"
+    bad_dir.mkdir(parents=True)
+    (bad_dir / "leak.jpg").write_bytes(b"\xff\xd8\xff" + b"x" * 2048)
+    monkeypatch.setattr(srh, "SITE_DIR", fake_site)
+    sup = {
+        "id": "x", "category": "lighting", "name": "X",
+        "url": "https://example.com",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+        "hero_image": "/secret/leak.jpg",
+        "hero_image_source": "real_brand_cdn",
+    }
+    card_html = srh._render_supplier_card(sup, sourcing_match_ids=[])
+    assert "/secret/leak.jpg" not in card_html
+    assert "supplier-hero-placeholder" in card_html
