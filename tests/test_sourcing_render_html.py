@@ -2988,3 +2988,281 @@ def test_collection_chip_meets_44px_touch_target_on_mobile():
     from sourcing_render_html import SUPPLIERS_CSS
 
     assert ".collection-chip { padding: 10px 14px; min-height: 44px;" in SUPPLIERS_CSS
+
+
+# ---------------------------------------------------------------------------
+# R2 mobile-fit (2026-05-17) — see audits/2026-05-17-mobile-fit-baseline/taa-r2-*
+# ---------------------------------------------------------------------------
+
+
+def test_topnav_uses_scroller_wrapper_for_dropdown_escape():
+    """R2-C1: topnav HTML must wrap topnav-inner in a .topnav-scroller div so
+    the absolute/fixed dropdowns escape the horizontal-scroll overflow scope.
+    Without the wrapper, Rooms ▾ + Canon ▾ menus are clipped vertically on
+    mobile (the most user-visible bug on the site at <720px)."""
+    from sourcing_render_html import _build_topnav_html
+
+    nav = _build_topnav_html("sourcing")
+    assert '<div class="topnav-scroller">' in nav, (
+        "topnav must wrap topnav-inner in .topnav-scroller — without it the "
+        "mobile dropdowns get clipped"
+    )
+    # And the scroller must contain the inner.
+    assert '<div class="topnav-scroller">' in nav
+    assert '<div class="topnav-inner">' in nav
+    # Order matters: scroller opens BEFORE inner.
+    scroller_idx = nav.find('<div class="topnav-scroller">')
+    inner_idx = nav.find('<div class="topnav-inner">')
+    assert scroller_idx < inner_idx, "scroller must wrap inner, not the reverse"
+
+
+def test_mobile_dropdown_escapes_overflow_via_fixed_position():
+    """R2-C1: on mobile the dropdown menu becomes position: fixed so it can
+    escape .topnav-scroller's horizontal-scroll overflow. Without this, even
+    with the scroller wrapper, the menu would still be clipped to the inner
+    container width."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "details.nav-dropdown[open] > .nav-dropdown-menu" in SHARED_CSS
+    assert "position: fixed" in SHARED_CSS
+
+
+def test_topnav_h_mobile_lifted_to_56px():
+    """R2-C4: mobile --topnav-h underestimated the actual computed height
+    (44px min-height + 6px×2 padding ≈ 56px). Pre-R2 it was 52px."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "--topnav-h: 56px" in SHARED_CSS
+    assert "--topnav-h: 52px" not in SHARED_CSS
+
+
+def test_wrapped_table_cascade_rule_present():
+    """R2-C2: .table-wrapper > table override so wrapped tables render
+    naturally + the wrapper handles overflow. Pre-R2 this lived only in
+    build_spec.py; build_pages and sourcing_render were missing it."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert ".table-wrapper > table" in SHARED_CSS
+    # The rule must reset display/white-space/overflow so the global table
+    # block-overflow fallback doesn't double-apply.
+    assert ("display: table" in SHARED_CSS and
+            "white-space: normal" in SHARED_CSS)
+
+
+def test_supplier_breakpoint_unified_to_720px():
+    """R2-C6: supplier two-column layout collapses at 720px (was 900px,
+    an outlier vs the site-wide 720/480 baseline)."""
+    from sourcing_render_html import SUPPLIERS_CSS
+
+    # The supplier-page-layout @media must be 720 now, not 900.
+    assert "@media (max-width: 720px) {\n  .suppliers-page-layout" in SUPPLIERS_CSS
+    # No more 900px breakpoint anywhere in supplier CSS.
+    assert "@media (max-width: 900px)" not in SUPPLIERS_CSS
+
+
+def test_anchor_shim_uses_topnav_h_variable():
+    """R2-C5: .item-card[id]::before anchor-shim derives from --topnav-h
+    instead of a hardcoded 56px. Keeps jump-link offsets accurate when the
+    sticky topnav height changes between mobile and desktop."""
+    from sourcing_render_html import SHARED_CSS
+
+    # Find the anchor-shim rule; assert it references --topnav-h.
+    shim_idx = SHARED_CSS.find(".item-card[id]::before")
+    assert shim_idx >= 0
+    shim_chunk = SHARED_CSS[shim_idx:shim_idx + 400]
+    assert "var(--topnav-h)" in shim_chunk
+
+
+def test_category_side_nav_sticky_offset_uses_topnav_h():
+    """R2-C5: .category-side-nav sticky top derives from --topnav-h instead
+    of a hardcoded 100px."""
+    from sourcing_render_html import SUPPLIERS_CSS
+
+    side_idx = SUPPLIERS_CSS.find(".category-side-nav { position: sticky;")
+    assert side_idx >= 0
+    side_chunk = SUPPLIERS_CSS[side_idx:side_idx + 200]
+    assert "var(--topnav-h)" in side_chunk
+
+
+def test_table_wrapper_scroll_affordance():
+    """R2-UX1: scrollable surfaces get an edge-fade gradient + visible
+    webkit scrollbar so users know they can swipe horizontally."""
+    from sourcing_render_html import SHARED_CSS
+
+    # Edge-fade gradient on the table-wrapper.
+    assert ".table-wrapper::after" in SHARED_CSS
+    # Visible scrollbar (the previous baseline had display: none).
+    assert ".table-wrapper::-webkit-scrollbar { height: 6px;" in SHARED_CSS
+
+
+def test_topnav_scroller_scroll_affordance():
+    """R2-UX1: edge-fade gradient on the topnav scroller so users can see
+    "Vendors / Annika / Spec / Rooms ▾ / Canon ▾ / Materials / Rejected"
+    are reachable via scroll on mobile."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert ".topnav-scroller::after" in SHARED_CSS or (
+        ".topnav-scroller::after, .table-wrapper::after" in SHARED_CSS
+    )
+
+
+def test_sourcing_admin_section_collapses_on_mobile():
+    """R2-UX2: schedule + decisions + budget + overshoot + lint banners
+    wrap in <details class="admin-section">. Desktop default (display:
+    contents) is transparent; mobile collapses behind a 'Admin & status'
+    tap-target so /sourcing first-paint lands on item cards within a screen."""
+    from pathlib import Path as _Path
+    from sourcing_loader import load_sourcing
+    from sourcing_render_html import render_site_page, SOURCING_MAIN_CSS
+
+    yaml_path = _Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
+    if not yaml_path.exists():
+        import pytest as _pytest
+        _pytest.skip("sourcing.yaml not available in this env")
+    data = load_sourcing(yaml_path)
+    html = render_site_page(data.items, data.meta, [])
+    # The HTML must wrap the admin banners.
+    assert '<details class="admin-section">' in html
+    assert '<summary class="admin-section-summary">' in html
+    # And the supporting CSS for the desktop-transparent / mobile-collapsed
+    # pattern is present.
+    assert ".admin-section { display: contents; }" in SOURCING_MAIN_CSS
+    assert "@media (max-width: 720px)" in SOURCING_MAIN_CSS
+
+
+def test_sourcing_filter_bar_uses_mobile_drawer():
+    """R2-UX4: /sourcing filter-bar now wraps in <details class="mobile-filters">
+    so it collapses behind a tap-target on phone (mirrors the /suppliers
+    pattern)."""
+    from pathlib import Path as _Path
+    from sourcing_loader import load_sourcing
+    from sourcing_render_html import render_site_page
+
+    yaml_path = _Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
+    if not yaml_path.exists():
+        import pytest as _pytest
+        _pytest.skip("sourcing.yaml not available in this env")
+    data = load_sourcing(yaml_path)
+    html = render_site_page(data.items, data.meta, [])
+    # Wrapper present.
+    assert 'details class="mobile-filters"' in html
+    assert 'class="mobile-filters-summary"' in html
+    # The original filter-bar is still inside, just behind the drawer on mobile.
+    assert '<div class="filter-bar">' in html
+
+
+def test_vendors_page_non_sku_cells_wrap_on_mobile():
+    """R2-UX3: vendor table on mobile relaxes white-space: nowrap on
+    id-col/title-col/num/status-col so titles wrap instead of forcing a
+    1500-3500px-wide row that requires per-row horizontal scroll."""
+    from sourcing_render_html import VENDORS_CSS
+
+    # The non-SKU cells get white-space: normal on mobile.
+    assert "white-space: normal" in VENDORS_CSS
+    assert "@media (max-width: 720px)" in VENDORS_CSS
+
+
+def test_filter_bar_buttons_meet_44px_touch_target():
+    """R2-T1: .filter-bar button/select/input lift to 44px min-height on
+    mobile per WCAG 2.5.5."""
+    from sourcing_render_html import SHARED_CSS
+
+    # The filter-bar mobile rule must include input + min-height: 44px.
+    filter_idx = SHARED_CSS.find(".filter-bar button, .filter-bar select, .filter-bar input")
+    assert filter_idx >= 0
+    chunk = SHARED_CSS[filter_idx:filter_idx + 300]
+    assert "min-height: 44px" in chunk
+
+
+def test_decisions_banner_anchors_meet_44px_on_mobile():
+    """R2-T3: .decisions-needed-banner a links lift to 44px min-height on
+    mobile per WCAG 2.5.5."""
+    from sourcing_render_html import SHARED_CSS
+
+    # The mobile @media block must include a rule for decisions-needed-banner a.
+    assert ".decisions-needed-banner a { min-height: 44px;" in SHARED_CSS
+
+
+def test_vendor_id_col_anchors_meet_44px_on_mobile():
+    """R2-T5: /vendors td.id-col a links lift to 44px on mobile (was ~24px
+    of unpadded font-only height)."""
+    from sourcing_render_html import VENDORS_CSS
+
+    assert ".vendor-section td.id-col a { min-height: 44px;" in VENDORS_CSS
+
+
+def test_build_spec_table_wrap_is_idempotent():
+    """R2-C3: build_spec.py table wrap is idempotent (re-running doesn't
+    double-wrap) and skips <table> tags inside <pre> code blocks."""
+    import importlib.util as _ilu
+    from pathlib import Path as _Path
+
+    bs_path = _Path(__file__).resolve().parent.parent / "build_spec.py"
+    src = bs_path.read_text()
+    # _wrap_tables must be defined.
+    assert "_wrap_tables" in src
+    # Load _wrap_tables alone (don't trigger the top-level read that depends on
+    # ~/Desktop/HomeAI). Easier path: regex-execute manually.
+    # Pull the helper into a sandbox by parsing the function body.
+    import re as _re
+    func_match = _re.search(
+        r"def _wrap_tables\(html: str\) -> str:.*?(?=\n\nhtml_body)",
+        src, _re.DOTALL,
+    )
+    assert func_match, "_wrap_tables function definition not found in build_spec.py"
+    # Reconstruct the helper alongside the regex/setup it depends on.
+    helper_src = _re.search(r"_TABLE_RE = _re\.compile.*?return \"\".join\(parts\)",
+                            src, _re.DOTALL).group(0)
+    ns = {"_re": _re}
+    exec(
+        "import re as _re\n"
+        "_TABLE_RE = _re.compile(r'<table\\b[^>]*>.*?</table>', _re.DOTALL)\n"
+        "_PRE_SPLIT_RE = _re.compile(r'(<pre\\b[^>]*>.*?</pre>)', _re.DOTALL)\n"
+        "_WRAPPER_PREFIX = '<div class=\"table-wrapper\">'\n"
+        "def _wrap_one_match(m):\n"
+        "    span = m.string\n"
+        "    start = m.start()\n"
+        "    if span[max(0, start - len(_WRAPPER_PREFIX)):start] == _WRAPPER_PREFIX:\n"
+        "        return m.group(0)\n"
+        "    return f'{_WRAPPER_PREFIX}{m.group(0)}</div>'\n"
+        "def _wrap_tables(html):\n"
+        "    parts = _PRE_SPLIT_RE.split(html)\n"
+        "    for i, part in enumerate(parts):\n"
+        "        if part.startswith('<pre'):\n"
+        "            continue\n"
+        "        parts[i] = _TABLE_RE.sub(_wrap_one_match, part)\n"
+        "    return ''.join(parts)\n",
+        ns,
+    )
+    _wrap_tables = ns["_wrap_tables"]
+
+    # Single table → wrapped.
+    once = _wrap_tables("<table><tr><td>x</td></tr></table>")
+    assert once.count('<div class="table-wrapper">') == 1
+    # Re-running on already-wrapped output → still 1 wrapper (idempotent).
+    twice = _wrap_tables(once)
+    assert twice.count('<div class="table-wrapper">') == 1, (
+        "build_spec.py table-wrap regex must be idempotent — re-rendering "
+        "must not double-wrap"
+    )
+    # <pre><table> inside code samples is untouched.
+    code = "<pre><code>&lt;table&gt;example&lt;/table&gt;</code></pre>"
+    assert _wrap_tables(code) == code, (
+        "tables inside <pre> code samples must not be wrapped"
+    )
+    # Real <pre><table> (raw embedded table inside pre, edge case) is untouched.
+    real_pre = "<pre><table><tr><td>literal</td></tr></table></pre>"
+    assert _wrap_tables(real_pre) == real_pre
+
+
+def test_build_pages_wrapped_table_cascade_rule_present():
+    """R2-C2: .table-wrapper > table override must also be present in
+    build_pages.py SHARED_CSS — pre-R2 it lived only in build_spec.py so
+    /budget /materials /kitchen /master etc. wrapped tables computed
+    differently than /spec wrapped tables."""
+    from build_pages import SHARED_CSS
+
+    assert ".table-wrapper > table" in SHARED_CSS
+    assert "display: table" in SHARED_CSS
+    assert "white-space: normal" in SHARED_CSS
+

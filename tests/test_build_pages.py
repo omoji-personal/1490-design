@@ -198,3 +198,82 @@ def test_sticky_offset_uses_topnav_h_variable():
     from build_pages import SHARED_CSS
 
     assert "var(--topnav-h)" in SHARED_CSS
+
+
+# ---------------------------------------------------------------------------
+# R2 mobile-fit (2026-05-17) — see audits/2026-05-17-mobile-fit-baseline/taa-r2-*
+# ---------------------------------------------------------------------------
+
+
+def test_topnav_uses_scroller_wrapper():
+    """R2-C1: build_pages.topnav() must wrap topnav-inner in .topnav-scroller
+    so absolute/fixed dropdown menus escape the horizontal-scroll overflow
+    scope on mobile. Without the wrapper, Rooms ▾ + Canon ▾ are clipped."""
+    from build_pages import topnav
+
+    nav = topnav("/budget")
+    assert '<div class="topnav-scroller">' in nav, (
+        "topnav must wrap topnav-inner in .topnav-scroller — without it the "
+        "mobile dropdowns get clipped vertically"
+    )
+    assert '<div class="topnav-inner">' in nav
+    scroller_idx = nav.find('<div class="topnav-scroller">')
+    inner_idx = nav.find('<div class="topnav-inner">')
+    assert scroller_idx < inner_idx, "scroller must wrap inner, not the reverse"
+
+
+def test_mobile_dropdown_escapes_via_fixed_position():
+    """R2-C1: mobile dropdown menu becomes position: fixed so it escapes
+    .topnav-scroller's overflow scope."""
+    from build_pages import SHARED_CSS
+
+    assert "details.nav-dropdown[open] > .nav-dropdown-menu" in SHARED_CSS
+    assert "position: fixed" in SHARED_CSS
+
+
+def test_topnav_h_mobile_56px_in_build_pages():
+    """R2-C4: --topnav-h on mobile is 56px (was 52px which underestimated
+    the actual 44px min-height + padding row height)."""
+    from build_pages import SHARED_CSS
+
+    assert "--topnav-h: 56px" in SHARED_CSS
+    assert "--topnav-h: 52px" not in SHARED_CSS
+
+
+def test_wrapped_table_cascade_in_build_pages():
+    """R2-C2: .table-wrapper > table override must be present in build_pages
+    SHARED_CSS — pre-R2 it lived only in build_spec.py so the per-room
+    /kitchen /master /baths /lr /nursery /office tables and /budget /materials
+    tables wrapped in .table-wrapper still computed as display: block +
+    nowrap, forcing horizontal scroll even when the content could wrap."""
+    from build_pages import SHARED_CSS
+
+    assert ".table-wrapper > table" in SHARED_CSS
+    assert "display: table" in SHARED_CSS
+    assert "white-space: normal" in SHARED_CSS
+
+
+def test_table_wrapper_scroll_affordance_in_build_pages():
+    """R2-UX1: edge-fade gradient + visible webkit scrollbar on
+    .table-wrapper so users know they can swipe horizontally."""
+    from build_pages import SHARED_CSS
+
+    assert ".table-wrapper::after" in SHARED_CSS
+    assert ".table-wrapper::-webkit-scrollbar { height: 6px;" in SHARED_CSS
+
+
+def test_tag_pills_meet_44px_touch_target_in_build_pages():
+    """R2-T2: .tag/.chip/.pill on mobile meet WCAG 2.5.5 44px floor. Affects
+    ~15 pages (mood-board, spectrum, kitchen, master, baths, lr, nursery,
+    office, cathie-hong, owiu, sss, jenni-kayne, rejected)."""
+    from build_pages import SHARED_CSS
+
+    assert ".tag, .chip, .pill { min-height: 44px;" in SHARED_CSS
+
+
+def test_td_anchors_meet_44px_touch_target_in_build_pages():
+    """R2-T4: in-cell <a> anchors lift to 44px hit area on mobile."""
+    from build_pages import SHARED_CSS
+
+    # Look for td a min-height: 44px (with surrounding context to disambiguate).
+    assert "td a { display: inline-block; padding: 8px 0; min-height: 44px;" in SHARED_CSS
