@@ -125,3 +125,76 @@ def test_rendered_budget_page_contains_dropdown_html():
     assert "<summary>Canon</summary>" in html
     # CSS that styles the dropdown ships in the same page
     assert ".topnav-inner details.nav-dropdown" in html
+
+
+# =====================================================================
+# R1 mobile-fit baseline (2026-05-17) — see audits/2026-05-17-mobile-fit-baseline/
+# =====================================================================
+
+def test_shared_css_includes_mobile_baseline():
+    """The SHARED_CSS string in build_pages.py carries the R1 mobile baseline:
+    overflow-x guard, responsive image reset, --topnav-h variable, and the
+    .table-wrapper helper. Without these, builds_pages-rendered pages cannot
+    survive at 375px without breaking layout (see baseline.md §9)."""
+    from build_pages import SHARED_CSS
+
+    # Site-wide horizontal-overflow safety net (baseline §9).
+    assert "overflow-x: hidden" in SHARED_CSS
+    # Global responsive image reset (baseline §4).
+    assert "img, picture, video" in SHARED_CSS
+    assert "max-width: 100%" in SHARED_CSS
+    # Topnav-height CSS variable used by sticky offsets (baseline §8 / Fix 4).
+    assert "--topnav-h" in SHARED_CSS
+    # Table wrapper class exists so wrapped tables can scroll on mobile.
+    assert ".table-wrapper" in SHARED_CSS
+
+
+def test_shared_css_topnav_mobile_scroll():
+    """At ≤720px the topnav becomes a horizontally-scrollable single row with
+    44px touch targets (baseline §5 + top-fix §3)."""
+    from build_pages import SHARED_CSS
+
+    # The mobile block must declare flex-wrap: nowrap + overflow-x: auto on the
+    # topnav so links don't stack into 5-6 rows of mini-pills on a phone.
+    assert "flex-wrap: nowrap" in SHARED_CSS
+    assert "min-height: 44px" in SHARED_CSS
+
+
+def test_shared_css_unified_720px_breakpoint():
+    """R1 unifies the build_pages breakpoint on 720px (matches sourcing_render +
+    build_spec) instead of the legacy 768px. The 480px micro-breakpoint stays
+    for very-small phones."""
+    from build_pages import SHARED_CSS
+
+    assert "@media (max-width: 720px)" in SHARED_CSS
+    assert "@media (max-width: 480px)" in SHARED_CSS
+    # Legacy 768px should no longer be the primary breakpoint.
+    assert "@media (max-width: 768px)" not in SHARED_CSS
+
+
+def test_spec_table_wrapped_in_table_wrapper():
+    """Every <table class='spec-table'> in build_pages.py output is wrapped in
+    <div class='table-wrapper'> so it can horizontally scroll on mobile without
+    blowing out the page width. Closes baseline §1."""
+    from build_pages import budget_page, materials_page, kitchen_page
+
+    for fn, label in (
+        (budget_page, "budget"),
+        (materials_page, "materials"),
+        (kitchen_page, "kitchen"),
+    ):
+        html = fn()
+        n_tables = html.count('<table class="spec-table">')
+        n_wrapped = html.count('<div class="table-wrapper"><table class="spec-table">')
+        assert n_tables > 0, f"{label}: no spec-tables found, fixture stale?"
+        assert n_tables == n_wrapped, (
+            f"{label}: {n_tables} spec-tables but only {n_wrapped} table-wrappers"
+        )
+
+
+def test_sticky_offset_uses_topnav_h_variable():
+    """.section-header scroll-margin-top references --topnav-h so anchor jumps
+    land in the right place on mobile where the topnav is taller (baseline §8)."""
+    from build_pages import SHARED_CSS
+
+    assert "var(--topnav-h)" in SHARED_CSS

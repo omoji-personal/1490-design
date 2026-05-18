@@ -2876,3 +2876,115 @@ def test_render_suppliers_page_first_action_radio_has_tabindex_zero():
         'class="action-btn action-ruled" data-action="ruled" '
         'role="radio" aria-checked="false" tabindex="-1"'
     ) in html
+
+
+# ---------------------------------------------------------------------------
+# R1 mobile-fit baseline (2026-05-17) — see audits/2026-05-17-mobile-fit-baseline/
+# ---------------------------------------------------------------------------
+
+
+def test_shared_css_includes_mobile_baseline():
+    """SHARED_CSS carries the R1 mobile baseline: overflow-x guard, responsive
+    image reset, --topnav-h variable, and the .table-wrapper helper."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "overflow-x: hidden" in SHARED_CSS
+    assert "img, picture, video" in SHARED_CSS
+    assert "max-width: 100%" in SHARED_CSS
+    assert "--topnav-h" in SHARED_CSS
+    assert ".table-wrapper" in SHARED_CSS
+
+
+def test_shared_css_topnav_mobile_scroll():
+    """At ≤720px the topnav becomes a horizontally-scrollable single row with
+    44px touch targets (baseline §5 + top-fix §3)."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "flex-wrap: nowrap" in SHARED_CSS
+    assert "min-height: 44px" in SHARED_CSS
+
+
+def test_shared_css_uses_720px_breakpoint():
+    """sourcing_render uses 720px primary + 480px micro — same convention as
+    build_pages + build_spec after R1."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "@media (max-width: 720px)" in SHARED_CSS
+    assert "@media (max-width: 480px)" in SHARED_CSS
+
+
+def test_sticky_offset_uses_topnav_h_variable():
+    """.filter-bar top references --topnav-h so sticky offsets scale with
+    the taller mobile topnav (baseline §8)."""
+    from sourcing_render_html import SHARED_CSS
+
+    assert "top: var(--topnav-h)" in SHARED_CSS
+
+
+def test_vendors_page_wraps_every_table_in_table_wrapper():
+    """vendors.html has 75 raw <table> tags — baseline §3 flagged this as the
+    single biggest mobile-fit failure on the site. R1 wraps each in a
+    .table-wrapper so they can horizontally scroll instead of breaking layout."""
+    import yaml as _yaml
+    from pathlib import Path as _Path
+    from sourcing_loader import load_sourcing
+    from sourcing_render_html import render_vendors_page
+
+    # Use the live scope yaml so the test reflects the real render.
+    yaml_path = _Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
+    if not yaml_path.exists():
+        import pytest as _pytest
+        _pytest.skip("sourcing.yaml not available in this env")
+    data = load_sourcing(yaml_path)
+    html = render_vendors_page(data.items, data.meta, last_changed_map={})
+
+    n_open = html.count("<table>")
+    n_wrapped = html.count('<div class="table-wrapper"><table>')
+    n_section_wrapped = html.count(
+        '<div class="table-wrapper">'
+    )
+    # Every <table> opens inside a table-wrapper (one wrapper per table).
+    assert n_open > 0, "vendors page should have multiple tables"
+    # Per-vendor + canon-summary + (potential budget) wraps — section wrappers
+    # always equal or exceed table count because each table is wrapped.
+    assert n_section_wrapped >= n_open, (
+        f"expected ≥{n_open} .table-wrapper divs, found {n_section_wrapped}"
+    )
+    # Direct test: every <table> tag is immediately preceded by a wrapper div
+    # OR the wrapper appears inline with the table on the same chunk.
+    assert n_open == n_wrapped, (
+        f"{n_open} <table> tags but only {n_wrapped} wrapped — "
+        "some tables would break layout at 375px"
+    )
+
+
+def test_sourcing_page_budget_rollup_table_wrapped():
+    """The /sourcing budget-rollup table is the lone unwrapped table baseline §10
+    flagged on an otherwise well-tuned page. After R1 it lives inside a
+    .table-wrapper."""
+    from pathlib import Path as _Path
+    from sourcing_loader import load_sourcing
+    from sourcing_render_html import render_site_page
+
+    yaml_path = _Path.home() / "Desktop" / "HomeAI" / "scope" / "sourcing.yaml"
+    if not yaml_path.exists():
+        import pytest as _pytest
+        _pytest.skip("sourcing.yaml not available in this env")
+    data = load_sourcing(yaml_path)
+    html = render_site_page(data.items, data.meta, [])
+    # The rollup is rendered as `<div class="budget-rollup">…<div class="table-wrapper"><table>`.
+    assert '<div class="budget-rollup">' in html
+    # Find the rollup block and verify it contains a wrapper.
+    rollup_start = html.find('<div class="budget-rollup">')
+    # Look within ~2000 chars after the rollup open for both wrapper + table.
+    rollup_chunk = html[rollup_start:rollup_start + 4000]
+    assert '<div class="table-wrapper">' in rollup_chunk
+    assert "<table>" in rollup_chunk
+
+
+def test_collection_chip_meets_44px_touch_target_on_mobile():
+    """Baseline top-fix §4 — .collection-chip lifted from 36px to 44px so it
+    clears WCAG 2.5.5 on the suppliers page."""
+    from sourcing_render_html import SUPPLIERS_CSS
+
+    assert ".collection-chip { padding: 10px 14px; min-height: 44px;" in SUPPLIERS_CSS
