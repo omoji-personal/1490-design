@@ -15,9 +15,14 @@ Writes: ~/Desktop/HomeAI/scope/SOURCING_TRACKER.md
         ~/Desktop/1490-design-site/suppliers.html
         ~/Desktop/1490-design-site/sourcing-<room>.html         (6 room views)
 
-Flags: --allow-missing-suppliers   skip /suppliers render if yaml absent
+Flags: --allow-missing-suppliers   bypass the fail-loud check when
+                                    supplier_directory.yaml is absent;
+                                    /suppliers.html still gets rendered as
+                                    an empty-state placeholder via the
+                                    loader's directory-not-found path.
        --trigger-t3                manual T3 trigger for decision queue
 """
+import argparse
 from datetime import date
 from pathlib import Path
 
@@ -129,8 +134,39 @@ def main(manual_trigger_t3: bool = False, allow_missing_suppliers: bool = False)
         sys.exit(1)
 
 
+def _parse_args(argv=None):
+    """R5 Min1 — argparse replaces the ad-hoc `in sys.argv` string scan so
+    typos like `--trigger_t3` fail loud and `--help` prints accurate text
+    (the previous help comment described `--allow-missing-suppliers` as
+    'skip /suppliers render', which didn't match the loader's actual
+    empty-state placeholder behavior)."""
+    p = argparse.ArgumentParser(
+        prog="build_sourcing.py",
+        description=(
+            "Build /sourcing, /vendors, /suppliers, /for-annika + 6 room views "
+            "from HomeAI yaml scope."
+        ),
+    )
+    p.add_argument(
+        "--allow-missing-suppliers",
+        action="store_true",
+        help=(
+            "Bypass the fail-loud check when supplier_directory.yaml is "
+            "absent. The loader still renders an empty-state /suppliers "
+            "placeholder; this flag only suppresses the build-time error."
+        ),
+    )
+    p.add_argument(
+        "--trigger-t3",
+        action="store_true",
+        help="Manual T3 trigger for the decision-queue tier rules.",
+    )
+    return p.parse_args(argv)
+
+
 if __name__ == "__main__":
-    import sys
-    manual = "--trigger-t3" in sys.argv
-    allow_missing = "--allow-missing-suppliers" in sys.argv
-    main(manual_trigger_t3=manual, allow_missing_suppliers=allow_missing)
+    args = _parse_args()
+    main(
+        manual_trigger_t3=args.trigger_t3,
+        allow_missing_suppliers=args.allow_missing_suppliers,
+    )
