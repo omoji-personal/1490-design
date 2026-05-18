@@ -227,6 +227,13 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
     position: fixed; top: calc(var(--topnav-h) + 4px); left: 12px; right: 12px;
     margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
     overflow-y: auto; }
+  /* R2-T2: tags/chips/pills meet WCAG 2.5.5 44px floor on touch devices. */
+  .tag, .chip, .pill { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  /* R2-T4: in-cell anchors get vertical hit area inside tables on mobile. */
+  td a { display: inline-block; padding: 8px 0; min-height: 44px;
+    box-sizing: border-box; }
   /* Tables overflow-scroll on mobile (.table-wrapper opt-in for desktop polish). */
   table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
     max-width: 100%; white-space: nowrap; }

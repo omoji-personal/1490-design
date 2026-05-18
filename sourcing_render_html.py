@@ -291,8 +291,20 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
     overflow-y: auto; }
   .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
-  .filter-bar button, .filter-bar select { font-size: 13px; padding: 8px 14px;
-    min-height: 44px; }
+  /* R2-T1: filter-bar controls meet WCAG 2.5.5 44px floor. */
+  .filter-bar button, .filter-bar select, .filter-bar input {
+    font-size: 13px; padding: 8px 14px;
+    min-height: 44px; box-sizing: border-box; }
+  /* R2-T2/T3: pills/chips/tags + decisions-needed banner links meet 44px floor. */
+  .tag, .chip, .pill { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  .decisions-needed-banner a { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 14px;
+    box-sizing: border-box; }
+  /* R2-T4: in-cell anchors get vertical hit area inside tables on mobile. */
+  td a { display: inline-flex; align-items: center; min-height: 44px;
+    box-sizing: border-box; padding: 8px 0; }
   .options-grid { grid-template-columns: 1fr; }
   .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
   .item-card { padding: 12px; }
@@ -1954,16 +1966,24 @@ VENDORS_CSS = """
 .vendor-section .status-drafted { background: #fef0d6; color: #6e4f1a; }
 .vendor-section .status-watch { background: #ece8f4; color: #4a4566; }
 .vendor-section .status-other { background: #efe7d4; color: var(--muted); }
-/* R2-UX3: vendors page on mobile — relax white-space: nowrap on non-SKU cells
- * so titles wrap naturally instead of forcing 1500-3500px-wide rows that
- * require 75 individual horizontal swipes to read. SKU column stays nowrap
- * (long SKU strings shouldn't break mid-word). */
+/* R2-UX3 + R2-T5: vendors page on mobile — relax white-space: nowrap on
+ * non-SKU cells + lift in-cell anchors + status pills to 44px hit area. */
 @media (max-width: 720px) {
   .vendor-section td.id-col,
   .vendor-section td.title-col,
   .vendor-section td.num,
   .vendor-section td.status-col { white-space: normal; word-break: break-word; }
   .vendor-section td.sku-col { white-space: normal; }
+  /* R2-T5: vendor id-col anchors lift to 44px hit area. */
+  .vendor-section td.id-col a { min-height: 44px;
+    display: inline-flex; align-items: center; padding: 8px 0;
+    box-sizing: border-box; }
+  /* R2-T5: status badge floor — bumped from 10px/2px-7px (~18px tall) to a
+   * comfortable 28px+. Not 44px (it's a non-interactive label, not a button)
+   * but visually readable + matches the audit recommendation. */
+  .vendor-section .status-badge-mini { min-height: 28px;
+    padding: 6px 10px; font-size: 12px;
+    display: inline-flex; align-items: center; box-sizing: border-box; }
 }
 """
 
