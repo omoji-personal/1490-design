@@ -295,8 +295,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
   .filter-bar button, .filter-bar select, .filter-bar input {
     font-size: 13px; padding: 8px 14px;
     min-height: 44px; box-sizing: border-box; }
-  /* R2-T2/T3: pills/chips/tags + decisions-needed banner links meet 44px floor. */
-  .tag, .chip, .pill { min-height: 44px;
+  /* R2-T2/T3 + R3-UX2: pills/chips/tags (incl. .collection-chip on /suppliers)
+   * + decisions-needed banner links meet 44px floor. */
+  .tag, .chip, .pill, .collection-chip { min-height: 44px;
     display: inline-flex; align-items: center; padding: 8px 14px;
     box-sizing: border-box; }
   .decisions-needed-banner a { min-height: 44px;
@@ -1219,11 +1220,11 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 </header>
 {ROOM_LINKS_HTML}
 <main>
+{decisions_banner_html}
 <details class="admin-section">
 <summary class="admin-section-summary">Admin &amp; status</summary>
 <div class="admin-section-inner">
 {schedule_banner_html}
-{decisions_banner_html}
 {budget_rollup_html}
 {overshoot_html}
 {lint_html}
