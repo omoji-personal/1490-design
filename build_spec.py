@@ -18,6 +18,17 @@ html_body = markdown.markdown(
     extensions=["tables", "fenced_code", "toc", "attr_list", "sane_lists"],
 )
 
+# R1 mobile-fit: wrap every markdown-generated <table>…</table> in a
+# .table-wrapper div so it can horizontally scroll on mobile without
+# breaking the page layout. The wrapper has no desktop effect.
+import re as _re
+html_body = _re.sub(
+    r"(<table[^>]*>)",
+    r'<div class="table-wrapper">\1',
+    html_body,
+)
+html_body = html_body.replace("</table>", "</table></div>")
+
 html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,9 +47,18 @@ html = f"""<!DOCTYPE html>
     --note-tint: #f0e8d8;
     --border: #e8e2d6;
     --target-tint: #e8efe2;
+    --topnav-h: 48px;
   }}
+  @media (max-width: 720px) {{ :root {{ --topnav-h: 52px; }} }}
   * {{ box-sizing: border-box; }}
   html, body {{ margin: 0; padding: 0; }}
+  /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+  html, body {{ overflow-x: hidden; max-width: 100%; }}
+  img, picture, video {{ max-width: 100%; height: auto; }}
+  .table-wrapper {{ width: 100%; }}
+  @media (max-width: 720px) {{
+    .table-wrapper {{ overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }}
+  }}
   body {{
     font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
     background: var(--bg); color: var(--ink); line-height: 1.65;
@@ -158,7 +178,6 @@ html = f"""<!DOCTYPE html>
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
   }}
   th, td {{
     text-align: left;
@@ -189,11 +208,35 @@ html = f"""<!DOCTYPE html>
   a:hover {{ border-bottom-color: var(--accent); }}
 
   @media (max-width: 720px) {{
+    body {{ font-size: 16px; }}
     .container {{ padding: 24px 18px 60px; }}
     h1 {{ font-size: 28px; }}
     h2 {{ font-size: 21px; }}
-    table {{ font-size: 12.5px; }}
+    /* R1 mobile baseline: topnav horizontally-scrollable + 44px touch targets. */
+    .topnav-inner {{ padding: 6px 12px; font-size: 13px; gap: 6px;
+      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; }}
+    .topnav-inner::-webkit-scrollbar {{ display: none; }}
+    .topnav-inner > * {{ flex: 0 0 auto; }}
+    .topnav-inner a:not(.home),
+    .topnav-inner details.nav-dropdown > summary {{
+      padding: 8px 12px; font-size: 13px; min-height: 44px;
+      display: inline-flex; align-items: center; }}
+    /* Tables: opt out of the overflow: hidden on .table wrapper so .table-wrapper
+     * can scroll, fall back to display:block scroll for any unwrapped tables. */
+    table {{ font-size: 12.5px; display: block; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; max-width: 100%; white-space: nowrap;
+      border-radius: 0; }}
+    table.mobile-stack {{ display: table; white-space: normal; overflow-x: visible; }}
+    .table-wrapper > table {{ display: table; }}
     th, td {{ padding: 8px 10px; }}
+    pre, code {{ word-break: break-word; white-space: pre-wrap; }}
+  }}
+  @media (max-width: 480px) {{
+    body {{ font-size: 16px; line-height: 1.5; }}
+    h1 {{ font-size: 1.75rem; }}
+    h2 {{ font-size: 1.4rem; }}
+    h3 {{ font-size: 1.15rem; }}
   }}
 </style>
 </head>

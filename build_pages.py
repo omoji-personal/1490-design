@@ -17,9 +17,18 @@ SHARED_CSS = """
   --note-tint: #f0e8d8;
   --reject-tint: #f8e6df;
   --border: #e8e2d6;
+  --topnav-h: 48px;
 }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; }
+.table-wrapper { width: 100%; }
+@media (max-width: 720px) {
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
   background: var(--bg); color: var(--ink); line-height: 1.55;
@@ -92,7 +101,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
   margin: 44px 0 16px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
-  scroll-margin-top: 70px;
+  scroll-margin-top: calc(var(--topnav-h) + 22px);
 }
 .section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
 .section-header .count { color: var(--muted); font-size: 13px; }
@@ -143,7 +152,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
 .spec-table {
   width: 100%; border-collapse: collapse; font-size: 14px;
   background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: 8px; overflow: hidden;
+  border-radius: 8px;
 }
 .spec-table th, .spec-table td {
   text-align: left; padding: 10px 14px;
@@ -177,12 +186,34 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
-@media (max-width: 768px) {
+/* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
+ * build_spec, plus add table overflow-x and topnav touch-target floor. */
+@media (max-width: 720px) {
+  body { font-size: 16px; }
   h1 { font-size: 28px; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
   main, header.page-header { padding-left: 18px; padding-right: 18px; }
+  /* Topnav: horizontally-scrollable single row with 44px touch targets. */
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-inner > * { flex: 0 0 auto; }
+  .topnav-inner a:not(.home),
+  .topnav-inner details.nav-dropdown > summary {
+    padding: 8px 12px; font-size: 13px; min-height: 44px;
+    display: inline-flex; align-items: center; }
+  /* Tables overflow-scroll on mobile (.table-wrapper opt-in for desktop polish). */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%; white-space: nowrap; }
+  table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  pre, code { word-break: break-word; white-space: pre-wrap; }
 }
 @media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
 """
@@ -297,7 +328,7 @@ def kitchen_page():
 </div>
 
 <section class="section-header"><h2>Locked construction specs</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Cabinets</td><td>CDGA KraftMaid Vantage light oak Shaker, 30 LF</td></tr>
 <tr><td>Counters</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
@@ -309,7 +340,7 @@ def kitchen_page():
 <tr><td>Pendants</td><td>Keep existing 3 white domes + add matching 4th</td></tr>
 <tr><td>Hardware</td><td>Rejuvenation/Forge — matte black + lacquered brass mix</td></tr>
 <tr><td>Paint</td><td>BM Aura Bath & Spa (wet-room spec for kitchen)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header">
   <h2>Anchor moods</h2>
@@ -379,7 +410,7 @@ def kitchen_page():
 </div>
 
 <section class="section-header"><h2>Sourcing brief</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Item</th><th>Vendor / SKU</th><th>Status</th></tr>
 <tr><td>Cabinet quote</td><td>CDGA (404-361-5200) — KraftMaid Vantage light oak Shaker</td><td>Owner action: get quote, push for Vantage volume discount</td></tr>
 <tr><td>Counter slab</td><td>Caesarstone Statuario via Atlanta fab shop</td><td>Owner sources sample swatches first</td></tr>
@@ -389,7 +420,7 @@ def kitchen_page():
 <tr><td>Faucet</td><td>Delta Trinsic in Champagne Bronze</td><td>Owner-direct via Build.com Pro account</td></tr>
 <tr><td>Pendants (4th match)</td><td>Match existing 3 white domes</td><td>Verify SKU on existing 3 + source matching unit</td></tr>
 <tr><td>Hardware</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix</td><td>Owner-direct via Rejuvenation trade account</td></tr>
-</table>
+</table></div>
 """
     return page("/kitchen", "Kitchen", "California Modern Japandi kitchen at 1490 — Cathie Hong Campbell House as the anchor. Most construction-locked room in the house.", body)
 
@@ -409,7 +440,7 @@ def master_page():
 </div>
 
 <section class="section-header"><h2>Locked construction specs</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Floor</td><td>Existing hardwood refinished (Bleach + Rubio Pure)</td></tr>
 <tr><td>Walls</td><td>BM White Dove (OC-17) matte — Aura product line</td></tr>
@@ -418,7 +449,7 @@ def master_page():
 <tr><td>Hardware</td><td>Lacquered brass (Rejuvenation Westmore pulls if any built-in)</td></tr>
 <tr><td>Window treatments</td><td>Cream linen Roman shades (sheer + blackout layer)</td></tr>
 <tr><td>Lighting</td><td>Bedside sconces — Schoolhouse Princeton or equivalent, brass</td></tr>
-</table>
+</table></div>
 
 <section class="section-header">
   <h2>Anchor moods</h2>
@@ -460,7 +491,7 @@ def master_page():
 </div>
 
 <section class="section-header"><h2>Furniture brief (within $30K envelope)</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Bed frame</td><td>King, upholstered cream linen OR light oak platform</td><td>WE Andes or Article Sven oak</td></tr>
 <tr><td>Nightstands ×2</td><td>Light oak, 2-drawer, ~22-26" wide</td><td>WE Hutchinson nightstand or Rejuvenation</td></tr>
@@ -470,7 +501,7 @@ def master_page():
 <tr><td>Window treatments</td><td>Sheer linen Roman + blackout panels</td><td>Custom or Smith & Noble</td></tr>
 <tr><td>Bedding</td><td>Linen — washed natural / oat / sage accent throw</td><td>WE / Coyuchi / Parachute</td></tr>
 <tr><td>One color accent</td><td>Sage olive throw OR mustard cushion — ONE only</td><td>WE / vintage</td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>Master bedroom kill list:</strong>
@@ -525,7 +556,7 @@ def baths_page():
     </div>
   </div>
 </div>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II One-Piece + Toto Washlet C5</td></tr>
@@ -538,7 +569,7 @@ def baths_page():
 <tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed</td></tr>
 <tr><td>Door</td><td>Pocket door — premium hardware</td></tr>
 <tr><td>Exhaust</td><td>New w/ wall vent (humidity microclimate spec)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header">
   <h2>Hall bath — $15,400 honest</h2>
@@ -570,7 +601,7 @@ def baths_page():
     </div>
   </div>
 </div>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
@@ -581,13 +612,13 @@ def baths_page():
 <tr><td>Sconces</td><td>Cedar & Moss — flanking mirror</td></tr>
 <tr><td>Mirror</td><td>Framed wood-edge round</td></tr>
 <tr><td>Shelf</td><td>Slim wall shelf above tub</td></tr>
-</table>
+</table></div>
 
 <section class="section-header">
   <h2>Basement ¾ bath — $11,800 sheet / $17,000 honest</h2>
   <div class="count">~30 sf · slab cut for shower drain</div>
 </section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
@@ -596,7 +627,7 @@ def baths_page():
 <tr><td>Floor</td><td>Daltile Portfolio (match hall)</td></tr>
 <tr><td>Mirror</td><td>Small framed circular</td></tr>
 <tr><td>Plumbing</td><td>Slab cut for shower drain ($1.5-2K of the line) + Washlet C5 dedicated GFCI</td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>Bath kill list (all three):</strong>
@@ -629,13 +660,13 @@ def lr_page():
 </div>
 
 <section class="section-header"><h2>Locked construction specs</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Floor</td><td>Existing hardwood refinished (Bleach + Rubio Pure)</td></tr>
 <tr><td>Walls</td><td>BM White Dove (OC-17) matte — Aura</td></tr>
 <tr><td>Built-in TV cabinetry</td><td>Refresh existing — $5,100 (paint-grade modification, hardware refresh, no full rebuild)</td></tr>
 <tr><td>Lighting</td><td>Brass overhead pendant + 2 floor lamps + table lamps. At least one brass fixture per public room.</td></tr>
-</table>
+</table></div>
 
 <section class="section-header">
   <h2>Anchor moods</h2>
@@ -677,7 +708,7 @@ def lr_page():
 </div>
 
 <section class="section-header"><h2>Furniture brief (within $30K envelope)</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Sofa / sectional</td><td>Cream linen Crypton/Perennials performance fabric (pet+kid proof) — Andes or Harmony</td><td>West Elm Andes / Harmony in performance linen</td></tr>
 <tr><td>Coffee table</td><td>Light oak, ~48×30, round or rectangle</td><td>Article Sven / WE Anton / Rejuvenation Mast</td></tr>
@@ -688,7 +719,7 @@ def lr_page():
 <tr><td>Real plant tree</td><td>Cat-safe: kentia palm OR parlor palm OR bird of paradise (NOT fiddle leaf — toxic)</td><td>Local nursery</td></tr>
 <tr><td>Ceramic groupings</td><td>3-5 hand-thrown matte-clay pieces per shelf</td><td>Vintage / etsy / local Atlanta makers</td></tr>
 <tr><td>Bar zone (architected freestanding shelf)</td><td>Custom or floating walnut accent shelf on street-facing kitchen wall</td><td>Custom millwork (separate budget within construction $25-35K range)</td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>LR kill list:</strong>
@@ -720,7 +751,7 @@ def nursery_page():
 </div>
 
 <section class="section-header"><h2>Aesthetic framework</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Direction</th></tr>
 <tr><td>Approach</td><td>Same California Modern Japandi palette — cream, plaster, light oak, sage accent. NOT pastel. NOT primary-color nursery.</td></tr>
 <tr><td>Floor</td><td>Existing hardwood refinished — soft cream wool rug 5×7 with washable cover</td></tr>
@@ -732,7 +763,7 @@ def nursery_page():
 <tr><td>Lighting</td><td>Brass overhead pendant (dimmable) + brass sconce or table lamp for night feeds</td></tr>
 <tr><td>Mobile / art</td><td>Hand-thrown or hand-woven (no commercial cartoon characters)</td></tr>
 <tr><td>Window treatments</td><td>Blackout linen Roman (sheer + blackout)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Mood references</h2></section>
 <div class="grid">
@@ -789,7 +820,7 @@ def office_page():
 </div>
 
 <section class="section-header"><h2>Construction specs</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Floor</td><td>Existing hardwood refinished</td></tr>
 <tr><td>Walls</td><td>BM White Dove matte (Aura)</td></tr>
@@ -797,7 +828,7 @@ def office_page():
 <tr><td>Built-in (optional, within $25-35K custom millwork allowance)</td><td>Light oak built-in desk + bookcase, full wall</td></tr>
 <tr><td>Lighting</td><td>Overhead brass pendant + desk lamp (brass, swing-arm)</td></tr>
 <tr><td>Electrical</td><td>Cat6 already in scope, surge protector, dedicated computer circuit if WFH-heavy</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Mood references</h2></section>
 <div class="grid">
@@ -820,7 +851,7 @@ def office_page():
 </div>
 
 <section class="section-header"><h2>Furniture brief</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Desk</td><td>Light oak — standing desk capable OR fixed wood top. ~60×30.</td><td>Custom millwork built-in OR Article Madera / WE Hutchinson desk</td></tr>
 <tr><td>Office chair</td><td>Ergonomic but visually quiet (no gaming chair).</td><td>Herman Miller Aeron (timeless) or Steelcase Leap</td></tr>
@@ -828,7 +859,7 @@ def office_page():
 <tr><td>Desk lamp</td><td>Brass swing-arm</td><td>Schoolhouse Hudson swing arm</td></tr>
 <tr><td>Rug</td><td>Cream/oat flat-weave 6×9</td><td>Loloi II</td></tr>
 <tr><td>Plant</td><td>Kentia palm (cat-safe) under skylight</td><td>Local nursery</td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>Office kill list:</strong>
@@ -855,16 +886,16 @@ def materials_page():
 </div>
 
 <section class="section-header"><h2>Wood floors</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th><th>Vendor</th></tr>
 <tr><td>Refinish process</td><td><strong>Bleach + Rubio Monocoat Pure</strong> — NOT Bona poly + "natural" stain (contract callout)</td><td>Rhodes Hardwood Atlanta — $7.48/sf published</td></tr>
 <tr><td>Existing floor</td><td>Red oak strip — refinishing reveals warm-honey-white-oak tone</td><td>—</td></tr>
 <tr><td>Basement LVP</td><td>Mid-grade LVP — vapor underlayment + transitions</td><td>Owner-direct (Build.com Pro / Lowe's Pro)</td></tr>
 <tr><td>Wood rules</td><td>White oak primary, ash/beech secondary, light walnut accent ONLY. NO dark walnut, NO espresso, NO pickled.</td><td>—</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Tile</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th><th>Vendor / SKU</th></tr>
 <tr><td>Master bath shower walls</td><td>Cle Weathered White Bejmat 2×6 — handmade specialty</td><td>cletile.com (master ONLY)</td></tr>
 <tr><td>Master bath + Kitchen floor</td><td>Daltile Choice Ivory porcelain 24×24 honed</td><td>Daltile via Atlanta dealer</td></tr>
@@ -872,10 +903,10 @@ def materials_page():
 <tr><td>Hall + Basement bath floor</td><td>Daltile Portfolio White 12×24 honed</td><td>Daltile</td></tr>
 <tr><td>Kitchen range backsplash (PIVOT)</td><td>Carrara slab — bookmatched or single piece</td><td>Atlanta fab shop slab</td></tr>
 <tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt zellige 4×4 — handmade actual zellige (NOT Cloé character-only)</td><td>cletile.com</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Paint</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Color</th><th>Sheen</th><th>Product line</th></tr>
 <tr><td>Walls — most rooms</td><td>BM White Dove (OC-17)</td><td>Matte</td><td><strong>BM Aura</strong></td></tr>
 <tr><td>Walls — bedroom alt</td><td>SW Accessible Beige (SW 7036)</td><td>Matte</td><td>BM Aura (color-matched)</td></tr>
@@ -883,14 +914,14 @@ def materials_page():
 <tr><td>Trim + doors</td><td>BM Simply White (OC-117)</td><td>Satin</td><td>BM Aura</td></tr>
 <tr><td>Wet rooms (baths, kitchen, basement)</td><td>same colors</td><td>Matte/eggshell</td><td><strong>BM Aura Bath & Spa</strong></td></tr>
 <tr><td>Exterior</td><td>TBD — coordinate with brick</td><td>—</td><td><strong>BM Aura Exterior</strong></td></tr>
-</table>
+</table></div>
 
 <div class="note-card target">
 <strong>Why Aura, not Regal Select or ben:</strong> 1490's lot is heavily tree-canopied + close to creek = persistent high humidity year-round. Aura is BM's premium washable + mildew-resistant line. Non-negotiable in this microclimate. Marginal cost ~$30-40/gal premium = $1,500-2,000 total project upcharge.
 </div>
 
 <section class="section-header"><h2>Plumbing fixtures</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Faucet line (all baths + kitchen)</td><td><strong>Delta Trinsic in Champagne Bronze</strong> — contract callout (NOT chrome, NOT polished nickel)</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II (One-Piece in master, Two-Piece in hall + basement)</td></tr>
@@ -901,10 +932,10 @@ def materials_page():
 <tr><td>Hall bath tub</td><td>Kohler Bellwether cast iron 60" alcove</td></tr>
 <tr><td>Master shower drain</td><td>Schluter linear drain + Kerdi waterproofing system</td></tr>
 <tr><td>Kitchen sink</td><td>Stainless undermount (owner-direct, Build.com Pro)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Hardware</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th><th>Vendor</th></tr>
 <tr><td>Kitchen cabinet pulls</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix (5:1 brass:black)</td><td>Rejuvenation trade account</td></tr>
 <tr><td>Front door handleset</td><td>Schoolhouse Mortise OR Rejuvenation Emry — lacquered brass</td><td>Schoolhouse / Rejuvenation trade</td></tr>
@@ -912,27 +943,27 @@ def materials_page():
 <tr><td>Interior doors (10)</td><td>Emtek Modern matte black</td><td>Emtek via Build.com</td></tr>
 <tr><td>Bath fixtures</td><td>Delta Trinsic Champagne Bronze (faucet + shower trim)</td><td>—</td></tr>
 <tr><td>Lighting fixtures</td><td>Schoolhouse Princeton / Hudson / Apex + Rejuvenation Putman</td><td>Schoolhouse + Rejuvenation</td></tr>
-</table>
+</table></div>
 
 <div class="note-card target">
 <strong>Patina rule:</strong> LACQUERED brass throughout — "no patina romance." Schoolhouse's lacquered finish stays color-fast, vs unlacquered which develops patina. Owner explicitly chose lacquered (locked decision #4). This is consistent with the warm-but-stays-looking-good philosophy.
 </div>
 
 <section class="section-header"><h2>Counters</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th></tr>
 <tr><td>Kitchen island + perimeter</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
 <tr><td>Bath vanity tops</td><td>Matches respective tile / vanity spec (Hutchinson is integral)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Roof + envelope</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Shingle</td><td>Premium 50-yr impact with AR (algae-resistant) granules + 10-yr algae warranty</td></tr>
 <tr><td>Underlayment</td><td>Synthetic + ice-and-water shield at eaves, valleys, penetrations</td></tr>
 <tr><td>Gutter</td><td>Heavy-duty + micro-mesh leaf guard (LeafFilter-tier)</td></tr>
 <tr><td>Exterior paint</td><td>BM Aura Exterior — full repaint (humidity microclimate)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Sample order list (owner action)</h2></section>
 <div class="note-card warm">
@@ -1498,7 +1529,7 @@ def budget_page():
 </div>
 
 <section class="section-header"><h2>Where it stands today</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Line</th><th>$</th></tr>
 <tr><td>Construction subtotal (honest, post-correction)</td><td>$312,398</td></tr>
 <tr><td>Contingency (5.4% held)</td><td>$16,870</td></tr>
@@ -1506,7 +1537,7 @@ def budget_page():
 <tr><td><strong>All-in projection</strong></td><td><strong>$341,768</strong></td></tr>
 <tr><td>Cap (revised 2026-05-15)</td><td>$342,000</td></tr>
 <tr><td>Cushion</td><td>$232</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>How we got here — the audit chain</h2></section>
 
@@ -1522,7 +1553,7 @@ def budget_page():
 <strong>2026-05-15 afternoon — full-sheet vet.</strong> Six agents (Codex + Gemini-3-pro + four specialized Claude subagents) extended the line-by-line method to G2 through G7. Total honest gap surfaced: <strong>$85,645 across the sheet</strong>, not just G1.
 </div>
 
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Group</th><th>Sheet</th><th>Honest (UP-only)</th><th>Delta</th></tr>
 <tr><td>G1 Interior</td><td>$145,930</td><td>$200,800</td><td>+$54,870</td></tr>
 <tr><td>G2 Baths</td><td>$42,000</td><td>$55,900</td><td>+$13,900</td></tr>
@@ -1532,7 +1563,7 @@ def budget_page():
 <tr><td>G6 Outdoor</td><td>$47,000</td><td>$53,675</td><td>+$6,675</td></tr>
 <tr><td>G7 Soft</td><td>$31,500</td><td>$32,900</td><td>+$1,400</td></tr>
 <tr><td><strong>Total honest gap</strong></td><td></td><td></td><td><strong>+$85,645</strong></td></tr>
-</table>
+</table></div>
 
 <div class="note-card">
 <strong>Then — audit-overestimate correction.</strong> A line-by-line review of the audit findings caught ~$10K of padding the agents had added: closets priced as four-rooms-all-premium when the real spec is one premium reach-in + three PAX hybrid; exterior doors priced as both-premium when only the front door is the walnut splurge; sheetrock / trim / exterior paint slightly above Atlanta 2026 market; G5 EV cluster overpriced. Real material-only delta to absorb: <strong>$15,968</strong>.
@@ -1548,13 +1579,13 @@ def budget_page():
 
 <p>The $85,645 surfaced gap minus $15,968 material-only corrections + $17K cap revision still leaves a labor delta that Path 3 must absorb:</p>
 
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Lever</th><th>Honest ceiling</th></tr>
 <tr><td>TCW labor friend rate from 20% → 30% off market</td><td>$15-25K</td></tr>
 <tr><td>Owner-direct material trade discounts (Home Depot Pro Xtra, Lowe's Pro, manufacturer-direct on tile / lighting / hardware)</td><td>$5-10K</td></tr>
 <tr><td>G6.7 buffer line itemized + negotiated down (hidden 27.6% contingency on outdoor scope)</td><td>$2.5-3K</td></tr>
 <tr><td><strong>Path 3 realistic ceiling</strong></td><td><strong>$22.5-38K labor absorption</strong></td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>Risk R19 (High probability):</strong> if TCW does NOT absorb the labor delta via aggressive friend rate, all-in projection goes to <strong>$395-415K range</strong>. The TCW change-order email is the gating conversation that resolves Path 3 viability.
@@ -1562,25 +1593,25 @@ def budget_page():
 
 <section class="section-header"><h2>What the cap revision did NOT do</h2></section>
 
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Tempting move</th><th>Why we said no</th></tr>
 <tr><td>Defer kitchen full reno to P2</td><td>Five years of patched-together cooking in a 1953 ranch kitchen — quality-of-life cost too high for the savings.</td></tr>
 <tr><td>Defer basement ¾ bath</td><td>Adding shower to under-stair half-bath unlocks the basement as a guest suite + future kid-2 zone — high option-value preserved.</td></tr>
 <tr><td>Drop hardwood spec back to standard refinish</td><td>Bleach + Rubio is one of two non-negotiable contract callouts — the aesthetic depends on it (avoids pinkish poly tone on red oak).</td></tr>
 <tr><td>Cut contingency to 0%</td><td>1953 ranch reno with no permits + waterproofing on contractor-allowance + structural-engineer-letter gap on 2020 kitchen wall. 5.4% is already thin.</td></tr>
 <tr><td>Trim 2 exterior doors to keep originals</td><td>Front door is the walnut splurge — the canon Campbell House move. Side door upgrade is the smaller adjacent decision; defer-able if Path 3 underperforms.</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Files behind these numbers</h2></section>
 
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Doc</th><th>What it is</th></tr>
 <tr><td>scope/TIER_B_FINAL_LOCKED.md</td><td>The canonical sheet — every line, every owner-locked decision, the risk register</td></tr>
 <tr><td>audits/2026-05-15-g1-itemization/</td><td>2-agent G1 deep-dive (Claude + Codex), SYNTHESIS.md, $48K surfaced</td></tr>
 <tr><td>audits/2026-05-15-full-sheet-vet/</td><td>6-agent full-sheet vet (Codex + Gemini-3-pro + 4 subagents), SYNTHESIS.md, $86K surfaced</td></tr>
 <tr><td>audits/2026-05-14-tier-b-recheck/</td><td>The prior 3-agent reckoning + TCW 2023 floor verification (what the new audits built on)</td></tr>
 <tr><td>audits/2026-05-14-roof-research/</td><td>Roof material decision (premium shingle vs metal vs stone-coated steel) — locked at $16K shingle</td></tr>
-</table>
+</table></div>
 
 <div class="note-card warm">
 <strong>Next gate:</strong> the TCW change-order email. Ten line-itemized asks (G1-G7 full breakdown + G6.7 buffer itemization + Vent-A-Hood SKU verification with CDGA + kitchen backsplash spec reconciliation + Aura paint product-line confirmation + HVAC bundle truth-up + management fee concession). Rick's reply on those specifics is the only data point that resolves whether Path 3 holds at $22-38K or falls short and forces the next cap conversation.

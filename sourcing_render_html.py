@@ -69,9 +69,18 @@ SHARED_CSS = """
   --status-awaiting: #c9893a; --status-installed: #6b6660;
   --status-deferred: #8a85a0;
   --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
+  --topnav-h: 48px;
 }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; }
+.table-wrapper { width: 100%; }
+@media (max-width: 720px) {
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+}
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
@@ -138,7 +147,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
   font-size: 11.5px; color: var(--muted); }
 .revision-history strong { color: var(--ink); margin-right: 6px; }
-.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: var(--topnav-h); background: var(--bg); z-index: 40; }
 .filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
   border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
 .filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
@@ -239,18 +248,43 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
+  body { font-size: 16px; }
   .page-header h1 { font-size: 24px; }
-  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  /* R1 mobile baseline: topnav becomes a horizontally-scrollable single row
+   * with 44px touch targets. Rooms ▾ / Canon ▾ dropdowns stay inline.
+   * Per baseline.md pattern §5 + §8: avoids the 5-6-row pill-stack on phones. */
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-inner > * { flex: 0 0 auto; }
   .topnav-inner .home { margin-right: 8px; }
-  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner a:not(.home),
+  .topnav-inner details.nav-dropdown > summary {
+    padding: 8px 12px; font-size: 13px; min-height: 44px;
+    display: inline-flex; align-items: center; }
   .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
   .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
-  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .filter-bar button, .filter-bar select { font-size: 13px; padding: 8px 14px;
+    min-height: 44px; }
   .options-grid { grid-template-columns: 1fr; }
   .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
   .item-card { padding: 12px; }
   main { padding: 0 14px 60px; }
   .page-header { padding: 0 14px; }
+  /* R1 baseline: tables overflow-scroll on mobile (overridden by .table-wrapper
+   * for pages that opt into a desktop-friendly wrapper instead). */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%; white-space: nowrap; }
+  table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* Long URLs / code blocks must wrap so they can't break the page layout. */
+  pre, code { word-break: break-word; white-space: pre-wrap; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
 }
 """
 
@@ -679,11 +713,13 @@ def _budget_rollup_block(items: List[Item], meta: Meta) -> str:
         f'<span>Construction cap: <strong>${cap:,.0f}</strong></span>'
         f'<span class="{delta_cls}">Delta vs cap: {delta_sign}${abs(delta):,.0f}</span>'
         f'</div>'
+        f'<div class="table-wrapper">'
         f'<table>'
         f'<thead><tr><th>Category</th><th class="num">Count</th>'
         f'<th class="num">Budgeted</th><th class="num">% of cap</th></tr></thead>'
         f'<tbody>{"".join(rows_html)}</tbody>'
         f'</table>'
+        f'</div>'
         f'</div>'
     )
 
@@ -1964,11 +2000,13 @@ def render_vendors_page(items: List[Item], meta: Meta,
         f'<h3>Canon brand-mix coherence</h3>'
         f'<p class="lead">Share of ${cap:,.0f} construction cap by canon bucket vs DESIGN_SPEC '
         f'&sect;5d targets. Warns if a bucket is more than 5pp outside its target band.</p>'
+        f'<div class="table-wrapper">'
         f'<table>'
         f'<thead><tr><th>Bucket</th><th class="num">$</th><th class="num">% of cap</th>'
         f'<th class="num">Target</th><th>Status</th></tr></thead>'
         f'<tbody>{"".join(mix_rows_html)}</tbody>'
         f'</table>'
+        f'</div>'
         f'</div>'
     )
 
@@ -2022,7 +2060,7 @@ def render_vendors_page(items: List[Item], meta: Meta,
             f'<strong>{pct_of_cap:.1f}%</strong> of cap &middot; '
             f'bucket: {escape(bucket_label)}</span>'
             f'</div>'
-            f'<table><tbody>{"".join(rows_inner)}</tbody></table>'
+            f'<div class="table-wrapper"><table><tbody>{"".join(rows_inner)}</tbody></table></div>'
             f'</section>'
         )
 
@@ -2073,7 +2111,7 @@ SUPPLIERS_CSS = """
 .suppliers-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 12px 0;
   margin: 0 0 18px; border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  position: sticky; top: 44px; background: var(--bg); z-index: 40; align-items: center; }
+  position: sticky; top: var(--topnav-h); background: var(--bg); z-index: 40; align-items: center; }
 .suppliers-filter-bar label { font-size: 11.5px; color: var(--muted); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
 .suppliers-filter-bar input[type=search] { background: var(--card-bg);
@@ -2103,7 +2141,7 @@ SUPPLIERS_CSS = """
   .category-side-nav { position: static; }
 }
 
-.category-section { margin: 0 0 36px; scroll-margin-top: 110px; }
+.category-section { margin: 0 0 36px; scroll-margin-top: calc(var(--topnav-h) + 62px); }
 .category-section-header { display: flex; align-items: baseline; gap: 14px;
   padding: 0 0 8px; border-bottom: 1px solid var(--border); margin: 0 0 16px; }
 /* R5-UX2: Single Japandi serif moment — category h2 only. Other headings
@@ -2350,7 +2388,7 @@ details.mobile-filters > .suppliers-filter-bar { display: flex; }
   .supplier-action .action-btn { padding: 10px 6px; min-height: 44px;
     font-size: 12px; }
   .supplier-action { gap: 6px; }
-  .collection-chip { padding: 8px 12px; min-height: 36px;
+  .collection-chip { padding: 10px 14px; min-height: 44px;
     display: inline-flex; align-items: center; }
   /* Verification tooltip can't overflow viewport */
   .verif-badge .verif-tooltip { right: auto; left: 0;
