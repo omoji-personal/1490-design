@@ -810,6 +810,61 @@ def check_supplier_directory_uncategorized(items: List[Item], meta: Meta) -> Lis
     return findings
 
 
+def check_supplier_directory_citation_guard(items: List[Item], meta: Meta) -> List[LintFinding]:
+    """R5 (2026-05-17) — Invoke the pre-commit citation/URL-metadata guard at
+    `~/Desktop/HomeAI/scripts/verify_directory_citations.py` as part of the lint
+    pipeline so its three checks (fabricated §-citation, URL-metadata 404
+    anti-pattern, state-vs-prose drift) ride the standard `python build_sourcing.py`
+    flow rather than living as a standalone pre-commit hook.
+
+    Each error returned by the guard is surfaced as a single warning LintFinding.
+    The guard module is loaded via importlib so this lint check stays defensive:
+    a missing file, an import failure, or a YAML resolution issue degrades to a
+    no-op rather than crashing the entire build.
+    """
+    import importlib.util
+    import os
+    findings: List[LintFinding] = []
+    guard_path = os.path.expanduser("~/Desktop/HomeAI/scripts/verify_directory_citations.py")
+    if not os.path.exists(guard_path):
+        return findings
+    try:
+        spec = importlib.util.spec_from_file_location("_verify_directory_citations", guard_path)
+        if spec is None or spec.loader is None:
+            return findings
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    except Exception:
+        return findings
+    # The guard exposes `check_fabricated_citations`, `check_url_metadata`,
+    # `check_state_vs_prose`, the helpers `extract_design_spec_sections` +
+    # `DIRECTORY_PATH` / `DESIGN_SPEC_PATH`.  Re-implement the orchestration
+    # locally (lint-friendly: no sys.exit, no stderr, no I/O surprises).
+    try:
+        directory_path = mod.DIRECTORY_PATH
+        design_spec_path = mod.DESIGN_SPEC_PATH
+        if not directory_path.exists() or not design_spec_path.exists():
+            return findings
+        known_sections = mod.extract_design_spec_sections(design_spec_path)
+        import yaml as _yaml
+        with directory_path.open(encoding="utf-8") as f:
+            data = _yaml.safe_load(f) or {}
+        suppliers = (data.get("suppliers") or [])
+        errors: List[str] = []
+        errors.extend(mod.check_fabricated_citations(suppliers, known_sections))
+        errors.extend(mod.check_url_metadata(suppliers))
+        errors.extend(mod.check_state_vs_prose(suppliers))
+    except Exception:
+        return findings
+    for e in errors:
+        findings.append(LintFinding(
+            severity="warning",
+            message=f"supplier_directory citation/url guard: {e}",
+            item_id=None,
+        ))
+    return findings
+
+
 def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings: List[LintFinding] = []
     findings += check_brass_finish(items, meta.consistency_locks.brass_finish_family)
@@ -826,4 +881,5 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_catalog_status_callouts(items, meta)
     findings += check_supplier_directory_url_freshness(items, meta)
     findings += check_supplier_directory_uncategorized(items, meta)
+    findings += check_supplier_directory_citation_guard(items, meta)
     return findings
