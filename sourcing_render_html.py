@@ -2420,15 +2420,24 @@ SUPPLIERS_JS = """
         setAction(card, cur === wanted ? '' : wanted);
       });
       // R3 Fix UX6 — arrow-key navigation across the radio group + space/enter to select.
+      // R4 Fix V2 — arrow keys must also UPDATE the selected radio (call
+      // setAction with the target value) and the roving tabindex, not just
+      // move DOM focus. This matches the standard ARIA radiogroup pattern;
+      // R3 Beta's claim that this was implemented was rejected by Codex
+      // because the original handler only focused without selecting.
       btn.addEventListener('keydown', e => {
         const key = e.key;
         if (key === 'ArrowRight' || key === 'ArrowDown') {
           e.preventDefault();
           const next = groupBtns[(idx + 1) % groupBtns.length];
+          // Select the target radio (updates aria-checked + roving tabindex
+          // via applyActionToCard inside setAction) then move focus.
+          setAction(card, next.dataset.action);
           next.focus();
         } else if (key === 'ArrowLeft' || key === 'ArrowUp') {
           e.preventDefault();
           const prev = groupBtns[(idx - 1 + groupBtns.length) % groupBtns.length];
+          setAction(card, prev.dataset.action);
           prev.focus();
         } else if (key === ' ' || key === 'Enter') {
           e.preventDefault();

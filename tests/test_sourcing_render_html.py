@@ -2273,6 +2273,32 @@ def test_suppliers_js_wires_arrow_key_navigation():
     assert "aria-checked" in SUPPLIERS_JS
 
 
+def test_suppliers_js_arrow_keys_call_setaction():
+    """R4 Fix V2 — arrow-key handlers must call setAction(card, next.dataset.action)
+    so aria-checked + roving tabindex actually update on arrow nav (not just
+    DOM focus). Codex rejected R3 Beta's R3-A3 'verified' claim because the
+    original handler only called .focus() without invoking setAction()."""
+    from sourcing_render_html import SUPPLIERS_JS
+    # ArrowRight branch: setAction call must appear after the next assignment.
+    assert "ArrowRight" in SUPPLIERS_JS
+    # Find ArrowRight branch and assert setAction is called within it.
+    right_idx = SUPPLIERS_JS.find("ArrowRight")
+    left_idx = SUPPLIERS_JS.find("ArrowLeft")
+    assert right_idx > 0 and left_idx > 0
+    # The window between ArrowRight and ArrowLeft is the ArrowRight branch body.
+    right_branch = SUPPLIERS_JS[right_idx:left_idx]
+    assert "setAction(card, next.dataset.action)" in right_branch, (
+        "ArrowRight handler must call setAction so aria-checked + roving "
+        "tabindex update, not just .focus(). Got branch: " + right_branch[:500]
+    )
+    # ArrowLeft branch: same expectation against prev.
+    enter_idx = SUPPLIERS_JS.find("' ' || key === 'Enter'", left_idx)
+    left_branch = SUPPLIERS_JS[left_idx:enter_idx if enter_idx > 0 else left_idx + 600]
+    assert "setAction(card, prev.dataset.action)" in left_branch, (
+        "ArrowLeft handler must call setAction with prev.dataset.action."
+    )
+
+
 # ---------------------------------------------------------------------------
 # R3 Fix UX4 — tri-state action OUTSIDE the <details> expander
 # ---------------------------------------------------------------------------
