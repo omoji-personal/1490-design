@@ -1718,8 +1718,11 @@ def test_render_item_card_emits_data_vendor_matches():
 
 
 def test_vendor_matches_scopes_to_compatible_category():
-    """A bedroom-suffixed supplier must NOT match seating sourcing items even
-    though the brand string ('West Elm') matches both."""
+    """R4 Fix C1 — vendor matches must obey the SAME supplier-category-scope
+    predicate that drives `/suppliers` counts. A 'sofa' titled item in LR
+    must match west-elm-seating (seating title keyword) but NOT
+    west-elm-bedroom (bedroom is room+title gated and a sofa in LR fails
+    both)."""
     from sourcing_render_html import _vendor_matches_for_item
     # Fake suppliers index (id, name, category)
     suppliers = [
@@ -1729,17 +1732,41 @@ def test_vendor_matches_scopes_to_compatible_category():
     ]
     class FakeItem:
         id = "LR-SOFA"
+        title = "Sectional sofa"
         category = "furniture"
+        room = "lr"
         vendor = "West Elm"
         options = []
     matches = _vendor_matches_for_item(FakeItem(), suppliers)
-    # Both seating and bedroom variants are under "furniture" parent → both match.
-    # But _SOURCING_CAT_TO_SUPPLIER_SUFFIXES["furniture"] includes both suffixes.
+    # Seating: title contains "sofa" → in scope.
     assert "west-elm-seating" in matches
-    assert "west-elm-bedroom" in matches
+    # Bedroom: requires room in {master_br, nursery, guest_br} AND a bedroom
+    # title keyword. LR-room sofa fails both. R4 closes the 22-row bleed.
+    assert "west-elm-bedroom" not in matches
     # Schoolhouse has no recognized suffix → brand-wide match passes via name.
     # However the item's vendor string is "West Elm" not "Schoolhouse", so no match.
     assert "schoolhouse" not in matches
+
+
+def test_vendor_matches_bedroom_supplier_with_bedroom_item():
+    """R4 Fix C1 — a bedroom-room nightstand from West Elm DOES match
+    west-elm-bedroom (both room and title-keyword in scope)."""
+    from sourcing_render_html import _vendor_matches_for_item
+    suppliers = [
+        ("west-elm-seating", "West Elm", "furniture-seating"),
+        ("west-elm-bedroom", "West Elm", "furniture-bedroom"),
+    ]
+    class FakeItem:
+        id = "MBR-NIGHTSTAND"
+        title = "Master bedroom nightstand pair"
+        category = "furniture"
+        room = "master_br"
+        vendor = "West Elm"
+        options = []
+    matches = _vendor_matches_for_item(FakeItem(), suppliers)
+    assert "west-elm-bedroom" in matches
+    # Seating: nightstand is not a seating title keyword → out of scope.
+    assert "west-elm-seating" not in matches
 
 
 def test_vendor_matches_blocks_bedroom_supplier_for_lighting_item():
@@ -1748,7 +1775,9 @@ def test_vendor_matches_blocks_bedroom_supplier_for_lighting_item():
     suppliers = [("west-elm-bedroom", "West Elm", "furniture-bedroom")]
     class FakeItem:
         id = "K-PENDANTS"
+        title = "Kitchen pendants"
         category = "lighting_fixture"
+        room = "kitchen"
         vendor = "West Elm"
         options = []
     matches = _vendor_matches_for_item(FakeItem(), suppliers)

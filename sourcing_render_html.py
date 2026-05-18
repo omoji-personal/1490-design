@@ -920,11 +920,20 @@ _SOURCING_CAT_TO_SUPPLIER_SUFFIXES = {
 
 
 def _vendor_matches_for_item(item, suppliers_by_id_and_brand) -> List[str]:
-    """R2 Fix C5+C6 — Compute which supplier-ids this sourcing item matches,
-    scoped by category. Returns list of supplier-ids.
+    """R4 Fix C1 — Compute which supplier-ids this sourcing item matches,
+    scoped by the SAME predicate that `_supplier_sourcing_links()` uses to
+    drive `/suppliers` counts. Returns list of supplier-ids.
 
     suppliers_by_id_and_brand is a list of (supplier_id, supplier_name,
     supplier_category_string) tuples loaded from supplier_directory.yaml.
+
+    Previously this function used a parent-category allow-list of suffixes,
+    which meant every WE subcategory (-seating / -tables / -bedroom) tagged
+    EVERY furniture item the same way. As a result `/sourcing?vendor=west-elm-bedroom`
+    returned 22 furniture rows, even though the supplier card on
+    `/suppliers` correctly reported only 5 bedroom items. R4 closes the
+    integrity split by reusing `_item_in_supplier_category_scope()` so
+    the data attribute matches the displayed count exactly.
     """
     if not suppliers_by_id_and_brand:
         return []
@@ -938,33 +947,36 @@ def _vendor_matches_for_item(item, suppliers_by_id_and_brand) -> List[str]:
     if not vendor_strs:
         return []
 
-    allowed_suffixes = _SOURCING_CAT_TO_SUPPLIER_SUFFIXES.get(item.category, [])
+    # R4 Fix C1 — adapt the Item dataclass into the dict shape that
+    # `_item_in_supplier_category_scope()` reads (it expects "title",
+    # "category", "room" keys). Built once per item.
+    item_dict = {
+        "title": getattr(item, "title", "") or "",
+        "category": getattr(item, "category", "") or "",
+        "room": getattr(item, "room", "") or "",
+    }
 
     matches = []
     seen = set()
-    for sid, sname, _scat in suppliers_by_id_and_brand:
-        # Category scope: if the supplier-id ends in one of the recognized
-        # supplier-category suffixes, allow only when it's in the item's
-        # category's allow-list. Brand-wide suppliers (no recognized suffix)
-        # are always allowed (e.g. paint brands like "benjamin-moore").
-        recognized_suffix = next(
-            (s for s in (
-                "-seating", "-tables", "-bedroom", "-bedding", "-lighting",
-                "-appliances", "-hardware", "-window", "-tile", "-counters",
-                "-stone", "-paint", "-finish", "-plumbing", "-cabinetry",
-                "-millwork", "-decor", "-rugs", "-art")
-                if sid.endswith(s)),
-            None,
-        )
-        if recognized_suffix and recognized_suffix not in allowed_suffixes:
-            continue
-        # Brand-match check against any vendor string on the item.
+    for sid, sname, scat in suppliers_by_id_and_brand:
+        # Brand-match against any vendor string on the item.
+        brand_matched = False
         for vstr in vendor_strs:
             if _vendor_string_matches_supplier(vstr, sid, sname):
-                if sid not in seen:
-                    matches.append(sid)
-                    seen.add(sid)
+                brand_matched = True
                 break
+        if not brand_matched:
+            continue
+        # R4 Fix C1 — apply the same supplier-category scope used by
+        # `_supplier_sourcing_links()`. When the supplier has no recognized
+        # supplier-category (or the map has no rule for it), the predicate
+        # falls through to True (brand-only match), matching the legacy
+        # behavior for non-furniture brand-wide suppliers.
+        if scat and not _item_in_supplier_category_scope(item_dict, scat):
+            continue
+        if sid not in seen:
+            matches.append(sid)
+            seen.add(sid)
     return matches
 
 
