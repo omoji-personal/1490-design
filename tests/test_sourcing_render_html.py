@@ -2097,6 +2097,98 @@ def test_parse_supplier_rejects_null_fit_for_project():
         })
 
 
+# ---------------------------------------------------------------------------
+# R5 Fix I1 — parse_supplier() must reject non-string values for the typed
+# display fields BEFORE stringification. Lists/dicts/ints would otherwise
+# silently become "[]"/"{}"/"123" via str() and poison card render.
+# ---------------------------------------------------------------------------
+
+
+def test_parse_supplier_rejects_list_style_fingerprint():
+    """R5 Fix I1 — a list value for style_fingerprint must fail at parse_supplier()
+    instead of silently stringifying to '[]'."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="style_fingerprint must be a string"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": [], "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_dict_style_fingerprint():
+    """R5 Fix I1 — a dict value for style_fingerprint must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="style_fingerprint must be a string"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": {"a": 1}, "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_int_style_fingerprint():
+    """R5 Fix I1 — an int value for style_fingerprint must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="style_fingerprint must be a string"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": 42, "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_list_fit_for_project():
+    """R5 Fix I1 — a list value for fit_for_project must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="fit_for_project must be a string"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": [],
+        })
+
+
+def test_parse_supplier_rejects_dict_fit_for_project():
+    """R5 Fix I1 — a dict value for fit_for_project must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="fit_for_project must be a string"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": {"a": 1},
+        })
+
+
+def test_parse_supplier_rejects_empty_string_style_fingerprint():
+    """R5 — empty-string style_fingerprint must fail (audit gap from R4)."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="null/empty style_fingerprint"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "   ", "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_empty_string_fit_for_project():
+    """R5 — empty-string fit_for_project must fail (audit gap from R4)."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="null/empty fit_for_project"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "",
+        })
+
+
 def test_parse_supplier_round_trips_url_status_tag():
     """R4 Fix I2 — recommended_url / url_status_tag / price_validation_status
     must round-trip through parse_supplier() onto the Supplier dataclass."""

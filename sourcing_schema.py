@@ -331,13 +331,34 @@ def parse_supplier(raw: Dict[str, Any]) -> Supplier:
             f"{sid}: supplier url must be a string, got {type(raw_url).__name__}"
         )
     # R4 Fix V1 (c) — required display fields validated at parse-time.
+    # R5 Fix I1 — also reject non-string values BEFORE stringification. Lists,
+    # dicts, ints etc. used to silently become "[]"/"{}"/"123" via str(), which
+    # poisoned card render. Type-check first, then content-check.
     raw_sf = raw.get("style_fingerprint")
-    if raw_sf is None or (isinstance(raw_sf, str) and not raw_sf.strip()):
+    if raw_sf is None:
+        raise ValidationError(
+            f"{sid}: supplier has null/empty style_fingerprint — required for card render."
+        )
+    if not isinstance(raw_sf, str):
+        raise ValidationError(
+            f"{sid}: supplier style_fingerprint must be a string, "
+            f"got {type(raw_sf).__name__}"
+        )
+    if not raw_sf.strip():
         raise ValidationError(
             f"{sid}: supplier has null/empty style_fingerprint — required for card render."
         )
     raw_ffp = raw.get("fit_for_project")
-    if raw_ffp is None or (isinstance(raw_ffp, str) and not raw_ffp.strip()):
+    if raw_ffp is None:
+        raise ValidationError(
+            f"{sid}: supplier has null/empty fit_for_project — required for card render."
+        )
+    if not isinstance(raw_ffp, str):
+        raise ValidationError(
+            f"{sid}: supplier fit_for_project must be a string, "
+            f"got {type(raw_ffp).__name__}"
+        )
+    if not raw_ffp.strip():
         raise ValidationError(
             f"{sid}: supplier has null/empty fit_for_project — required for card render."
         )
@@ -348,8 +369,8 @@ def parse_supplier(raw: Dict[str, Any]) -> Supplier:
         url=raw_url,
         price_tier=price_tier,
         fit=fit,
-        style_fingerprint=str(raw_sf),
-        fit_for_project=str(raw_ffp),
+        style_fingerprint=raw_sf,
+        fit_for_project=raw_ffp,
         off_canon_warning=raw.get("off_canon_warning"),
         collections_to_browse=list(raw.get("collections_to_browse") or []),
         lead_time_typical=raw.get("lead_time_typical"),
