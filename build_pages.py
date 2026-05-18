@@ -27,7 +27,19 @@ html, body { overflow-x: hidden; max-width: 100%; }
 img, picture, video { max-width: 100%; height: auto; }
 .table-wrapper { width: 100%; }
 @media (max-width: 720px) {
-  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  /* R2-UX1: scrollable surfaces get an edge-fade affordance + a visible
+   * scrollbar so users know they can swipe. */
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;
+    position: relative; }
+  .table-wrapper::-webkit-scrollbar { height: 6px; }
+  .table-wrapper::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.3);
+    border-radius: 3px; }
+  .table-wrapper::-webkit-scrollbar-track { background: transparent; }
+  .topnav-scroller { position: relative; }
+  .topnav-scroller::after, .table-wrapper::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 24px; pointer-events: none;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;

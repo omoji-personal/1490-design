@@ -160,8 +160,13 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
   /* R2-C1: scroll the WRAPPER, not topnav-inner. Dropdowns inside topnav-inner
    * escape via position:fixed so they don't get clipped. */
   nav.topnav .topnav-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; }
+    scrollbar-width: none; position: relative; }
   nav.topnav .topnav-scroller::-webkit-scrollbar { display: none; }
+  /* R2-UX1: edge-fade scroll affordance on the topnav scroller. */
+  nav.topnav .topnav-scroller::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 24px; pointer-events: none;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
   nav.topnav .topnav-inner { padding: 6px 12px; gap: 6px;
     flex-wrap: nowrap; }
   nav.topnav .topnav-inner > * { flex: 0 0 auto; }
