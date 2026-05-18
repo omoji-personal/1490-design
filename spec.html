@@ -221,7 +221,11 @@
       -webkit-overflow-scrolling: touch; max-width: 100%; white-space: nowrap;
       border-radius: 0; }
     table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
-    .table-wrapper > table { display: table; }
+    /* R3-C1: complete the wrapped-table reset so the outer .table-wrapper owns
+     * the horizontal scroll while the inner <table> reflows normally (matches
+     * sourcing_render_html.py and build_pages.py). */
+    .table-wrapper > table { display: table; white-space: normal;
+      overflow-x: visible; max-width: none; }
     th, td { padding: 8px 10px; }
     pre, code { word-break: break-word; white-space: pre-wrap; }
   }
