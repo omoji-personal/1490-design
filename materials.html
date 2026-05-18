@@ -17,9 +17,18 @@
   --note-tint: #f0e8d8;
   --reject-tint: #f8e6df;
   --border: #e8e2d6;
+  --topnav-h: 48px;
 }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; }
+.table-wrapper { width: 100%; }
+@media (max-width: 720px) {
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
   background: var(--bg); color: var(--ink); line-height: 1.55;
@@ -92,7 +101,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
   margin: 44px 0 16px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
-  scroll-margin-top: 70px;
+  scroll-margin-top: calc(var(--topnav-h) + 22px);
 }
 .section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
 .section-header .count { color: var(--muted); font-size: 13px; }
@@ -143,7 +152,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
 .spec-table {
   width: 100%; border-collapse: collapse; font-size: 14px;
   background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: 8px; overflow: hidden;
+  border-radius: 8px;
 }
 .spec-table th, .spec-table td {
   text-align: left; padding: 10px 14px;
@@ -177,12 +186,34 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
-@media (max-width: 768px) {
+/* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
+ * build_spec, plus add table overflow-x and topnav touch-target floor. */
+@media (max-width: 720px) {
+  body { font-size: 16px; }
   h1 { font-size: 28px; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
   main, header.page-header { padding-left: 18px; padding-right: 18px; }
+  /* Topnav: horizontally-scrollable single row with 44px touch targets. */
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-inner > * { flex: 0 0 auto; }
+  .topnav-inner a:not(.home),
+  .topnav-inner details.nav-dropdown > summary {
+    padding: 8px 12px; font-size: 13px; min-height: 44px;
+    display: inline-flex; align-items: center; }
+  /* Tables overflow-scroll on mobile (.table-wrapper opt-in for desktop polish). */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%; white-space: nowrap; }
+  table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  pre, code { word-break: break-word; white-space: pre-wrap; }
 }
 @media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
 </style>
@@ -209,16 +240,16 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </div>
 
 <section class="section-header"><h2>Wood floors</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th><th>Vendor</th></tr>
 <tr><td>Refinish process</td><td><strong>Bleach + Rubio Monocoat Pure</strong> — NOT Bona poly + "natural" stain (contract callout)</td><td>Rhodes Hardwood Atlanta — $7.48/sf published</td></tr>
 <tr><td>Existing floor</td><td>Red oak strip — refinishing reveals warm-honey-white-oak tone</td><td>—</td></tr>
 <tr><td>Basement LVP</td><td>Mid-grade LVP — vapor underlayment + transitions</td><td>Owner-direct (Build.com Pro / Lowe's Pro)</td></tr>
 <tr><td>Wood rules</td><td>White oak primary, ash/beech secondary, light walnut accent ONLY. NO dark walnut, NO espresso, NO pickled.</td><td>—</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Tile</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th><th>Vendor / SKU</th></tr>
 <tr><td>Master bath shower walls</td><td>Cle Weathered White Bejmat 2×6 — handmade specialty</td><td>cletile.com (master ONLY)</td></tr>
 <tr><td>Master bath + Kitchen floor</td><td>Daltile Choice Ivory porcelain 24×24 honed</td><td>Daltile via Atlanta dealer</td></tr>
@@ -226,10 +257,10 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Hall + Basement bath floor</td><td>Daltile Portfolio White 12×24 honed</td><td>Daltile</td></tr>
 <tr><td>Kitchen range backsplash (PIVOT)</td><td>Carrara slab — bookmatched or single piece</td><td>Atlanta fab shop slab</td></tr>
 <tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt zellige 4×4 — handmade actual zellige (NOT Cloé character-only)</td><td>cletile.com</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Paint</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Color</th><th>Sheen</th><th>Product line</th></tr>
 <tr><td>Walls — most rooms</td><td>BM White Dove (OC-17)</td><td>Matte</td><td><strong>BM Aura</strong></td></tr>
 <tr><td>Walls — bedroom alt</td><td>SW Accessible Beige (SW 7036)</td><td>Matte</td><td>BM Aura (color-matched)</td></tr>
@@ -237,14 +268,14 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Trim + doors</td><td>BM Simply White (OC-117)</td><td>Satin</td><td>BM Aura</td></tr>
 <tr><td>Wet rooms (baths, kitchen, basement)</td><td>same colors</td><td>Matte/eggshell</td><td><strong>BM Aura Bath & Spa</strong></td></tr>
 <tr><td>Exterior</td><td>TBD — coordinate with brick</td><td>—</td><td><strong>BM Aura Exterior</strong></td></tr>
-</table>
+</table></div>
 
 <div class="note-card target">
 <strong>Why Aura, not Regal Select or ben:</strong> 1490's lot is heavily tree-canopied + close to creek = persistent high humidity year-round. Aura is BM's premium washable + mildew-resistant line. Non-negotiable in this microclimate. Marginal cost ~$30-40/gal premium = $1,500-2,000 total project upcharge.
 </div>
 
 <section class="section-header"><h2>Plumbing fixtures</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Faucet line (all baths + kitchen)</td><td><strong>Delta Trinsic in Champagne Bronze</strong> — contract callout (NOT chrome, NOT polished nickel)</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II (One-Piece in master, Two-Piece in hall + basement)</td></tr>
@@ -255,10 +286,10 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Hall bath tub</td><td>Kohler Bellwether cast iron 60" alcove</td></tr>
 <tr><td>Master shower drain</td><td>Schluter linear drain + Kerdi waterproofing system</td></tr>
 <tr><td>Kitchen sink</td><td>Stainless undermount (owner-direct, Build.com Pro)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Hardware</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th><th>Vendor</th></tr>
 <tr><td>Kitchen cabinet pulls</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix (5:1 brass:black)</td><td>Rejuvenation trade account</td></tr>
 <tr><td>Front door handleset</td><td>Schoolhouse Mortise OR Rejuvenation Emry — lacquered brass</td><td>Schoolhouse / Rejuvenation trade</td></tr>
@@ -266,27 +297,27 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Interior doors (10)</td><td>Emtek Modern matte black</td><td>Emtek via Build.com</td></tr>
 <tr><td>Bath fixtures</td><td>Delta Trinsic Champagne Bronze (faucet + shower trim)</td><td>—</td></tr>
 <tr><td>Lighting fixtures</td><td>Schoolhouse Princeton / Hudson / Apex + Rejuvenation Putman</td><td>Schoolhouse + Rejuvenation</td></tr>
-</table>
+</table></div>
 
 <div class="note-card target">
 <strong>Patina rule:</strong> LACQUERED brass throughout — "no patina romance." Schoolhouse's lacquered finish stays color-fast, vs unlacquered which develops patina. Owner explicitly chose lacquered (locked decision #4). This is consistent with the warm-but-stays-looking-good philosophy.
 </div>
 
 <section class="section-header"><h2>Counters</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th></tr>
 <tr><td>Kitchen island + perimeter</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
 <tr><td>Bath vanity tops</td><td>Matches respective tile / vanity spec (Hutchinson is integral)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Roof + envelope</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Shingle</td><td>Premium 50-yr impact with AR (algae-resistant) granules + 10-yr algae warranty</td></tr>
 <tr><td>Underlayment</td><td>Synthetic + ice-and-water shield at eaves, valleys, penetrations</td></tr>
 <tr><td>Gutter</td><td>Heavy-duty + micro-mesh leaf guard (LeafFilter-tier)</td></tr>
 <tr><td>Exterior paint</td><td>BM Aura Exterior — full repaint (humidity microclimate)</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Sample order list (owner action)</h2></section>
 <div class="note-card warm">

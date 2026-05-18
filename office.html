@@ -17,9 +17,18 @@
   --note-tint: #f0e8d8;
   --reject-tint: #f8e6df;
   --border: #e8e2d6;
+  --topnav-h: 48px;
 }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; }
+.table-wrapper { width: 100%; }
+@media (max-width: 720px) {
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
   background: var(--bg); color: var(--ink); line-height: 1.55;
@@ -92,7 +101,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
   margin: 44px 0 16px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
-  scroll-margin-top: 70px;
+  scroll-margin-top: calc(var(--topnav-h) + 22px);
 }
 .section-header h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
 .section-header .count { color: var(--muted); font-size: 13px; }
@@ -143,7 +152,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
 .spec-table {
   width: 100%; border-collapse: collapse; font-size: 14px;
   background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: 8px; overflow: hidden;
+  border-radius: 8px;
 }
 .spec-table th, .spec-table td {
   text-align: left; padding: 10px 14px;
@@ -177,12 +186,34 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
-@media (max-width: 768px) {
+/* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
+ * build_spec, plus add table overflow-x and topnav touch-target floor. */
+@media (max-width: 720px) {
+  body { font-size: 16px; }
   h1 { font-size: 28px; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr 1fr; }
   main, header.page-header { padding-left: 18px; padding-right: 18px; }
+  /* Topnav: horizontally-scrollable single row with 44px touch targets. */
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-inner > * { flex: 0 0 auto; }
+  .topnav-inner a:not(.home),
+  .topnav-inner details.nav-dropdown > summary {
+    padding: 8px 12px; font-size: 13px; min-height: 44px;
+    display: inline-flex; align-items: center; }
+  /* Tables overflow-scroll on mobile (.table-wrapper opt-in for desktop polish). */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%; white-space: nowrap; }
+  table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  pre, code { word-break: break-word; white-space: pre-wrap; }
 }
 @media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
 </style>
@@ -217,7 +248,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </div>
 
 <section class="section-header"><h2>Construction specs</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Floor</td><td>Existing hardwood refinished</td></tr>
 <tr><td>Walls</td><td>BM White Dove matte (Aura)</td></tr>
@@ -225,7 +256,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Built-in (optional, within $25-35K custom millwork allowance)</td><td>Light oak built-in desk + bookcase, full wall</td></tr>
 <tr><td>Lighting</td><td>Overhead brass pendant + desk lamp (brass, swing-arm)</td></tr>
 <tr><td>Electrical</td><td>Cat6 already in scope, surge protector, dedicated computer circuit if WFH-heavy</td></tr>
-</table>
+</table></div>
 
 <section class="section-header"><h2>Mood references</h2></section>
 <div class="grid">
@@ -248,7 +279,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </div>
 
 <section class="section-header"><h2>Furniture brief</h2></section>
-<table class="spec-table">
+<div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Desk</td><td>Light oak — standing desk capable OR fixed wood top. ~60×30.</td><td>Custom millwork built-in OR Article Madera / WE Hutchinson desk</td></tr>
 <tr><td>Office chair</td><td>Ergonomic but visually quiet (no gaming chair).</td><td>Herman Miller Aeron (timeless) or Steelcase Leap</td></tr>
@@ -256,7 +287,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Desk lamp</td><td>Brass swing-arm</td><td>Schoolhouse Hudson swing arm</td></tr>
 <tr><td>Rug</td><td>Cream/oat flat-weave 6×9</td><td>Loloi II</td></tr>
 <tr><td>Plant</td><td>Kentia palm (cat-safe) under skylight</td><td>Local nursery</td></tr>
-</table>
+</table></div>
 
 <div class="kill-list">
 <strong>Office kill list:</strong>

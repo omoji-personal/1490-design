@@ -16,9 +16,18 @@
     --note-tint: #f0e8d8;
     --border: #e8e2d6;
     --target-tint: #e8efe2;
+    --topnav-h: 48px;
   }
+  @media (max-width: 720px) { :root { --topnav-h: 52px; } }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+  html, body { overflow-x: hidden; max-width: 100%; }
+  img, picture, video { max-width: 100%; height: auto; }
+  .table-wrapper { width: 100%; }
+  @media (max-width: 720px) {
+    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;
     background: var(--bg); color: var(--ink); line-height: 1.65;
@@ -138,7 +147,6 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
   }
   th, td {
     text-align: left;
@@ -169,11 +177,35 @@
   a:hover { border-bottom-color: var(--accent); }
 
   @media (max-width: 720px) {
+    body { font-size: 16px; }
     .container { padding: 24px 18px 60px; }
     h1 { font-size: 28px; }
     h2 { font-size: 21px; }
-    table { font-size: 12.5px; }
+    /* R1 mobile baseline: topnav horizontally-scrollable + 44px touch targets. */
+    .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; }
+    .topnav-inner::-webkit-scrollbar { display: none; }
+    .topnav-inner > * { flex: 0 0 auto; }
+    .topnav-inner a:not(.home),
+    .topnav-inner details.nav-dropdown > summary {
+      padding: 8px 12px; font-size: 13px; min-height: 44px;
+      display: inline-flex; align-items: center; }
+    /* Tables: opt out of the overflow: hidden on .table wrapper so .table-wrapper
+     * can scroll, fall back to display:block scroll for any unwrapped tables. */
+    table { font-size: 12.5px; display: block; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; max-width: 100%; white-space: nowrap;
+      border-radius: 0; }
+    table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+    .table-wrapper > table { display: table; }
     th, td { padding: 8px 10px; }
+    pre, code { word-break: break-word; white-space: pre-wrap; }
+  }
+  @media (max-width: 480px) {
+    body { font-size: 16px; line-height: 1.5; }
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.15rem; }
   }
 </style>
 </head>
@@ -256,7 +288,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <li>Shiplap with barn doors with black metal grid ("modern farmhouse")</li>
 </ul>
 <h2 id="4-the-7-locked-principles-final-reconciliation">4. The 7 LOCKED principles (final reconciliation)</h2>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>#</th>
@@ -301,7 +333,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td><strong>8-12% vintage</strong> (split between Claude's "low" and Gemini's "high" recommendation). One real vintage piece per major room. <strong>Beni Ourain DEFERRED to year 4</strong> (post-potty-train, post-pet-maturity).</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2 id="5-reconciled-rule-corrections-audit-flagged-contradictions">5. RECONCILED rule corrections (audit-flagged contradictions)</h2>
 <h3 id="5a-walnut-rule-corrected">5a. Walnut rule (CORRECTED)</h3>
 <p><strong>Previously stated wrong:</strong> "No walnut as primary surface, no walnut accent."</p>
@@ -320,7 +352,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <p><strong>5-7 objects per surface</strong> chosen over 7-9 (too busy under 8-ft ceilings) and 3-5 (too cold/austere). Designer calibration: low-end (5) in master BR + master bath; mid (6) in office, dining, kitchen; high (7) in LR + family room + entry.</p>
 <h3 id="5d-vintage-locked-at-8-12">5d. Vintage % (LOCKED at 8-12%)</h3>
 <p>Final brand split (revised):</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Bracket</th>
@@ -360,7 +392,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>Real vintage gestures — soul layer</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3 id="5e-brass-vs-bright-gold-distinction-owner-clarified-2026-05-16">5e. Brass vs bright-gold distinction (owner clarified 2026-05-16)</h3>
 <p>The canon's "warm brass + matte black mix" includes the lacquered, unlacquered, antique, and aged-brass family, plus Champagne Bronze (plumbing, Delta Trinsic) — all warm, restrained, matte-leaning gold tones.</p>
 <p><strong>EXCLUDED from the canon — do not specify or select:</strong>
@@ -384,7 +416,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <p><em>This clarification supersedes any prior option reasoning that described Luxe Gold or Brushed Gold finishes as premium upgrades or acceptable alternate finish families. Those options remain in sourcing.yaml for reference but are tagged as owner-rejected.</em></p>
 <h2 id="6-construction-spec-callouts-from-renovation-budget-locked">6. Construction spec callouts (from renovation budget — LOCKED)</h2>
 <p>These were locked in the construction phase and constrain design execution.</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Element</th>
@@ -519,7 +551,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td><strong>LOCKED 2026-05-14</strong></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3 id="6a-goldbrass-weight-calibration-2026-05-16-owner-feedback">6a. Gold/brass weight calibration (2026-05-16 owner feedback)</h3>
 <p>Prior canon described "brass + matte black mix" but the sourcing tracker defaulted brass-first on most lighting and hardware ★ picks. Owner feedback 2026-05-16: "this is using too much gold overall." Calibration rule:</p>
 <ul>
@@ -650,7 +682,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 </ul>
 <h2 id="13-window-treatments-per-room-new-section-was-missing">13. Window treatments per room (NEW SECTION — was missing)</h2>
 <p>Audit flagged this as gap. Per-room policy:</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Room</th>
@@ -700,7 +732,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>Lower priority</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Performance-fabric mandate:</strong> any window treatment that puddles at floor in pet zone = NOT pure linen. Crypton Linen or Perennials linen-weave.</p>
 <h2 id="14-storage-mudroom-drop-zones-new-section-was-missing">14. Storage / mudroom / drop zones (NEW SECTION — was missing)</h2>
 <p>Canon photos show 30% of storage; real life needs 70% off-camera. Per-zone:</p>
@@ -725,7 +757,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 </ul>
 <h2 id="16-patina-maintenance-contract-new-section-was-implicit-now-explicit">16. Patina maintenance contract (NEW SECTION — was implicit, now explicit)</h2>
 <p>Reframing principle 3 as a contract:</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Material</th>
@@ -784,12 +816,12 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>Pass</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Total annual maintenance commitment: ~$1,500-2,500/year + 4-8 hours of owner-direct work.</strong> If unwilling: pivot to lacquered finishes throughout (principle 3 changes from "patina gracefully" to "stay pristine").</p>
 <h2 id="17-sourceability-classification-system-locked-image-audit-complete">17. Sourceability classification system (LOCKED — image audit complete)</h2>
 <p>Each canon image classified per <code>_IMAGE_AUDIT.md</code> (image audit 2026-05-12).</p>
 <p><strong>Tally across 60 images:</strong> 18 SOURCEABLE / 21 MATERIAL-DIRECTION / 19 MOOD-ONLY / 2 DROPPED (exact duplicates)</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Classification</th>
@@ -814,7 +846,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>Absorb the vibe; do not procure</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3 id="18-sourceable-anchor-images-per-room-sourcing-briefs-build-from-these">18 SOURCEABLE anchor images (per-room sourcing briefs build from these)</h3>
 <ol>
 <li><strong>cali_02</strong> — Saratoga Whimsy Kitchen (CHI) — light oak island + oat upper cabinets + brass branching chandelier</li>
@@ -871,7 +903,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <p>These are documentation-only fixes (JPGs are fine; labels need rewriting). Lower priority than the duplicates/reclassifications.</p>
 <h2 id="18-custom-millwork-sub-budget-new-section-was-missing">18. Custom millwork sub-budget (NEW SECTION — was missing)</h2>
 <p>Audit flagged $30-50K minimum in custom millwork to achieve canon look. Breakdown estimate:</p>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Element</th>
@@ -916,7 +948,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>MED (or accept existing brick + paint)</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Custom millwork target: $30-50K within construction budget.</strong> If this is not affordable: aesthetic shifts toward retail-furniture-heavy (Article, WE, R&amp;B as primary spine; less canon CHI/OWIU-look-alike).</p>
 <h2 id="19-resale-future-flexibility-new-section-was-missing">19. Resale / future flexibility (NEW SECTION — was missing)</h2>
 <ul>
@@ -937,7 +969,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <li><strong>Custom millwork budget:</strong> confirm $30-50K sub-budget available.</li>
 </ol>
 <h2 id="whats-locked-whats-owner-pending">What's locked / what's owner-pending</h2>
-<table>
+<div class="table-wrapper"><table>
 <thead>
 <tr>
 <th>Category</th>
@@ -994,7 +1026,7 @@ Status: <strong>LOCKED for per-room sourcing</strong>, with explicit owner-decis
 <td>NEXT</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <hr />
 <p><strong>Supersedes:</strong> <code>PHILOSOPHY.md</code>, <code>_DESIGN_LANGUAGE.md</code> (both will be renamed to <code>*-OLD.md</code> after this is confirmed by owner)
 <strong>Companion files:</strong> <code>mood_boards/session_01_philosophy/_CALIFORNIA_CANON.md</code> (image manifest), <code>mood_boards/session_01_philosophy/_IMAGE_AUDIT.md</code> (per-image classification, in progress), <code>locked_exemplars.html</code> (37-image mood board)</p>

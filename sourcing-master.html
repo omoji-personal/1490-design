@@ -14,9 +14,18 @@
   --status-awaiting: #c9893a; --status-installed: #6b6660;
   --status-deferred: #8a85a0;
   --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
+  --topnav-h: 48px;
 }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; }
+.table-wrapper { width: 100%; }
+@media (max-width: 720px) {
+  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+}
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
@@ -83,7 +92,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .revision-history { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border);
   font-size: 11.5px; color: var(--muted); }
 .revision-history strong { color: var(--ink); margin-right: 6px; }
-.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: 44px; background: var(--bg); z-index: 40; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; position: sticky; top: var(--topnav-h); background: var(--bg); z-index: 40; }
 .filter-bar button, .filter-bar select { background: var(--card-bg); border: 1px solid var(--border);
   border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
 .filter-bar button.active { background: var(--warm-tint); border-color: #c9b88a; }
@@ -184,18 +193,43 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .budget-rollup tr:last-child td { border-bottom: none; }
 
 @media (max-width: 720px) {
+  body { font-size: 16px; }
   .page-header h1 { font-size: 24px; }
-  .topnav-inner { padding: 8px 14px; font-size: 12px; gap: 3px; }
+  /* R1 mobile baseline: topnav becomes a horizontally-scrollable single row
+   * with 44px touch targets. Rooms ▾ / Canon ▾ dropdowns stay inline.
+   * Per baseline.md pattern §5 + §8: avoids the 5-6-row pill-stack on phones. */
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-inner > * { flex: 0 0 auto; }
   .topnav-inner .home { margin-right: 8px; }
-  .topnav-inner a:not(.home) { padding: 3px 8px; font-size: 12px; }
+  .topnav-inner a:not(.home),
+  .topnav-inner details.nav-dropdown > summary {
+    padding: 8px 12px; font-size: 13px; min-height: 44px;
+    display: inline-flex; align-items: center; }
   .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
   .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
-  .filter-bar button, .filter-bar select { font-size: 12px; padding: 4px 10px; }
+  .filter-bar button, .filter-bar select { font-size: 13px; padding: 8px 14px;
+    min-height: 44px; }
   .options-grid { grid-template-columns: 1fr; }
   .option-img-main { max-width: 100%; height: auto; max-height: 220px; }
   .item-card { padding: 12px; }
   main { padding: 0 14px 60px; }
   .page-header { padding: 0 14px; }
+  /* R1 baseline: tables overflow-scroll on mobile (overridden by .table-wrapper
+   * for pages that opt into a desktop-friendly wrapper instead). */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%; white-space: nowrap; }
+  table.mobile-stack { display: table; white-space: normal; overflow-x: visible; }
+  /* Long URLs / code blocks must wrap so they can't break the page layout. */
+  pre, code { word-break: break-word; white-space: pre-wrap; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
 }
 </style>
 </head>
