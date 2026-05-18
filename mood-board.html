@@ -146,6 +146,55 @@ nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250,248,244
 .topnav-inner a.current { background: #f7eedc; border-color: #c9b88a; }
 </style>
 
+<style>
+/* R2 mobile baseline — static-page parity with renderer SHARED_CSS. */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, picture, video { max-width: 100%; height: auto; display: block; }
+
+:root { --topnav-h: 48px; }
+@media (max-width: 720px) { :root { --topnav-h: 52px; } }
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+  nav a, nav button, nav summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+  }
+  pre, code { word-break: break-word; white-space: pre-wrap; }
+  .container, main, article { padding-left: 16px; padding-right: 16px; }
+  /* Topnav: horizontally-scrollable single row at mobile, matches build_pages.py R1. */
+  nav.topnav .topnav-inner { padding: 6px 12px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  nav.topnav .topnav-inner::-webkit-scrollbar { display: none; }
+  nav.topnav .topnav-inner > * { flex: 0 0 auto; }
+  /* Section "Jump" posnav: same horizontal-scroll treatment. */
+  nav.posnav .posnav-inner { padding: 6px 12px; gap: 6px;
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  nav.posnav .posnav-inner::-webkit-scrollbar { display: none; }
+  nav.posnav .posnav-inner > * { flex: 0 0 auto; }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 16px; line-height: 1.5; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
+  /* Image-heavy page: ensure single-col card grid at phone width. */
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body>
 <nav class="topnav">
