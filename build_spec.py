@@ -102,6 +102,17 @@ html = f"""<!DOCTYPE html>
       content: ""; position: absolute; top: 0; right: 0; bottom: 0;
       width: 24px; pointer-events: none;
       background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }}
+    /* R4-4: scroll-driven animation makes the edge-fade content-aware on
+     * Chrome 115+ / modern browsers — it fades out as the user scrolls to
+     * the right edge. Older browsers fall back to the always-shown fade. */
+    @supports (animation-timeline: scroll(x)) {{
+      .table-wrapper::after, .topnav-scroller::after {{
+        animation: edge-fade auto linear;
+        animation-timeline: scroll(self x);
+        animation-range: 95% 100%;
+      }}
+      @keyframes edge-fade {{ to {{ opacity: 0; }} }}
+    }}
   }}
   body {{
     font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", system-ui, sans-serif;

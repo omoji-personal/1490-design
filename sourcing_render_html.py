@@ -93,6 +93,17 @@ img, picture, video { max-width: 100%; height: auto; }
     content: ""; position: absolute; top: 0; right: 0; bottom: 0;
     width: 24px; pointer-events: none;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.08)); }
+  /* R4-4: scroll-driven animation makes the edge-fade content-aware on
+   * Chrome 115+ / modern browsers — it fades out as the user scrolls to
+   * the right edge. Older browsers fall back to the always-shown fade. */
+  @supports (animation-timeline: scroll(x)) {
+    .table-wrapper::after, .topnav-scroller::after {
+      animation: edge-fade auto linear;
+      animation-timeline: scroll(self x);
+      animation-range: 95% 100%;
+    }
+    @keyframes edge-fade { to { opacity: 0; } }
+  }
 }
 body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
@@ -1434,6 +1445,10 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
   margin: 16px 0 8px; }
 .annika-summary-cta .format-line { font-size: 14.5px; color: var(--muted); }
 .annika-summary-cta a { color: var(--accent); }
+/* R4-5: overflow auto so unbreakable glossary terms can scroll horizontally
+ * inside the panel rather than getting clipped. Higher specificity selector
+ * overrides the inline style="overflow:hidden" on the <details> element. */
+details.annika-glossary { overflow: auto; }
 @media (max-width: 720px) {
   .annika-item-body { grid-template-columns: 1fr; }
   .cover { margin-top: 30px; padding: 0 16px; }
@@ -1442,13 +1457,16 @@ details.annika-why .why-inner p:last-child { margin-bottom: 0; }
   main.annika-main { padding: 0 16px 80px; }
   .section-divider { padding: 0 16px; padding-top: 24px; }
   .section-note { padding: 0 16px; }
+  /* R4-5: on phones, scope to horizontal scroll only so the vertical content
+   * (definitions) can expand naturally. */
+  details.annika-glossary { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; }
 }
 """
 
 # ANNIKA topnav is identical to main but marks /for-annika as current
 ANNIKA_TOPNAV_HTML = _build_topnav_html("annika")
 
-ANNIKA_GLOSSARY_HTML = """<details class="annika-glossary" style="max-width:760px;margin:0 auto 32px;border:1px solid #e8e2d6;border-radius:10px;overflow:hidden;">
+ANNIKA_GLOSSARY_HTML = """<details class="annika-glossary" style="max-width:760px;margin:0 auto 32px;border:1px solid #e8e2d6;border-radius:10px;">
   <summary style="padding:11px 16px;cursor:pointer;font-size:13.5px;font-weight:600;color:#8a7a5a;background:#f0e8d8;list-style:none;user-select:none;">
     &#9654;&nbsp; Design jargon quick-reference (tap to expand)
   </summary>
