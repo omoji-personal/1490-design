@@ -2040,8 +2040,79 @@ def test_supplier_sourcing_links_brand_only_match_when_no_category():
 
 
 # ---------------------------------------------------------------------------
-# R3 Fix C4 — schema validation: null required fields + category membership
+# R3 Fix C4 / R4 Fix V1 — schema validation: null required fields + category
+# membership. R4 moved strict checks INTO parse_supplier() so direct probes
+# can't slip past the loader-level guard.
 # ---------------------------------------------------------------------------
+
+
+def test_parse_supplier_rejects_null_url():
+    """R4 Fix V1 — parse_supplier() must reject null url at parse time,
+    not let it stringify through to "None" and rely on the loader."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="null/empty url"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": None,
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_unknown_category():
+    """R4 Fix V1 — parse_supplier() must reject unknown supplier-directory
+    categories at parse time. Codex's R3 direct probe with
+    'not-a-real-category' previously slipped past parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="unknown supplier category"):
+        parse_supplier({
+            "id": "x", "category": "not-a-real-category", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_null_style_fingerprint():
+    """R4 Fix V1 — null style_fingerprint must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="null/empty style_fingerprint"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": None, "fit_for_project": "x",
+        })
+
+
+def test_parse_supplier_rejects_null_fit_for_project():
+    """R4 Fix V1 — null fit_for_project must fail at parse_supplier()."""
+    from sourcing_schema import parse_supplier, ValidationError
+    with pytest.raises(ValidationError, match="null/empty fit_for_project"):
+        parse_supplier({
+            "id": "x", "category": "lighting", "name": "X",
+            "url": "https://example.com",
+            "price_tier": "mid", "fit": "STRONG",
+            "style_fingerprint": "x", "fit_for_project": None,
+        })
+
+
+def test_parse_supplier_round_trips_url_status_tag():
+    """R4 Fix I2 — recommended_url / url_status_tag / price_validation_status
+    must round-trip through parse_supplier() onto the Supplier dataclass."""
+    from sourcing_schema import parse_supplier
+    sup = parse_supplier({
+        "id": "x", "category": "rugs", "name": "X",
+        "url": "https://example.com/old",
+        "recommended_url": "https://example.com/new",
+        "url_status_tag": "redirected_changed_path",
+        "price_validation_status": "verified",
+        "price_tier": "mid", "fit": "STRONG",
+        "style_fingerprint": "x", "fit_for_project": "x",
+    })
+    assert sup.recommended_url == "https://example.com/new"
+    assert sup.url_status_tag == "redirected_changed_path"
+    assert sup.price_validation_status == "verified"
 
 
 def test_load_supplier_directory_rejects_null_url(tmp_path):
@@ -2084,7 +2155,12 @@ def test_load_supplier_directory_rejects_unknown_category(tmp_path):
             style_fingerprint: x
             fit_for_project: x
         """))
-    with pytest.raises(ValidationError, match="not in directory categories"):
+    # R4 Fix V1 — parse_supplier() now rejects unknown supplier categories
+    # at parse time (against the canonical VALID_SUPPLIER_CATEGORIES set),
+    # which fires BEFORE the loader's per-file declared-categories check.
+    # Either message is acceptable; "unknown supplier category" is the new
+    # one for back-compat.
+    with pytest.raises(ValidationError, match="unknown supplier category|not in directory categories"):
         load_supplier_directory(str(p))
 
 

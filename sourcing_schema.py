@@ -222,6 +222,16 @@ def parse_item(raw: Dict[str, Any]) -> Item:
 
 VALID_PRICE_TIERS = {"entry", "mid", "premium", "aspirational"}
 VALID_FITS = {"STRONG", "GOOD", "MIXED", "CANON-ADJACENT", "WATCH_LIST"}
+# R4 Fix V1 — canonical supplier-directory category vocabulary. parse_supplier()
+# enforces membership so direct probes can't slip an unknown category past the
+# loader-level check. Kept aligned with supplier_directory.yaml `categories:`
+# and the _SUPPLIER_CATEGORY_SCOPE map in sourcing_render_html.py.
+VALID_SUPPLIER_CATEGORIES = {
+    "furniture-seating", "furniture-tables", "furniture-bedroom",
+    "lighting", "tile", "plumbing", "hardware", "paint", "cabinetry",
+    "counters", "appliances", "rugs", "decor-art", "window-treatments",
+    "outdoor", "hvac", "smart_home",
+}
 
 
 @dataclass
@@ -256,12 +266,31 @@ class Supplier:
     canon_classification_reasoning: Optional[str] = None
     url_status_note: Optional[str] = None
     verification_source_batch: Optional[str] = None
+    # R4 Fix I2 — round-trip URL verification metadata. Codex R3 flagged that
+    # `recommended_url`, `url_status_tag`, and `price_validation_status` were
+    # dropped by the loader, breaking lint's canonical-URL check and any
+    # downstream tool that needs to see post-verification corrections.
+    recommended_url: Optional[str] = None
+    url_status_tag: Optional[str] = None
+    price_validation_status: Optional[str] = None
 
 
 def parse_supplier(raw: Dict[str, Any]) -> Supplier:
     """Validate and parse a supplier dict. Raises ValidationError on missing or
     invalid required fields. Unknown keys are tolerated (forward-compat with
-    Alpha-introduced fields)."""
+    Alpha-introduced fields).
+
+    R4 Fix V1 — strict required-field validation now lives HERE, not only in
+    `load_supplier_directory()`. Codex R3 flagged that a direct probe of
+    `parse_supplier({"category": "not-a-real-category", ...})` was accepted
+    and `url: None` was stringified to literal `"None"`. The loader caught
+    these against the file's `categories:` list and via a downstream null
+    check, but the dataclass parser itself was permissive. R4 closes that
+    gap by:
+      (a) raising on null/missing/non-string url (was stringified)
+      (b) raising on category not in VALID_SUPPLIER_CATEGORIES
+      (c) raising on null/missing/non-string style_fingerprint / fit_for_project
+    """
     if not isinstance(raw, dict):
         raise ValidationError(f"supplier must be a dict, got {type(raw).__name__}")
     sid = raw.get("id")
@@ -273,6 +302,12 @@ def parse_supplier(raw: Dict[str, Any]) -> Supplier:
     category = raw.get("category")
     if not category or not isinstance(category, str):
         raise ValidationError(f"{sid}: supplier missing or non-string category")
+    # R4 Fix V1 (b) — category membership check moved earlier into parse_supplier.
+    if category not in VALID_SUPPLIER_CATEGORIES:
+        raise ValidationError(
+            f"{sid}: unknown supplier category {category!r} "
+            f"(allowed: {sorted(VALID_SUPPLIER_CATEGORIES)})"
+        )
     price_tier = raw.get("price_tier")
     if price_tier not in VALID_PRICE_TIERS:
         raise ValidationError(
@@ -283,15 +318,38 @@ def parse_supplier(raw: Dict[str, Any]) -> Supplier:
         raise ValidationError(
             f"{sid}: invalid fit {fit!r} (allowed: {sorted(VALID_FITS)})"
         )
+    # R4 Fix V1 (a) — url null/empty handled here instead of letting it
+    # stringify through to literal "None" downstream.
+    raw_url = raw.get("url")
+    if raw_url is None or (isinstance(raw_url, str) and not raw_url.strip()):
+        raise ValidationError(
+            f"{sid}: supplier has null/empty url — every directory entry must "
+            f"point somewhere (set url to '#' if intentionally absent)."
+        )
+    if not isinstance(raw_url, str):
+        raise ValidationError(
+            f"{sid}: supplier url must be a string, got {type(raw_url).__name__}"
+        )
+    # R4 Fix V1 (c) — required display fields validated at parse-time.
+    raw_sf = raw.get("style_fingerprint")
+    if raw_sf is None or (isinstance(raw_sf, str) and not raw_sf.strip()):
+        raise ValidationError(
+            f"{sid}: supplier has null/empty style_fingerprint — required for card render."
+        )
+    raw_ffp = raw.get("fit_for_project")
+    if raw_ffp is None or (isinstance(raw_ffp, str) and not raw_ffp.strip()):
+        raise ValidationError(
+            f"{sid}: supplier has null/empty fit_for_project — required for card render."
+        )
     return Supplier(
         id=sid,
         category=category,
         name=name,
-        url=str(raw.get("url", "")),
+        url=raw_url,
         price_tier=price_tier,
         fit=fit,
-        style_fingerprint=str(raw.get("style_fingerprint", "")),
-        fit_for_project=str(raw.get("fit_for_project", "")),
+        style_fingerprint=str(raw_sf),
+        fit_for_project=str(raw_ffp),
         off_canon_warning=raw.get("off_canon_warning"),
         collections_to_browse=list(raw.get("collections_to_browse") or []),
         lead_time_typical=raw.get("lead_time_typical"),
@@ -310,6 +368,11 @@ def parse_supplier(raw: Dict[str, Any]) -> Supplier:
         canon_classification_reasoning=raw.get("canon_classification_reasoning"),
         url_status_note=raw.get("url_status_note"),
         verification_source_batch=raw.get("verification_source_batch"),
+        # R4 Fix I2 — round-trip URL verification metadata onto the dataclass
+        # so the loader can propagate it forward (lint + render need these).
+        recommended_url=raw.get("recommended_url"),
+        url_status_tag=raw.get("url_status_tag"),
+        price_validation_status=raw.get("price_validation_status"),
     )
 
 
@@ -340,6 +403,10 @@ def load_supplier_directory(path) -> Dict[str, Any]:
         raise ValidationError(f"supplier_directory.yaml has no suppliers at {path}")
     # R3 Fix C4 — build the allowed-categories set from the file's own
     # categories: list. Falls through to no-op when the file omits the list.
+    # R4 Fix V1 — parse_supplier() now enforces VALID_SUPPLIER_CATEGORIES;
+    # the per-file declared_categories check stays as an EXTRA guard (a
+    # category present in our canonical vocabulary but missing from THIS
+    # file's `categories:` block still fails loud).
     declared_categories = set()
     for c in (data.get("categories") or []):
         if isinstance(c, dict) and c.get("id"):
@@ -350,28 +417,13 @@ def load_supplier_directory(path) -> Dict[str, Any]:
     validated = []
     for raw in data["suppliers"]:
         # parse_supplier raises ValidationError on bad data — keep loud failure.
+        # R4 Fix V1 — null url / unknown category / null required-display
+        # fields now raise INSIDE parse_supplier(), not here.
         sup = parse_supplier(raw)
-        # R3 Fix C4 (a) — null required-display fields.
-        sid = sup.id
-        if sup.url is None or sup.url == "None" or not str(sup.url).strip():
-            # url:null in yaml round-trips to literal "None" in parse_supplier.
-            # Flag it loud so the operator can fill it in or drop the supplier.
-            raise ValidationError(
-                f"{sid}: supplier has null/empty url — every directory entry "
-                f"must point somewhere (set url to '#' if intentionally absent)."
-            )
-        if not str(sup.style_fingerprint).strip() or sup.style_fingerprint == "None":
-            raise ValidationError(
-                f"{sid}: supplier has null/empty style_fingerprint — required for card render."
-            )
-        if not str(sup.fit_for_project).strip() or sup.fit_for_project == "None":
-            raise ValidationError(
-                f"{sid}: supplier has null/empty fit_for_project — required for card render."
-            )
-        # R3 Fix C4 (b) — category membership check.
+        # File-scope category membership (in case file declares a subset).
         if declared_categories and sup.category not in declared_categories:
             raise ValidationError(
-                f"{sid}: supplier category '{sup.category}' not in directory categories: "
+                f"{sup.id}: supplier category '{sup.category}' not in directory categories: "
                 f"{sorted(declared_categories)}"
             )
         # Round-trip back to dict for renderer compatibility.
