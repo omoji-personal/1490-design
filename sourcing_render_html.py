@@ -71,7 +71,7 @@ SHARED_CSS = """
   --approved-overshoot-bg: #eef0f4; --approved-overshoot-border: #9ba8c0;
   --topnav-h: 48px;
 }
-@media (max-width: 720px) { :root { --topnav-h: 52px; } }
+@media (max-width: 720px) { :root { --topnav-h: 56px; } }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
@@ -85,7 +85,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-
        background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 nav.topnav { position: sticky; top: 0; z-index: 50; background: rgba(250, 248, 244, 0.96);
   border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
-.topnav-inner { max-width: 1200px; margin: 0 auto; padding: 11px 28px; display: flex;
+/* R2-C1: scroller wraps the inner so absolute dropdowns positioned vs. <nav>
+ * (or position:fixed on mobile) escape the horizontal-scroll overflow clip. */
+.topnav-scroller { max-width: 1200px; margin: 0 auto; }
+.topnav-inner { padding: 11px 28px; display: flex;
   gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px; }
 .topnav-inner .home { color: #6b6660; margin-right: 14px; font-weight: 600; text-decoration: none; }
 .topnav-inner .home:hover { color: var(--accent); }
@@ -250,13 +253,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 @media (max-width: 720px) {
   body { font-size: 16px; }
   .page-header h1 { font-size: 24px; }
-  /* R1 mobile baseline: topnav becomes a horizontally-scrollable single row
-   * with 44px touch targets. Rooms ▾ / Canon ▾ dropdowns stay inline.
-   * Per baseline.md pattern §5 + §8: avoids the 5-6-row pill-stack on phones. */
-  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
-    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  /* R2-C1: scroll the WRAPPER, not topnav-inner. Absolutely-positioned dropdown
+   * menus inside topnav-inner now escape the overflow scope and become
+   * position:fixed (anchored below the topnav) so they don't get clipped. */
+  .topnav-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch;
     scrollbar-width: none; }
-  .topnav-inner::-webkit-scrollbar { display: none; }
+  .topnav-scroller::-webkit-scrollbar { display: none; }
+  .topnav-inner { padding: 6px 12px; font-size: 13px; gap: 6px;
+    flex-wrap: nowrap; }
   .topnav-inner > * { flex: 0 0 auto; }
   .topnav-inner .home { margin-right: 8px; }
   .topnav-inner a:not(.home),
@@ -264,6 +268,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     padding: 8px 12px; font-size: 13px; min-height: 44px;
     display: inline-flex; align-items: center; }
   .topnav-inner .group-label { font-size: 10px; margin: 0 2px 0 8px; }
+  /* R2-C1: dropdown menus pop out of the horizontal-scroll container by
+   * using fixed positioning anchored below the sticky topnav. */
+  .topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu {
+    position: fixed; top: calc(var(--topnav-h) + 4px); left: 12px; right: 12px;
+    margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
+    overflow-y: auto; }
   .filter-bar { top: auto; position: static; flex-wrap: wrap; padding: 10px 0; }
   .filter-bar button, .filter-bar select { font-size: 13px; padding: 8px 14px;
     min-height: 44px; }
@@ -341,12 +351,14 @@ def _build_topnav_html(current: str = "sourcing") -> str:
     canon_attr = " open" if canon_open else ""
 
     return f"""<nav class="topnav">
-  <div class="topnav-inner">
-    <a href="/" class="home">&larr; 1490 Lively Ridge</a>
-    <a href="/"{cls('home')}>Home</a><a href="/mood-board"{cls('mood')}>Mood</a><a href="/spectrum"{cls('spectrum')}>Spectrum</a><a href="/decisions"{cls('decisions')}>Decisions</a><a href="/budget"{cls('budget')}>Budget</a><a href="/sourcing"{cls('sourcing')}>Sourcing</a><a href="/suppliers"{cls('suppliers')}>Suppliers</a><a href="/vendors"{cls('vendors')}>Vendors</a><a href="/for-annika"{cls('annika')}>Annika</a><a href="/spec"{cls('spec')}>Spec</a>
-    <details class="nav-dropdown"{rooms_attr} aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen"{cls('kitchen')}>Kitchen</a><a href="/master"{cls('master')}>Master</a><a href="/baths"{cls('baths')}>Baths</a><a href="/lr"{cls('lr')}>LR</a><a href="/nursery"{cls('nursery')}>Nursery</a><a href="/office"{cls('office')}>Office</a></div></details>
-    <details class="nav-dropdown"{canon_attr} aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong"{cls('cathie-hong')}>Cathie Hong</a><a href="/owiu"{cls('owiu')}>OWIU</a><a href="/sss"{cls('sss')}>SSS</a><a href="/jenni-kayne"{cls('jenni-kayne')}>Jenni Kayne</a></div></details>
-    <a href="/materials"{cls('materials')}>Materials</a><a href="/rejected"{cls('rejected')}>Rejected</a>
+  <div class="topnav-scroller">
+    <div class="topnav-inner">
+      <a href="/" class="home">&larr; 1490 Lively Ridge</a>
+      <a href="/"{cls('home')}>Home</a><a href="/mood-board"{cls('mood')}>Mood</a><a href="/spectrum"{cls('spectrum')}>Spectrum</a><a href="/decisions"{cls('decisions')}>Decisions</a><a href="/budget"{cls('budget')}>Budget</a><a href="/sourcing"{cls('sourcing')}>Sourcing</a><a href="/suppliers"{cls('suppliers')}>Suppliers</a><a href="/vendors"{cls('vendors')}>Vendors</a><a href="/for-annika"{cls('annika')}>Annika</a><a href="/spec"{cls('spec')}>Spec</a>
+      <details class="nav-dropdown"{rooms_attr} aria-label="Rooms"><summary>Rooms</summary><div class="nav-dropdown-menu" role="menu"><a href="/kitchen"{cls('kitchen')}>Kitchen</a><a href="/master"{cls('master')}>Master</a><a href="/baths"{cls('baths')}>Baths</a><a href="/lr"{cls('lr')}>LR</a><a href="/nursery"{cls('nursery')}>Nursery</a><a href="/office"{cls('office')}>Office</a></div></details>
+      <details class="nav-dropdown"{canon_attr} aria-label="Canon designers"><summary>Canon</summary><div class="nav-dropdown-menu" role="menu"><a href="/cathie-hong"{cls('cathie-hong')}>Cathie Hong</a><a href="/owiu"{cls('owiu')}>OWIU</a><a href="/sss"{cls('sss')}>SSS</a><a href="/jenni-kayne"{cls('jenni-kayne')}>Jenni Kayne</a></div></details>
+      <a href="/materials"{cls('materials')}>Materials</a><a href="/rejected"{cls('rejected')}>Rejected</a>
+    </div>
   </div>
 </nav>"""
 

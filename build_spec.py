@@ -49,7 +49,7 @@ html = f"""<!DOCTYPE html>
     --target-tint: #e8efe2;
     --topnav-h: 48px;
   }}
-  @media (max-width: 720px) {{ :root {{ --topnav-h: 52px; }} }}
+  @media (max-width: 720px) {{ :root {{ --topnav-h: 56px; }} }}
   * {{ box-sizing: border-box; }}
   html, body {{ margin: 0; padding: 0; }}
   /* R1 mobile baseline — site-wide horizontal-overflow guard + responsive media. */
@@ -71,8 +71,11 @@ html = f"""<!DOCTYPE html>
     -webkit-backdrop-filter: saturate(140%) blur(8px);
     border-bottom: 1px solid var(--border);
   }}
+  /* R2-C1: scroller wraps the inner so absolute dropdowns positioned vs. <nav>
+   * (or position:fixed on mobile) escape the horizontal-scroll overflow clip. */
+  .topnav-scroller {{ max-width: 1200px; margin: 0 auto; }}
   .topnav-inner {{
-    max-width: 1200px; margin: 0 auto; padding: 11px 28px;
+    padding: 11px 28px;
     display: flex; gap: 4px; flex-wrap: wrap; align-items: center; font-size: 13px;
   }}
   .topnav-inner .home {{
@@ -212,16 +215,25 @@ html = f"""<!DOCTYPE html>
     .container {{ padding: 24px 18px 60px; }}
     h1 {{ font-size: 28px; }}
     h2 {{ font-size: 21px; }}
-    /* R1 mobile baseline: topnav horizontally-scrollable + 44px touch targets. */
-    .topnav-inner {{ padding: 6px 12px; font-size: 13px; gap: 6px;
-      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    /* R2-C1: scroll the WRAPPER, not topnav-inner. Absolutely-positioned dropdown
+     * menus inside topnav-inner now escape the overflow scope via position:fixed
+     * so they don't get clipped on mobile. */
+    .topnav-scroller {{ overflow-x: auto; -webkit-overflow-scrolling: touch;
       scrollbar-width: none; }}
-    .topnav-inner::-webkit-scrollbar {{ display: none; }}
+    .topnav-scroller::-webkit-scrollbar {{ display: none; }}
+    .topnav-inner {{ padding: 6px 12px; font-size: 13px; gap: 6px;
+      flex-wrap: nowrap; }}
     .topnav-inner > * {{ flex: 0 0 auto; }}
     .topnav-inner a:not(.home),
     .topnav-inner details.nav-dropdown > summary {{
       padding: 8px 12px; font-size: 13px; min-height: 44px;
       display: inline-flex; align-items: center; }}
+    /* R2-C1: dropdown menus pop out of the horizontal-scroll container by
+     * using fixed positioning anchored below the sticky topnav. */
+    .topnav-inner details.nav-dropdown[open] > .nav-dropdown-menu {{
+      position: fixed; top: calc(var(--topnav-h) + 4px); left: 12px; right: 12px;
+      margin-top: 0; min-width: 0; max-height: calc(100vh - var(--topnav-h) - 24px);
+      overflow-y: auto; }}
     /* Tables: opt out of the overflow: hidden on .table wrapper so .table-wrapper
      * can scroll, fall back to display:block scroll for any unwrapped tables. */
     table {{ font-size: 12.5px; display: block; overflow-x: auto;
