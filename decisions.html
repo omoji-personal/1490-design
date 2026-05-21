@@ -299,7 +299,11 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
 <div class="container">
   <h1>Decisions Locked</h1>
   <p class="subtitle">29 calibration questions → 7 owner-decisions. Locked 2026-05-13.</p>
-  <p class="page-status" style="font-size: 13px; color: #8a7a5a; background: var(--warm-tint); border: 1px solid #c9b88a; border-radius: 6px; padding: 8px 12px; margin: 0 0 16px;">Last updated 2026-05-17 — F1 furniture phasing ratified; F2 brass calibration pending</p>
+  <p class="page-status" style="font-size: 13px; color: #8a7a5a; background: var(--warm-tint); border: 1px solid #c9b88a; border-radius: 6px; padding: 8px 12px; margin: 0 0 16px;">Last updated 2026-05-17 — F1 furniture phasing + F2 metal calibration ratified; F3 designer quote verification pending</p>
+
+  <div class="calibration-note" style="background: var(--target-tint); border: 1px solid #8aa376; border-radius: 6px; padding: 12px 16px; margin: 0 0 16px;">
+    <strong>Per F2 ratification 2026-05-17:</strong> existing material picks audited against the new 30 / 50 / 20 brass / matte-black / other-texture calibration. Actual picks currently skew brass-heavy (≈73 / 19 / 8); if item-level picks are too brass-heavy, individual rebalancing decisions are surfaced in <a href="/sourcing" style="color:var(--accent);">/sourcing</a> per item. Full numbers in <code>audits/2026-05-17-f2-material-audit/</code>.
+  </div>
 
   <div class="calibration-note">
     <strong>How we got here:</strong> 6+ rounds of mood-board iteration → tri-audit (Claude + Gemini + Codex) → 48-hour reconciliation sprint → 29 philosophical Q&A → 7 owner-decision locks. This page is the digestible summary. Full reasoning in the <a href="/spec">Design Spec</a>.
@@ -349,13 +353,19 @@ img, picture, video { max-width: 100%; height: auto; display: block; }
   <div class="decision locked">
     <div class="decision-header">
       <span class="decision-num">4</span>
-      <h3 class="decision-title">Brass finish</h3>
-      <span class="decision-status">Pivot to Lacquered</span>
+      <h3 class="decision-title">Metal calibration</h3>
+      <span class="decision-status">30 / 50 / 20</span>
     </div>
     <div class="decision-body">
-      <p class="decision-q">Unlacquered brass (patinates over time) or lacquered brass (stays shiny)?</p>
-      <p><strong>LOCKED: Lacquered brass throughout</strong> — plumbing, cabinet hardware, light fixtures. Stays shiny indefinitely.</p>
-      <p class="decision-rationale">Owner explicitly rejected patina romance (Q3 of philosophy calibration: "no I don't particularly see value in that"). Lacquered brass eliminates annual Renaissance Wax maintenance cycle and Atlanta humidity blotchy-tarnish failure mode. Lower wabi-sabi credit but matches owner's "stays looking good" priority.</p>
+      <p class="decision-q">How much brass vs matte black across hardware, lighting, and fixtures?</p>
+      <p><strong>RATIFIED 2026-05-17 per §6a: 30% brass / 50% matte black / 20% other-texture (wood, ceramic, leather, blackened bronze).</strong></p>
+      <ul>
+        <li><strong>Brass on hero moments only</strong> — kitchen pendants, one primary-bath sconce or fixture, occasional lamp/candleholder, dining chandelier, front-door hardware. Lacquered brass remains the brass-family pick (no patina maintenance) when brass does appear.</li>
+        <li><strong>Matte black is the default hardware voice</strong> — cabinet pulls, door hardware, sconces, towel bars, faucet trim where black is offered.</li>
+        <li><strong>Per-room nuance:</strong> kitchen may skew slightly warmer (~35% brass — pendants are the hero); baths cooler (~20%); bedrooms quietest (~15% — door hardware + maybe one lamp).</li>
+        <li><strong>Anti-pattern: "lacquered brass throughout" — explicitly rejected.</strong> This was the previously aspirational direction (locked 2026-05-13, restated as 50/35/15 on 2026-05-16); ratified to a restrained 30/50/20 on 2026-05-17 after the owner read the cumulative effect as "too much gold and brass everywhere."</li>
+      </ul>
+      <p class="decision-rationale">Canon-aligned with Cathie Hong, Jenni Kayne, and OWIU — none of those projects read as "brass-saturated"; brass earns its place as a hero accent against a matte-black-and-wood baseline. The patina-maintenance contract still applies only to unlacquered brass on high-touch items, but the high-touch brass surface area is now much smaller. Existing item-level picks audited 2026-05-17 — current ratio ≈73 / 19 / 8 (brass-heavy); per-item rebalance candidates surfaced in <a href="/sourcing" style="color:var(--accent);">/sourcing</a>.</p>
     </div>
   </div>
 

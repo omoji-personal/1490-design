@@ -419,7 +419,7 @@ def kitchen_page():
 <tr><td>Sink + faucet</td><td>Stainless undermount + Delta Trinsic Champagne Bronze</td></tr>
 <tr><td>Under-cabinet lighting</td><td>Refresh / replace</td></tr>
 <tr><td>Pendants</td><td>Rejuvenation Pinnock Cone Aged Brass × 3 — canon-compliant successor to discontinued Schoolhouse Hyatt <span class="catalog-gap-pill" title="vendor catalog moved — see /sourcing K-PENDANTS">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Owner reselect pending. See <a href="/sourcing#item-K-PENDANTS" style="color:var(--accent);">K-PENDANTS</a>.</small></td></tr>
-<tr><td>Hardware</td><td>Rejuvenation/Forge — matte black + lacquered brass mix</td></tr>
+<tr><td>Hardware</td><td>Rejuvenation/Forge — matte black primary + restrained lacquered brass on hero pendants (per §6a 30/50/20)</td></tr>
 <tr><td>Paint</td><td>BM Aura Bath & Spa (wet-room spec for kitchen)</td></tr>
 </table></div>
 
@@ -469,7 +469,7 @@ def kitchen_page():
 <li>Light oak Shaker base cabinets (KraftMaid Vantage tier — premium semi-custom)</li>
 <li>Marble counters: Statuario waterfall (not subway tile, not standard quartz)</li>
 <li>One warm-wood gesture: the oak island is THE wood gesture; floor stays porcelain, not oak</li>
-<li>Lacquered brass hardware mixed with matte black (5:1 brass:black ratio)</li>
+<li>Warm metal stays restrained — lacquered brass anchors the hero moment (the 3 island pendants) while matte black carries the primary hardware voice (cabinet pulls, door hardware). Roughly 30/50/20 brass/matte black/other-texture per <a href="/spec" style="color:var(--accent);">§6a calibration</a>; kitchen permitted to skew slightly warmer (~35%) because pendants are the hero.</li>
 <li>Brass pendant lighting — Rejuvenation Pinnock Cone Aged Brass × 3 (canon-compliant successor to discontinued Schoolhouse Hyatt; owner reselect pending — see <a href="/sourcing#item-K-PENDANTS">K-PENDANTS</a>)</li>
 <li>Backsplash slab Carrara (range wall) — bookmatched-look continuity to counter</li>
 <li>Cle Sea Salt zellige (counter-to-upper elsewhere) — texture without color</li>
@@ -527,9 +527,9 @@ def master_page():
 <tr><td>Walls</td><td>BM White Dove (OC-17) matte — Aura product line</td></tr>
 <tr><td>Trim + door</td><td>BM Simply White (OC-117) satin — Aura</td></tr>
 <tr><td>Sound insulation</td><td>Rockwool + RC + drywall close-up — wall to nursery</td></tr>
-<tr><td>Hardware</td><td>Lacquered brass (Rejuvenation Westmore pulls if any built-in)</td></tr>
+<tr><td>Hardware</td><td>Matte black primary (Emtek Modern interior door hardware, any built-in pulls); lacquered brass restrained to the bedside-sconce pair only (per §6a 30/50/20 — bedrooms quietest ~15% brass)</td></tr>
 <tr><td>Window treatments</td><td>Cream linen Roman shades (sheer + blackout layer)</td></tr>
-<tr><td>Lighting</td><td>Bedside sconces — Schoolhouse Princeton or equivalent, brass</td></tr>
+<tr><td>Lighting</td><td>Bedside sconces — Schoolhouse Princeton or equivalent; brass only if claimed as the room's single hero accent, otherwise matte black (per §6a 30/50/20)</td></tr>
 </table></div>
 
 <section class="section-header"><h2>Master bath — sourcing notes</h2></section>
@@ -588,7 +588,7 @@ def master_page():
 <tr><td>Bed frame</td><td>King, upholstered cream linen OR light oak platform</td><td>WE Andes or Article Sven oak</td></tr>
 <tr><td>Nightstands ×2</td><td>Light oak, 2-drawer, ~22-26" wide</td><td>WE Hutchinson nightstand or Rejuvenation</td></tr>
 <tr><td>Dresser</td><td>Light oak 6-drawer low</td><td>WE Hutchinson 6-drawer</td></tr>
-<tr><td>Lamp/sconces</td><td>Lacquered brass bedside sconces, plug-in or hardwired</td><td>Schoolhouse Princeton or Rejuvenation Putman</td></tr>
+<tr><td>Lamp/sconces</td><td>Bedside sconces, plug-in or hardwired — lacquered brass on one pair if it earns the brass-hero slot for the room, otherwise matte black (per §6a 30/50/20 — bedrooms quietest ~15% brass)</td><td>Schoolhouse Princeton (brass or black) or Rejuvenation Putman</td></tr>
 <tr><td>Rug</td><td>Year 1-3: flat-weave cream/oat 8×10. Year 4+: Beni Ourain.</td><td>Loloi II / Annie Selke flat-weave</td></tr>
 <tr><td>Window treatments</td><td>Sheer linen Roman + blackout panels</td><td>Custom or Smith & Noble</td></tr>
 <tr><td>Bedding</td><td>Linen — washed natural / oat / sage accent throw</td><td>WE / Coyuchi / Parachute</td></tr>
@@ -1038,7 +1038,7 @@ def materials_page():
 <section class="section-header"><h2>Hardware</h2></section>
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Where</th><th>Spec</th><th>Vendor</th></tr>
-<tr><td>Kitchen cabinet pulls</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix (5:1 brass:black)</td><td>Rejuvenation trade account</td></tr>
+<tr><td>Kitchen cabinet pulls</td><td>Matte black primary (Forge / Rejuvenation Westmore in flat black) with restrained brass on a small subset only — per §6a 30/50/20 (kitchen warmer-permitted ~35%)</td><td>Rejuvenation trade account / Forge</td></tr>
 <tr><td>Front door handleset</td><td>Schoolhouse Mortise OR Rejuvenation Emry — lacquered brass</td><td>Schoolhouse / Rejuvenation trade</td></tr>
 <tr><td>Secondary entry door</td><td>Standard matte black or brass — Emtek (less premium)</td><td>Emtek</td></tr>
 <tr><td>Interior doors (10)</td><td>Emtek Modern matte black</td><td>Emtek via Build.com</td></tr>
@@ -1047,7 +1047,7 @@ def materials_page():
 </table></div>
 
 <div class="note-card target">
-<strong>Patina rule:</strong> LACQUERED brass throughout — "no patina romance." Schoolhouse's lacquered finish stays color-fast, vs unlacquered which develops patina. Owner explicitly chose lacquered (locked decision #4). This is consistent with the warm-but-stays-looking-good philosophy.
+<strong>Metal calibration (§6a, ratified 2026-05-17):</strong> warm metal stays restrained — brass anchors hero moments (kitchen pendants, dining chandelier, one primary-bath sconce or fixture, front door) while matte black carries the primary hardware/sconce voice (cabinet pulls, door hardware, towel bars, secondary sconces). Roughly <strong>30 / 50 / 20 brass / matte black / other-texture</strong>; kitchen warmer-permitted ~35%, baths cooler ~20%, bedrooms quietest ~15%. When brass <em>is</em> used it's lacquered (no patina maintenance, color-fast in Atlanta humidity) per the "no patina romance" rule. Anti-pattern: "lacquered brass throughout" is explicitly rejected as the project's metal direction.<br><br><strong>Per F2 ratification 2026-05-17:</strong> existing material picks audited against the new calibration; actual ratio ≈73 / 19 / 8 (brass-heavy). If item-level picks are too brass-heavy, individual rebalancing decisions are surfaced in <a href="/sourcing" style="color:var(--accent);">/sourcing</a> per item.
 </div>
 
 <section class="section-header"><h2>Counters</h2></section>
@@ -1603,7 +1603,7 @@ def rejected_page():
 <li>Open shelves carrying matched-set commercial dishware</li>
 <li>Saturated wall paint (terracotta, navy, emerald) — single-accent textile is the only color delivery</li>
 <li>Gilt mirrors, antlers, taxidermy, William Morris wallpaper, dreamcatchers, macramé walls</li>
-<li>Chrome, polished nickel, exposed Edison cages, crystal, dark bronze (light finishes only — lacquered brass + matte black)</li>
+<li>Chrome, polished nickel, exposed Edison cages, crystal, dark bronze (palette is matte-black primary + lacquered brass on hero moments only — per §6a 30/50/20)</li>
 <li>Glass coffee tables on chrome legs, lucite, mirrored furniture</li>
 <li>Espresso / mahogany / cherry / pickled-whitewash wood finishes</li>
 <li>High-saturation kilim revival rugs, pattern-on-pattern textile stacking</li>
