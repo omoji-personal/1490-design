@@ -265,6 +265,16 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
+/* R1-2 / R1-5 / R2-A4 / R2-A5 / R2-A9 / R2-A10: catalog-gap pill + last-updated
+   stamp ported from /sourcing renderer so all build_pages.py outputs carry the
+   same visual vocabulary. Pills surface in spec tables and inline narrative;
+   sage-green VERIFIED variant matches the renderer's locked-row badge. */
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -296,10 +306,6 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   <p class="subtitle">The honest reckoning — $342K cap, $341,768 all-in projection, $232 cushion. How an 8-agent audit chain surfaced $86K of hidden cost and revised the cap up $17K.</p>
 </header>
 <main>
-
-<div class="note-card target" style="border-left:4px solid #d4a93a; background:#fff8e0;">
-<strong>$342K cap (revised 2026-05-15 from $325K).</strong> $17K cap revision when an 8-agent audit chain surfaced $85,645 of hidden cost the prior sheet was carrying implicitly. <strong>HARD RULE: revisions go UP only, never cut.</strong> See audit chain below.
-</div>
 
 <div class="note-card warm">
 <strong>The honest reckoning.</strong> What the renovation costs at Atlanta 2026 market, after two rounds of multi-agent audit. The cap moved up $17K on 2026-05-15 — not because scope grew, but because deeper itemization surfaced costs the prior sheet was carrying implicitly.
@@ -401,6 +407,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <strong>Next gate:</strong> the TCW change-order email. Ten line-itemized asks (G1-G7 full breakdown + G6.7 buffer itemization + Vent-A-Hood SKU verification with CDGA + kitchen backsplash spec reconciliation + Aura paint product-line confirmation + HVAC bundle truth-up + management fee concession). Rick's reply on those specifics is the only data point that resolves whether Path 3 holds at $22-38K or falls short and forces the next cap conversation.
 </div>
 
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>

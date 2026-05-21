@@ -175,6 +175,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -316,7 +322,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     <a href="/sourcing" style="color:var(--accent);">Sourcing</a> › Baths (Hall + Basement)
   </p>
   <h1>Sourcing · Baths (Hall + Basement)</h1>
-  <p class="subtitle">17 items in Baths (Hall + Basement). Updated 2026-05-16.</p>
+  <p class="subtitle">17 items in Baths (Hall + Basement). Updated 2026-05-17.</p>
   <div style="margin-top:8px;padding:8px 12px;background:var(--note-tint);border-radius:6px;font-size:13px;color:var(--muted);">Design vision, mood, and constraints: <a href="/baths" style="color:var(--accent);">Baths (Hall + Basement) design hub →</a></div>
 </header>
 <main>
@@ -345,12 +351,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com)</div>
-      <div class="sku"><a href="https://www.cletile.com/products/zellige-moroccan-sea-salt-2x6-subway" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed →</a></div>
+      <div class="sku"><a href="https://www.cletile.com/collections/zellige" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed →</a></div>
       <div class="price">$22</div>
-      <img class="option-img-main" src="/images/sourcing/hb-tile-wall-0.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/hb-tile-wall-0-b.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/hb-tile-wall-0-c.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
-      <div class="option-details">2&quot;×6&quot; handmade terracotta zellige, glossy hand-glazed enamel, Sea Salt white colorway w/ tonal variation; ~6.42 sf/box (90 pc), 19 sf min order; wall/floor/shower/exterior; expect level-3 size+color variation.</div>
-      <div class="reasoning">Primary canon pick per DESIGN_SPEC §6 — Sea Salt zellige on hall bath wall is the intended palette lock, matching kitchen perimeter and basement bath.</div>
+      <img class="option-img-main" src="/images/sourcing/hb-tile-wall-0.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed" loading="lazy" onerror="this.style.opacity=0.3;">
+      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/hb-tile-wall-0-b.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/hb-tile-wall-0-c.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      <div class="option-details">4&quot;×4&quot; handmade terracotta Petite zellige, glossy hand-glazed enamel, Sea Salt white colorway w/ tonal variation; wall/floor/shower/exterior; expect level-3 size+color variation per Cle handmade spec.</div>
+      <div class="reasoning">Primary canon pick per DESIGN_SPEC §6 LOCKED — Cle Sea Salt 4×4 Petite Zellige is the §6 canon-locked spec for hall bath wall, matching kitchen counter-to-upper and basement bath wall.</div>
     </div><div class="option-card ">
       <div class="vendor">Bedrosians (bedrosians.com / Atlanta showroom)</div>
       <div class="sku"><a href="https://www.bedrosians.com/en/product/detail/zagora-tile/?itemNo=100003201" target="_blank" rel="noopener" class="sku-link">Bedrosians Cloé Zellige 3×12 — Blanc colorway, hand-pressed →</a></div>
@@ -368,7 +374,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="option-details">4&quot;×4&quot; glazed ceramic zellige-look, glossy finish, Gesso (white) colorway; 5.81 sf/box; wall + indoor backsplash only — not suitable for floors or wet/shower areas; mechanically consistent palette entry at budget tier.</div>
       <div class="reasoning">Budget-tier zellige-look at $4–8/sf — substantially less hand-crafted variation than Cle or authentic Bedrosians Zagora. Also NOTE: Marazzi Zellige Gesso 4×4 (ZL11441P), sometimes cited as a Daltile alt, is NOT wet-area rated and must not be used on shower surrounds. Reserve Marrakech for basement bath only if cap forces a downgrade; do not use in hall bath shower surround.</div>
     </div></div>
-      <div class="notes-line">Canon family: Cle Sea Salt palette. Owner must reconcile G2 (Cloé) vs DESIGN_SPEC §6 (Cle Sea Salt) at sample stage. Step 2 drafted both options + budget tier below.</div>
+      <div class="notes-line">Canon family: Cle Sea Salt 4×4 Petite Zellige per DESIGN_SPEC §6 LOCKED canon. Prior 2×6 subway format reconciled to 4×4 Petite 2026-05-17 to match the §6 LOCKED canon spec across all surfaces. Step 2 drafted Cle 4×4 Petite primary + Bedrosians + Daltile budget tiers below.</div>
       
     </article>
 <article class="item-card" id="item-HB-TILE-FLOOR" data-id="HB-TILE-FLOOR"
@@ -421,12 +427,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Cle Tile (cletile.com) — combine order with HB-TILE-WALL for single lead-time pull</div>
-      <div class="sku"><a href="https://www.cletile.com/products/zellige-moroccan-sea-salt-2x6-subway" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath) →</a></div>
+      <div class="sku"><a href="https://www.cletile.com/collections/zellige" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed (match hall bath) →</a></div>
       <div class="price">$22</div>
-      <img class="option-img-main" src="/images/sourcing/bb-tile-wall-0.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath)" loading="lazy" onerror="this.style.opacity=0.3;">
-      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/bb-tile-wall-0-b.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/bb-tile-wall-0-c.jpg" alt="Cle Sea Salt Zellige 2×6 — Sea Salt colorway, hand-glazed (match hall bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
-      <div class="option-details">2&quot;×6&quot; handmade terracotta zellige, glossy hand-glazed enamel, Sea Salt white colorway w/ tonal variation; ~6.42 sf/box (90 pc), 19 sf min order; wall/floor/shower/exterior; combine order with HB-TILE-WALL for single pull.</div>
-      <div class="reasoning">Palette-locked match to hall bath Cle Sea Salt pick per DESIGN_SPEC §9 consistency requirement. Combining both rooms into one Cle order (HB + BB, ~95 sf total) reduces lead-time risk and may unlock volume pricing. $1,305 slightly exceeds $1,100 budget — $205 overage absorbed by contingency, acceptable given palette-lock priority.</div>
+      <img class="option-img-main" src="/images/sourcing/bb-tile-wall-0.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed (match hall bath)" loading="lazy" onerror="this.style.opacity=0.3;">
+      <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/bb-tile-wall-0-b.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed (match hall bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"><img class="option-img-supp" src="/images/sourcing/bb-tile-wall-0-c.jpg" alt="Cle Sea Salt 4×4 Petite Zellige — Sea Salt colorway, hand-glazed (match hall bath) detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
+      <div class="option-details">4&quot;×4&quot; handmade terracotta Petite zellige, glossy hand-glazed enamel, Sea Salt white colorway w/ tonal variation; wall/floor/shower/exterior; combine order with HB-TILE-WALL for single pull.</div>
+      <div class="reasoning">Palette-locked match to hall bath Cle Sea Salt 4×4 Petite pick per DESIGN_SPEC §6 LOCKED canon + §9 cross-room consistency requirement. Combining both rooms into one Cle order (HB + BB, ~95 sf total) reduces lead-time risk and may unlock volume pricing. $1,305 slightly exceeds $1,100 budget — $205 overage absorbed by contingency, acceptable given palette-lock priority.</div>
     </div><div class="option-card ">
       <div class="vendor">Bedrosians (bedrosians.com / Atlanta showroom)</div>
       <div class="sku"><a href="https://www.bedrosians.com/en/product/detail/zagora-tile/?itemNo=100003201" target="_blank" rel="noopener" class="sku-link">Bedrosians Cloé Zellige 3×12 — Blanc colorway, hand-pressed (match hall bath) →</a></div>
@@ -929,7 +935,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">BB-VANITY</span>
-        <h3>Basement bath vanity (Pottery Barn Mason 24)<span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span></h3>
+        <h3>Basement bath vanity (Pottery Barn Mason 24)<span class="catalog-gap-pill" title="spec does not exist at this vendor — wrong product class">⚠ SPEC ERROR — wrong product class</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -942,11 +948,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Actor:</strong> owner_furniture
       </div>
       <div class="item-last-changed">Last changed 2026-05-16</div>
-      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Mason vanity line smallest current size is 31.5&quot; (Mason 31.5&quot; Single Sink Vanity, ~$2,799). No 24&quot; Mason and no wall-mount Mason configuration exists in PB catalog. Budget $1,100 is also short of current Mason pricing. Owner reselect: candidates at 24&quot; wall-mount from PB current = Bryston 24-30, Sabine 24-30, Sinclaire 24-30, Warner 24-30, Alderson 24-30 — pick one or upsize budget to fit Mason 31.5.</em></div>
+      <div class="catalog-gap-banner"><strong>⚠ SPEC ERROR — wrong product class</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Mason vanity line smallest current size is 31.5&quot; (Mason 31.5&quot; Single Sink Vanity, ~$2,799). No 24&quot; Mason and no wall-mount Mason configuration exists in PB catalog. Budget $1,100 is also short of current Mason pricing. Owner reselect: candidates at 24&quot; wall-mount from PB current = Bryston 24-30, Sabine 24-30, Sinclaire 24-30, Warner 24-30, Alderson 24-30 — pick one or upsize budget to fit Mason 31.5.</em></div>
       <div class="decided-line">✅ Pottery Barn Mason 24-inch wall-mount vanity</div><img class="option-img-main item-img-main" src="/images/sourcing/bb-vanity-0.jpg" alt="Basement bath vanity (Pottery Barn Mason 24)" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
     </article>
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>

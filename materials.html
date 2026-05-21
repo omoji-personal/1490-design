@@ -212,9 +212,6 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
-/* R1-5: last-updated stamp pattern. */
-.last-updated { font-size: 12px; color: var(--muted); text-align: center; padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
-
 /* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
  * build_spec, plus add table overflow-x and topnav touch-target floor. */
 @media (max-width: 720px) {
@@ -268,6 +265,16 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
+/* R1-2 / R1-5 / R2-A4 / R2-A5 / R2-A9 / R2-A10: catalog-gap pill + last-updated
+   stamp ported from /sourcing renderer so all build_pages.py outputs carry the
+   same visual vocabulary. Pills surface in spec tables and inline narrative;
+   sage-green VERIFIED variant matches the renderer's locked-row badge. */
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -318,10 +325,10 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><th>Where</th><th>Spec</th><th>Vendor / SKU</th></tr>
 <tr><td>Master bath shower walls</td><td>Cle Weathered White Bejmat 2×6 — handmade specialty</td><td>cletile.com (master ONLY)</td></tr>
 <tr><td>Master bath + Kitchen floor</td><td>Daltile Choice Ivory porcelain 24×24 honed</td><td>Daltile via Atlanta dealer</td></tr>
-<tr><td>Hall bath wall</td><td>Cle Sea Salt 4×4 Petite Zellige — handmade actual zellige (DESIGN_SPEC §6 lock; replaces prior Bedrosians Cloé character-only)</td><td>cletile.com</td></tr>
+<tr><td>Hall + Basement bath wall</td><td>Cle Sea Salt 4×4 Petite Zellige — handmade actual zellige (DESIGN_SPEC §6 LOCKED canon; replaces prior Bedrosians Cloé character-only)</td><td>cletile.com</td></tr>
 <tr><td>Hall + Basement bath floor</td><td>Daltile Portfolio White 12×24 honed</td><td>Daltile</td></tr>
 <tr><td>Kitchen range backsplash (PIVOT)</td><td>Carrara slab — bookmatched or single piece</td><td>Atlanta fab shop slab</td></tr>
-<tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt zellige 4×4 — handmade actual zellige (NOT Cloé character-only)</td><td>cletile.com</td></tr>
+<tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt 4×4 Petite Zellige — handmade actual zellige (same canon family as hall+basement bath wall)</td><td>cletile.com</td></tr>
 </table></div>
 
 <section class="section-header"><h2>Paint</h2></section>
@@ -347,7 +354,8 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Washlet</td><td>Toto Washlet C5 in all 3 baths — dedicated GFCI per bath</td></tr>
 <tr><td>Master vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
 <tr><td>Hall vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
-<tr><td>Basement vanity</td><td>PB Mason 24" wall-mount</td></tr>
+<tr><td>Basement vanity</td><td>PB Mason 24" wall-mount <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">PB Mason smallest is 31.5"; no 24" / no wall-mount Mason in PB catalog. Owner reselect — see <a href="/sourcing#item-BB-VANITY" style="color:var(--accent);">BB-VANITY</a>.</small></td></tr>
+<tr><td>Master medicine cabinet</td><td>Pottery Barn Hutchinson recessed (originally spec'd) <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">Hutchinson is a PB vanity line — no Hutchinson medicine cabinet exists in PB catalog. Owner reselect candidates: PB Vintage Recessed / Vintage Slim. See <a href="/sourcing#item-MB-MEDICINE-CABINET" style="color:var(--accent);">MB-MEDICINE-CABINET</a>.</small></td></tr>
 <tr><td>Hall bath tub</td><td>Kohler Bellwether cast iron 60" alcove</td></tr>
 <tr><td>Master shower drain</td><td>Schluter linear drain + Kerdi waterproofing system</td></tr>
 <tr><td>Kitchen sink</td><td>Stainless undermount (owner-direct, Build.com Pro)</td></tr>
@@ -390,9 +398,9 @@ Lead times: Cle = 4-6 weeks. Bedrosians = 2-3 weeks. Daltile = 1 week. Order thi
 </div>
 <ul class="bullet">
 <li>Cle Bejmat Weathered White sample box ($7 + ship)</li>
-<li>Cle Sea Salt zellige sample (separate order)</li>
+<li>Cle Sea Salt 4×4 Petite zellige sample (separate order — DESIGN_SPEC §6 lock for hall + basement bath wall + kitchen counter-to-upper)</li>
 <li>Daltile Choice Ivory + Portfolio chip set (free)</li>
-<li>Cle Sea Salt 4×4 Petite Zellige sample (hall + basement bath walls)</li>
+<li>Bedrosians Cloé sample (rejected as primary per §6 lock; keep for character-only fallback only if §6 4×4 Petite is unavailable)</li>
 <li>BM Aura paint chips: White Dove, Saybrook Sage, Simply White; Aura B&S samples</li>
 <li>SW Accessible Beige chip</li>
 <li>Rubio Monocoat Pure + Smoke 5% finish samples (Rhodes Hardwood Atlanta or Rubio direct)</li>

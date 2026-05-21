@@ -175,6 +175,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -316,7 +322,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     <a href="/sourcing" style="color:var(--accent);">Sourcing</a> › Kitchen
   </p>
   <h1>Sourcing · Kitchen</h1>
-  <p class="subtitle">20 items in Kitchen. Updated 2026-05-16.</p>
+  <p class="subtitle">20 items in Kitchen. Updated 2026-05-17.</p>
   <div style="margin-top:8px;padding:8px 12px;background:var(--note-tint);border-radius:6px;font-size:13px;color:var(--muted);">Design vision, mood, and constraints: <a href="/kitchen" style="color:var(--accent);">Kitchen design hub →</a></div>
 </header>
 <main>
@@ -329,7 +335,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">CABINET-FINISH-KITCHEN</span>
-        <h3>Kitchen cabinet finish<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
+        <h3>Kitchen cabinet finish<span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -381,7 +387,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false" data-vendor-matches="daltile">
       <div class="item-card-header">
         <span class="item-id">K-FLOOR-TILE</span>
-        <h3>Kitchen floor tile<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span></h3>
+        <h3>Kitchen floor tile<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -394,7 +400,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
       <div class="item-last-changed">Last changed 2026-05-16</div>
-      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Same Daltile Choice Ivory catalog gap as MB-TILE-FLOOR — spec says porcelain but Choice Ivory is currently sold as ceramic (AR04 series, 12x24 matte). Owner reselect at Daltile Norcross showroom; should match the master-bath floor SKU for one-vendor batch.</em></div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — needs reselection</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Same Daltile Choice Ivory catalog gap as MB-TILE-FLOOR — spec says porcelain but Choice Ivory is currently sold as ceramic (AR04 series, 12x24 matte). Owner reselect at Daltile Norcross showroom; should match the master-bath floor SKU for one-vendor batch.</em></div>
       <div class="decided-line">✅ Daltile Choice Ivory porcelain</div><img class="option-img-main item-img-main" src="/images/sourcing/k-floor-tile-0.jpg" alt="Kitchen floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6.</div>
       
@@ -643,7 +649,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false" data-vendor-matches="schoolhouse rejuvenation cedar-moss">
       <div class="item-card-header">
         <span class="item-id">K-PENDANTS</span>
-        <h3>Kitchen island pendants (3+1)<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span></h3>
+        <h3>Kitchen island pendants (3+1)<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span></h3>
         <span class="status-badge decide-now">Decide now</span>
         
       </div>
@@ -656,7 +662,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
       <div class="item-last-changed">Last changed 2026-05-16</div>
-      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Schoolhouse Hyatt 8&quot; Pendant URL 404 — product is no longer in the Schoolhouse catalog. Current Schoolhouse catalog has Otto 8&quot;, Ray 8&quot;, Alfred 20&quot; lantern in natural brass — none match Hyatt geometry+price. Rejuvenation Pinnock Cone (opt 1) is the only remaining canon-compliant choice in current catalogs at this budget; owner reselect.</em></div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — needs reselection</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Schoolhouse Hyatt 8&quot; Pendant URL 404 — product is no longer in the Schoolhouse catalog. Current Schoolhouse catalog has Otto 8&quot;, Ray 8&quot;, Alfred 20&quot; lantern in natural brass — none match Hyatt geometry+price. Rejuvenation Pinnock Cone (opt 1) is the only remaining canon-compliant choice in current catalogs at this budget; owner reselect.</em></div>
       <div class="options-grid"><div class="option-card recommend">
       <div class="vendor">Rejuvenation (rejuvenation.com)</div>
       <div class="sku"><a href="https://www.rejuvenation.com/shop/pendants" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Rejuvenation Pinnock Cone Pendant in Aged Brass × 3 (island) — canon-compliant successor to discontinued Hyatt →</a></div>
@@ -978,7 +984,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-category="appliance" data-status="options_drafted"
        data-annika="true"
        data-catalog-status=""
-       data-schedule-locked="false" data-vendor-matches="best-hoods">
+       data-schedule-locked="false" data-vendor-matches="vent-a-hood best-hoods">
       <div class="item-card-header">
         <span class="item-id">G3-HOOD</span>
         <h3>Kitchen range hood</h3>
@@ -996,7 +1002,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="item-last-changed">Last changed 2026-05-16</div>
       
       <div class="options-grid"><div class="option-card recommend">
-      <div class="vendor">AJ Madison / CDGA</div>
+      <div class="vendor">Vent-A-Hood (via AJ Madison / CDGA)</div>
       <div class="sku"><a href="https://www.ajmadison.com/cgi-bin/ajmadison/PRH18342SS.html" target="_blank" rel="noopener" class="sku-link"><span class="star">★</span> Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison) →</a></div>
       <div class="price">$3,433</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-0.jpg" alt="Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison)" loading="lazy" onerror="this.style.opacity=0.3;">
@@ -1004,7 +1010,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="option-details">42&quot;W × 24&quot;D × 18&quot;H wall-mount, Magic Lung dual-blower 900 CFM, 3 LED lights w/dimmer, ducted only (10&quot; round min), 6.3 sones; matte-black is factory custom-color upcharge ~10% over SS base via CDGA.</div>
       <div class="reasoning">Canon-primary pick. PRH18342SS is the verified 42&quot;/900 CFM Professional Magic Lung wall mount; BK custom-color is a factory order via CDGA at ~10% upcharge over the ~$3,433 SS base, 6–8 wk lead. Fits within the $3,400 + $900 MAU envelope. High-BTU steak/smoke kitchen demands 900+ CFM — Magic Lung centrifugal technology meets that without makeup-air over-engineering.</div>
     </div><div class="option-card ">
-      <div class="vendor">AJ Madison / CDGA</div>
+      <div class="vendor">Vent-A-Hood (via AJ Madison / CDGA)</div>
       <div class="sku"><a href="https://www.universityelectric.com/product/vent-a-hood-42-black-contemporary-wall-mounted-range-hood-cweh9-242-bl-168264" target="_blank" rel="noopener" class="sku-link">Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) →</a></div>
       <div class="price">$2,650</div>
       <img class="option-img-main" src="/images/sourcing/g3-hood-1.jpg" alt="Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black)" loading="lazy" onerror="this.style.opacity=0.3;">
@@ -1020,7 +1026,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="option-details">42&quot;W wall-mount chimney, blower options up to 1000 CFM (external/inline), tri-level LED lighting, 3-speed capacitive touch + wireless remote, ducted or recirculating (10&quot; round), 6 sones max; black glass + stainless combo.</div>
       <div class="reasoning">Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be conflated with it. Black glass panel diverges from matte-black chimney aesthetic. At $1,400 it under-delivers on the design brief; use only if Vent-A-Hood lead time collapses the kitchen TCO.</div>
     </div></div>
-      <div class="notes-line">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Original SKU K2240SS does not exist in CDGA catalog — successor model (likely SLDH9-K42 or equivalent) must be confirmed before ordering. Step 2 draft confirmed Vent-A-Hood SKU options at 42-inch 900+ CFM matte black. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. Vent-A-Hood PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</div>
+      <div class="notes-line">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Canonical SKU PRH18342SS-BK (Professional Magic Lung 42-inch wall mount, 900 CFM dual blower, matte-black BK custom finish; order via CDGA or AJ Madison). Prior dealer-code reference (now obsolete) was superseded by the orderable catalog SKU 2026-05-17. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</div>
       
     </article>
 <article class="item-card" id="item-KITCHEN-OPEN-SHELF" data-id="KITCHEN-OPEN-SHELF"
@@ -1081,6 +1087,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per §3a anti-signal — NOT matched commercial dishware. Hand-thrown + olive wood + cookbooks.</div>
       
     </article>
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>

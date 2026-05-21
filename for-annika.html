@@ -175,6 +175,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -1470,7 +1476,7 @@ details.annika-glossary { overflow: auto; }
         <h3 class="annika-item-title">Kitchen range hood</h3>
         <span class="annika-status-pill ">Your read</span>
       </div>
-      <p class="annika-tagline">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Original SKU K2240SS does not exist in CDGA catalog — successor model (likely SLDH9-K42 or equivalent) must be confirmed before ordering. Step 2 draft confirmed Vent-A-Hood SKU options at 42-inch 900+ CFM matte black. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. Vent-A-Hood PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</p>
+      <p class="annika-tagline">Canon family: Vent-A-Hood Magic Lung, matte black, 42-inch, with integrated make-up air. Canonical SKU PRH18342SS-BK (Professional Magic Lung 42-inch wall mount, 900 CFM dual blower, matte-black BK custom finish; order via CDGA or AJ Madison). Prior dealer-code reference (now obsolete) was superseded by the orderable catalog SKU 2026-05-17. $3.4K + $900 MAU budget. | budget revised UP per HARD RULE 2026-05-16: from $3,400 to $3,435. PRH18342SS-BK at $3,433 is spec-correct (900 CFM dual Magic Lung, matte black); nominal $33 gap closed.</p>
       <div class="annika-item-body">
         <div class="annika-pick-image-wrap">
           <img class="annika-pick-image" src="/images/sourcing/g3-hood-0.jpg" alt="Vent-A-Hood PRH18342SS-BK (42&quot;, 900 CFM dual Magic Lung blower, matte black custom color — order via CDGA or AJ Madison)" loading="lazy" onerror="this.style.opacity=0.3;">
@@ -1485,7 +1491,7 @@ details.annika-glossary { overflow: auto; }
             <summary>Why this pick / vs alternates</summary>
             <div class="why-inner">
               <p>Canon-primary pick. PRH18342SS is the verified 42&quot;/900 CFM Professional Magic Lung wall mount; BK custom-color is a factory order via CDGA at ~10% upcharge over the ~$3,433 SS base, 6–8 wk lead. Fits within the $3,400 + $900 MAU envelope. High-BTU steak/smoke kitchen demands 900+ CFM — Magic Lung centrifugal technology meets that without makeup-air over-engineering.</p>
-              <p><strong>vs</strong> AJ Madison / CDGA Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) ($2,650) &mdash; Saves ~$1,150 vs. canon PRH18342SS-BK but drops to 600 CFM — below the 900 CFM minimum for a high-BTU range that does sm</p><p><strong>vs</strong> Best Buy / AJ Madison Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) ($1,400) &mdash; Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be </p>
+              <p><strong>vs</strong> Vent-A-Hood (via AJ Madison / CDGA) Vent-A-Hood CWEH9-242 BL (42&quot;, 600 CFM Magic Lung, contemporary style, gloss black) ($2,650) &mdash; Saves ~$1,150 vs. canon PRH18342SS-BK but drops to 600 CFM — below the 900 CFM minimum for a high-BTU range that does sm</p><p><strong>vs</strong> Best Buy / AJ Madison Zephyr Arc Layers ALA-E42BBX (42&quot;, 1000 CFM blower-capable, black glass + stainless) ($1,400) &mdash; Zephyr Tempest is the canon premium alt (sleeker face, 1000+ CFM) — this Arc Layers is not that model and should not be </p>
             </div>
           </details>
           

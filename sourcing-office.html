@@ -175,6 +175,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -316,7 +322,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     <a href="/sourcing" style="color:var(--accent);">Sourcing</a> › Office
   </p>
   <h1>Sourcing · Office</h1>
-  <p class="subtitle">5 items in Office. Updated 2026-05-16.</p>
+  <p class="subtitle">5 items in Office. Updated 2026-05-17.</p>
   <div style="margin-top:8px;padding:8px 12px;background:var(--note-tint);border-radius:6px;font-size:13px;color:var(--muted);">Design vision, mood, and constraints: <a href="/office" style="color:var(--accent);">Office design hub →</a></div>
 </header>
 <main>
@@ -326,7 +332,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-category="lighting_fixture" data-status="options_drafted"
        data-annika="false"
        data-catalog-status=""
-       data-schedule-locked="false" data-vendor-matches="schoolhouse rejuvenation cedar-moss hay-lighting">
+       data-schedule-locked="false" data-vendor-matches="rejuvenation cedar-moss hay-lighting">
       <div class="item-card-header">
         <span class="item-id">OFFICE-LIGHTING</span>
         <h3>Office overhead + task</h3>
@@ -349,8 +355,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="price">$495</div>
       <img class="option-img-main" src="/images/sourcing/office-lighting-0.jpg" alt="Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass + Rejuvenation Jenesen or desk task lamp" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="option-img-supps"><img class="option-img-supp" src="/images/sourcing/office-lighting-0-b.jpg" alt="Rejuvenation Crawford 14&quot; Flush Mount — Lacquered Brass + Rejuvenation Jenesen or desk task lamp detail" loading="lazy" onerror="this.style.opacity=0.3;"></div>
-      <div class="option-details">Schoolhouse Vega Flush Mount discontinued; Otto 6&quot; Flush Mount URL returns 404. Two dead references cascade from this item. Rejuvenation Crawford 14&quot; in lacquered brass replaces both as the ceiling overhead. Add a Rejuvenation or HAY task lamp for desk. Combined ~$495 within $500 budget. ALSO: OFFICE-LIGHTING opt 3 references Otto in Black + Hyatt task lamp — Hyatt task lamp needs verification at schoolhouse.com as well. If Otto is dead, opt 3 Schoolhouse combo is also broken.</div>
-      <div class="reasoning">Vega + Otto both dead. Crawford 14&quot; lacquered brass is the Rejuvenation replacement. Cascading fix: opt 3&#x27;s search URL (otto+flush+black) is not a product URL and the Otto product is 404 — that option needs to be re-sourced or removed as well.</div>
+      <div class="option-details">Schoolhouse Vega Flush Mount discontinued; Otto 6&quot; Flush Mount URL returns 404. Rejuvenation Crawford 14&quot; in lacquered brass replaces both as the ceiling overhead. Add a Rejuvenation or HAY task lamp for desk. Combined ~$495 within $500 budget.</div>
+      <div class="reasoning">Vega + Otto both dead at Schoolhouse. Crawford 14&quot; lacquered brass is the Rejuvenation replacement for the overhead layer; pair with a Rejuvenation or HAY task lamp for the desk. Schoolhouse Hyatt task lamp option also removed 2026-05-17 because Hyatt is no longer in the Schoolhouse catalog (same gap as K-PENDANTS).</div>
     </div><div class="option-card ">
       <div class="vendor">Cedar &amp; Moss + third-party</div>
       <div class="sku"><a href="https://cedarandmoss.com/products/bijou-single" target="_blank" rel="noopener" class="sku-link">Cedar &amp; Moss Globe Pendant, lacquered brass, 8-inch clear globe, 12-inch drop, E26 + generic LED task lamp →</a></div>
@@ -367,14 +373,6 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       
       <div class="option-details">Crawford 14&quot; Flush Mount (Rejuvenation) — brass, minimal Scandinavian silhouette, 1× E26 60W, flush ceiling; + HAY Matin table lamp ~$200. Verify Crawford price.</div>
       <div class="reasoning">Rejuvenation Hartwell flush provides a clean opal overhead while HAY Matin adds Scandinavian warmth at the desk — a two-brand solution at $10 over budget. Choose this if owner wants the desk lamp to be a decorative object rather than a utilitarian tool; give up single-brand Schoolhouse consistency and $10 of budget.</div>
-    </div><div class="option-card ">
-      <div class="vendor">Schoolhouse</div>
-      <div class="sku"><a href="https://www.schoolhouse.com/search?q=otto+flush+black" target="_blank" rel="noopener" class="sku-link">Schoolhouse Otto 6&quot; Flush Mount, Black + Schoolhouse Hyatt Task Lamp, Black — combo →</a></div>
-      <div class="price">$450</div>
-      
-      
-      <div class="option-details">Schoolhouse Otto 6&quot; Flush Mount in Black (~$225) + Schoolhouse Hyatt Task Lamp in Black (~$225) — both single brand, black finish. Verify current Otto and Hyatt SKUs and prices at schoolhouse.com before ordering. Combined est. $450.</div>
-      <div class="reasoning">Matte-black alt to provide finish mix per §6a brass+black rule; pick this if owner wants more weight away from brass in the office. All 3 existing OFFICE-LIGHTING options are brass-led — this Schoolhouse Otto flush in Black plus Schoolhouse Hyatt task in Black at ~$450 combined stays within the $500 budget and keeps single-brand discipline while delivering the black finish the §6a calibration targets for office/utility-tier rooms.</div>
     </div></div>
       <div class="notes-line">Flush mount or pendant + desk task lamp. Schoolhouse or Cedar &amp; Moss.</div>
       
@@ -579,6 +577,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">Per loved_08 OWIU Echo Park canon — Eames Soft Pad. Herman Miller authentic or vintage.</div>
       
     </article>
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>

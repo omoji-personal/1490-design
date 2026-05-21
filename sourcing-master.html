@@ -175,6 +175,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -316,7 +322,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
     <a href="/sourcing" style="color:var(--accent);">Sourcing</a> › Master Suite
   </p>
   <h1>Sourcing · Master Suite</h1>
-  <p class="subtitle">23 items in Master Suite. Updated 2026-05-16.</p>
+  <p class="subtitle">23 items in Master Suite. Updated 2026-05-17.</p>
   <div style="margin-top:8px;padding:8px 12px;background:var(--note-tint);border-radius:6px;font-size:13px;color:var(--muted);">Design vision, mood, and constraints: <a href="/master" style="color:var(--accent);">Master Suite design hub →</a></div>
 </header>
 <main>
@@ -329,7 +335,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false" data-vendor-matches="cle-tile">
       <div class="item-card-header">
         <span class="item-id">MB-TILE-WALL</span>
-        <h3>Master bath wall tile (shower walls)<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
+        <h3>Master bath wall tile (shower walls)<span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -355,7 +361,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false" data-vendor-matches="daltile">
       <div class="item-card-header">
         <span class="item-id">MB-TILE-FLOOR</span>
-        <h3>Master bath floor tile<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span></h3>
+        <h3>Master bath floor tile<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -368,7 +374,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Actor:</strong> owner_direct · 👩 Annika · ⚠️ sample required
       </div>
       <div class="item-last-changed">Last changed 2026-05-16</div>
-      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Daltile Choice Ivory product line still listed at daltile.com/products/stone-look/choice/ivory, but site search returns no results and current third-party listings show Choice Ivory only as AR04 12x24 matte ceramic — not 24x24 honed porcelain. The 24x24 honed format spec&#x27;d here is not in the current vendor catalog. Owner reselect at Daltile Norcross showroom: candidates = Daltile Bee Hive Ivory 24x20 porcelain (current ColorBody, matte, hex format) or Kesler Marble Avorio 24x48 polished porcelain (wrong finish for spec).</em></div>
+      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — needs reselection</strong>Spec'd SKU is no longer in the current vendor catalog with no clean successor; owner reselect required. <em>Daltile Choice Ivory product line still listed at daltile.com/products/stone-look/choice/ivory, but site search returns no results and current third-party listings show Choice Ivory only as AR04 12x24 matte ceramic — not 24x24 honed porcelain. The 24x24 honed format spec&#x27;d here is not in the current vendor catalog. Owner reselect at Daltile Norcross showroom: candidates = Daltile Bee Hive Ivory 24x20 porcelain (current ColorBody, matte, hex format) or Kesler Marble Avorio 24x48 polished porcelain (wrong finish for spec).</em></div>
       <div class="decided-line">✅ Daltile Choice Ivory 24×24 honed</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-tile-floor-0.jpg" alt="Master bath floor tile" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per §6. Heated floor whole bath.</div>
       
@@ -717,7 +723,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-MEDICINE-CABINET</span>
-        <h3>Master bath medicine cabinet<span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span></h3>
+        <h3>Master bath medicine cabinet<span class="catalog-gap-pill" title="spec does not exist at this vendor — wrong product class">⚠ SPEC ERROR — wrong product class</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -730,7 +736,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
         <strong>Actor:</strong> owner_direct · 👩 Annika
       </div>
       <div class="item-last-changed">Last changed 2026-05-16</div>
-      <div class="catalog-gap-banner"><strong>⚠ CATALOG GAP — see notes</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Hutchinson is a VANITY range at Pottery Barn — there is no Hutchinson medicine cabinet in the PB catalog. Owner reselect from current PB medicine cabinets: PB Vintage Recessed Medicine Cabinet (Vintage Brass/Aged Bronze, 17W x 25H, $400-600) or PB Vintage Slim Recessed; PB Kensington Recessed for a wider unit. Carries G2 line callout but spec needs an actual SKU.</em></div>
+      <div class="catalog-gap-banner"><strong>⚠ SPEC ERROR — wrong product class</strong>Spec'd product does not exist in this vendor's catalog (wrong line/format). Owner reselect required. <em>PB Hutchinson is a VANITY range at Pottery Barn — there is no Hutchinson medicine cabinet in the PB catalog. Owner reselect from current PB medicine cabinets: PB Vintage Recessed Medicine Cabinet (Vintage Brass/Aged Bronze, 17W x 25H, $400-600) or PB Vintage Slim Recessed; PB Kensington Recessed for a wider unit. Carries G2 line callout but spec needs an actual SKU.</em></div>
       <div class="decided-line">✅ Pottery Barn Hutchinson medicine cabinet</div><img class="option-img-main item-img-main" src="/images/sourcing/mb-medicine-cabinet-0.jpg" alt="Master bath medicine cabinet" loading="lazy" onerror="this.style.opacity=0.3;">
       <div class="notes-line">Locked per G2 line.</div>
       
@@ -743,7 +749,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
        data-schedule-locked="false">
       <div class="item-card-header">
         <span class="item-id">MB-VANITY</span>
-        <h3>Master bath vanity (WE Hutchinson 60-inch Double)<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
+        <h3>Master bath vanity (WE Hutchinson 60-inch Double)<span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span></h3>
         <span class="status-badge decided">Decided</span>
         
       </div>
@@ -1300,6 +1306,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
       <div class="notes-line">WE or vintage oak frame.</div>
       
     </article>
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>
