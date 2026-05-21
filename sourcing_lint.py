@@ -602,6 +602,9 @@ SENTINEL_WORDS = {
     # are sentinel exclusions for the vendor-finish guard (Rule 11) when no
     # paired material noun follows.
     "RAW", "TRUE",
+    # R2: doc-keyword exclusions for the orphan-SKU heuristic (notes prose can
+    # carry these as policy markers, not as SKU references).
+    "LOCKED", "CANON", "CANONICAL", "RESELECT", "ORDER", "OBSOLETE",
 }
 
 

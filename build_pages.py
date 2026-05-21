@@ -265,6 +265,16 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
   h3 { font-size: 1.15rem; }
   .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
 }
+/* R1-2 / R1-5 / R2-A4 / R2-A5 / R2-A9 / R2-A10: catalog-gap pill + last-updated
+   stamp ported from /sourcing renderer so all build_pages.py outputs carry the
+   same visual vocabulary. Pills surface in spec tables and inline narrative;
+   sage-green VERIFIED variant matches the renderer's locked-row badge. */
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 """
 
 # Topnav — shared across all pages.
@@ -346,8 +356,16 @@ def topnav(current=""):
 </script>
 """
 
+LAST_UPDATED = "2026-05-17"
+
+
 def page(slug, title, subtitle, body_html, current=None):
-    """Generate a full HTML page."""
+    """Generate a full HTML page.
+
+    R1-5 / R2-A5: every page() output carries a footer-style "Last updated"
+    stamp via the shared template so the renderer is the single source of
+    truth — direct HTML edits to add stamps would revert on re-render.
+    """
     current = current or slug
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -366,6 +384,7 @@ def page(slug, title, subtitle, body_html, current=None):
 </header>
 <main>
 {body_html}
+<p class="last-updated">Last updated {LAST_UPDATED}</p>
 </main>
 </body>
 </html>
@@ -394,12 +413,12 @@ def kitchen_page():
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Cabinets</td><td>CDGA KraftMaid Vantage light oak Shaker, 30 LF</td></tr>
 <tr><td>Counters</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
-<tr><td>Floor</td><td>Daltile Choice Ivory porcelain</td></tr>
+<tr><td>Floor</td><td>Daltile Choice Ivory porcelain <span class="catalog-gap-pill" title="vendor catalog moved — see /sourcing K-FLOOR-TILE">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Owner reselect at Daltile Norcross — Choice Ivory 24×24 honed porcelain not in current catalog. See <a href="/sourcing#item-K-FLOOR-TILE" style="color:var(--accent);">K-FLOOR-TILE</a>.</small></td></tr>
 <tr><td>Backsplash</td><td><strong>PIVOT:</strong> Carrara slab on range wall + Cle Sea Salt zellige counter-to-upper elsewhere (replaces prior Bejmat plan)</td></tr>
-<tr><td>Hood</td><td>Vent-A-Hood Magic Lung matte black + integrated make-up air (SKU confirmation pending CDGA)</td></tr>
+<tr><td>Hood</td><td>Vent-A-Hood PRH18-342SS family (42″ Magic Lung, matte black custom color) — order via CDGA / AJ Madison<br><small style="color:var(--muted);">PRH18342SS-BK is the orderable canon hood (Professional Magic Lung, 900 CFM dual blower, BK custom finish). See <a href="/sourcing#item-G3-HOOD" style="color:var(--accent);">G3-HOOD</a>.</small></td></tr>
 <tr><td>Sink + faucet</td><td>Stainless undermount + Delta Trinsic Champagne Bronze</td></tr>
 <tr><td>Under-cabinet lighting</td><td>Refresh / replace</td></tr>
-<tr><td>Pendants</td><td>Keep existing 3 white domes + add matching 4th</td></tr>
+<tr><td>Pendants</td><td>Rejuvenation Pinnock Cone Aged Brass × 3 — canon-compliant successor to discontinued Schoolhouse Hyatt <span class="catalog-gap-pill" title="vendor catalog moved — see /sourcing K-PENDANTS">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Owner reselect pending. See <a href="/sourcing#item-K-PENDANTS" style="color:var(--accent);">K-PENDANTS</a>.</small></td></tr>
 <tr><td>Hardware</td><td>Rejuvenation/Forge — matte black + lacquered brass mix</td></tr>
 <tr><td>Paint</td><td>BM Aura Bath & Spa (wet-room spec for kitchen)</td></tr>
 </table></div>
@@ -451,7 +470,7 @@ def kitchen_page():
 <li>Marble counters: Statuario waterfall (not subway tile, not standard quartz)</li>
 <li>One warm-wood gesture: the oak island is THE wood gesture; floor stays porcelain, not oak</li>
 <li>Lacquered brass hardware mixed with matte black (5:1 brass:black ratio)</li>
-<li>Brass pendant lighting (keep existing white domes, add 4th)</li>
+<li>Brass pendant lighting — Rejuvenation Pinnock Cone Aged Brass × 3 (canon-compliant successor to discontinued Schoolhouse Hyatt; owner reselect pending — see <a href="/sourcing#item-K-PENDANTS">K-PENDANTS</a>)</li>
 <li>Backsplash slab Carrara (range wall) — bookmatched-look continuity to counter</li>
 <li>Cle Sea Salt zellige (counter-to-upper elsewhere) — texture without color</li>
 <li>One real plant at floor height — kentia palm or bird of paradise (cat-safe)</li>
@@ -476,11 +495,11 @@ def kitchen_page():
 <tr><th>Item</th><th>Vendor / SKU</th><th>Status</th></tr>
 <tr><td>Cabinet quote</td><td>CDGA (404-361-5200) — KraftMaid Vantage light oak Shaker</td><td>Owner action: get quote, push for Vantage volume discount</td></tr>
 <tr><td>Counter slab</td><td>Caesarstone Statuario via Atlanta fab shop</td><td>Owner sources sample swatches first</td></tr>
-<tr><td>Hood</td><td>Vent-A-Hood Magic Lung matte black</td><td>Confirm exact SKU with CDGA (K2240SS appears to be dealer code, not catalog)</td></tr>
+<tr><td>Hood</td><td>Vent-A-Hood PRH18342SS-BK (42″, 900 CFM Magic Lung dual blower, matte black custom)</td><td>Order via CDGA or AJ Madison; ~$3,433 base + ~10% BK custom upcharge; 6-8 wk lead</td></tr>
 <tr><td>Backsplash</td><td>Carrara slab (range) + Cle Sea Salt zellige (rest)</td><td>Cle sample box $7 — order now (4-6 wk lead)</td></tr>
-<tr><td>Floor tile</td><td>Daltile Choice Ivory porcelain</td><td>Sample chips free — order Daltile sample set</td></tr>
+<tr><td>Floor tile <span class="catalog-gap-pill">⚠ CATALOG GAP — needs reselection</span></td><td>Daltile Choice Ivory porcelain (needs reselect)</td><td>Owner reselect at Daltile Norcross — Choice Ivory 24×24 honed porcelain not in current catalog (see <a href="/sourcing#item-K-FLOOR-TILE">K-FLOOR-TILE</a>)</td></tr>
 <tr><td>Faucet</td><td>Delta Trinsic in Champagne Bronze</td><td>Owner-direct via Build.com Pro account</td></tr>
-<tr><td>Pendants (4th match)</td><td>Match existing 3 white domes</td><td>Verify SKU on existing 3 + source matching unit</td></tr>
+<tr><td>Pendants <span class="catalog-gap-pill">⚠ CATALOG GAP — needs reselection</span></td><td>Rejuvenation Pinnock Cone Aged Brass × 3 (canon successor to discontinued Hyatt)</td><td>Owner reselect pending — see <a href="/sourcing#item-K-PENDANTS">K-PENDANTS</a></td></tr>
 <tr><td>Hardware</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix</td><td>Owner-direct via Rejuvenation trade account</td></tr>
 </table></div>
 """
@@ -511,6 +530,14 @@ def master_page():
 <tr><td>Hardware</td><td>Lacquered brass (Rejuvenation Westmore pulls if any built-in)</td></tr>
 <tr><td>Window treatments</td><td>Cream linen Roman shades (sheer + blackout layer)</td></tr>
 <tr><td>Lighting</td><td>Bedside sconces — Schoolhouse Princeton or equivalent, brass</td></tr>
+</table></div>
+
+<section class="section-header"><h2>Master bath — sourcing notes</h2></section>
+<div class="table-wrapper"><table class="spec-table">
+<tr><th>Element</th><th>Spec / status</th></tr>
+<tr><td>Master bath floor + shower</td><td>Daltile Choice Ivory 24×24 honed porcelain <span class="catalog-gap-pill">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Choice Ivory 24×24 honed not in current Daltile catalog; owner reselect at Norcross showroom. See <a href="/sourcing#item-MB-TILE-FLOOR" style="color:var(--accent);">MB-TILE-FLOOR</a> and <a href="/baths#master" style="color:var(--accent);">/baths master section</a>.</small></td></tr>
+<tr><td>Master bath medicine cabinet</td><td>Pottery Barn Hutchinson recessed (originally spec'd) <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">PB Hutchinson is a vanity line — no Hutchinson medicine cabinet exists in the PB catalog. Owner reselect (PB Vintage Recessed candidate). See <a href="/sourcing#item-MB-MEDICINE-CABINET" style="color:var(--accent);">MB-MEDICINE-CABINET</a>.</small></td></tr>
+<tr><td>Master bath full spec</td><td>See <a href="/baths" style="color:var(--accent);">/baths</a> for vanity, fixtures, tile, sconces, walls, paint.</td></tr>
 </table></div>
 
 <section class="section-header">
@@ -623,12 +650,12 @@ def baths_page():
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II One-Piece + Toto Washlet C5</td></tr>
 <tr><td>Shower walls</td><td>Cle Weathered White Bejmat 2×6 (master ONLY)</td></tr>
-<tr><td>Shower floor / drain</td><td>Daltile Choice Ivory 24×24 honed + Schluter linear drain</td></tr>
+<tr><td>Shower floor / drain</td><td>Daltile Choice Ivory 24×24 honed + Schluter linear drain <span class="catalog-gap-pill">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Daltile Choice Ivory 24×24 honed porcelain not in current catalog; owner reselect — see <a href="/sourcing#item-MB-TILE-FLOOR" style="color:var(--accent);">MB-TILE-FLOOR</a>.</small></td></tr>
 <tr><td>Shower glass</td><td>Frameless 48×36 walk-in (curbless)</td></tr>
-<tr><td>Floor</td><td>Daltile Choice Ivory + heated mat (whole bath)</td></tr>
+<tr><td>Floor</td><td>Daltile Choice Ivory + heated mat (whole bath) <span class="catalog-gap-pill">⚠ CATALOG GAP — needs reselection</span><br><small style="color:var(--muted);">Floor SKU shares MB-TILE-FLOOR reselect.</small></td></tr>
 <tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze (NOT chrome)</td></tr>
 <tr><td>Sconces</td><td>Schoolhouse Princeton — flanking mirror</td></tr>
-<tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed</td></tr>
+<tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">Hutchinson is a PB vanity line — no Hutchinson medicine cabinet exists in PB catalog. Owner reselect (PB Vintage Recessed candidate) — see <a href="/sourcing#item-MB-MEDICINE-CABINET" style="color:var(--accent);">MB-MEDICINE-CABINET</a>.</small></td></tr>
 <tr><td>Door</td><td>Pocket door — premium hardware</td></tr>
 <tr><td>Exhaust</td><td>New w/ wall vent (humidity microclimate spec)</td></tr>
 </table></div>
@@ -668,7 +695,7 @@ def baths_page():
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
 <tr><td>Tub</td><td>Kohler Bellwether cast iron (60") — alcove install</td></tr>
-<tr><td>Wall tile</td><td>Bedrosians Cloé wall tile (handmade zellige character)</td></tr>
+<tr><td>Wall tile</td><td>Cle Sea Salt 4×4 Petite Zellige (handmade actual zellige; locked per DESIGN_SPEC §6 — replaces prior Bedrosians Cloé character-only)</td></tr>
 <tr><td>Floor</td><td>Daltile Portfolio White 12×24 honed</td></tr>
 <tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze</td></tr>
 <tr><td>Sconces</td><td>Cedar & Moss — flanking mirror</td></tr>
@@ -682,10 +709,10 @@ def baths_page():
 </section>
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
-<tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount</td></tr>
+<tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">PB Mason smallest is 31.5"; no 24" / no wall-mount Mason in PB catalog. Owner reselect (PB Bryston/Sabine/Sinclaire 24-30 candidates) — see <a href="/sourcing#item-BB-VANITY" style="color:var(--accent);">BB-VANITY</a>.</small></td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
 <tr><td>Shower</td><td>32×32 neo-angle frameless enclosure</td></tr>
-<tr><td>Wall tile</td><td>Bedrosians Cloé (match hall)</td></tr>
+<tr><td>Wall tile</td><td>Cle Sea Salt 4×4 Petite Zellige (match hall — DESIGN_SPEC §6 lock; replaces prior Bedrosians Cloé)</td></tr>
 <tr><td>Floor</td><td>Daltile Portfolio (match hall)</td></tr>
 <tr><td>Mirror</td><td>Small framed circular</td></tr>
 <tr><td>Plumbing</td><td>Slab cut for shower drain ($1.5-2K of the line) + Washlet C5 dedicated GFCI</td></tr>
@@ -961,10 +988,10 @@ def materials_page():
 <tr><th>Where</th><th>Spec</th><th>Vendor / SKU</th></tr>
 <tr><td>Master bath shower walls</td><td>Cle Weathered White Bejmat 2×6 — handmade specialty</td><td>cletile.com (master ONLY)</td></tr>
 <tr><td>Master bath + Kitchen floor</td><td>Daltile Choice Ivory porcelain 24×24 honed</td><td>Daltile via Atlanta dealer</td></tr>
-<tr><td>Hall bath wall</td><td>Bedrosians Cloé 4×4 zellige-character (NOT actual zellige)</td><td>Bedrosians</td></tr>
+<tr><td>Hall + Basement bath wall</td><td>Cle Sea Salt 4×4 Petite Zellige — handmade actual zellige (DESIGN_SPEC §6 LOCKED canon; replaces prior Bedrosians Cloé character-only)</td><td>cletile.com</td></tr>
 <tr><td>Hall + Basement bath floor</td><td>Daltile Portfolio White 12×24 honed</td><td>Daltile</td></tr>
 <tr><td>Kitchen range backsplash (PIVOT)</td><td>Carrara slab — bookmatched or single piece</td><td>Atlanta fab shop slab</td></tr>
-<tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt zellige 4×4 — handmade actual zellige (NOT Cloé character-only)</td><td>cletile.com</td></tr>
+<tr><td>Kitchen counter-to-upper (PIVOT)</td><td>Cle Sea Salt 4×4 Petite Zellige — handmade actual zellige (same canon family as hall+basement bath wall)</td><td>cletile.com</td></tr>
 </table></div>
 
 <section class="section-header"><h2>Paint</h2></section>
@@ -990,7 +1017,8 @@ def materials_page():
 <tr><td>Washlet</td><td>Toto Washlet C5 in all 3 baths — dedicated GFCI per bath</td></tr>
 <tr><td>Master vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
 <tr><td>Hall vanity</td><td>WE Hutchinson 36" Single blonde oak</td></tr>
-<tr><td>Basement vanity</td><td>PB Mason 24" wall-mount</td></tr>
+<tr><td>Basement vanity</td><td>PB Mason 24" wall-mount <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">PB Mason smallest is 31.5"; no 24" / no wall-mount Mason in PB catalog. Owner reselect — see <a href="/sourcing#item-BB-VANITY" style="color:var(--accent);">BB-VANITY</a>.</small></td></tr>
+<tr><td>Master medicine cabinet</td><td>Pottery Barn Hutchinson recessed (originally spec'd) <span class="catalog-gap-pill">⚠ SPEC ERROR — wrong product class</span><br><small style="color:var(--muted);">Hutchinson is a PB vanity line — no Hutchinson medicine cabinet exists in PB catalog. Owner reselect candidates: PB Vintage Recessed / Vintage Slim. See <a href="/sourcing#item-MB-MEDICINE-CABINET" style="color:var(--accent);">MB-MEDICINE-CABINET</a>.</small></td></tr>
 <tr><td>Hall bath tub</td><td>Kohler Bellwether cast iron 60" alcove</td></tr>
 <tr><td>Master shower drain</td><td>Schluter linear drain + Kerdi waterproofing system</td></tr>
 <tr><td>Kitchen sink</td><td>Stainless undermount (owner-direct, Build.com Pro)</td></tr>
@@ -1033,9 +1061,9 @@ Lead times: Cle = 4-6 weeks. Bedrosians = 2-3 weeks. Daltile = 1 week. Order thi
 </div>
 <ul class="bullet">
 <li>Cle Bejmat Weathered White sample box ($7 + ship)</li>
-<li>Cle Sea Salt zellige sample (separate order)</li>
+<li>Cle Sea Salt 4×4 Petite zellige sample (separate order — DESIGN_SPEC §6 lock for hall + basement bath wall + kitchen counter-to-upper)</li>
 <li>Daltile Choice Ivory + Portfolio chip set (free)</li>
-<li>Bedrosians Cloé sample</li>
+<li>Bedrosians Cloé sample (rejected as primary per §6 lock; keep for character-only fallback only if §6 4×4 Petite is unavailable)</li>
 <li>BM Aura paint chips: White Dove, Saybrook Sage, Simply White; Aura B&S samples</li>
 <li>SW Accessible Beige chip</li>
 <li>Rubio Monocoat Pure + Smoke 5% finish samples (Rhodes Hardwood Atlanta or Rubio direct)</li>

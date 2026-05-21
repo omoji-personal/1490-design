@@ -230,6 +230,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 28px 80px; }
 .catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
   border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
   font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+/* R2-A10: VERIFIED variant uses sage green to distinguish from CATALOG GAP / SPEC ERROR. */
+.catalog-gap-pill.catalog-verified { background: #e8efe2; color: #3a5a3a; border-color: #a4c08a; }
+/* R2-A6: room-page footer stamp matches the .last-updated pattern on the
+   build_pages.py-rendered static pages. */
+.last-updated { font-size: 12px; color: var(--muted); text-align: center;
+  padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
 /* Pinned decisions-needed banner (catalog gaps surfaced atop /sourcing + /for-annika). */
 .decisions-needed-banner { background: #fff4d6; border: 2px solid #d4a93a;
   border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
@@ -594,26 +600,26 @@ def _render_item_card(item: Item, schedule_lookup: Optional[ScheduleLookup] = No
     catalog_gap_pill = ""
     if item.catalog_status == "needs_reselection":
         extra_card_class = " catalog-gap"
-        catalog_gap_pill = '<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span>'
+        catalog_gap_pill = '<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span>'
         catalog_gap_html = (
             f'<div class="catalog-gap-banner">'
-            f'<strong>⚠ CATALOG GAP — see notes</strong>'
+            f'<strong>⚠ CATALOG GAP — needs reselection</strong>'
             f'Spec\'d SKU is no longer in the current vendor catalog with no clean successor; owner reselect required.'
             + (f' <em>{escape(item.catalog_status_note)}</em>' if item.catalog_status_note else "")
             + '</div>'
         )
     elif item.catalog_status == "spec_error":
         extra_card_class = " catalog-gap"
-        catalog_gap_pill = '<span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span>'
+        catalog_gap_pill = '<span class="catalog-gap-pill" title="spec does not exist at this vendor — wrong product class">⚠ SPEC ERROR — wrong product class</span>'
         catalog_gap_html = (
             f'<div class="catalog-gap-banner">'
-            f'<strong>⚠ CATALOG GAP — see notes</strong>'
+            f'<strong>⚠ SPEC ERROR — wrong product class</strong>'
             f'Spec\'d product does not exist in this vendor\'s catalog (wrong line/format). Owner reselect required.'
             + (f' <em>{escape(item.catalog_status_note)}</em>' if item.catalog_status_note else "")
             + '</div>'
         )
     elif item.catalog_status == "verified":
-        catalog_gap_pill = '<span class="catalog-gap-pill" style="background:#e8efe2;color:#3a5a3a;border-color:#a4c08a;" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span>'
+        catalog_gap_pill = '<span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span>'
 
     last_changed_html = (
         f'<div class="item-last-changed">Last changed {escape(last_changed)}</div>'
@@ -1041,9 +1047,12 @@ def _render_locked_row(item: Item, last_changed: Optional[str] = None,
     row_extra = " catalog-gap" if item.catalog_status in ("needs_reselection", "spec_error") else ""
     gap_pill = ""
     if item.catalog_status == "needs_reselection":
-        gap_pill = '<span class="catalog-gap-pill">⚠ CATALOG GAP</span>'
+        gap_pill = '<span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span>'
     elif item.catalog_status == "spec_error":
-        gap_pill = '<span class="catalog-gap-pill">⚠ SPEC ERROR</span>'
+        gap_pill = '<span class="catalog-gap-pill" title="spec does not exist at this vendor — wrong product class">⚠ SPEC ERROR — wrong product class</span>'
+    elif item.catalog_status == "verified":
+        # R2-A10: propagate ✓ CATALOG VERIFIED badge onto /sourcing locked rows.
+        gap_pill = '<span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span>'
     changed_meta = f" · changed {escape(last_changed)}" if last_changed else ""
     vendor_attr = ""
     if vendor_matches:
@@ -1348,6 +1357,7 @@ def render_room_page(room_label: str, rooms_filter: List[str], items: List[Item]
 <main>
 {schedule_banner_html}
 {cards_html if visible else '<p style="color:var(--muted);">No items yet for this room.</p>'}
+<p class="last-updated">Last updated {escape(meta.last_updated)}</p>
 </main>
 </body>
 </html>
@@ -2207,12 +2217,18 @@ def render_vendors_page(items: List[Item], meta: Meta,
             # R1-2: surface catalog-gap-pill on /vendors so the 5 reselection
             # items are visible at the vendor-batch-ordering surface, not only
             # on /sourcing.
+            # R2-A9/A10: distinguish needs_reselection vs spec_error labels +
+            # propagate ✓ CATALOG VERIFIED badge on rows whose spec is confirmed
+            # against the current vendor PDP.
             if it.catalog_status == "needs_reselection":
-                vendor_gap_pill = ' <span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span>'
+                vendor_gap_pill = ' <span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP — needs reselection</span>'
                 vendor_row_extra = " catalog-gap"
             elif it.catalog_status == "spec_error":
-                vendor_gap_pill = ' <span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span>'
+                vendor_gap_pill = ' <span class="catalog-gap-pill" title="spec does not exist at this vendor — wrong product class">⚠ SPEC ERROR — wrong product class</span>'
                 vendor_row_extra = " catalog-gap"
+            elif it.catalog_status == "verified":
+                vendor_gap_pill = ' <span class="catalog-gap-pill catalog-verified" title="spec confirmed against live vendor PDP">✓ CATALOG VERIFIED</span>'
+                vendor_row_extra = ""
             else:
                 vendor_gap_pill = ""
                 vendor_row_extra = ""
