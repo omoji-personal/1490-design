@@ -207,6 +207,21 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
 ul.bullet { padding-left: 22px; margin: 12px 0; }
 ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 
+/* F3: inline source citation for verified designer-page claims. */
+.source-link {
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  vertical-align: super;
+  line-height: 1;
+  white-space: nowrap;
+}
+.source-link:hover { background: var(--warm-tint); color: var(--ink); border-color: var(--accent); }
+
 .kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
 .kill-list strong { color: #7a3a2a; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
@@ -1094,7 +1109,7 @@ Lead times: Cle = 4-6 weeks. Bedrosians = 2-3 weeks. Daltile = 1 week. Order thi
 def cathie_hong_page():
     body = """
 <div class="note-card warm">
-<strong>The anchor.</strong> Cathie Hong Interiors is the spine of 1490's canon. Campbell House (Rue Magazine, 2023) is THE single reference that ties the whole direction together — kitchen, LR, dining, primary bedroom all land within the canon.
+<strong>The anchor.</strong> Cathie Hong Interiors is the spine of 1490's canon. Campbell House (Rue Magazine, 2024<a class="source-link" href="https://ruemag.com/home-tour-2/a-minimalist-home-with-japandi-vibes" target="_blank" rel="noopener" title='Rue Magazine, Home Tours, Sep 23, 2024: "A Minimalist Home with Japandi Vibes" — Cathie Hong Interiors / Campbell, CA. Photography: Margaret Austin.'>source</a>) is THE single reference that ties the whole direction together — kitchen, LR, dining, primary bedroom all land within the canon.
 </div>
 
 <section class="section-header"><h2>Why she anchors</h2></section>
@@ -1107,7 +1122,7 @@ def cathie_hong_page():
 
 <section class="section-header">
   <h2>Campbell House — THE spine project</h2>
-  <div class="count">Rue Magazine feature, 2023</div>
+  <div class="count">Rue Magazine feature, 2024 <a class="source-link" href="https://ruemag.com/home-tour-2/a-minimalist-home-with-japandi-vibes" target="_blank" rel="noopener" title='Rue Magazine, Home Tours, Sep 23, 2024: "A Minimalist Home with Japandi Vibes" — Cathie Hong Interiors.'>source</a></div>
 </section>
 <div class="grid">
   <div class="card hero">
@@ -1206,7 +1221,7 @@ def cathie_hong_page():
 <strong>Owner takeaway:</strong> If a decision feels unclear, ask "what would Cathie Hong do here?" She's the tie-breaker.
 </div>
 """
-    return page("/cathie-hong", "Cathie Hong Interiors", "The anchor designer. Campbell House (Rue Magazine) is THE spine project — kitchen, LR, dining, bedroom all canonical.", body)
+    return page("/cathie-hong", "Cathie Hong Interiors", "The anchor designer. Campbell House (Rue Magazine, 2024) is THE spine project — kitchen, LR, dining, bedroom all canonical.", body)
 
 
 def owiu_page():
@@ -1217,7 +1232,7 @@ def owiu_page():
 
 <section class="section-header"><h2>Warm projects (canon)</h2></section>
 <ul class="bullet">
-<li><strong>Palmero House</strong> (Atwater Village) — kitchen anchor</li>
+<li><strong>Palmero House</strong> (Mount Washington, LA<a class="source-link" href="https://www.dezeen.com/2022/06/13/owiu-mid-century-palmero-house-los-angeles/" target="_blank" rel="noopener" title="Dezeen, Jun 13, 2022: 'OWIU creates tranquil environment in mid-century LA home.' Palmero sits within the San Rafael Hills in LA's Mount Washington neighbourhood. Photography by Justin Chung.">source</a>) — kitchen anchor</li>
 <li><strong>Ryokan House</strong> — bath + entry anchor</li>
 <li><strong>Echo Park Hill House</strong> — LR + dining</li>
 <li><strong>Duane House</strong> — full-house warm Japandi</li>
@@ -1418,7 +1433,7 @@ def jenni_kayne_page():
     <img src="/images/jennikayne_03.jpg" alt="Lake House dining">
     <div class="meta">
       <div class="title">Lake House dining — hero quality</div>
-      <div class="caption">Light oak pedestal, cream linen, Beni Ourain. Photography Tessa Neustadt.</div>
+      <div class="caption">Light oak pedestal, cream linen, Beni Ourain. Photography Tessa Neustadt.<a class="source-link" href="https://www.jennikayne.com/blogs/ripandtan/making-jenni-kayne-lake-house" target="_blank" rel="noopener" title="Jenni Kayne — The Making of the Jenni Kayne Lake House (Rip &amp; Tan, Sep 25, 2019). 'Photos by Tessa Neustadt.'">source</a></div>
       <span class="tag">jennikayne_03</span>
     </div>
   </div>

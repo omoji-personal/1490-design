@@ -15,7 +15,7 @@ Cream linen anchor furniture. Real plants. Restrained color accent per room. Han
 
 ## Files
 
-owiu_01.jpg — Palmero House (Atwater Village) — kitchen / great-room context: oak island, plaster walls, brass pendant
+owiu_01.jpg — Palmero House (Mount Washington, LA) — kitchen / great-room context: oak island, plaster walls, brass pendant
 owiu_02.jpg — Palmero House — dining nook: oak banquette, cream textiles, brass pendant
 owiu_03.jpg — Palmero House — living room: cream linen sofa, light oak floor, plaster backdrop
 owiu_04.jpg — Echo Park Hill House — kitchen: marble counter, brass tap, warm-cream cabinetry

@@ -207,6 +207,21 @@ main { max-width: 1100px; margin: 0 auto; padding: 8px 28px 80px; }
 ul.bullet { padding-left: 22px; margin: 12px 0; }
 ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 
+/* F3: inline source citation for verified designer-page claims. */
+.source-link {
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  vertical-align: super;
+  line-height: 1;
+  white-space: nowrap;
+}
+.source-link:hover { background: var(--warm-tint); color: var(--ink); border-color: var(--accent); }
+
 .kill-list { background: var(--reject-tint); border-left: 4px solid #a85a4a; padding: 14px 20px; border-radius: 4px; margin: 16px 0; }
 .kill-list strong { color: #7a3a2a; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
@@ -323,7 +338,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
     <img src="/images/jennikayne_03.jpg" alt="Lake House dining">
     <div class="meta">
       <div class="title">Lake House dining — hero quality</div>
-      <div class="caption">Light oak pedestal, cream linen, Beni Ourain. Photography Tessa Neustadt.</div>
+      <div class="caption">Light oak pedestal, cream linen, Beni Ourain. Photography Tessa Neustadt.<a class="source-link" href="https://www.jennikayne.com/blogs/ripandtan/making-jenni-kayne-lake-house" target="_blank" rel="noopener" title="Jenni Kayne — The Making of the Jenni Kayne Lake House (Rip &amp; Tan, Sep 25, 2019). 'Photos by Tessa Neustadt.'">source</a></div>
       <span class="tag">jennikayne_03</span>
     </div>
   </div>
