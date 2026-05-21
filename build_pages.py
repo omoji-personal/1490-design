@@ -579,7 +579,10 @@ def master_page():
   </div>
 </div>
 
-<section class="section-header"><h2>Furniture brief (within $30K envelope)</h2></section>
+<section class="section-header"><h2>Furniture brief (within $55K phased envelope, 3-4 year horizon)</h2></section>
+<div class="note-card target">
+<strong>Phased (ratified 2026-05-17):</strong> master is a year 1-2 primary-room new-buy zone — bed frame, nightstands, dresser, lamps all new. No reuse-existing items in the master plan.
+</div>
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Bed frame</td><td>King, upholstered cream linen OR light oak platform</td><td>WE Andes or Article Sven oak</td></tr>
@@ -796,19 +799,27 @@ def lr_page():
   </div>
 </div>
 
-<section class="section-header"><h2>Furniture brief (within $30K envelope)</h2></section>
+<section class="section-header"><h2>Furniture brief (within $55K phased envelope, 3-4 year horizon)</h2></section>
+<div class="note-card target">
+<strong>Reuse-existing strategy (ratified 2026-05-17):</strong> primary LR pieces (sofa, accent chair, lighting) get new buys in year 1-2; select pieces — likely the coffee table (pending vintage hunt) and side tables — reuse existing furniture where condition + style allow. The $55K is the new-purchase envelope, not the all-in furniture spend. Basement is fully reuse-first (see basement note below).
+</div>
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Piece</th><th>Direction</th><th>Vendor lean</th></tr>
 <tr><td>Sofa / sectional</td><td>Cream linen Crypton/Perennials performance fabric (pet+kid proof) — Andes or Harmony</td><td>West Elm Andes / Harmony in performance linen</td></tr>
-<tr><td>Coffee table</td><td>Light oak, ~48×30, round or rectangle</td><td>Article Sven / WE Anton / Rejuvenation Mast</td></tr>
+<tr><td>Coffee table</td><td>Light oak, ~48×30, round or rectangle. <strong>Reuse-eligible</strong> if vintage hunt yields a match before year-1 buy.</td><td>Article Sven / WE Anton / Rejuvenation Mast — OR existing piece if condition + style align</td></tr>
 <tr><td>Accent chair (1)</td><td>Light oak + linen seat (Wishbone-form or paper-cord)</td><td>Article / vintage / Allbirds Atlantic Westside</td></tr>
 <tr><td>Floor lamp (1)</td><td>Brass + linen drum shade</td><td>Schoolhouse Apex / Rejuvenation Putman</td></tr>
 <tr><td>Table lamps (2)</td><td>Ceramic base + linen shade</td><td>WE / Schoolhouse</td></tr>
+<tr><td>Side tables</td><td>Light oak or vintage. <strong>Reuse-eligible</strong> where condition + style allow.</td><td>Existing / vintage / WE</td></tr>
 <tr><td>Rug</td><td>Year 1-3: flat-weave cream/oat 9×12. Year 4+: Beni Ourain.</td><td>Loloi II flat-weave</td></tr>
 <tr><td>Real plant tree</td><td>Cat-safe: kentia palm OR parlor palm OR bird of paradise (NOT fiddle leaf — toxic)</td><td>Local nursery</td></tr>
 <tr><td>Ceramic groupings</td><td>3-5 hand-thrown matte-clay pieces per shelf</td><td>Vintage / etsy / local Atlanta makers</td></tr>
 <tr><td>Bar zone (architected freestanding shelf)</td><td>Custom or floating walnut accent shelf on street-facing kitchen wall</td><td>Custom millwork (separate budget within construction $25-35K range)</td></tr>
 </table></div>
+
+<div class="note-card warm">
+<strong>Basement / lower-level — reuse existing where possible.</strong> The basement is not in the primary new-purchase scope. Existing TV stand, seating, and storage are the default; replace only where condition or style is a hard miss. The $55K envelope sizes for upstairs primary rooms (LR, master, nursery, office) + dining + outdoor — not a finished-magazine basement.
+</div>
 
 <div class="kill-list">
 <strong>LR kill list:</strong>
@@ -823,7 +834,7 @@ def lr_page():
 </ul>
 </div>
 """
-    return page("/lr", "Living Room", "The most-public room. Cream linen + light oak + brass anchor. Cocktail-hour ready. $30K furniture envelope.", body)
+    return page("/lr", "Living Room", "The most-public room. Cream linen + light oak + brass anchor. Cocktail-hour ready. $55K phased furniture envelope (3-4 year horizon, reuse where condition allows).", body)
 
 
 def nursery_page():
@@ -888,7 +899,7 @@ def nursery_page():
 </div>
 
 <div class="note-card target">
-<strong>Phase plan:</strong> nursery doesn't get built out during P1 reno (timing is post-move-back-in, when arrival is closer). P1 just preps the room: paint + floor refinish + sound insulation wall. Furniture/decor happens in the months before arrival, within the $30K envelope.
+<strong>Phase plan:</strong> nursery doesn't get built out during P1 reno (timing is post-move-back-in, when arrival is closer). P1 just preps the room: paint + floor refinish + sound insulation wall. Furniture/decor happens in the months before arrival as part of the $55K phased furniture envelope (3-4 year horizon, ratified 2026-05-17). Nursery is a year 1-2 primary-room new-buy zone — all new pieces, no reuse-existing.
 </div>
 """
     return page("/nursery", "Nursery", "Annika's domain. Same California Modern Japandi palette extended to nursery — NOT pastel, NOT primary-color. Light oak + cream + ONE accent.", body)
