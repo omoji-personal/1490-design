@@ -212,6 +212,13 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
+/* R1-2: catalog-gap-pill ported from sourcing_render_html SHARED_CSS so per-room
+ * pages can surface the same yellow callout used on /sourcing + /vendors. */
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+.last-updated { font-size: 12px; color: var(--muted); text-align: center; padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
+
 /* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
  * build_spec, plus add table overflow-x and topnav touch-target floor. */
 @media (max-width: 720px) {
@@ -314,12 +321,12 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><th>Element</th><th>Spec</th></tr>
 <tr><td>Cabinets</td><td>CDGA KraftMaid Vantage light oak Shaker, 30 LF</td></tr>
 <tr><td>Counters</td><td>Caesarstone Statuario waterfall island + perimeter</td></tr>
-<tr><td>Floor</td><td>Daltile Choice Ivory porcelain</td></tr>
+<tr><td>Floor</td><td>Daltile Choice Ivory porcelain <span class="catalog-gap-pill" title="vendor catalog moved — see /sourcing K-FLOOR-TILE">⚠ CATALOG GAP</span><br><small style="color:var(--muted);">Owner reselect at Daltile Norcross — Choice Ivory 24×24 honed porcelain not in current catalog. See <a href="/sourcing#item-K-FLOOR-TILE" style="color:var(--accent);">K-FLOOR-TILE</a>.</small></td></tr>
 <tr><td>Backsplash</td><td><strong>PIVOT:</strong> Carrara slab on range wall + Cle Sea Salt zellige counter-to-upper elsewhere (replaces prior Bejmat plan)</td></tr>
-<tr><td>Hood</td><td>Vent-A-Hood Magic Lung matte black + integrated make-up air (SKU confirmation pending CDGA)</td></tr>
+<tr><td>Hood</td><td>Vent-A-Hood PRH18-342SS family (42″ Magic Lung, matte black custom color) — order via CDGA / AJ Madison<br><small style="color:var(--muted);">Prior K2240SS was a CDGA dealer code, not a catalog SKU; current PRH18342SS-BK is the orderable canon hood. See <a href="/sourcing#item-G3-HOOD" style="color:var(--accent);">G3-HOOD</a>.</small></td></tr>
 <tr><td>Sink + faucet</td><td>Stainless undermount + Delta Trinsic Champagne Bronze</td></tr>
 <tr><td>Under-cabinet lighting</td><td>Refresh / replace</td></tr>
-<tr><td>Pendants</td><td>Keep existing 3 white domes + add matching 4th</td></tr>
+<tr><td>Pendants</td><td>Rejuvenation Pinnock Cone Aged Brass × 3 — canon-compliant successor to discontinued Schoolhouse Hyatt <span class="catalog-gap-pill" title="vendor catalog moved — see /sourcing K-PENDANTS">⚠ CATALOG GAP</span><br><small style="color:var(--muted);">Owner reselect pending. See <a href="/sourcing#item-K-PENDANTS" style="color:var(--accent);">K-PENDANTS</a>.</small></td></tr>
 <tr><td>Hardware</td><td>Rejuvenation/Forge — matte black + lacquered brass mix</td></tr>
 <tr><td>Paint</td><td>BM Aura Bath & Spa (wet-room spec for kitchen)</td></tr>
 </table></div>
@@ -371,7 +378,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <li>Marble counters: Statuario waterfall (not subway tile, not standard quartz)</li>
 <li>One warm-wood gesture: the oak island is THE wood gesture; floor stays porcelain, not oak</li>
 <li>Lacquered brass hardware mixed with matte black (5:1 brass:black ratio)</li>
-<li>Brass pendant lighting (keep existing white domes, add 4th)</li>
+<li>Brass pendant lighting — Rejuvenation Pinnock Cone Aged Brass × 3 (canon-compliant successor to discontinued Schoolhouse Hyatt; owner reselect pending — see <a href="/sourcing#item-K-PENDANTS">K-PENDANTS</a>)</li>
 <li>Backsplash slab Carrara (range wall) — bookmatched-look continuity to counter</li>
 <li>Cle Sea Salt zellige (counter-to-upper elsewhere) — texture without color</li>
 <li>One real plant at floor height — kentia palm or bird of paradise (cat-safe)</li>
@@ -396,14 +403,15 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><th>Item</th><th>Vendor / SKU</th><th>Status</th></tr>
 <tr><td>Cabinet quote</td><td>CDGA (404-361-5200) — KraftMaid Vantage light oak Shaker</td><td>Owner action: get quote, push for Vantage volume discount</td></tr>
 <tr><td>Counter slab</td><td>Caesarstone Statuario via Atlanta fab shop</td><td>Owner sources sample swatches first</td></tr>
-<tr><td>Hood</td><td>Vent-A-Hood Magic Lung matte black</td><td>Confirm exact SKU with CDGA (K2240SS appears to be dealer code, not catalog)</td></tr>
+<tr><td>Hood</td><td>Vent-A-Hood PRH18342SS-BK (42″, 900 CFM Magic Lung dual blower, matte black custom)</td><td>Order via CDGA or AJ Madison; ~$3,433 base + ~10% BK custom upcharge; 6-8 wk lead</td></tr>
 <tr><td>Backsplash</td><td>Carrara slab (range) + Cle Sea Salt zellige (rest)</td><td>Cle sample box $7 — order now (4-6 wk lead)</td></tr>
-<tr><td>Floor tile</td><td>Daltile Choice Ivory porcelain</td><td>Sample chips free — order Daltile sample set</td></tr>
+<tr><td>Floor tile <span class="catalog-gap-pill">⚠ CATALOG GAP</span></td><td>Daltile Choice Ivory porcelain (needs reselect)</td><td>Owner reselect at Daltile Norcross — Choice Ivory 24×24 honed porcelain not in current catalog (see <a href="/sourcing#item-K-FLOOR-TILE">K-FLOOR-TILE</a>)</td></tr>
 <tr><td>Faucet</td><td>Delta Trinsic in Champagne Bronze</td><td>Owner-direct via Build.com Pro account</td></tr>
-<tr><td>Pendants (4th match)</td><td>Match existing 3 white domes</td><td>Verify SKU on existing 3 + source matching unit</td></tr>
+<tr><td>Pendants <span class="catalog-gap-pill">⚠ CATALOG GAP</span></td><td>Rejuvenation Pinnock Cone Aged Brass × 3 (canon successor to discontinued Hyatt)</td><td>Owner reselect pending — see <a href="/sourcing#item-K-PENDANTS">K-PENDANTS</a></td></tr>
 <tr><td>Hardware</td><td>Rejuvenation Westmore/Pinnock + Forge matte black mix</td><td>Owner-direct via Rejuvenation trade account</td></tr>
 </table></div>
 
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>
