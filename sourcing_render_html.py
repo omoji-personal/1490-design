@@ -1263,6 +1263,7 @@ def render_site_page(items: List[Item], meta: Meta, lint_findings: List[LintFind
 </details>
 {_render_filter_bar()}
 {cards_html}
+<p class="last-updated">Last updated {escape(meta.last_updated)}</p>
 </main>
 <div style="max-width:900px;margin:0 auto 48px;padding:0 16px;">
 <details style="border:1px solid #e8e2d6;border-radius:10px;overflow:hidden;">
@@ -2277,6 +2278,7 @@ def render_vendors_page(items: List[Item], meta: Meta,
 <main>
 {canon_summary_html}
 {sections_html}
+<p class="last-updated">Last updated {escape(meta.last_updated)}</p>
 </main>
 </body>
 </html>
@@ -4276,6 +4278,7 @@ def render_suppliers_page(directory: Optional[dict] = None) -> str:
     {sections_html}
   </div>
 </div>
+<p class="last-updated">Last updated {generated}</p>
 </main>
 {SUPPLIERS_JS}
 </body>
