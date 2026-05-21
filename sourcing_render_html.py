@@ -1998,6 +1998,9 @@ VENDORS_CSS = """
 .vendor-section .status-drafted { background: #fef0d6; color: #6e4f1a; }
 .vendor-section .status-watch { background: #ece8f4; color: #4a4566; }
 .vendor-section .status-other { background: #efe7d4; color: var(--muted); }
+/* R1-2: catalog-gap rows surface against the standard vendor table row. */
+.vendor-section tr.vendor-row.catalog-gap td { background: #fff8e0; }
+.vendor-section tr.vendor-row.catalog-gap td.id-col { border-left: 3px solid #d4a93a; padding-left: 9px; }
 /* R2-UX3 + R2-T5: vendors page on mobile — relax white-space: nowrap on
  * non-SKU cells + lift in-cell anchors + status pills to 44px hit area. */
 @media (max-width: 720px) {
@@ -2201,10 +2204,22 @@ def render_vendors_page(items: List[Item], meta: Meta,
                 price_display = f"${(it.budget_target_usd or 0):,.0f}"
             changed_str = lc.get(it.id, "")
             changed_display = f"<br><small style=\"color:var(--muted);\">changed {escape(changed_str)}</small>" if changed_str else ""
+            # R1-2: surface catalog-gap-pill on /vendors so the 5 reselection
+            # items are visible at the vendor-batch-ordering surface, not only
+            # on /sourcing.
+            if it.catalog_status == "needs_reselection":
+                vendor_gap_pill = ' <span class="catalog-gap-pill" title="vendor catalog moved — see notes">⚠ CATALOG GAP</span>'
+                vendor_row_extra = " catalog-gap"
+            elif it.catalog_status == "spec_error":
+                vendor_gap_pill = ' <span class="catalog-gap-pill" title="spec does not exist at this vendor">⚠ SPEC ERROR</span>'
+                vendor_row_extra = " catalog-gap"
+            else:
+                vendor_gap_pill = ""
+                vendor_row_extra = ""
             rows_inner.append(
-                f'<tr>'
+                f'<tr class="vendor-row{vendor_row_extra}">'
                 f'<td class="id-col"><a href="/sourcing#item-{escape(it.id)}" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">{escape(it.id)}</a>{changed_display}</td>'
-                f'<td class="title-col">{escape(it.title)}</td>'
+                f'<td class="title-col">{escape(it.title)}{vendor_gap_pill}</td>'
                 f'<td class="sku-col">{escape(sku_display[:120])}</td>'
                 f'<td class="num">{price_display}</td>'
                 f'<td class="status-col"><span class="status-badge-mini {badge_class_mini}">{escape(badge_text)}</span></td>'

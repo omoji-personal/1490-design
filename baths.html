@@ -212,6 +212,12 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 .kill-list ul { margin: 8px 0 0; padding-left: 22px; }
 .kill-list li { font-size: 14px; color: #5c2a20; margin-bottom: 4px; }
 
+/* R1-2 / R1-5: catalog-gap-pill + last-updated stamp ported from /sourcing. */
+.catalog-gap-pill { display: inline-block; background: #fff4d6; color: #8a5a10;
+  border: 1px solid #d4a93a; border-radius: 999px; padding: 1px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.4px; margin-left: 6px; vertical-align: middle; }
+.last-updated { font-size: 12px; color: var(--muted); text-align: center; padding: 16px 0 8px; margin: 24px 0 0; border-top: 1px solid var(--border); }
+
 /* R1 mobile baseline — unify on 720px breakpoint to match sourcing_render +
  * build_spec, plus add table overflow-x and topnav touch-target floor. */
 @media (max-width: 720px) {
@@ -337,12 +343,12 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II One-Piece + Toto Washlet C5</td></tr>
 <tr><td>Shower walls</td><td>Cle Weathered White Bejmat 2×6 (master ONLY)</td></tr>
-<tr><td>Shower floor / drain</td><td>Daltile Choice Ivory 24×24 honed + Schluter linear drain</td></tr>
+<tr><td>Shower floor / drain</td><td>Daltile Choice Ivory 24×24 honed + Schluter linear drain <span class="catalog-gap-pill">⚠ CATALOG GAP</span><br><small style="color:var(--muted);">Daltile Choice Ivory 24×24 honed porcelain not in current catalog; owner reselect — see <a href="/sourcing#item-MB-TILE-FLOOR" style="color:var(--accent);">MB-TILE-FLOOR</a>.</small></td></tr>
 <tr><td>Shower glass</td><td>Frameless 48×36 walk-in (curbless)</td></tr>
-<tr><td>Floor</td><td>Daltile Choice Ivory + heated mat (whole bath)</td></tr>
+<tr><td>Floor</td><td>Daltile Choice Ivory + heated mat (whole bath) <span class="catalog-gap-pill">⚠ CATALOG GAP</span><br><small style="color:var(--muted);">Floor SKU shares MB-TILE-FLOOR reselect.</small></td></tr>
 <tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze (NOT chrome)</td></tr>
 <tr><td>Sconces</td><td>Schoolhouse Princeton — flanking mirror</td></tr>
-<tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed</td></tr>
+<tr><td>Medicine cabinet</td><td>Pottery Barn Hutchinson recessed <span class="catalog-gap-pill">⚠ SPEC ERROR</span><br><small style="color:var(--muted);">Hutchinson is a PB vanity line — no Hutchinson medicine cabinet exists in PB catalog. Owner reselect (PB Vintage Recessed candidate) — see <a href="/sourcing#item-MB-MEDICINE-CABINET" style="color:var(--accent);">MB-MEDICINE-CABINET</a>.</small></td></tr>
 <tr><td>Door</td><td>Pocket door — premium hardware</td></tr>
 <tr><td>Exhaust</td><td>New w/ wall vent (humidity microclimate spec)</td></tr>
 </table></div>
@@ -382,7 +388,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 <tr><td>Vanity</td><td>WE Hutchinson 36" Single, blonde oak</td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
 <tr><td>Tub</td><td>Kohler Bellwether cast iron (60") — alcove install</td></tr>
-<tr><td>Wall tile</td><td>Bedrosians Cloé wall tile (handmade zellige character)</td></tr>
+<tr><td>Wall tile</td><td>Cle Sea Salt 4×4 Petite Zellige (handmade actual zellige; locked per DESIGN_SPEC §6 — replaces prior Bedrosians Cloé character-only)</td></tr>
 <tr><td>Floor</td><td>Daltile Portfolio White 12×24 honed</td></tr>
 <tr><td>Faucet / shower</td><td>Delta Trinsic in Champagne Bronze</td></tr>
 <tr><td>Sconces</td><td>Cedar & Moss — flanking mirror</td></tr>
@@ -396,10 +402,10 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </section>
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Element</th><th>Spec</th></tr>
-<tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount</td></tr>
+<tr><td>Vanity</td><td>Pottery Barn Mason 24" wall-mount <span class="catalog-gap-pill">⚠ SPEC ERROR</span><br><small style="color:var(--muted);">PB Mason smallest is 31.5"; no 24" / no wall-mount Mason in PB catalog. Owner reselect (PB Bryston/Sabine/Sinclaire 24-30 candidates) — see <a href="/sourcing#item-BB-VANITY" style="color:var(--accent);">BB-VANITY</a>.</small></td></tr>
 <tr><td>Toilet</td><td>Toto Drake II Two-Piece + Toto Washlet C5</td></tr>
 <tr><td>Shower</td><td>32×32 neo-angle frameless enclosure</td></tr>
-<tr><td>Wall tile</td><td>Bedrosians Cloé (match hall)</td></tr>
+<tr><td>Wall tile</td><td>Cle Sea Salt 4×4 Petite Zellige (match hall — DESIGN_SPEC §6 lock; replaces prior Bedrosians Cloé)</td></tr>
 <tr><td>Floor</td><td>Daltile Portfolio (match hall)</td></tr>
 <tr><td>Mirror</td><td>Small framed circular</td></tr>
 <tr><td>Plumbing</td><td>Slab cut for shower drain ($1.5-2K of the line) + Washlet C5 dedicated GFCI</td></tr>
@@ -418,6 +424,7 @@ ul.bullet li { margin-bottom: 6px; font-size: 14.5px; }
 </ul>
 </div>
 
+<p class="last-updated">Last updated 2026-05-17</p>
 </main>
 </body>
 </html>
