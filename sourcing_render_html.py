@@ -496,8 +496,11 @@ def _render_option(opt) -> str:
     # Details block (new)
     details_html = f'<div class="option-details">{escape(opt.details)}</div>' if opt.details else ""
     # Product URL link (new)
+    # I15 — scheme-sanitize via _safe_href() before escaping: a yaml-sourced
+    # "javascript:"/"data:" product_url would otherwise survive escape() and stay
+    # clickable (XSS-class). _safe_href() neutralizes unsafe schemes to "#".
     sku_html = (
-        f'<a href="{escape(opt.product_url)}" target="_blank" rel="noopener" class="sku-link">{star}{escape(opt.sku)} →</a>'
+        f'<a href="{escape(_safe_href(opt.product_url))}" target="_blank" rel="noopener" class="sku-link">{star}{escape(opt.sku)} →</a>'
         if opt.product_url
         else f'{star}{escape(opt.sku)}'
     )
@@ -765,11 +768,17 @@ def _decisions_needed_banner(items: List[Item], variant: str = "default") -> str
             "Vendor catalog disagrees with spec on the items below. "
             "Each needs an owner reselect before re-order. Tap any item to jump to its card."
         )
+    # On /sourcing every item renders, so same-page "#item-{id}" anchors always
+    # resolve. On /for-annika only annika_loop items render as cards, so a flagged
+    # item that is NOT in the annika set (e.g. BB-VANITY, annika_loop:false) would
+    # be a dead jump-link. Cross-link the annika banner to /sourcing#item-{id},
+    # which has an anchor for every item — guarantees all links resolve. (I19 fix.)
+    href_prefix = "/sourcing" if variant == "annika" else ""
     items_html = []
     for it in flagged:
         kind = "CATALOG GAP" if it.catalog_status == "needs_reselection" else "SPEC ERROR"
         items_html.append(
-            f'<li><a href="#item-{escape(it.id)}">'
+            f'<li><a href="{href_prefix}#item-{escape(it.id)}">'
             f'<span class="gap-kind">{kind}</span>'
             f'{escape(it.id)} &middot; {escape(it.title)}'
             f'</a></li>'
@@ -804,16 +813,62 @@ _CATEGORY_LABELS = [
 
 
 def _budget_rollup_block(items: List[Item], meta: Meta) -> str:
-    """Compact summary block showing total $ budgeted across all visible items vs the
-    construction cap (read from meta.budgets.construction_cap, currently $342,000),
-    plus per-category breakdown. Skips items with null/0 budget_target_usd."""
-    cap = meta.budgets.construction_cap
-    total = sum((it.budget_target_usd or 0) for it in items)
-    delta = cap - total
-    delta_cls = "delta-positive" if delta >= 0 else "delta-negative"
-    delta_sign = "+" if delta >= 0 else "-"
+    """Compact summary block showing two INDEPENDENT budget lines:
 
-    # Per-category breakdown
+    1. Construction — sum of items whose budget_source is construction_allowance
+       OR path3_direct, compared to the construction cap (meta.budgets.construction_cap,
+       $342,000). This is the contractor/owner-facing construction cushion.
+    2. Furniture envelope — sum of items whose budget_source is furniture_envelope
+       (covers furniture + decor per the F1 phased envelope), compared to
+       meta.budgets.furniture_envelope ($55,000).
+
+    I3 fix: the prior version summed ALL items (construction + path3 + furniture
+    ~$215K) and compared that to the construction cap, displaying a phantom
+    "+$126,877 delta vs cap". That mixed two unrelated budgets. We now MIRROR the
+    split used by sourcing_lint.check_budget_rollup() and NEVER compare the
+    all-items sum to the construction cap. Per-category % is computed against the
+    matching denominator (cap for construction categories, envelope for furniture).
+    Skips items with null/0 budget_target_usd."""
+    cap = meta.budgets.construction_cap
+    furn_cap = meta.budgets.furniture_envelope
+
+    # I3 — split by budget_source, mirroring sourcing_lint.check_budget_rollup.
+    # Construction group = construction_allowance + path3_direct vs construction cap.
+    # Furniture group    = furniture_envelope (furniture + decor) vs $55K envelope.
+    _CONSTRUCTION_SOURCES = {"construction_allowance", "path3_direct"}
+    construction_items = [it for it in items if it.budget_source in _CONSTRUCTION_SOURCES]
+    furniture_items = [it for it in items if it.budget_source == "furniture_envelope"]
+
+    construction_total = sum((it.budget_target_usd or 0) for it in construction_items)
+    furniture_total = sum((it.budget_target_usd or 0) for it in furniture_items)
+
+    # Honest construction framing (I3): sourcing.yaml only ITEMIZES the design
+    # selections (~half the construction spend); the rest of the construction
+    # subtotal is allowances (demo/framing/MEP) carried in /budget. So we must NOT
+    # show "cap - tracked_selections" as a cushion — that fabricates headroom that
+    # the allowances already consume. When the authoritative TIER_B figures are
+    # present (meta.budgets.construction_subtotal / all_in), compare tracked
+    # selections to the SUBTOTAL and cite the true all-in/cushion vs cap.
+    subtotal = meta.budgets.construction_subtotal
+    all_in = meta.budgets.all_in
+    honest = subtotal is not None
+    if honest:
+        true_cushion = cap - all_in if all_in is not None else None
+        tracked_pct = (construction_total / subtotal * 100) if subtotal else 0
+    else:
+        # Fallback (legacy data / synthetic tests with no untracked allowances):
+        # the tracked items ARE the full construction set, so cap - total is valid.
+        c_delta = cap - construction_total
+        c_delta_cls = "delta-positive" if c_delta >= 0 else "delta-negative"
+        c_delta_sign = "+" if c_delta >= 0 else "-"
+
+    f_delta = furn_cap - furniture_total
+    f_delta_cls = "delta-positive" if f_delta >= 0 else "delta-negative"
+    f_delta_sign = "+" if f_delta >= 0 else "-"
+
+    # Per-category breakdown. Construction categories show % of cap; furniture/
+    # decor categories show % of the furniture envelope (never % of construction cap).
+    _FURNITURE_CATEGORIES = {"furniture", "decor_softgoods"}
     rows_html = []
     for cat_key, cat_label in _CATEGORY_LABELS:
         cat_items = [it for it in items if it.category == cat_key]
@@ -821,26 +876,61 @@ def _budget_rollup_block(items: List[Item], meta: Meta) -> str:
             continue
         cat_count = len(cat_items)
         cat_sum = sum((it.budget_target_usd or 0) for it in cat_items)
-        pct_of_cap = (cat_sum / cap * 100) if cap else 0
+        if cat_key in _FURNITURE_CATEGORIES:
+            denom = furn_cap
+            pct = (cat_sum / denom * 100) if denom else 0
+            pct_label = f"{pct:.1f}% of env."
+        else:
+            denom = cap
+            pct = (cat_sum / denom * 100) if denom else 0
+            pct_label = f"{pct:.1f}% of cap"
         rows_html.append(
             f'<tr><td>{escape(cat_label)}</td>'
             f'<td class="num">{cat_count}</td>'
             f'<td class="num">${cat_sum:,.0f}</td>'
-            f'<td class="num">{pct_of_cap:.1f}%</td></tr>'
+            f'<td class="num">{pct_label}</td></tr>'
+        )
+
+    if honest:
+        cushion_html = (
+            f'<span class="delta-positive">All-in: <strong>${all_in:,.0f}</strong> vs cap '
+            f'<strong>${cap:,.0f}</strong> &rarr; cushion <strong>${true_cushion:,.0f}</strong></span>'
+            if all_in is not None else
+            f'<span>Construction cap: <strong>${cap:,.0f}</strong></span>'
+        )
+        construction_block = (
+            f'<div class="totals-row">'
+            f'<span>Construction selections tracked here: <strong>${construction_total:,.0f}</strong> '
+            f'of <strong>${subtotal:,.0f}</strong> subtotal ({tracked_pct:.0f}%)</span>'
+            f'{cushion_html}'
+            f'</div>'
+            f'<p class="rollup-note" style="font-size:0.85em;color:var(--muted);margin:0.25rem 0 0.5rem;">'
+            f'Only itemized design <em>selections</em> are tracked on this page. The rest of the '
+            f'${subtotal:,.0f} construction subtotal is allowances (demolition, framing, MEP rough, etc.) '
+            f'carried in <a href="/budget">/budget</a> — the true cap math is all-in vs cap above.</p>'
+        )
+    else:
+        construction_block = (
+            f'<div class="totals-row">'
+            f'<span>Construction budgeted: <strong>${construction_total:,.0f}</strong></span>'
+            f'<span>Construction cap: <strong>${cap:,.0f}</strong></span>'
+            f'<span class="{c_delta_cls}">Construction cushion: {c_delta_sign}${abs(c_delta):,.0f}</span>'
+            f'</div>'
         )
 
     return (
         f'<div class="budget-rollup">'
         f'<h3>Budget rollup</h3>'
+        f'{construction_block}'
         f'<div class="totals-row">'
-        f'<span>Total budgeted: <strong>${total:,.0f}</strong></span>'
-        f'<span>Construction cap: <strong>${cap:,.0f}</strong></span>'
-        f'<span class="{delta_cls}">Delta vs cap: {delta_sign}${abs(delta):,.0f}</span>'
+        f'<span>Furniture budgeted: <strong>${furniture_total:,.0f}</strong></span>'
+        f'<span>Furniture envelope: <strong>${furn_cap:,.0f}</strong></span>'
+        f'<span class="{f_delta_cls}">Envelope remaining: {f_delta_sign}${abs(f_delta):,.0f}</span>'
         f'</div>'
         f'<div class="table-wrapper">'
         f'<table>'
         f'<thead><tr><th>Category</th><th class="num">Count</th>'
-        f'<th class="num">Budgeted</th><th class="num">% of cap</th></tr></thead>'
+        f'<th class="num">Budgeted</th><th class="num">% of budget</th></tr></thead>'
         f'<tbody>{"".join(rows_html)}</tbody>'
         f'</table>'
         f'</div>'
@@ -1602,7 +1692,9 @@ def _render_annika_cover(cover_md: str, meta: Meta, item_count: int) -> str:
             elif line.startswith("date:"):
                 date_str = line.split(":", 1)[1].strip()
             elif line.startswith("deadline:"):
-                deadline = line.split(":", 1)[1].strip()
+                # Strip any trailing "# ..." frontmatter comment so internal notes
+                # (e.g. owner-to-set placeholders) never render on the partner page.
+                deadline = line.split(":", 1)[1].split("#", 1)[0].strip()
         else:
             body_lines.append(line)
 
@@ -1796,9 +1888,12 @@ def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
             sku_flag_html = '<div class="annika-sku-flag">&#9733; SKU verification in progress &mdash; concept stands, exact model being confirmed.</div>'
 
         # URL link for SKU
+        # I15 — scheme-sanitize via _safe_href() before escaping so a malicious
+        # "javascript:"/"data:" product_url in sourcing.yaml renders as href="#"
+        # (inert) rather than a clickable XSS vector.
         sku_display = escape(pick_opt.sku)
         if pick_opt.product_url:
-            sku_display = f'<a href="{escape(pick_opt.product_url)}" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">{sku_display} &rarr;</a>'
+            sku_display = f'<a href="{escape(_safe_href(pick_opt.product_url))}" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--accent);">{sku_display} &rarr;</a>'
 
         body_html = f"""<div class="annika-brief-block">
           <div class="annika-label">Pick</div>
@@ -1824,7 +1919,7 @@ def _render_annika_item(item: "Item", questions: Dict[str, str]) -> str:
         body_content = img_html + "\n" + body_html
         grid_start = f'<div class="annika-item-body"{grid_style}>'
 
-    return f"""<article class="annika-item">
+    return f"""<article class="annika-item" id="item-{escape(item.id)}">
       <div class="annika-item-header">
         <span class="annika-item-id">{escape(item.id)}</span>
         <h3 class="annika-item-title">{escape(item.title)}</h3>
@@ -1930,7 +2025,7 @@ def render_for_annika(
   <h2>What happens next</h2>
   <p>Once you send reactions, I&rsquo;ll lock the long-lead orders &mdash; the items that need 4&ndash;8 weeks to arrive before the contractor is ready for them. You don&rsquo;t need to have an opinion on every item. &ldquo;Looks fine&rdquo; is a complete answer.</p>
   <p>A few items are marked <strong>&#9733; SKU verification in progress</strong> &mdash; I&rsquo;m confirming those products are in stock and current before ordering. The concept for each stands; just the exact model is being confirmed.</p>
-  <div class="deadline-line">Please react by Friday May 23.</div>
+  <div class="deadline-line">Please react within about a week of receiving this.</div>
   <div class="format-line">Text as you scroll, or a short voicemail. No need to reference item IDs unless you want to be precise.</div>
   <p style="margin-top: 16px;"><a href="https://1490-design-site.vercel.app/for-annika">https://1490-design-site.vercel.app/for-annika</a> &mdash; forward this link to view later.</p>
 </div>"""
@@ -1953,6 +2048,7 @@ def render_for_annika(
 {ANNIKA_GLOSSARY_HTML}
 {sections_html}
 {summary_cta_html}
+<p class="last-updated">Last updated {escape(meta.last_updated)}</p>
 </body>
 </html>
 """
@@ -2127,25 +2223,50 @@ def render_vendors_page(items: List[Item], meta: Meta,
 
     cap = meta.budgets.construction_cap
 
+    # I17 — the §5d canon-mix targets (West Elm 35-40%, etc.) are FURNISHING-share
+    # targets, so brand share must be measured against the furnishing/decor subtotal,
+    # NOT the construction cap. Computing share as bucket/$342K cap made West Elm's
+    # 35.6% of furnishing read as 6.1% of cap → structurally always-fail. We track a
+    # furnishing-only bucket sum and use the furnishing subtotal as the denominator.
+    _FURNISHING_CATEGORIES = {"furniture", "decor_softgoods"}
+
     # Compute per-vendor totals
     vendor_rows = []
     bucket_sums: Dict[str, float] = {k: 0.0 for k, _, _ in _CANON_BUCKETS}
     bucket_sums["other"] = 0.0
+    # Furnishing-only bucket sums (denominator for §5d share check).
+    bucket_furnishing_sums: Dict[str, float] = {k: 0.0 for k, _, _ in _CANON_BUCKETS}
+    bucket_furnishing_sums["other"] = 0.0
+    furnishing_subtotal = 0.0
     total_budgeted = 0.0
     for vendor, vitems in groups.items():
         sub_total = sum((it.budget_target_usd or 0) for it in vitems)
+        furnishing_sub = sum(
+            (it.budget_target_usd or 0) for it in vitems
+            if it.category in _FURNISHING_CATEGORIES
+        )
         total_budgeted += sub_total
+        furnishing_subtotal += furnishing_sub
         bucket_key = _bucket_for_vendor(vendor)
         bucket_sums[bucket_key] = bucket_sums.get(bucket_key, 0.0) + sub_total
+        bucket_furnishing_sums[bucket_key] = (
+            bucket_furnishing_sums.get(bucket_key, 0.0) + furnishing_sub
+        )
         vendor_rows.append((vendor, vitems, sub_total))
 
     vendor_rows.sort(key=lambda x: -x[2])
 
     # Build canon-mix summary block
+    # I17 — denominator is the FURNISHING/DECOR subtotal (sum of furniture + decor
+    # items), since the §5d targets are furnishing-share targets. Each bucket's $
+    # column shows its furnishing spend; the % is that bucket's share of the
+    # furnishing subtotal. Comparing bucket/$342K-cap (the old behavior) made every
+    # canon bucket structurally always-fail.
+    denom = furnishing_subtotal
     mix_rows_html = []
     for key, label, _needles in _CANON_BUCKETS:
-        sub = bucket_sums.get(key, 0.0)
-        pct = (sub / cap * 100) if cap else 0.0
+        sub = bucket_furnishing_sums.get(key, 0.0)
+        pct = (sub / denom * 100) if denom else 0.0
         lo, hi = _CANON_BUCKET_TARGETS[key]
         # Within band if pct is inside [lo - 5, hi + 5] window? Spec says >5pp outside.
         within = (pct >= lo - 5.0) and (pct <= hi + 5.0)
@@ -2160,8 +2281,8 @@ def render_vendors_page(items: List[Item], meta: Meta,
             f'<td class="{status_cls}">{status_text}</td></tr>'
         )
     # Plus the unbucketed
-    other_sum = bucket_sums.get("other", 0.0)
-    other_pct = (other_sum / cap * 100) if cap else 0.0
+    other_sum = bucket_furnishing_sums.get("other", 0.0)
+    other_pct = (other_sum / denom * 100) if denom else 0.0
     mix_rows_html.append(
         f'<tr><td>(other / TCW / specialty)</td>'
         f'<td class="num">${other_sum:,.0f}</td>'
@@ -2173,11 +2294,12 @@ def render_vendors_page(items: List[Item], meta: Meta,
     canon_summary_html = (
         f'<div class="vendor-mix-summary">'
         f'<h3>Canon brand-mix coherence</h3>'
-        f'<p class="lead">Share of ${cap:,.0f} construction cap by canon bucket vs DESIGN_SPEC '
-        f'&sect;5d targets. Warns if a bucket is more than 5pp outside its target band.</p>'
+        f'<p class="lead">Share of the ${furnishing_subtotal:,.0f} furnishing/decor subtotal by canon '
+        f'bucket vs DESIGN_SPEC &sect;5d targets. Warns if a bucket is more than 5pp outside its '
+        f'target band.</p>'
         f'<div class="table-wrapper">'
         f'<table>'
-        f'<thead><tr><th>Bucket</th><th class="num">$</th><th class="num">% of cap</th>'
+        f'<thead><tr><th>Bucket</th><th class="num">$</th><th class="num">% of furnishing</th>'
         f'<th class="num">Target</th><th>Status</th></tr></thead>'
         f'<tbody>{"".join(mix_rows_html)}</tbody>'
         f'</table>'

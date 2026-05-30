@@ -641,3 +641,122 @@ def test_run_all_lints_empty_items_no_findings():
     # machine. We assert only item-level findings (item_id != None) are empty.
     item_level = [f for f in findings if f.item_id is not None]
     assert item_level == []
+
+
+# --- B6b I25: supplier-URL freshness predicate ---
+
+from sourcing_lint import _supplier_url_status_is_fresh
+
+
+def test_url_status_descriptive_200_sentence_is_fresh():
+    """A real entry stored as a sentence beginning '200 — <domain> live; ...' must
+    be treated as fresh (the I25 false-flag bug). Exact-match-only logic rejected it."""
+    assert _supplier_url_status_is_fresh("200 — foo.com homepage live; Litze at /bath")
+    assert _supplier_url_status_is_fresh("301 — redirected to new canonical path")
+    assert _supplier_url_status_is_fresh("302 — temporary redirect, target verified")
+
+
+def test_url_status_bare_keywords_still_fresh():
+    """The original bare-keyword allow-list must keep passing."""
+    assert _supplier_url_status_is_fresh("200")
+    assert _supplier_url_status_is_fresh("ok")
+    assert _supplier_url_status_is_fresh("bot_blocked_ok")
+    assert _supplier_url_status_is_fresh("redirected_changed_path")
+
+
+def test_url_status_deceptive_404_sentence_is_stale():
+    """R2's deceptive-string concern: '200 BUT IS 404' must NOT be treated as fresh."""
+    assert not _supplier_url_status_is_fresh("200 BUT IS 404")
+    assert not _supplier_url_status_is_fresh("200 — site live but PDP returns 503")
+    assert not _supplier_url_status_is_fresh("404 not found")
+
+
+def test_url_status_sku_digits_not_mistaken_for_failure_code():
+    """A SKU like '5031' contains '503' but is not an HTTP 503 — whole-word match
+    on failure markers must keep a legit '200 — ... 5031 ...' sentence fresh."""
+    assert _supplier_url_status_is_fresh(
+        "200 — caesarstoneus.com live; 5031 Statuario Maximus product page active"
+    )
+
+
+# --- B6b I12: decided item with options but no recommended option ---
+
+def test_per_item_budget_decided_with_options_no_recommend_not_bypassed():
+    """The exact HB-TUB-FILLER bypass case: a DECIDED item that HAS options but
+    NONE are recommend=true must NOT escape the price check. Previously
+    `if not rec: continue` skipped both checks; the fix falls through to the
+    decided-item info finding so the item can't dodge budget validation."""
+    items = [_i("HBX", decided_sku="Delta Trinsic T4759-CZ Roman Tub Filler",
+                options=[_opt(sku="T4759-CZ", price=999.0, recommend=False)])]
+    items[0].budget_target_usd = 500.0
+    items[0].decision_status = "decided"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert any(f.severity == "info" and "HBX" in f.message for f in findings), \
+        f"decided+options-without-★ item must not be bypassed; got: {findings}"
+
+
+def test_per_item_budget_decided_with_options_no_recommend_approved_suppressed():
+    """approved_overshoot still suppresses the fall-through info finding."""
+    items = [_i("HBY", decided_sku="Delta Trinsic T4759-CZ",
+                options=[_opt(sku="T4759-CZ", price=999.0, recommend=False)])]
+    items[0].budget_target_usd = 500.0
+    items[0].decision_status = "decided"
+    items[0].notes = "approved_overshoot: true per owner 2026-05-16"
+    findings = check_per_item_budget_overshoot(items, _meta_simple())
+    assert not any("HBY" in f.message for f in findings)
+
+
+# --- B6b I14: metal calibration (F2 30/50/20) ---
+
+from sourcing_lint import check_metal_calibration
+
+
+def _metal_item(id_, tags):
+    return _i(id_, category="hardware", tags=tags, decided_sku="finish")
+
+
+def test_metal_calibration_on_target_is_info():
+    """A 30/50/20 warm/black/other mix is on-target → info finding, ratio in message."""
+    items = (
+        [_metal_item(f"W{i}", ["lacquered_brass"]) for i in range(3)]
+        + [_metal_item(f"B{i}", ["matte_black"]) for i in range(5)]
+        + [_metal_item(f"O{i}", ["chrome"]) for i in range(2)]
+    )
+    findings = check_metal_calibration(items)
+    assert len(findings) == 1
+    assert findings[0].severity == "info"
+    assert "30.0 / 50.0 / 20.0" in findings[0].message
+
+
+def test_metal_calibration_brass_heavy_warns():
+    """A brass-heavy mix (>5pp off target) → warning carrying the computed ratio."""
+    items = (
+        [_metal_item(f"W{i}", ["lacquered_brass"]) for i in range(8)]
+        + [_metal_item(f"C{i}", ["champagne_bronze"]) for i in range(2)]
+        + [_metal_item("B0", ["matte_black"])]
+    )
+    findings = check_metal_calibration(items)
+    assert len(findings) == 1
+    assert findings[0].severity == "warning"
+    assert "OFF-TARGET" in findings[0].message
+    # champagne_bronze counts as warm: 10 warm / 1 black / 0 other of 11
+    assert "90.9 / 9.1 / 0.0" in findings[0].message
+
+
+def test_metal_calibration_champagne_bronze_counts_as_warm():
+    """Champagne bronze is grouped with brass (warm) to mirror the published F2 audit."""
+    items = [_metal_item(f"CZ{i}", ["champagne_bronze"]) for i in range(4)]
+    findings = check_metal_calibration(items)
+    assert len(findings) == 1
+    # all 4 warm → 100/0/0
+    assert "100.0 / 0.0 / 0.0" in findings[0].message
+
+
+def test_metal_calibration_no_metal_items_no_finding():
+    """Items with no metal-finish tags don't participate → no finding at all."""
+    items = [
+        _i("P1", category="paint_finish", tags=["paint_line"], decided_sku="BM Aura"),
+        _i("W1", category="cabinetry_millwork", tags=["wood_tone"], decided_sku="white oak"),
+    ]
+    findings = check_metal_calibration(items)
+    assert findings == []

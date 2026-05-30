@@ -102,6 +102,12 @@ class Budgets:
     construction_cap: int
     furniture_envelope: int
     path3_owner_direct_ceiling: int
+    # Optional authoritative totals from TIER_B_FINAL_LOCKED.md. When present, the
+    # /sourcing rollup compares tracked construction SELECTIONS against the full
+    # construction subtotal (not the cap) and shows the true all-in/cushion — so it
+    # never fabricates a cushion from the partial set of itemized items. (I3 fix.)
+    construction_subtotal: Optional[int] = None
+    all_in: Optional[int] = None
 
 
 @dataclass
@@ -499,6 +505,8 @@ def parse_meta(raw: Dict[str, Any]) -> Meta:
             construction_cap=int(b["construction_cap"]),
             furniture_envelope=int(b["furniture_envelope"]),
             path3_owner_direct_ceiling=int(b["path3_owner_direct_ceiling"]),
+            construction_subtotal=int(b["construction_subtotal"]) if b.get("construction_subtotal") is not None else None,
+            all_in=int(b["all_in"]) if b.get("all_in") is not None else None,
         ),
         consistency_locks=ConsistencyLocks(
             brass_finish_family=c["brass_finish_family"],

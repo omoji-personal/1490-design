@@ -97,14 +97,33 @@ def render_full_tracker(items: List[Item], meta: Meta) -> str:
 
 def render_decision_queue(items: List[Item], meta: Meta, lookup: ScheduleLookup, manual_trigger_t3: bool) -> str:
     queue_items = [it for it in items if is_in_decision_queue(it, lookup, manual_trigger_t3)]
+    # I22: also surface OPEN catalog-gap reselections directly from item data. The
+    # urgency-window queue keys off construction_schedule phase dates (currently null),
+    # so without this the page reads "no items" while real reselections sit open in
+    # decide_this_week.yaml. Catalog gaps are owner-decisions regardless of phase date.
+    queue_ids = {it.id for it in queue_items}
+    flagged = [
+        it for it in items
+        if getattr(it, "catalog_status", None) in ("needs_reselection", "spec_error")
+        and it.id not in queue_ids
+    ]
     lines = [f"# Decide This Week", "", f"*Last updated: {meta.last_updated}*", ""]
-    if not queue_items:
+    if not queue_items and not flagged:
         lines.append("_No items in the decision queue right now._\n")
         return "\n".join(lines)
-    lines.append(f"{len(queue_items)} item(s) need a decision in the urgency window.\n")
-    for it in sorted(queue_items, key=lambda x: (x.urgency, x.id)):
+    if queue_items:
+        lines.append(f"{len(queue_items)} item(s) need a decision in the urgency window.\n")
+        for it in sorted(queue_items, key=lambda x: (x.urgency, x.id)):
+            lines.append("")
+            lines.append(_format_item(it))
+    if flagged:
         lines.append("")
-        lines.append(_format_item(it))
+        lines.append(f"## Catalog-gap reselections — {len(flagged)} open")
+        lines.append("")
+        lines.append("Spec'd product is no longer in the vendor catalog; owner reselect before order:")
+        for it in sorted(flagged, key=lambda x: (x.urgency, x.id)):
+            lines.append("")
+            lines.append(_format_item(it))
     return "\n".join(lines) + "\n"
 
 

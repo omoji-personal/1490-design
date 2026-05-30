@@ -51,6 +51,53 @@ def test_render_site_page_topnav_marks_sourcing_current():
     assert '<a href="/sourcing" class="current">Sourcing</a>' in html
 
 
+def test_sourcing_option_javascript_product_url_neutralized():
+    """I15: a javascript: product_url on an option must be neutralized to href="#"
+    (XSS-class). It must never render as an executable href."""
+    from sourcing_schema import Option, Item
+    from sourcing_render_html import render_site_page
+    bad = Option(
+        sku="Evil SKU", vendor="V", price_usd=100.0, image="",
+        reasoning="r", recommend=True,
+        product_url="javascript:alert(document.cookie)",
+    )
+    item = Item(
+        id="XSS-OPT", title="XSS option item", category="hardware", room="kitchen",
+        urgency="T0", lead_time_weeks=1, budget_source="construction_allowance",
+        budget_target_usd=100.0, sourcing_actor="owner_direct",
+        decision_status="options_drafted", annika_loop=False, options=[bad],
+    )
+    meta = _make_meta()
+    html = render_site_page([item], meta, lint_findings=[])
+    # Neutralized to an inert anchor; the javascript: scheme never reaches href.
+    assert 'href="#"' in html
+    assert 'href="javascript:' not in html
+    assert "javascript:alert" not in html
+
+
+def test_annika_javascript_product_url_neutralized():
+    """I15: the for-annika SKU link must also scheme-sanitize product_url so a
+    javascript: URL renders as href="#" instead of an executable link."""
+    from sourcing_schema import Option, Item
+    from sourcing_render_html import render_for_annika
+    bad = Option(
+        sku="Evil SKU", vendor="V", price_usd=100.0, image="",
+        reasoning="r", recommend=True,
+        product_url="javascript:alert(1)",
+    )
+    item = Item(
+        id="XSS-ANNIKA", title="XSS annika item", category="hardware", room="kitchen",
+        urgency="T0", lead_time_weeks=1, budget_source="construction_allowance",
+        budget_target_usd=100.0, sourcing_actor="owner_direct",
+        decision_status="options_drafted", annika_loop=True, options=[bad],
+    )
+    meta = _make_meta()
+    html = render_for_annika([item], meta)
+    assert 'href="#"' in html
+    assert 'href="javascript:' not in html
+    assert "javascript:alert" not in html
+
+
 def test_render_site_page_schedule_not_locked_badge_shows_when_phase_null():
     """When >50% of urgency-sensitive items are unlocked (all phases null), the renderer
     emits a single top-of-page banner instead of per-card badges. The data-attribute is
@@ -169,6 +216,60 @@ def test_render_for_annika_toc_generated():
     html = render_for_annika(data.items, data.meta)
     assert 'class="toc"' in html
     assert "Sections" in html
+
+
+def test_render_for_annika_item_cards_have_anchor_ids():
+    """I19: annika item cards must carry id="item-{id}" so the decisions-needed
+    banner's "#item-{id}" jump-links resolve on the same page (they were dead
+    because the <article> emitted no id)."""
+    data = load_sourcing(FIXTURES / "sample_sourcing.yaml")
+    html = render_for_annika(data.items, data.meta)
+    # G3-HOOD is an annika_loop active item rendered as a card.
+    assert 'id="item-G3-HOOD"' in html
+
+
+def test_render_for_annika_banner_jumplinks_resolve_to_card_anchors():
+    """I19 (regression fix): the /for-annika decisions banner must produce links that
+    RESOLVE for EVERY flagged item — including catalog-gap items that are NOT rendered as
+    cards on the annika page (e.g. annika_loop=False, like BB-VANITY). On /for-annika only
+    annika_loop items render as cards, so a same-page '#item-{id}' is dead for the rest;
+    the banner therefore cross-links to '/sourcing#item-{id}', which has an anchor for every
+    item. (The earlier same-page approach left BB-VANITY a dead jump-link.)"""
+    from sourcing_render_html import render_for_annika
+    rendered = _make_item("MB-TILE-FLOOR", catalog_status="needs_reselection")
+    rendered.annika_loop = True
+    not_rendered = _make_item("BB-VANITY", catalog_status="spec_error")
+    not_rendered.annika_loop = False  # flagged but never rendered as a card on /for-annika
+    meta = _make_meta()
+    html = render_for_annika([rendered, not_rendered], meta)
+    # Both flagged items get banner links that resolve on /sourcing.
+    assert 'href="/sourcing#item-MB-TILE-FLOOR"' in html
+    assert 'href="/sourcing#item-BB-VANITY"' in html
+    # The previously-dead same-page form must NOT be used for the non-rendered item.
+    assert 'href="#item-BB-VANITY"' not in html
+
+
+def test_render_for_annika_has_last_updated_stamp():
+    """M22: /for-annika carries a 'Last updated' stamp like the other shared pages,
+    sourced from meta.last_updated (not hardcoded)."""
+    from sourcing_schema import Meta, Budgets, ConsistencyLocks
+    from sourcing_render_html import render_for_annika
+    item = _make_item("X1")
+    item.annika_loop = True
+    meta = Meta(
+        last_updated="2026-09-09",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000,
+                        path3_owner_direct_ceiling=10000),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="Rejuvenation lacquered brass",
+            wood_tone="white_oak_bleach_rubio_pure",
+            tile_palette=["cle_sea_salt_zellige", "carrara_slab", "cle_bejmat_master_only"],
+            paint_line="aura",
+        ),
+    )
+    html = render_for_annika([item], meta)
+    assert 'class="last-updated"' in html
+    assert "Last updated 2026-09-09" in html
 
 
 # ---------------------------------------------------------------------------
@@ -586,27 +687,112 @@ def test_decisions_needed_banner_singular_grammar():
 # ---------------------------------------------------------------------------
 
 def test_budget_rollup_block_renders_totals_and_categories():
-    """D2: rollup shows total, cap, delta, and per-category breakdown."""
+    """D2 + I3: rollup shows the construction and furniture-envelope lines
+    INDEPENDENTLY (never the all-items sum vs the construction cap), plus a
+    per-category breakdown.
+
+    Items: A,B,C use construction_allowance (default in _make_item), D uses
+    furniture_envelope. So construction total = $300 (A+B+C), furniture total
+    = $100 (D). Construction cushion = $342,000 - $300 = $341,700; envelope
+    remaining = $55,000 - $100 = $54,900."""
     from sourcing_render_html import render_site_page
     items = [
-        _make_item("A", category="plumbing_fixture"),  # 100
-        _make_item("B", category="plumbing_fixture"),  # 100
-        _make_item("C", category="lighting_fixture"),  # 100
-        _make_item("D", category="furniture"),         # 100
+        _make_item("A", category="plumbing_fixture"),  # 100, construction
+        _make_item("B", category="plumbing_fixture"),  # 100, construction
+        _make_item("C", category="lighting_fixture"),  # 100, construction
+        _make_item("D", category="furniture"),         # 100, furniture
     ]
+    items[3].budget_source = "furniture_envelope"
     meta = _make_meta()
     html = render_site_page(items, meta, lint_findings=[])
     assert "budget-rollup" in html
-    # Total = $400, cap $342,000, delta = $341,600 positive
-    assert "Total budgeted:" in html
-    assert "$400" in html
+    # Two independent budget lines.
+    assert "Construction budgeted:" in html
+    assert "$300" in html
     assert "$342,000" in html
+    assert "Construction cushion:" in html
+    assert "$341,700" in html
+    assert "Furniture budgeted:" in html
+    assert "Furniture envelope:" in html
+    assert "$55,000" in html
+    assert "Envelope remaining:" in html
+    assert "$54,900" in html
     assert "delta-positive" in html
-    assert "$341,600" in html
+    # The all-items sum ($400) is NEVER compared to the construction cap. The
+    # phantom "+$341,600 delta vs cap" must not appear.
+    assert "$341,600" not in html
     # Per-category rows: plumbing (2), lighting (1), furniture (1)
     assert "Plumbing" in html
     assert "Lighting" in html
     assert "Furniture" in html
+
+
+def test_budget_rollup_construction_line_excludes_furniture_items():
+    """I3 (CRITICAL): the construction rollup line must sum ONLY construction_allowance
+    + path3_direct items and compare to the construction cap. Furniture-envelope items
+    must NOT inflate the construction total, and the all-items sum must never be shown
+    against the construction cap."""
+    from sourcing_render_html import _budget_rollup_block
+    # $5,000 of construction + $40,000 of furniture envelope.
+    constr_a = _make_item("CA", category="plumbing_fixture")
+    constr_a.budget_target_usd = 3000.0
+    constr_a.budget_source = "construction_allowance"
+    constr_b = _make_item("CB", category="tile_stone")
+    constr_b.budget_target_usd = 2000.0
+    constr_b.budget_source = "path3_direct"
+    furn = _make_item("FA", category="furniture")
+    furn.budget_target_usd = 40000.0
+    furn.budget_source = "furniture_envelope"
+    meta = _make_meta()
+    html = _budget_rollup_block([constr_a, constr_b, furn], meta)
+    # Construction total = $5,000 (NOT $45,000). Cushion = $342,000 - $5,000 = $337,000.
+    assert "Construction budgeted:" in html
+    assert "$5,000" in html
+    assert "$337,000" in html
+    # The $45,000 all-items sum must never appear as a construction figure.
+    assert "$45,000" not in html
+    # Furniture line is reported separately: $40,000 vs the $55,000 envelope.
+    assert "Furniture budgeted:" in html
+    assert "$40,000" in html
+    assert "$55,000" in html
+    assert "$15,000" in html  # envelope remaining = 55,000 - 40,000
+
+
+def test_budget_rollup_honest_construction_framing_when_subtotal_present():
+    """I3 (CRITICAL, honest framing): when meta.budgets.construction_subtotal + all_in
+    are present (the real page), the construction line must compare tracked SELECTIONS
+    to the construction SUBTOTAL (not the cap), and cite the true all-in vs cap cushion.
+    It must NEVER show 'cap - tracked_selections' as a cushion (that fabricates headroom
+    the allowances already consume — the old +$181,936 phantom)."""
+    from sourcing_render_html import _budget_rollup_block
+    from sourcing_schema import Meta, Budgets, ConsistencyLocks
+    # $160,000 of itemized construction selections; full subtotal $312,398; all-in $341,768.
+    constr = _make_item("C1", category="plumbing_fixture")
+    constr.budget_target_usd = 160000.0
+    constr.budget_source = "construction_allowance"
+    meta = Meta(
+        last_updated="2026-05-30",
+        budgets=Budgets(construction_cap=342000, furniture_envelope=55000,
+                        path3_owner_direct_ceiling=10000,
+                        construction_subtotal=312398, all_in=341768),
+        consistency_locks=ConsistencyLocks(
+            brass_finish_family="x", wood_tone="x",
+            tile_palette=["a"], paint_line="aura"),
+    )
+    html = _budget_rollup_block([constr], meta)
+    # Tracked selections compared to the SUBTOTAL, not the cap.
+    assert "Construction selections tracked here:" in html
+    assert "$160,000" in html
+    assert "$312,398" in html          # the subtotal denominator
+    # The authoritative cap math: all-in vs cap -> true cushion $232.
+    assert "$341,768" in html
+    assert "$342,000" in html
+    assert "$232" in html
+    # The phantom "cap - tracked" cushion ($342,000 - $160,000 = $182,000) must NOT appear.
+    assert "$182,000" not in html
+    assert "Construction cushion:" not in html  # the misleading label is gone on the honest path
+    # Explanatory note that selections are only part of the construction spend.
+    assert "allowances" in html
 
 
 def test_budget_rollup_handles_null_budget_gracefully():
@@ -778,6 +964,57 @@ def test_render_vendors_page_canon_coherence_warns_when_outside_band():
     assert "vendor-mix-summary" in html
     # All canon buckets should be flagged out-of-band (0% vs 35-40 etc)
     assert "5pp outside" in html
+
+
+def test_render_vendors_page_canon_share_uses_furnishing_subtotal_denominator():
+    """I17: canon brand-mix share must be measured against the FURNISHING/DECOR
+    subtotal, not the $342K construction cap. A West Elm furniture bucket that is
+    ~37% of furnishing must read ~37% (within its 35-40% §5d band), not ~6% of cap
+    (which would always-fail). Construction items must not dilute the furnishing
+    denominator."""
+    from sourcing_render_html import render_vendors_page
+    from sourcing_schema import Item, Option
+
+    def _furn(item_id, vendor, price):
+        opt = Option(sku=f"{vendor}-{item_id}", vendor=vendor, price_usd=price,
+                     image="", reasoning="r", recommend=True)
+        return Item(
+            id=item_id, title=item_id, category="furniture", room="lr",
+            urgency="T1", lead_time_weeks=4, budget_source="furniture_envelope",
+            budget_target_usd=price, sourcing_actor="owner_furniture",
+            decision_status="options_drafted", annika_loop=False, options=[opt],
+        )
+
+    # Furnishing subtotal = $10,000. West Elm = $3,700 → 37% (in 35-40% band).
+    items = [
+        _furn("WE1", "West Elm", 3700.0),
+        _furn("ART1", "Article", 2300.0),
+        _furn("SH1", "Schoolhouse", 1500.0),
+        _furn("PB1", "Pottery Barn", 800.0),
+        _furn("FERM1", "ferm LIVING", 300.0),
+        _furn("VIN1", "Vintage finds", 1000.0),
+        _furn("OTHER1", "Some Specialty Shop", 400.0),
+    ]
+    # Add a large CONSTRUCTION item that must NOT inflate the furnishing denominator.
+    constr_opt = Option(sku="big-tile", vendor="Some Specialty Shop", price_usd=50000.0,
+                        image="", reasoning="r", recommend=True)
+    items.append(Item(
+        id="BIG-TILE", title="Big tile job", category="tile_stone", room="kitchen",
+        urgency="T0", lead_time_weeks=2, budget_source="construction_allowance",
+        budget_target_usd=50000.0, sourcing_actor="tcw",
+        decision_status="options_drafted", annika_loop=False, options=[constr_opt],
+    ))
+    meta = _make_meta()
+    html = render_vendors_page(items, meta)
+    # Denominator is the $10,000 furnishing subtotal, not $342K cap (and the $50K
+    # construction item does not enter the furnishing denominator).
+    assert "$10,000 furnishing/decor subtotal" in html
+    assert "% of furnishing" in html
+    # West Elm reads 37.0% (in 35-40% band) and is within band, not always-fail.
+    assert "37.0%" in html
+    # The header must NOT describe share as "% of cap" / "$342,000 construction cap".
+    assert "construction cap" not in html
+    assert "% of cap</th>" not in html
 
 
 def test_render_vendors_page_includes_vendors_topnav_link():

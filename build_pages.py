@@ -823,7 +823,7 @@ def lr_page():
 <tr><td>Sofa / sectional</td><td>Cream linen Crypton/Perennials performance fabric (pet+kid proof) — Andes or Harmony</td><td>West Elm Andes / Harmony in performance linen</td></tr>
 <tr><td>Coffee table</td><td>Light oak, ~48×30, round or rectangle. <strong>Reuse-eligible</strong> if vintage hunt yields a match before year-1 buy.</td><td>Article Sven / WE Anton / Rejuvenation Mast — OR existing piece if condition + style align</td></tr>
 <tr><td>Accent chair (1)</td><td>Light oak + linen seat (Wishbone-form or paper-cord)</td><td>Article / vintage / Allbirds Atlantic Westside</td></tr>
-<tr><td>Floor lamp (1)</td><td>Matte-dark column lamp w/ linen drum shade (per §6a F2 rebalance — LR's designated matte-dark moment; LR-SCONCES holds the warm-metal anchor)</td><td>Rejuvenation Cylinder Floor Lamp (ORB) ★ — Vibia Sticks premium alt — vintage brass torchiere budget-vintage alt</td></tr>
+<tr><td>Floor lamp (1)</td><td>Matte-dark column lamp w/ linen drum shade (per §6a F2 rebalance — LR's designated matte-dark moment; LR-SCONCES holds the warm-metal anchor)</td><td>Rejuvenation Cylinder Floor Lamp (ORB) ★ — Cedar &amp; Moss brass premium alt — vintage brass torchiere budget alt</td></tr>
 <tr><td>Table lamps (2)</td><td>Ceramic base + linen shade</td><td>WE / Schoolhouse</td></tr>
 <tr><td>Side tables</td><td>Light oak or vintage. <strong>Reuse-eligible</strong> where condition + style allow.</td><td>Existing / vintage / WE</td></tr>
 <tr><td>Rug</td><td>Year 1-3: flat-weave cream/oat 9×12. Year 4+: Beni Ourain.</td><td>Loloi II flat-weave</td></tr>
@@ -1632,6 +1632,15 @@ def rejected_page():
 
 
 def budget_page():
+    # ---------------------------------------------------------------------------
+    # B6b I18 — WARNING: every budget figure rendered below is HARDCODED and
+    # duplicates the source-of-truth in scope/TIER_B_FINAL_LOCKED.md (cap, all-in,
+    # cushion, construction subtotal, the §5d group bands / G1-G7 deltas). There is
+    # NO programmatic reconciliation against the SoT — this is a drift risk. Keep it
+    # in sync MANUALLY until a budget.yaml SoT exists.
+    # Last reconciled 2026-05-30: cap 342,000 / all-in 341,768 / cushion 232 /
+    # construction subtotal 312,398.
+    # ---------------------------------------------------------------------------
     body = """
 <div class="note-card warm">
 <strong>The honest reckoning.</strong> What the renovation costs at Atlanta 2026 market, after two rounds of multi-agent audit. The cap moved up $17K on 2026-05-15 — not because scope grew, but because deeper itemization surfaced costs the prior sheet was carrying implicitly.
@@ -1671,6 +1680,9 @@ def budget_page():
 
 <div class="table-wrapper"><table class="spec-table">
 <tr><th>Group</th><th>Sheet</th><th>Honest (UP-only)</th><th>Delta</th></tr>
+<!-- B6b I1: G1 honest = $200,800 heading; itemization sums $194,080, see TIER_B I1 reconciliation.
+     Number left unchanged here on purpose — budget.html must match TIER_B's final G1 heading,
+     which stays $200,800; the TIER_B batch owns the heading-vs-itemization reconciliation. -->
 <tr><td>G1 Interior</td><td>$145,930</td><td>$200,800</td><td>+$54,870</td></tr>
 <tr><td>G2 Baths</td><td>$42,000</td><td>$55,900</td><td>+$13,900</td></tr>
 <tr><td>G3 Kitchen</td><td>$33,000</td><td>$40,800</td><td>+$7,800</td></tr>

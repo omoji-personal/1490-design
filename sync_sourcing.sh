@@ -24,10 +24,13 @@ else
   echo "(no HomeAI changes)"
 fi
 
-# Commit site (sourcing.html + any image additions)
+# Commit site (all sourcing-derived pages + any image additions)
+# I16 — build_sourcing.py also regenerates for-annika.html, vendors.html,
+# suppliers.html, and the 6 sourcing-<room>.html pages; the prior `git add`
+# only staged sourcing.html, so those silently went stale on deploy.
 cd "$SITE_DIR"
-if git status --porcelain | grep -qE "sourcing\.html|images/sourcing/"; then
-  git add sourcing.html images/sourcing/ 2>/dev/null || true
+if git status --porcelain | grep -qE "sourcing\.html|for-annika\.html|vendors\.html|suppliers\.html|sourcing-.*\.html|images/sourcing/"; then
+  git add sourcing.html for-annika.html vendors.html suppliers.html sourcing-*.html images/sourcing/ 2>/dev/null || true
   git commit -m "$MSG" || echo "(no site changes)"
   git push origin main
 else

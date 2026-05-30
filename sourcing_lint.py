@@ -288,6 +288,15 @@ def check_hardware_mix(items: List[Item]) -> List[LintFinding]:
 
     This prevents noise for small baths (1-2 hardware items) while still
     catching rooms with a real hardware-count where a second finish is expected.
+
+    B6b M13 — SUPERSEDED by check_metal_calibration (F2). This per-room ≥brass /
+    ≥matte-black balance rule encodes the OLD 50/35/15 "two-finishes-per-room"
+    expectation, which false-flags rooms that are F2-correct under the ratified
+    30/50/20 brass/matte-black/other model (e.g. a deliberately matte-black-heavy
+    bath now reads as "unbalanced"). It is intentionally NO LONGER wired into
+    run_all_lints(). The function body is retained only so existing unit tests
+    keep passing; do not re-add it to the pipeline — the site-wide metal balance
+    is now governed by check_metal_calibration() against the F2 target.
     """
     findings = []
     by_room: dict = {}
@@ -315,6 +324,146 @@ def check_hardware_mix(items: List[Item]) -> List[LintFinding]:
                 ),
                 item_id=None,
             ))
+    return findings
+
+
+# B6b I14 — F2 metal-calibration target (ratified 2026-05-17): the site-wide
+# decorative-metal mix should sit near 30 / 50 / 20 warm / matte-black / other.
+# Stored as fractions so the tolerance comparison is unit-free.
+METAL_CALIBRATION_TARGET = {"warm": 0.30, "black": 0.50, "other": 0.20}
+METAL_CALIBRATION_TOLERANCE_PP = 5.0  # percentage-points slack before we warn
+
+# Finish tags (cross_room_consistency) bucketed into the three F2 families.
+# WARM = brass family PLUS champagne bronze. Champagne bronze is grouped with
+# brass deliberately to mirror the published F2 audit, which counts the 9 Delta
+# Trinsic Champagne Bronze plumbing items inside the "brass floor" (see
+# decisions.html decision 4 / build_pages.py §6a). BLACK = matte black. OTHER =
+# cool metals (chrome / nickel / stainless) that are neither warm nor black.
+_METAL_WARM_TAGS = frozenset({
+    "lacquered_brass", "unlacquered_brass", "aged_brass", "natural_brass",
+    "satin_brass", "antique_brass", "champagne_bronze",
+})
+_METAL_BLACK_TAGS = frozenset({"matte_black"})
+_METAL_OTHER_TAGS = frozenset({
+    "chrome", "polished_nickel", "brushed_nickel", "satin_nickel", "stainless",
+})
+
+
+def check_metal_calibration(items: List[Item]) -> List[LintFinding]:
+    """Info/warning: compute the site-wide metal-finish ratio and compare it to the
+    ratified F2 target of 30 / 50 / 20 warm / matte-black / other.
+
+    METHODOLOGY (clearly documented so the number is reproducible):
+    -------------------------------------------------------------------------
+    * Universe: every Item that carries AT LEAST ONE metal-finish tag in its
+      `cross_room_consistency` list. Items with no metal tag (paint, wood,
+      tile, fabric, untagged rows) are NOT counted — they don't participate in
+      the decorative-metal palette.
+    * Bucketing is by `cross_room_consistency` tag, checked in priority order
+      warm > black > other (an item tagged both brass AND matte-black counts as
+      warm, since the warm read dominates perception). The tag → bucket map:
+        - WARM  = _METAL_WARM_TAGS  (lacquered/aged/natural/satin brass,
+                  unlacquered brass, antique brass, AND champagne_bronze —
+                  champagne bronze is grouped with brass to mirror the published
+                  F2 audit which counts the Delta Trinsic CZ plumbing items in
+                  the brass floor).
+        - BLACK = _METAL_BLACK_TAGS (matte_black).
+        - OTHER = _METAL_OTHER_TAGS (chrome / polished-nickel / brushed-nickel /
+                  satin-nickel / stainless — cool metals that are neither warm
+                  nor black).
+    * Ratio = each bucket count / total tagged-item count, expressed in percent.
+    -------------------------------------------------------------------------
+    NOTE: this tag-based count is a DIFFERENT (and more conservative) lens than
+    the published 52.6 / 39.7 / 7.7 figure in build_pages.py / decisions.html,
+    which was a hand-rolled item-level material audit. The two methodologies are
+    not expected to match exactly; this lint exists to give a reproducible,
+    code-derived signal and to surface drift away from the 30/50/20 target.
+
+    Severity:
+      - No metal-tagged items at all → no finding (nothing to calibrate).
+      - Any bucket more than METAL_CALIBRATION_TOLERANCE_PP (~5 pp) outside its
+        target share → a single `warning` (the computed ratio is in the message).
+      - Otherwise → a single `info` confirming the ratio is on-target.
+    The computed ratio is ALWAYS embedded in the finding message so it's visible
+    in lint output regardless of severity.
+    """
+    findings: List[LintFinding] = []
+    warm = black = other = 0
+    for item in items:
+        tags = set(item.cross_room_consistency or [])
+        if tags & _METAL_WARM_TAGS:
+            warm += 1
+        elif tags & _METAL_BLACK_TAGS:
+            black += 1
+        elif tags & _METAL_OTHER_TAGS:
+            other += 1
+    total = warm + black + other
+    if total == 0:
+        return findings  # no metal-tagged items — nothing to calibrate
+
+    pct_warm = 100.0 * warm / total
+    pct_black = 100.0 * black / total
+    pct_other = 100.0 * other / total
+    ratio_str = f"{pct_warm:.1f} / {pct_black:.1f} / {pct_other:.1f}"
+    target_str = "30 / 50 / 20"
+
+    # Per-bucket deviation from target (in percentage points).
+    dev_warm = abs(pct_warm - METAL_CALIBRATION_TARGET["warm"] * 100)
+    dev_black = abs(pct_black - METAL_CALIBRATION_TARGET["black"] * 100)
+    dev_other = abs(pct_other - METAL_CALIBRATION_TARGET["other"] * 100)
+    max_dev = max(dev_warm, dev_black, dev_other)
+
+    if max_dev > METAL_CALIBRATION_TOLERANCE_PP:
+        findings.append(LintFinding(
+            severity="warning",
+            message=(
+                f"metal calibration OFF-TARGET: computed warm/black/other = "
+                f"{ratio_str} (n={total} metal-tagged items) vs F2 target "
+                f"{target_str}; max deviation {max_dev:.1f}pp > "
+                f"{METAL_CALIBRATION_TOLERANCE_PP:.0f}pp tolerance — rebalance "
+                f"toward more matte black (anti-pattern: 'lacquered brass throughout'). "
+                f"NOTE: this is a tag-based count over metal-tagged items only; it "
+                f"differs by methodology from the hand-audited item-material figure "
+                f"published on /decisions + /materials — owner to reconcile which "
+                f"number to publish (see audit I13)"
+            ),
+            item_id=None,
+        ))
+    else:
+        findings.append(LintFinding(
+            severity="info",
+            message=(
+                f"metal calibration on-target: computed warm/black/other = "
+                f"{ratio_str} (n={total} metal-tagged items) within "
+                f"{METAL_CALIBRATION_TOLERANCE_PP:.0f}pp of F2 target {target_str}"
+            ),
+            item_id=None,
+        ))
+    return findings
+
+
+def check_star_image(items: List[Item]) -> List[LintFinding]:
+    """I11: a recommended (★, recommend=true) option should carry a product image.
+
+    When a ★ pick has image:'' it renders text-only on the room/sourcing pages
+    while the demoted alternates below it show photos — a contractor-confusion
+    risk, and a silent regression vector whenever a ★ is flipped to a new SKU
+    without sourcing its photo. Warns (not errors) so the build still succeeds;
+    the 5 known F2-rebalance picks are already FLAG-FOR-OWNER in sourcing.yaml."""
+    findings: List[LintFinding] = []
+    for item in items:
+        for opt in (getattr(item, "options", None) or []):
+            if getattr(opt, "recommend", False) and not (getattr(opt, "image", "") or "").strip():
+                sku = (getattr(opt, "sku", "") or "")[:60]
+                findings.append(LintFinding(
+                    severity="warning",
+                    message=(
+                        f"{item.id}: recommended (★) option '{sku}' has no product "
+                        f"image (image:'') — renders text-only while demoted alternates "
+                        f"show photos. Source a product photo for the ★ pick."
+                    ),
+                    item_id=item.id,
+                ))
     return findings
 
 
@@ -554,11 +703,9 @@ def check_per_item_budget_overshoot(items: List[Item], meta: Meta) -> List[LintF
     for item in items:
         if item.budget_target_usd <= 0:
             continue
-        if item.options:
-            # Standard path: check the ★ recommended option
-            rec = next((o for o in item.options if o.recommend), None)
-            if not rec:
-                continue
+        # Standard path: a ★ recommended option exists → validate its price.
+        rec = next((o for o in item.options or [] if o.recommend), None)
+        if rec is not None:
             if rec.price_usd > item.budget_target_usd * 1.05:
                 if "approved_overshoot" in (item.notes or "").lower():
                     continue
@@ -572,15 +719,23 @@ def check_per_item_budget_overshoot(items: List[Item], meta: Meta) -> List[LintF
                     ),
                     item_id=item.id,
                 ))
-        elif item.decision_status == "decided" and item.decided_sku:
-            # Decided item with no options array — actual price is unknown, can't validate
+            continue
+
+        # B6b Fix I12 — no recommended option. Previously `if not rec: continue`
+        # bypassed BOTH price checks for a decided item that HAS options but with
+        # all recommend=false (the exact HB-TUB-FILLER case the guard exists to
+        # catch). Fall through to the decided-item check instead of skipping, so a
+        # decided item can't escape budget validation merely by lacking a ★ pick.
+        # (The yaml is being corrected separately to set recommend:true; this hardens
+        # the lint so the bypass can't recur.)
+        if item.decision_status == "decided" and item.decided_sku:
             if "approved_overshoot" in (item.notes or "").lower():
                 continue
             findings.append(LintFinding(
                 severity="info",
                 message=(
                     f"{item.id} is decided ({item.decided_sku}) with budget "
-                    f"${item.budget_target_usd:.0f} but has no priced option — "
+                    f"${item.budget_target_usd:.0f} but has no ★-recommended priced option — "
                     f"actual price unknown, budget compliance unverifiable"
                 ),
                 item_id=item.id,
@@ -689,6 +844,46 @@ def check_catalog_status_callouts(items: List[Item], meta: Meta) -> List[LintFin
     return findings
 
 
+# R2 Fix C3 — exact-match allow-list for the bare-keyword status forms
+# ("ok", "bot_blocked_ok", etc.). Codex flagged that naive prefix matching on
+# "200" silently passed strings like "200 BUT IS 404".
+FRESH_STATUS_STRINGS = {
+    "200", "301", "302", "ok", "bot_blocked_ok",
+    "redirected_changed_path", "redirected_brand_change",
+}
+# B6b Fix I25 — real supplier_directory entries store a descriptive sentence that
+# BEGINS with the HTTP code, e.g. "200 — brizo.com homepage live; Litze collection
+# at ...". The exact-match set above false-flagged 31 well-verified suppliers as
+# stale because those sentences aren't literal "200"/"301"/"302". A status that
+# STARTS WITH 200/301/302 as a word (^(200|301|302)\b) is treated as fresh. The
+# trailing \b matches the code as a token (followed by space / dash / em-dash),
+# not e.g. "2004".
+_FRESH_STATUS_PREFIX = re.compile(r"^(200|301|302)\b")
+# R2's deceptive-string concern ("200 BUT IS 404") is preserved by a failure-marker
+# veto: a status that begins 200/301/302 but ALSO names a hard failure token as a
+# WHOLE WORD (404/410/500/503/dead/broken/gone) is still treated as stale. Whole-word
+# matching is required so a product SKU like "5031" (which contains "503") in a legit
+# "200 — ..." sentence is NOT mistaken for an HTTP 503.
+_FAILURE_MARKER_RE = re.compile(r"\b(404|410|500|503|dead|broken|gone)\b")
+
+
+def _supplier_url_status_is_fresh(raw: str) -> bool:
+    """True if a string url_status represents a fresh/verified URL.
+
+    Accepts the bare-keyword forms in FRESH_STATUS_STRINGS, and any descriptive
+    sentence that begins with 200/301/302 as a word — UNLESS that sentence also
+    names a hard failure marker as a whole word (the R2 deceptive-string veto).
+    """
+    s_lower = raw.strip().lower()
+    if s_lower in FRESH_STATUS_STRINGS:
+        return True
+    if _FRESH_STATUS_PREFIX.match(s_lower):
+        if _FAILURE_MARKER_RE.search(s_lower):
+            return False
+        return True
+    return False
+
+
 def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> List[LintFinding]:
     """Surface supplier_directory.yaml entries whose URLs failed verification.
 
@@ -711,13 +906,6 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
     except Exception:
         return findings
     suppliers = (data or {}).get("suppliers", []) or []
-    # R2 Fix C3 — exact-match against allow-list. Codex flagged that prefix
-    # matching on "200" silently passed strings like "200 BUT IS 404". Lint
-    # only treats these explicit values as fresh; anything else is flagged.
-    FRESH_STATUS_STRINGS = {
-        "200", "301", "302", "ok", "bot_blocked_ok",
-        "redirected_changed_path", "redirected_brand_change",
-    }
     stale = []
     # R4 Fix I3 — track suppliers tagged `redirected_changed_path` whose
     # `url` has NOT been updated to the canonical `recommended_url`. Codex
@@ -742,8 +930,7 @@ def check_supplier_directory_url_freshness(items: List[Item], meta: Meta) -> Lis
                 # post-redirect target). url_verified=true is the signal.
                 continue
             if isinstance(url_status, str):
-                s_lower = url_status.strip().lower()
-                if s_lower in FRESH_STATUS_STRINGS:
+                if _supplier_url_status_is_fresh(url_status):
                     continue
             # Otherwise: verified but with a non-200 status → flag.
             stale.append(s.get("id", "?"))
@@ -874,7 +1061,12 @@ def run_all_lints(items: List[Item], meta: Meta) -> List[LintFinding]:
     findings += check_wood_tone(items, meta.consistency_locks.wood_tone)
     findings += check_tile_palette(items, meta.consistency_locks.tile_palette)
     findings += check_paint_line(items, meta.consistency_locks.paint_line)
-    findings += check_hardware_mix(items)
+    # B6b M13 — check_hardware_mix() is intentionally NOT wired here: its per-room
+    # ≥2/≥3 two-finish rule encodes the superseded 50/35/15 model and false-flags
+    # F2-correct rooms. Site-wide metal balance is now governed by
+    # check_metal_calibration() against the ratified 30/50/20 target.
+    findings += check_metal_calibration(items)
+    findings += check_star_image(items)
     findings += check_budget_rollup(items, meta)
     findings += check_no_fictional_sku_urls(items, meta)
     findings += check_no_collection_landing_urls(items, meta)

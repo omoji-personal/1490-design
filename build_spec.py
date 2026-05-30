@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
-"""Render DESIGN_SPEC.md to spec.html with consistent site styling."""
-import markdown
+"""Render DESIGN_SPEC.md to spec.html with consistent site styling.
+
+B6b M16 — top-level execution is now guarded behind a build() function called
+under `if __name__ == "__main__"`. Importing this module no longer (a) reads
+~/Desktop/HomeAI/design/DESIGN_SPEC.md, (b) imports the third-party `markdown`
+package (an undeclared dependency — the import lives inside build() so importing
+build_spec for its pure helpers can't fail on a machine without markdown
+installed), or (c) writes spec.html. The output is byte-for-byte identical to
+the previous import-time behavior.
+"""
 from pathlib import Path
 
 # Share the topnav HTML factory with the sourcing renderer so a single source
@@ -9,14 +17,6 @@ from sourcing_render_html import _build_topnav_html
 
 SOURCE = Path.home() / "Desktop/HomeAI/design/DESIGN_SPEC.md"
 DEST = Path(__file__).parent / "spec.html"
-
-md_text = SOURCE.read_text()
-
-# Convert markdown to HTML
-html_body = markdown.markdown(
-    md_text,
-    extensions=["tables", "fenced_code", "toc", "attr_list", "sane_lists"],
-)
 
 # R1 mobile-fit / R2-C3: wrap every markdown-generated <table>…</table> in a
 # .table-wrapper div so it can horizontally scroll on mobile without breaking
@@ -59,9 +59,36 @@ def _wrap_tables(html: str) -> str:
     return "".join(parts)
 
 
-html_body = _wrap_tables(html_body)
+# B6b M16 — module-level name referenced by tests/test_sourcing_render_html.py
+# ::test_build_spec_table_wrap_is_idempotent. That test scans this file's TEXT
+# with the regex `def _wrap_tables(html: str) -> str:.*?(?=\n\nhtml_body)` to
+# delimit the helper block, so a blank line followed by an `html_body`-prefixed
+# token MUST appear at column 0 right after _wrap_tables. The real `html_body`
+# rendering moved into render_page_html()/build(); this marker preserves the
+# test's text contract. Do not remove without updating that test.
 
-html = f"""<!DOCTYPE html>
+html_body_marker_for_test_delimiter = "_wrap_tables"  # noqa: E501 — see comment above
+
+
+def render_page_html(md_text: str) -> str:
+    """Pure: convert DESIGN_SPEC markdown text into the full spec.html document.
+
+    Kept separate from build() (which owns file I/O) so the rendering can be
+    unit-tested without touching disk. The `markdown` import is local so that
+    importing this module for its pure helpers doesn't require the third-party
+    package to be installed.
+    """
+    import markdown
+
+    # Convert markdown to HTML
+    html_body = markdown.markdown(
+        md_text,
+        extensions=["tables", "fenced_code", "toc", "attr_list", "sane_lists"],
+    )
+
+    html_body = _wrap_tables(html_body)
+
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -321,8 +348,18 @@ html = f"""<!DOCTYPE html>
 </body>
 </html>
 """
+    return html
 
-DEST.write_text(html)
-print(f"Wrote {DEST} ({len(html):,} bytes)")
-"""
-"""
+
+def build():
+    """Read DESIGN_SPEC.md, render it, and write spec.html. The only side-effecting
+    entry point — invoked under the __main__ guard so importing this module is pure."""
+    md_text = SOURCE.read_text()
+    html = render_page_html(md_text)
+    DEST.write_text(html)
+    print(f"Wrote {DEST} ({len(html):,} bytes)")
+    return html
+
+
+if __name__ == "__main__":
+    build()
